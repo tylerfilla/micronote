@@ -2,14 +2,12 @@ package com.gmail.tylerfilla.android.notes;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class NotesActivity extends Activity {
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_notes);
-	}
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        this.setContentView(R.layout.activity_notes);
+    }
+    
 }
