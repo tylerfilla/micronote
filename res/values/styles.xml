@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
+    
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/AppThemeActionBar</item>
     </style>
 
     <style name="AppThemeActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-		<item name="android:icon">@android:color/transparent</item>
+        <item name="android:displayOptions">showCustom</item>
+		<item name="android:icon">@color/transparent</item>
         <item name="android:background">@color/notes_actionbar_background</item>
         <item name="android:titleTextStyle">@style/AppThemeActionBarTitleText</item>
     </style>
-    
-    <style name="AppThemeActionBarTitleText" parent="@android:style/TextAppearance">
-        <item name="android:textColor">#FFFFFF</item>
-    </style>
 
+    <style name="AppThemeActionBarTitleText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/notes_actionbar_text</item>
+    </style>
+    
 </resources>
