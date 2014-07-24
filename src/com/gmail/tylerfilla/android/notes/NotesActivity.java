@@ -1,6 +1,9 @@
 package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
@@ -23,6 +26,7 @@ import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
 public class NotesActivity extends Activity {
     
     private View expandedNotesListEntry;
+    private Note expandedNotesListEntryNote;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,63 +50,20 @@ public class NotesActivity extends Activity {
         notesListLayout.removeAllViews();
         
         for (File noteFile : NoteKeeper.listNoteFiles()) {
+            Note note = null;
+            
+            try {
+                note = NoteKeeper.readNoteFile(noteFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
             LinearLayout listEntry = new LinearLayout(this);
-            listEntry.setBackgroundResource(R.drawable.background_notes_list_entry);
-            listEntry.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
-            listEntry.setOrientation(LinearLayout.VERTICAL);
-            listEntry.setPadding(24, 36, 24, 36);
-            listEntry.setLongClickable(true);
-            listEntry.setTag("contracted");
-            
-            TextView listEntryTitle = new TextView(this);
-            listEntryTitle.setTextAppearance(this, R.style.AppThemeNotesListEntryTitleText);
-            listEntryTitle.setSingleLine();
-            listEntryTitle.setEllipsize(TruncateAt.END);
-            
-            TextView listEntryPreview = new TextView(this);
-            listEntryPreview.setTextAppearance(this, R.style.AppThemeNotesListEntryPreviewText);
-            listEntryPreview.setSingleLine();
-            listEntryPreview.setEllipsize(TruncateAt.END);
+            this.buildNoteListEntry(listEntry, note);
             
             ImageView listEntryDivider = new ImageView(this);
             listEntryDivider.setBackgroundResource(R.color.pad_line);
             listEntryDivider.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));
-            
-            try {
-                final Note note = NoteKeeper.readNoteFile(noteFile);
-                
-                if (note != null) {
-                    listEntryTitle.setText(note.getTitle());
-                    listEntryPreview.setText(this.generateNoteContentPreview(note.getContent()));
-                    
-                    listEntry.setOnClickListener(new OnClickListener() {
-                        
-                        @Override
-                        public void onClick(View v) {
-                            noteListEntryClicked(v, note);
-                        }
-                        
-                    });
-                    listEntry.setOnLongClickListener(new OnLongClickListener() {
-                        
-                        @Override
-                        public boolean onLongClick(View v) {
-                            toggleNoteListEntryExpansion(v);
-                            return true;
-                        }
-                        
-                    });
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                
-                listEntryTitle.setText(noteFile.getName());
-                listEntryPreview.setText("Unable to read note: " + e.getMessage());
-            }
-            
-            listEntry.addView(listEntryTitle);
-            listEntry.addView(listEntryPreview);
             
             notesListLayout.addView(listEntry);
             notesListLayout.addView(listEntryDivider);
@@ -112,51 +73,146 @@ public class NotesActivity extends Activity {
         notesListScroll.requestLayout();
     }
     
-    public void toggleNoteListEntryExpansion(final View view) {
-        if ("expanded".equals(view.getTag())) {
-            ValueAnimator contractAnimation = ValueAnimator.ofInt(view.getHeight(),
-                    view.getHeight() - 128);
-            contractAnimation.setDuration(100l);
-            contractAnimation.setInterpolator(new LinearInterpolator());
+    public void buildNoteListEntry(LinearLayout entryView, final Note entryNote) {
+        entryView.setBackgroundResource(R.drawable.background_notes_list_entry);
+        entryView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        entryView.setOrientation(LinearLayout.VERTICAL);
+        entryView.setPadding(24, 36, 24, 36);
+        entryView.setLongClickable(true);
+        entryView.setTag("contracted");
+        
+        TextView listEntryTitle = new TextView(this);
+        listEntryTitle.setTag("anchor");
+        listEntryTitle.setTextAppearance(this, R.style.AppThemeNotesListEntryTitleText);
+        listEntryTitle.setSingleLine();
+        listEntryTitle.setEllipsize(TruncateAt.END);
+        
+        TextView listEntryPreview = new TextView(this);
+        listEntryPreview.setTag("anchor");
+        listEntryPreview.setTextAppearance(this, R.style.AppThemeNotesListEntryPreviewText);
+        listEntryPreview.setSingleLine();
+        listEntryPreview.setEllipsize(TruncateAt.END);
+        
+        if (entryNote != null) {
+            listEntryTitle.setText(entryNote.getTitle());
+            listEntryPreview.setText(this.generateNoteContentPreview(entryNote.getContent()));
             
-            contractAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            entryView.setOnClickListener(new OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    noteListEntryClicked(v, entryNote);
+                }
+                
+            });
+            entryView.setOnLongClickListener(new OnLongClickListener() {
+                
+                @Override
+                public boolean onLongClick(View v) {
+                    toggleNoteListEntryExpansion((LinearLayout) v, entryNote);
+                    return true;
+                }
+                
+            });
+        }
+        
+        entryView.addView(listEntryTitle);
+        entryView.addView(listEntryPreview);
+    }
+    
+    public void toggleNoteListEntryExpansion(final LinearLayout entryView, Note entryNote) {
+        if ("expanded".equals(entryView.getTag())) {
+            entryView.removeAllViews();
+            this.buildNoteListEntry(entryView, entryNote);
+            
+            ValueAnimator entryContractAnimation = ValueAnimator.ofInt(entryView.getHeight(),
+                    entryView.getHeight() - 264);
+            entryContractAnimation.setDuration(100l);
+            entryContractAnimation.setInterpolator(new LinearInterpolator());
+            
+            entryContractAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    LayoutParams layoutParams = view.getLayoutParams();
+                    LayoutParams layoutParams = entryView.getLayoutParams();
                     layoutParams.height = (Integer) animation.getAnimatedValue();
-                    view.setLayoutParams(layoutParams);
+                    entryView.setLayoutParams(layoutParams);
                 }
                 
             });
             
-            contractAnimation.start();
-            view.setTag("contracted");
+            entryContractAnimation.start();
+            
+            entryView.setTag("contracted");
+            
             this.expandedNotesListEntry = null;
+            this.expandedNotesListEntryNote = null;
         } else {
             if (this.expandedNotesListEntry != null) {
-                this.toggleNoteListEntryExpansion(this.expandedNotesListEntry);
+                this.toggleNoteListEntryExpansion((LinearLayout) this.expandedNotesListEntry,
+                        this.expandedNotesListEntryNote);
             }
             
-            ValueAnimator expandAnimation = ValueAnimator.ofInt(view.getHeight(),
-                    view.getHeight() + 128);
-            expandAnimation.setDuration(100l);
-            expandAnimation.setInterpolator(new LinearInterpolator());
+            ValueAnimator entryExpandAnimation = ValueAnimator.ofInt(entryView.getHeight(),
+                    entryView.getHeight() + 264);
+            entryExpandAnimation.setDuration(100l);
+            entryExpandAnimation.setInterpolator(new LinearInterpolator());
             
-            expandAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            entryExpandAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    LayoutParams layoutParams = view.getLayoutParams();
+                    LayoutParams layoutParams = entryView.getLayoutParams();
                     layoutParams.height = (Integer) animation.getAnimatedValue();
-                    view.setLayoutParams(layoutParams);
+                    entryView.setLayoutParams(layoutParams);
                 }
                 
             });
             
-            expandAnimation.start();
-            view.setTag("expanded");
-            this.expandedNotesListEntry = view;
+            entryExpandAnimation.start();
+            
+            TextView entryInfoAuthor = new TextView(this);
+            entryInfoAuthor.setSingleLine();
+            entryInfoAuthor.setEllipsize(TruncateAt.END);
+            entryInfoAuthor.setText("Author: " + entryNote.getAuthor());
+            entryInfoAuthor.setTextAppearance(this, R.style.AppThemeNotesListEntryInfoText);
+            
+            LinearLayout.LayoutParams entryInfoAuthorLayout = new LinearLayout.LayoutParams(
+                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            entryInfoAuthorLayout.setMargins(0, 40, 0, 0);
+            entryInfoAuthor.setLayoutParams(entryInfoAuthorLayout);
+            
+            TextView entryInfoFilename = new TextView(this);
+            entryInfoFilename.setSingleLine();
+            entryInfoFilename.setEllipsize(TruncateAt.END);
+            entryInfoFilename.setText("Filename: " + entryNote.getFile().getName());
+            entryInfoFilename.setTextAppearance(this, R.style.AppThemeNotesListEntryInfoText);
+            
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z",
+                    Locale.getDefault());
+            
+            TextView entryInfoDateCreated = new TextView(this);
+            entryInfoDateCreated.setSingleLine();
+            entryInfoDateCreated.setText("Created: "
+                    + dateFormat.format(entryNote.getDateCreated()));
+            entryInfoDateCreated.setTextAppearance(this, R.style.AppThemeNotesListEntryInfoText);
+            
+            TextView entryInfoDateModified = new TextView(this);
+            entryInfoDateModified.setSingleLine();
+            entryInfoDateModified.setText("Modified: "
+                    + dateFormat.format(entryNote.getDateModified()));
+            entryInfoDateModified.setTextAppearance(this, R.style.AppThemeNotesListEntryInfoText);
+            
+            entryView.addView(entryInfoAuthor);
+            entryView.addView(entryInfoFilename);
+            entryView.addView(entryInfoDateCreated);
+            entryView.addView(entryInfoDateModified);
+            
+            entryView.setTag("expanded");
+            
+            this.expandedNotesListEntry = entryView;
+            this.expandedNotesListEntryNote = entryNote;
         }
     }
     

@@ -27,4 +27,9 @@
         <item name="android:textColor">@color/text_notes_list_entry_preview</item>
     </style>
 
+    <style name="AppThemeNotesListEntryInfoText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_notes_list_entry_info</item>
+    </style>
+
 </resources>
