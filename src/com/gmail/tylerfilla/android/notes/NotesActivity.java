@@ -2,6 +2,7 @@ package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
 
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -19,6 +21,8 @@ import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
 
 public class NotesActivity extends Activity {
+    
+    private View expandedNotesListEntry;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +51,9 @@ public class NotesActivity extends Activity {
             listEntry.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT));
             listEntry.setOrientation(LinearLayout.VERTICAL);
-            listEntry.setPadding(20, 20, 20, 20);
+            listEntry.setPadding(24, 36, 24, 36);
             listEntry.setLongClickable(true);
+            listEntry.setTag("contracted");
             
             TextView listEntryTitle = new TextView(this);
             listEntryTitle.setTextAppearance(this, R.style.AppThemeNotesListEntryTitleText);
@@ -83,7 +88,7 @@ public class NotesActivity extends Activity {
                         
                         @Override
                         public boolean onLongClick(View v) {
-                            noteListEntryLongClicked(v, note);
+                            toggleNoteListEntryExpansion(v);
                             return true;
                         }
                         
@@ -105,6 +110,54 @@ public class NotesActivity extends Activity {
         
         notesListScroll.invalidate();
         notesListScroll.requestLayout();
+    }
+    
+    public void toggleNoteListEntryExpansion(final View view) {
+        if ("expanded".equals(view.getTag())) {
+            ValueAnimator contractAnimation = ValueAnimator.ofInt(view.getHeight(),
+                    view.getHeight() - 128);
+            contractAnimation.setDuration(100l);
+            contractAnimation.setInterpolator(new LinearInterpolator());
+            
+            contractAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    LayoutParams layoutParams = view.getLayoutParams();
+                    layoutParams.height = (Integer) animation.getAnimatedValue();
+                    view.setLayoutParams(layoutParams);
+                }
+                
+            });
+            
+            contractAnimation.start();
+            view.setTag("contracted");
+            this.expandedNotesListEntry = null;
+        } else {
+            if (this.expandedNotesListEntry != null) {
+                this.toggleNoteListEntryExpansion(this.expandedNotesListEntry);
+            }
+            
+            ValueAnimator expandAnimation = ValueAnimator.ofInt(view.getHeight(),
+                    view.getHeight() + 128);
+            expandAnimation.setDuration(100l);
+            expandAnimation.setInterpolator(new LinearInterpolator());
+            
+            expandAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    LayoutParams layoutParams = view.getLayoutParams();
+                    layoutParams.height = (Integer) animation.getAnimatedValue();
+                    view.setLayoutParams(layoutParams);
+                }
+                
+            });
+            
+            expandAnimation.start();
+            view.setTag("expanded");
+            this.expandedNotesListEntry = view;
+        }
     }
     
     public String generateNoteContentPreview(String noteContent) {
@@ -143,9 +196,6 @@ public class NotesActivity extends Activity {
     }
     
     public void noteListEntryClicked(View view, Note note) {
-    }
-    
-    public void noteListEntryLongClicked(View view, Note note) {
     }
     
 }
