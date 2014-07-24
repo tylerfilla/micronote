@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -45,16 +46,20 @@ public class NotesActivity extends Activity {
         
         for (File noteFile : NoteKeeper.listNoteFiles()) {
             LinearLayout listEntry = new LinearLayout(this);
-            
             listEntry.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT));
+            listEntry.setPadding(20, 20, 20, 20);
             listEntry.setOrientation(LinearLayout.VERTICAL);
             
             TextView listEntryTitle = new TextView(this);
-            listEntryTitle.setTextSize(30.0f);
+            listEntryTitle.setSingleLine();
+            listEntryTitle.setEllipsize(TruncateAt.END);
+            listEntryTitle.setTextSize(26.0f);
             listEntryTitle.setTextColor(Color.DKGRAY);
             
             TextView listEntryPreview = new TextView(this);
+            listEntryPreview.setSingleLine();
+            listEntryPreview.setEllipsize(TruncateAt.END);
             listEntryPreview.setTextSize(18.0f);
             listEntryPreview.setTextColor(Color.GRAY);
             
@@ -67,7 +72,7 @@ public class NotesActivity extends Activity {
                 Note note = NoteKeeper.readNoteFile(noteFile);
                 
                 listEntryTitle.setText(note.getTitle());
-                listEntryPreview.setText(note.getContent().substring(0, 20).concat("..."));
+                listEntryPreview.setText(this.generateNoteContentPreview(note.getContent()));
             } catch (IOException e) {
                 e.printStackTrace();
                 
@@ -84,6 +89,38 @@ public class NotesActivity extends Activity {
         
         notesListScroll.invalidate();
         notesListScroll.requestLayout();
+    }
+    
+    public String generateNoteContentPreview(String noteContent) {
+        String preview = "";
+        
+        boolean escaped = false;
+        boolean bracketed = false;
+        
+        for (int ci = 0; ci < noteContent.length(); ci++) {
+            char c = noteContent.charAt(ci);
+            
+            if (bracketed) {
+                if (c == ']') {
+                    bracketed = false;
+                }
+                continue;
+            }
+            
+            if (escaped) {
+                preview += c;
+            } else {
+                if (c == '[') {
+                    bracketed = true;
+                } else if (c == '\\') {
+                    escaped = true;
+                } else {
+                    preview += c;
+                }
+            }
+        }
+        
+        return preview;
     }
     
     @SuppressWarnings("deprecation")
