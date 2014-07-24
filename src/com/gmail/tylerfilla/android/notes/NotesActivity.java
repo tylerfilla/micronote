@@ -48,6 +48,8 @@ public class NotesActivity extends Activity {
                     LayoutParams.WRAP_CONTENT));
             listEntry.setPadding(20, 20, 20, 20);
             listEntry.setOrientation(LinearLayout.VERTICAL);
+            this.setViewBackground(listEntry,
+                    this.getResources().getDrawable(R.drawable.background_notes_list_entry));
             
             TextView listEntryTitle = new TextView(this);
             listEntryTitle.setSingleLine();

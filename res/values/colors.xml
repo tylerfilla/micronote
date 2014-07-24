@@ -8,7 +8,8 @@
     
     <color name="actionbar_text">#F0F0F0</color>
     
-    <color name="actionbar_button_selected_background">#33FFFFFF</color>
+    <color name="background_button_actionbar_selected">#33FFFFFF</color>
+    <color name="background_notes_list_entry_selected">#33888888</color>
     
     <color name="pad_background">#FFFFCC</color>
     <color name="pad_line">#D6D6FF</color>
