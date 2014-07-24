@@ -21,7 +21,7 @@ public class NoteKeeper {
     private NoteKeeper() {
     }
     
-    public static File[] listNoteFiles() throws IOException {
+    public static File[] listNoteFiles() {
         ArrayList<File> noteFiles = new ArrayList<File>();
         
         for (File noteFile : notesDirectory.listFiles()) {
@@ -33,21 +33,25 @@ public class NoteKeeper {
         return noteFiles.toArray(new File[noteFiles.size()]);
     }
     
-    public static boolean checkNoteFile(File noteFile) throws IOException {
+    public static boolean checkNoteFile(File noteFile) {
         boolean check = false;
         
         if (noteFile.isFile() && noteFile.getName().endsWith(".note")) {
-            ZipFile zip = new ZipFile(noteFile);
-            
-            ZipEntry mediaDirEntry = zip.getEntry("media");
-            ZipEntry infoEntry = zip.getEntry("info");
-            ZipEntry contentEntry = zip.getEntry("content");
-            
-            check = mediaDirEntry != null && infoEntry != null && contentEntry != null
-                    && mediaDirEntry.isDirectory() && !infoEntry.isDirectory()
-                    && !contentEntry.isDirectory();
-            
-            zip.close();
+            try {
+                ZipFile zip = new ZipFile(noteFile);
+                
+                ZipEntry mediaDirEntry = zip.getEntry("media");
+                ZipEntry infoEntry = zip.getEntry("info");
+                ZipEntry contentEntry = zip.getEntry("content");
+                
+                check = mediaDirEntry != null && infoEntry != null && contentEntry != null
+                        && mediaDirEntry.isDirectory() && !infoEntry.isDirectory()
+                        && !contentEntry.isDirectory();
+                
+                zip.close();
+            } catch (IOException e) {
+                check = false;
+            }
         }
         
         return check;

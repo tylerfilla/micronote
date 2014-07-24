@@ -3,11 +3,14 @@
 
     <color name="transparent">#00000000</color>
     
-    <color name="actionbar_background">#201000</color>
+    <color name="actionbar_background_top">#683D21</color>
+    <color name="actionbar_background_bottom">#441A00</color>
+    
     <color name="actionbar_text">#F0F0F0</color>
     
     <color name="actionbar_button_selected_background">#33FFFFFF</color>
     
     <color name="pad_background">#FFFFBD</color>
+    <color name="pad_line">#BBBBFF</color>
 
 </resources>

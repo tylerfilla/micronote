@@ -14,13 +14,34 @@
         android:textSize="24sp" />
 
     <ImageButton
-        android:id="@+id/buttonNotesNew"
+        android:id="@+id/buttonActionSettings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="left"
+        android:background="@drawable/button_actionbar_background"
+        android:contentDescription="@string/content_buttonActionSettings"
+        android:src="@drawable/ic_action_settings"
+        android:onClick="buttonActionClicked" />
+
+    <ImageButton
+        android:id="@+id/buttonActionSearch"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="48dp"
+        android:background="@drawable/button_actionbar_background"
+        android:contentDescription="@string/content_buttonActionSearch"
+        android:src="@drawable/ic_action_search"
+        android:onClick="buttonActionClicked" />
+
+    <ImageButton
+        android:id="@+id/buttonActionNotesNew"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
         android:background="@drawable/button_actionbar_background"
-        android:contentDescription="@string/content_buttonNotesNew"
-        android:src="@drawable/ic_note_new"
-        android:onClick="buttonNoteNewClicked" />
+        android:contentDescription="@string/content_buttonActionNotesNew"
+        android:src="@drawable/ic_action_note_new"
+        android:onClick="buttonActionClicked" />
 
 </FrameLayout>
