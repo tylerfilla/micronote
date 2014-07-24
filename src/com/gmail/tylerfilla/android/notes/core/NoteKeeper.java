@@ -2,10 +2,11 @@ package com.gmail.tylerfilla.android.notes.core;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -35,7 +36,7 @@ public class NoteKeeper {
     public static boolean checkNoteFile(File noteFile) throws IOException {
         boolean check = false;
         
-        if (noteFile.isFile() && noteFile.getName().endsWith(".zip")) {
+        if (noteFile.isFile() && noteFile.getName().endsWith(".note")) {
             ZipFile zip = new ZipFile(noteFile);
             
             ZipEntry mediaDirEntry = zip.getEntry("media");
@@ -57,41 +58,96 @@ public class NoteKeeper {
             return null;
         }
         
+        ZipFile zip = new ZipFile(noteFile);
+        
+        ZipEntry infoEntry = zip.getEntry("info");
+        ZipEntry contentEntry = zip.getEntry("content");
+        
         Note note = new Note();
         
-        File mediaDirFile = new File(noteFile, "media");
-        File infoFile = new File(noteFile, "info");
-        File contentFile = new File(noteFile, "content");
+        note.setFile(noteFile);
         
-        for (File mediaFile : mediaDirFile.listFiles()) {
-            NoteMedia media = new NoteMedia();
-            
-            String mediaFileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    MimeTypeMap.getFileExtensionFromUrl(mediaFile.getName()));
-            
-            if (mediaFileMimeType.startsWith("image/")) {
-                media.setType(NoteMedia.Type.IMAGE);
-            } else if (mediaFileMimeType.startsWith("audio/")) {
-                media.setType(NoteMedia.Type.AUDIO);
-            } else if (mediaFileMimeType.startsWith("video/")) {
-                media.setType(NoteMedia.Type.VIDEO);
+        Enumeration<? extends ZipEntry> enumeration = zip.entries();
+        while (enumeration.hasMoreElements()) {
+            ZipEntry entry = enumeration.nextElement();
+            if (entry.getName().startsWith("media/")) {
+                NoteMedia media = new NoteMedia();
+                
+                media.setType(MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                        MimeTypeMap.getFileExtensionFromUrl(entry.getName())));
+                media.setNote(note);
+                media.setName(entry.getName());
+                
+                note.addMedia(media);
             }
         }
         
         BufferedReader infoFileReader = new BufferedReader(new InputStreamReader(
-                new FileInputStream(infoFile)));
+                zip.getInputStream(infoEntry)));
         
         String infoFileLine = null;
         while ((infoFileLine = infoFileReader.readLine()) != null) {
+            String infoFileLineTrim = infoFileLine.trim();
+            if (infoFileLineTrim.isEmpty() || infoFileLineTrim.startsWith("#")) {
+                continue;
+            }
             
+            String key = "";
+            String value = "";
+            
+            int stage = 0;
+            
+            for (int ci = 0; ci < infoFileLine.length(); ci++) {
+                char c = infoFileLine.charAt(ci);
+                
+                if (c == '=' && value.isEmpty()) {
+                    stage = 1;
+                    continue;
+                }
+                
+                switch (stage) {
+                case 0:
+                    key += c;
+                    break;
+                case 1:
+                    value += c;
+                    break;
+                }
+            }
+            
+            if (key.equals("title")) {
+                note.setTitle(value);
+            } else if (key.equals("author")) {
+                note.setAuthor(value);
+            } else if (key.equals("time-created")) {
+                note.setDateCreated(new Date(Long.parseLong(value)));
+            } else if (key.equals("time-modified")) {
+                note.setDateModified(new Date(Long.parseLong(value)));
+            }
         }
         
         infoFileReader.close();
         
+        InputStreamReader contentFileReader = new InputStreamReader(
+                zip.getInputStream(contentEntry));
+        
+        StringBuilder contentBuilder = new StringBuilder();
+        
+        char[] buffer = new char[256];
+        while (contentFileReader.read(buffer, 0, buffer.length) > 0) {
+            contentBuilder.append(buffer);
+        }
+        
+        note.setContent(contentBuilder.toString());
+        
+        contentFileReader.close();
+        
+        zip.close();
+        
         return note;
     }
     
-    public static void writeNoteFile(Note note) {
+    public static void writeNoteFile(Note note) throws IOException {
     }
     
 }

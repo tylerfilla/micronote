@@ -1,25 +1,40 @@
 package com.gmail.tylerfilla.android.notes.core;
 
+
 public class NoteMedia {
     
-    private Type type;
+    private Note note;
+    private String type;
+    private String name;
     
     public NoteMedia() {
-        this.type = Type.IMAGE;
+        this.note = null;
+        this.type = null;
+        this.name = null;
     }
     
-    public Type getType() {
+    public Note getNote() {
+        return this.note;
+    }
+    
+    public void setNote(Note note) {
+        this.note = note;
+    }
+    
+    public String getType() {
         return this.type;
     }
     
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }
     
-    public static enum Type {
-        
-        IMAGE, AUDIO, VIDEO,
-        
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

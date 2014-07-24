@@ -1,10 +1,13 @@
 package com.gmail.tylerfilla.android.notes.core;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Note {
+    
+    private File file;
     
     private String title;
     private String author;
@@ -16,6 +19,8 @@ public class Note {
     private final ArrayList<NoteMedia> media;
     
     public Note() {
+        this.file = null;
+        
         this.title = null;
         this.author = null;
         
@@ -24,6 +29,14 @@ public class Note {
         
         this.content = null;
         this.media = new ArrayList<NoteMedia>();
+    }
+    
+    public File getFile() {
+        return this.file;
+    }
+    
+    public void setFile(File file) {
+        this.file = file;
     }
     
     public String getTitle() {
