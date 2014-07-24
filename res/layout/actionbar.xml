@@ -21,6 +21,7 @@
         android:background="@drawable/button_actionbar_background"
         android:contentDescription="@string/content_buttonActionSettings"
         android:src="@drawable/ic_action_settings"
+        android:tag="settings"
         android:onClick="buttonActionClicked" />
 
     <ImageButton
@@ -32,6 +33,7 @@
         android:background="@drawable/button_actionbar_background"
         android:contentDescription="@string/content_buttonActionSearch"
         android:src="@drawable/ic_action_search"
+        android:tag="search"
         android:onClick="buttonActionClicked" />
 
     <ImageButton
@@ -42,6 +44,7 @@
         android:background="@drawable/button_actionbar_background"
         android:contentDescription="@string/content_buttonActionNotesNew"
         android:src="@drawable/ic_action_note_new"
+        android:tag="new_note"
         android:onClick="buttonActionClicked" />
 
 </FrameLayout>

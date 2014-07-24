@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,9 +36,6 @@ public class NotesActivity extends Activity {
         actionBar.setCustomView(R.layout.actionbar);
         
         this.populateNoteList();
-    }
-    
-    public void buttonActionClicked(View view) {
     }
     
     private void populateNoteList() {
@@ -69,10 +67,19 @@ public class NotesActivity extends Activity {
                     this.getResources().getDrawable(R.color.pad_line));
             
             try {
-                Note note = NoteKeeper.readNoteFile(noteFile);
+                final Note note = NoteKeeper.readNoteFile(noteFile);
                 
                 listEntryTitle.setText(note.getTitle());
                 listEntryPreview.setText(this.generateNoteContentPreview(note.getContent()));
+                
+                listEntry.setOnClickListener(new OnClickListener() {
+                    
+                    @Override
+                    public void onClick(View v) {
+                        noteListEntryClicked(v, note);
+                    }
+                    
+                });
             } catch (IOException e) {
                 e.printStackTrace();
                 
@@ -131,6 +138,12 @@ public class NotesActivity extends Activity {
         } else {
             view.setBackground(drawable);
         }
+    }
+    
+    public void buttonActionClicked(View view) {
+    }
+    
+    public void noteListEntryClicked(View view, Note note) {
     }
     
 }
