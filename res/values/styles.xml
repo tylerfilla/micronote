@@ -13,7 +13,7 @@
     </style>
 
     <style name="AppThemeActionBarTitleText" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/actionbar_text</item>
+        <item name="android:textColor">@color/text_actionbar</item>
     </style>
     
 </resources>

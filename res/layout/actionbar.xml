@@ -9,7 +9,7 @@
         android:layout_height="fill_parent"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/activity_notes_actionbar_title"
-        android:textColor="@color/actionbar_text"
+        android:textColor="@color/text_actionbar"
         android:id="@+id/actionbar_title"
         android:textSize="24sp" />
 

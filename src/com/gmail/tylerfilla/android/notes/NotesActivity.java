@@ -6,7 +6,6 @@ import java.io.IOException;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,13 +54,15 @@ public class NotesActivity extends Activity {
             listEntryTitle.setSingleLine();
             listEntryTitle.setEllipsize(TruncateAt.END);
             listEntryTitle.setTextSize(26.0f);
-            listEntryTitle.setTextColor(Color.DKGRAY);
+            listEntryTitle.setTextColor(this.getResources().getColor(
+                    R.color.text_notes_list_entry_title));
             
             TextView listEntryPreview = new TextView(this);
             listEntryPreview.setSingleLine();
             listEntryPreview.setEllipsize(TruncateAt.END);
             listEntryPreview.setTextSize(18.0f);
-            listEntryPreview.setTextColor(Color.GRAY);
+            listEntryPreview.setTextColor(this.getResources().getColor(
+                    R.color.text_notes_list_entry_preview));
             
             ImageView listEntryDivider = new ImageView(this);
             listEntryDivider.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));

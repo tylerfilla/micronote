@@ -2,16 +2,18 @@
 <resources>
 
     <color name="transparent">#00000000</color>
-    
+
     <color name="actionbar_background_top">#63391F</color>
     <color name="actionbar_background_bottom">#441A00</color>
-    
-    <color name="actionbar_text">#F0F0F0</color>
-    
-    <color name="background_button_actionbar_selected">#33FFFFFF</color>
-    <color name="background_notes_list_entry_selected">#33888888</color>
-    
+
     <color name="pad_background">#FFFFCC</color>
     <color name="pad_line">#D6D6FF</color>
+
+    <color name="text_actionbar">#F0F0F0</color>
+    <color name="text_notes_list_entry_title">#CC0000</color>
+    <color name="text_notes_list_entry_preview">#888888</color>
+
+    <color name="background_button_actionbar_selected">#33FFFFFF</color>
+    <color name="background_notes_list_entry_selected">#33888888</color>
 
 </resources>
