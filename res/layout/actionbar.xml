@@ -17,7 +17,7 @@
         android:id="@+id/buttonNotesNew"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="right"
+        android:layout_gravity="center_vertical|right"
         android:background="@drawable/button_actionbar_background"
         android:contentDescription="@string/content_buttonNotesNew"
         android:src="@drawable/ic_note_new"
