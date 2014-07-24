@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
@@ -123,6 +126,8 @@ public class NotesActivity extends Activity {
     
     public void toggleNoteListEntryExpansion(final LinearLayout entryView, Note entryNote) {
         if ("expanded".equals(entryView.getTag())) {
+            entryView.setTag("contracting");
+            
             entryView.removeAllViews();
             this.buildNoteListEntry(entryView, entryNote);
             
@@ -142,13 +147,34 @@ public class NotesActivity extends Activity {
                 
             });
             
-            entryContractAnimation.start();
+            entryContractAnimation.addListener(new AnimatorListener() {
+                
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+                
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    entryView.setTag("contracted");
+                }
+                
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+                
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+                
+            });
             
-            entryView.setTag("contracted");
+            entryContractAnimation.start();
             
             this.expandedNotesListEntry = null;
             this.expandedNotesListEntryNote = null;
-        } else {
+        } else if ("contracted".equals(entryView.getTag())) {
+            entryView.setTag("expanding");
+            
             if (this.expandedNotesListEntry != null) {
                 this.toggleNoteListEntryExpansion((LinearLayout) this.expandedNotesListEntry,
                         this.expandedNotesListEntryNote);
@@ -166,6 +192,27 @@ public class NotesActivity extends Activity {
                     LayoutParams layoutParams = entryView.getLayoutParams();
                     layoutParams.height = (Integer) animation.getAnimatedValue();
                     entryView.setLayoutParams(layoutParams);
+                }
+                
+            });
+            
+            entryExpandAnimation.addListener(new AnimatorListener() {
+                
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+                
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    entryView.setTag("expanded");
+                }
+                
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+                
+                @Override
+                public void onAnimationRepeat(Animator animation) {
                 }
                 
             });
@@ -209,8 +256,6 @@ public class NotesActivity extends Activity {
             entryView.addView(entryInfoDateCreated);
             entryView.addView(entryInfoDateModified);
             
-            entryView.setTag("expanded");
-            
             this.expandedNotesListEntry = entryView;
             this.expandedNotesListEntryNote = entryNote;
         }
@@ -249,9 +294,13 @@ public class NotesActivity extends Activity {
     }
     
     public void buttonActionClicked(View view) {
+        Toast.makeText(this, "Clicked action \"" + String.valueOf(view.getTag()) + "\"",
+                Toast.LENGTH_SHORT).show();
     }
     
     public void noteListEntryClicked(View view, Note note) {
+        Toast.makeText(this, "Will open note \"" + note.getTitle() + "\"", Toast.LENGTH_SHORT)
+                .show();
     }
     
 }
