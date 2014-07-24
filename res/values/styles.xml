@@ -15,5 +15,15 @@
     <style name="AppThemeActionBarTitleText" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/text_actionbar</item>
     </style>
-    
+
+    <style name="AppThemeNotesListEntryTitleText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/text_notes_list_entry_title</item>
+    </style>
+
+    <style name="AppThemeNotesListEntryPreviewText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_notes_list_entry_preview</item>
+    </style>
+
 </resources>

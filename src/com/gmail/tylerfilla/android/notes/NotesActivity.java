@@ -1,17 +1,14 @@
 package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
-import java.io.IOException;
 
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,11 +26,12 @@ public class NotesActivity extends Activity {
         
         this.setContentView(R.layout.activity_notes);
         
-        // Action bar customization
+        // Action bar
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("");
         actionBar.setCustomView(R.layout.actionbar);
         
+        // Scan for notes and add entries to notes list
         this.populateNoteList();
     }
     
@@ -41,49 +39,57 @@ public class NotesActivity extends Activity {
         ScrollView notesListScroll = (ScrollView) this.findViewById(R.id.notesListScroll);
         LinearLayout notesListLayout = (LinearLayout) this.findViewById(R.id.notesListLayout);
         
+        notesListLayout.removeAllViews();
+        
         for (File noteFile : NoteKeeper.listNoteFiles()) {
             LinearLayout listEntry = new LinearLayout(this);
+            listEntry.setBackgroundResource(R.drawable.background_notes_list_entry);
             listEntry.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT));
-            listEntry.setPadding(20, 20, 20, 20);
             listEntry.setOrientation(LinearLayout.VERTICAL);
-            this.setViewBackground(listEntry,
-                    this.getResources().getDrawable(R.drawable.background_notes_list_entry));
+            listEntry.setPadding(20, 20, 20, 20);
+            listEntry.setLongClickable(true);
             
             TextView listEntryTitle = new TextView(this);
+            listEntryTitle.setTextAppearance(this, R.style.AppThemeNotesListEntryTitleText);
             listEntryTitle.setSingleLine();
             listEntryTitle.setEllipsize(TruncateAt.END);
-            listEntryTitle.setTextSize(26.0f);
-            listEntryTitle.setTextColor(this.getResources().getColor(
-                    R.color.text_notes_list_entry_title));
             
             TextView listEntryPreview = new TextView(this);
+            listEntryPreview.setTextAppearance(this, R.style.AppThemeNotesListEntryPreviewText);
             listEntryPreview.setSingleLine();
             listEntryPreview.setEllipsize(TruncateAt.END);
-            listEntryPreview.setTextSize(18.0f);
-            listEntryPreview.setTextColor(this.getResources().getColor(
-                    R.color.text_notes_list_entry_preview));
             
             ImageView listEntryDivider = new ImageView(this);
+            listEntryDivider.setBackgroundResource(R.color.pad_line);
             listEntryDivider.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));
-            this.setViewBackground(listEntryDivider,
-                    this.getResources().getDrawable(R.color.pad_line));
             
             try {
                 final Note note = NoteKeeper.readNoteFile(noteFile);
                 
-                listEntryTitle.setText(note.getTitle());
-                listEntryPreview.setText(this.generateNoteContentPreview(note.getContent()));
-                
-                listEntry.setOnClickListener(new OnClickListener() {
+                if (note != null) {
+                    listEntryTitle.setText(note.getTitle());
+                    listEntryPreview.setText(this.generateNoteContentPreview(note.getContent()));
                     
-                    @Override
-                    public void onClick(View v) {
-                        noteListEntryClicked(v, note);
-                    }
-                    
-                });
-            } catch (IOException e) {
+                    listEntry.setOnClickListener(new OnClickListener() {
+                        
+                        @Override
+                        public void onClick(View v) {
+                            noteListEntryClicked(v, note);
+                        }
+                        
+                    });
+                    listEntry.setOnLongClickListener(new OnLongClickListener() {
+                        
+                        @Override
+                        public boolean onLongClick(View v) {
+                            noteListEntryLongClicked(v, note);
+                            return true;
+                        }
+                        
+                    });
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
                 
                 listEntryTitle.setText(noteFile.getName());
@@ -133,20 +139,13 @@ public class NotesActivity extends Activity {
         return preview;
     }
     
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void setViewBackground(View view, Drawable drawable) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackgroundDrawable(drawable);
-        } else {
-            view.setBackground(drawable);
-        }
-    }
-    
     public void buttonActionClicked(View view) {
     }
     
     public void noteListEntryClicked(View view, Note note) {
+    }
+    
+    public void noteListEntryLongClicked(View view, Note note) {
     }
     
 }
