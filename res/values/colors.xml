@@ -3,9 +3,11 @@
 
     <color name="transparent">#00000000</color>
     
-    <color name="notes_actionbar_background">#201000</color>
-    <color name="notes_actionbar_text">#F0F0F0</color>
+    <color name="actionbar_background">#201000</color>
+    <color name="actionbar_text">#F0F0F0</color>
     
-    <color name="notes_pad_background">#FFFFBD</color>
+    <color name="actionbar_button_selected_background">#33FFFFFF</color>
+    
+    <color name="pad_background">#FFFFBD</color>
 
 </resources>

@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@color/notes_pad_background" >
+        android:background="@color/pad_background" >
 
         <LinearLayout
             android:layout_width="fill_parent"

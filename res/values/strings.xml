@@ -3,5 +3,6 @@
 
     <string name="app_name">Notes</string>
     <string name="activity_notes_actionbar_title">Notes</string>
+    <string name="content_buttonNotesNew">New note</string>
 
 </resources>

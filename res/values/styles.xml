@@ -8,12 +8,12 @@
     <style name="AppThemeActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:displayOptions">showCustom</item>
 		<item name="android:icon">@color/transparent</item>
-        <item name="android:background">@color/notes_actionbar_background</item>
+        <item name="android:background">@color/actionbar_background</item>
         <item name="android:titleTextStyle">@style/AppThemeActionBarTitleText</item>
     </style>
 
     <style name="AppThemeActionBarTitleText" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/notes_actionbar_text</item>
+        <item name="android:textColor">@color/actionbar_text</item>
     </style>
     
 </resources>

@@ -3,6 +3,7 @@ package com.gmail.tylerfilla.android.notes;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
 public class NotesActivity extends Activity {
     
@@ -15,6 +16,9 @@ public class NotesActivity extends Activity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("");
         actionBar.setCustomView(R.layout.actionbar);
+    }
+    
+    public void buttonNoteNewClicked(View view) {
     }
     
 }
