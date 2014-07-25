@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -47,29 +48,39 @@ public class NotesActivity extends Activity {
     }
     
     private void populateNoteList() {
+        LinearLayout notesListEmpty = (LinearLayout) this.findViewById(R.id.notesListEmpty);
         ScrollView notesListScroll = (ScrollView) this.findViewById(R.id.notesListScroll);
         LinearLayout notesListLayout = (LinearLayout) this.findViewById(R.id.notesListLayout);
         
         notesListLayout.removeAllViews();
         
-        for (File noteFile : NoteKeeper.listNoteFiles()) {
-            Note note = null;
+        File[] noteFiles = NoteKeeper.listNoteFiles();
+        
+        if (noteFiles.length > 0) {
+            notesListEmpty.setVisibility(View.GONE);
             
-            try {
-                note = NoteKeeper.readNoteFile(noteFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (File noteFile : noteFiles) {
+                Note note = null;
+                
+                try {
+                    note = NoteKeeper.readNoteFile(noteFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
+                LinearLayout listEntry = new LinearLayout(this);
+                this.buildNoteListEntry(listEntry, note);
+                
+                ImageView listEntryDivider = new ImageView(this);
+                listEntryDivider.setBackgroundResource(R.color.pad_line);
+                listEntryDivider.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));
+                
+                notesListLayout.addView(listEntry);
+                notesListLayout.addView(listEntryDivider);
             }
-            
-            LinearLayout listEntry = new LinearLayout(this);
-            this.buildNoteListEntry(listEntry, note);
-            
-            ImageView listEntryDivider = new ImageView(this);
-            listEntryDivider.setBackgroundResource(R.color.pad_line);
-            listEntryDivider.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));
-            
-            notesListLayout.addView(listEntry);
-            notesListLayout.addView(listEntryDivider);
+        } else {
+            notesListEmpty.setVisibility(View.VISIBLE);
+            ((ImageButton) this.findViewById(R.id.buttonActionSearch)).setVisibility(View.GONE);
         }
         
         notesListScroll.invalidate();

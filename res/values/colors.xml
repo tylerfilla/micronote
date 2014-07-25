@@ -13,6 +13,8 @@
     <color name="text_notes_list_entry_title">#C00000</color>
     <color name="text_notes_list_entry_preview">#888888</color>
     <color name="text_notes_list_entry_info">#888888</color>
+    <color name="text_notes_list_empty_title">#C00000</color>
+    <color name="text_notes_list_empty_body">#AAAAAA</color>
 
     <color name="background_button_actionbar_selected">#33FFFFFF</color>
     <color name="background_notes_list_entry_selected">#33888888</color>

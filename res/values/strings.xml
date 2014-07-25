@@ -7,5 +7,8 @@
     <string name="content_buttonActionSettings">Settings</string>
     <string name="content_buttonActionSearch">Search</string>
     <string name="content_buttonActionNotesNew">New note</string>
+    
+    <string name="note_list_empty_title">No Notes Taken</string>
+    <string name="note_list_empty_body">Tap the pencil icon in the upper right-hand corner to begin taking notes</string>
 
 </resources>
