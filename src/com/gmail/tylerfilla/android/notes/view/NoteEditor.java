@@ -1,11 +1,11 @@
 package com.gmail.tylerfilla.android.notes.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.EditText;
 
 import com.gmail.tylerfilla.android.notes.R;
@@ -18,13 +18,24 @@ public class NoteEditor extends EditText {
     public NoteEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
         
-        this.setGravity(Gravity.TOP | Gravity.LEFT);
-        
         this.notepadLinePaint = new Paint();
-        this.notepadLinePaint.setColor(this.getContext().getResources().getColor(R.color.pad_line));
-        this.notepadLinePaint.setStrokeWidth(2);
-        
         this.firstLineBounds = new Rect();
+        
+        TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.NoteEditor);
+        
+        for (int i = 0; i < styledAttrs.getIndexCount(); i++) {
+            int attr = styledAttrs.getIndex(i);
+            switch (attr) {
+            case R.styleable.NoteEditor_notepadLineColor:
+                this.notepadLinePaint.setColor(styledAttrs.getColor(attr, 0x000000));
+                break;
+            case R.styleable.NoteEditor_notepadLineStrokeWidth:
+                this.notepadLinePaint.setStrokeWidth(styledAttrs.getDimension(attr, 0.0f));
+                break;
+            }
+        }
+        
+        styledAttrs.recycle();
     }
     
     @Override
