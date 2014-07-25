@@ -41,7 +41,7 @@
         android:background="@drawable/background_button_actionbar"
         android:contentDescription="@string/content_buttonActionNotesNew"
         android:src="@drawable/ic_action_note_new"
-        android:tag="new_note"
+        android:tag="new"
         android:onClick="buttonActionClicked" />
 
 </FrameLayout>
