@@ -10,6 +10,7 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
@@ -116,7 +117,7 @@ public class NotesActivity extends Activity {
                 
                 @Override
                 public void onClick(View v) {
-                    noteListEntryClicked(v, entryNote);
+                    noteListEntryClicked((LinearLayout) v, entryNote);
                 }
                 
             });
@@ -309,9 +310,10 @@ public class NotesActivity extends Activity {
                 Toast.LENGTH_SHORT).show();
     }
     
-    public void noteListEntryClicked(View view, Note note) {
-        Toast.makeText(this, "Will open note \"" + note.getTitle() + "\"", Toast.LENGTH_SHORT)
-                .show();
+    public void noteListEntryClicked(LinearLayout view, Note note) {
+        Intent noteEditIntent = new Intent("com.gmail.tylerfilla.android.notes.ACTION_EDIT_NOTE");
+        noteEditIntent.putExtra("noteFilePath", note.getFile().getAbsolutePath());
+        this.startActivity(noteEditIntent);
     }
     
 }
