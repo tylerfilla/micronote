@@ -10,6 +10,7 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
+    android:padding="8dp"
     android:fillViewport="true"
     android:background="@color/pad_background" >
 
@@ -19,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top|left"
-        android:textSize="24sp"
+        android:textSize="22sp"
+        android:background="@color/transparent"
         custom:notepadLineColor="@color/pad_line"
         custom:notepadLineStrokeWidth="1dp" />
 
