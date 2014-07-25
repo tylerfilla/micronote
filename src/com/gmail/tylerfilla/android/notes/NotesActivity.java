@@ -304,9 +304,9 @@ public class NotesActivity extends Activity {
     
     public void buttonActionClicked(View view) {
         if ("settings".equals(view.getTag())) {
-            Toast.makeText(this, "Settings not implemented", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Settings not yet implemented", Toast.LENGTH_SHORT).show();
         } else if ("search".equals(view.getTag())) {
-            Toast.makeText(this, "Search not implemented", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Search not yet implemented", Toast.LENGTH_SHORT).show();
         } else if ("new".equals(view.getTag())) {
             this.startActivity(new Intent("com.gmail.tylerfilla.android.notes.ACTION_EDIT_NOTE"));
         }

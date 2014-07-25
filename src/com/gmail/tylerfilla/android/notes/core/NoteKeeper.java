@@ -138,8 +138,9 @@ public class NoteKeeper {
         StringBuilder contentBuilder = new StringBuilder();
         
         char[] buffer = new char[256];
-        while (contentFileReader.read(buffer, 0, buffer.length) > 0) {
-            contentBuilder.append(buffer);
+        int count = 0;
+        while ((count = contentFileReader.read(buffer, 0, buffer.length)) > 0) {
+            contentBuilder.append(buffer, 0, count);
         }
         
         note.setContent(contentBuilder.toString());
