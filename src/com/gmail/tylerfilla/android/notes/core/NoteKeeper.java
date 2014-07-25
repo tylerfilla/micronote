@@ -151,7 +151,14 @@ public class NoteKeeper {
         return note;
     }
     
-    public static void writeNoteFile(Note note) throws IOException {
+    public static void writeNote(Note note) throws IOException {
+    }
+    
+    public static Note createBlankNote() {
+        Note note = new Note();
+        note.setTitle("Untitled Note");
+        
+        return note;
     }
     
 }
