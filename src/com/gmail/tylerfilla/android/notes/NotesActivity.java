@@ -39,12 +39,9 @@ public class NotesActivity extends Activity {
         
         this.setContentView(R.layout.activity_notes);
         
-        // Action bar
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("");
-        actionBar.setCustomView(R.layout.actionbar);
+        actionBar.setCustomView(R.layout.actionbar_activity_notes);
         
-        // Scan for notes and add entries to notes list
         this.populateNoteList();
     }
     
@@ -306,8 +303,13 @@ public class NotesActivity extends Activity {
     }
     
     public void buttonActionClicked(View view) {
-        Toast.makeText(this, "Clicked action \"" + String.valueOf(view.getTag()) + "\"",
-                Toast.LENGTH_SHORT).show();
+        if ("settings".equals(view.getTag())) {
+            Toast.makeText(this, "Settings not implemented", Toast.LENGTH_SHORT).show();
+        } else if ("search".equals(view.getTag())) {
+            Toast.makeText(this, "Search not implemented", Toast.LENGTH_SHORT).show();
+        } else if ("new_note".equals(view.getTag())) {
+            this.startActivity(new Intent("com.gmail.tylerfilla.android.notes.ACTION_EDIT_NOTE"));
+        }
     }
     
     public void noteListEntryClicked(LinearLayout view, Note note) {
