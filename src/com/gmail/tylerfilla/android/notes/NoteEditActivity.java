@@ -6,10 +6,8 @@ import java.io.IOException;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
@@ -19,6 +17,8 @@ public class NoteEditActivity extends Activity {
     
     private NoteEditor noteEditor;
     private Note note;
+    
+    private int actionbarState;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,58 +53,16 @@ public class NoteEditActivity extends Activity {
         this.noteEditor = (NoteEditor) this.findViewById(R.id.noteEditor);
         
         if (this.note.getContent() != null) {
-            this.applyContentToNoteEditor(this.note.getContent());
-        }
-    }
-    
-    public void applyContentToNoteEditor(String content) {
-        SpannableStringBuilder contentBuilder = new SpannableStringBuilder();
-        
-        boolean escaped = false;
-        boolean bracketed = false;
-        
-        int bracketStart = -1;
-        int bracketEnd = -1;
-        String bracketText = "";
-        
-        for (int ci = 0; ci < content.length(); ci++) {
-            char c = content.charAt(ci);
-            
-            if (bracketed) {
-                if (c == ']') {
-                    bracketed = false;
-                    bracketEnd = ci;
-                    bracketText = "";
-                } else {
-                    bracketStart = ci;
-                    bracketText += c;
-                }
-                continue;
-            } else {
-                if (escaped) {
-                    contentBuilder.append(c);
-                    escaped = false;
-                } else {
-                    if (c == '[') {
-                        bracketed = true;
-                    } else if (c == '\\') {
-                        escaped = true;
-                    } else {
-                        contentBuilder.append(c);
-                    }
-                }
-            }
+            this.noteEditor.setNoteContent(this.note.getContent());
         }
         
-        this.noteEditor.setText(contentBuilder);
+        this.actionbarState = 0;
     }
     
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
             this.finish();
-        } else if ("clip".equals(view.getTag())) {
-            Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
+        } else if ("more".equals(view.getTag())) {
         }
     }
-    
 }

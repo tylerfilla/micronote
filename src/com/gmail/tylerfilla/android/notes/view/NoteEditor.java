@@ -1,10 +1,15 @@
 package com.gmail.tylerfilla.android.notes.view;
 
+import java.util.HashMap;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -50,6 +55,76 @@ public class NoteEditor extends EditText {
         }
         
         super.onDraw(canvas);
+    }
+    
+    public String getNoteContent() {
+        Editable text = this.getText();
+        if (text instanceof Spannable) {
+            return this.spannableToNoteContent(text);
+        } else {
+            return text.toString();
+        }
+    }
+    
+    public void setNoteContent(String noteContent) {
+        this.setText(this.noteContentToSpannable(noteContent));
+    }
+    
+    private Spannable noteContentToSpannable(String noteContent) {
+        SpannableStringBuilder contentBuilder = new SpannableStringBuilder();
+        
+        boolean escaped = false;
+        boolean bracketed = false;
+        
+        int bracketBegin = -1;
+        int bracketEnd = -1;
+        String bracketSequence = "";
+        
+        for (int ci = 0; ci < noteContent.length(); ci++) {
+            char c = noteContent.charAt(ci);
+            
+            if (bracketed) {
+                if (c == ']') {
+                    bracketed = false;
+                    bracketEnd = ci;
+                    
+                    this.handleBracketSequence(contentBuilder, bracketSequence, bracketBegin,
+                            bracketEnd);
+                    
+                    bracketSequence = "";
+                } else {
+                    bracketBegin = ci;
+                    bracketSequence += c;
+                }
+                continue;
+            } else {
+                if (escaped) {
+                    contentBuilder.append(c);
+                    escaped = false;
+                } else {
+                    if (c == '[') {
+                        bracketed = true;
+                    } else if (c == '\\') {
+                        escaped = true;
+                    } else {
+                        contentBuilder.append(c);
+                    }
+                }
+            }
+        }
+        
+        return contentBuilder;
+    }
+    
+    private String spannableToNoteContent(Spannable spannable) {
+        return null;
+    }
+    
+    private void handleBracketSequence(SpannableStringBuilder contentBuilder,
+            String bracketSequence, int begin, int end) {
+        String name = "";
+        HashMap<String, String> attributes = new HashMap<String, String>();
+        
     }
     
 }
