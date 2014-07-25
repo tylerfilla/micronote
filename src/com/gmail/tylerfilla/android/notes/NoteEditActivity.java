@@ -28,7 +28,9 @@ public class NoteEditActivity extends Activity {
     }
     
     public void buttonActionClicked(View view) {
-        if ("clip".equals(view.getTag())) {
+        if ("back".equals(view.getTag())) {
+            this.finish();
+        } else if ("clip".equals(view.getTag())) {
             Toast.makeText(this, "Clip media to note", Toast.LENGTH_SHORT).show();
         }
     }
