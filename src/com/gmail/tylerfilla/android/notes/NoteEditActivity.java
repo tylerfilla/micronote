@@ -75,6 +75,7 @@ public class NoteEditActivity extends Activity {
         
         ((TextView) this.findViewById(R.id.actionbarActivityNoteEditTitle)).setText(this.note
                 .getTitle());
+        ((TextView) this.findViewById(R.id.actionbarActivityNoteEditTitle)).setSelected(true);
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.noteEditor);
         
