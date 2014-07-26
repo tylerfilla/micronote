@@ -14,7 +14,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.style.StrikethroughSpan;
-import android.text.style.TypefaceSpan;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -112,7 +111,7 @@ public class NoteEditor extends EditText {
                             String prefix = "\n";
                             
                             for (int i = 0; i < level; i++) {
-                                prefix += ' ';
+                                prefix += '\t';
                             }
                             
                             if (list.equalsIgnoreCase("ul")) {
@@ -124,11 +123,7 @@ public class NoteEditor extends EditText {
                             
                             prefix += ' ';
                             
-                            int prefixPos = output.length();
-                            
                             output.append(prefix);
-                            output.setSpan(new TypefaceSpan("monospace"), prefixPos,
-                                    output.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
                     }
                 }
