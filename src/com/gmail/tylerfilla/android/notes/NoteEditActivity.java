@@ -6,7 +6,9 @@ import java.io.IOException;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
@@ -18,13 +20,30 @@ public class NoteEditActivity extends Activity {
     private NoteEditor noteEditor;
     private Note note;
     
-    private int actionbarState;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         this.setContentView(R.layout.activity_note_edit);
+        
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File dirNotes = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
+                    "Notes");
+            File dirCache = new File(this.getExternalCacheDir().getAbsolutePath(), "Notes");
+            
+            dirNotes.mkdir();
+            dirCache.mkdir();
+            
+            NoteKeeper.setDirectories(dirNotes.getAbsolutePath(), dirCache.getAbsolutePath());
+        } else {
+            File dirNotes = new File(this.getFilesDir(), "Notes");
+            File dirCache = new File(this.getFilesDir(), "TempMedia");
+            
+            dirNotes.mkdir();
+            dirCache.mkdir();
+            
+            NoteKeeper.setDirectories(dirNotes.getAbsolutePath(), dirCache.getAbsolutePath());
+        }
         
         String noteFilePath = null;
         
@@ -53,16 +72,19 @@ public class NoteEditActivity extends Activity {
         this.noteEditor = (NoteEditor) this.findViewById(R.id.noteEditor);
         
         if (this.note.getContent() != null) {
-            this.noteEditor.setNoteContent(this.note.getContent());
+            this.noteEditor.setNote(this.note);
         }
-        
-        this.actionbarState = 0;
     }
     
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
             this.finish();
         } else if ("more".equals(view.getTag())) {
+            InputMethodManager inputMethodManager = (InputMethodManager) this
+                    .getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+    
 }

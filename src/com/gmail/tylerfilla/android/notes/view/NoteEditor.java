@@ -1,21 +1,29 @@
 package com.gmail.tylerfilla.android.notes.view;
 
-import java.util.HashMap;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+import org.xml.sax.XMLReader;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.Editable;
+import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableStringBuilder;
+import android.text.style.StrikethroughSpan;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
 import com.gmail.tylerfilla.android.notes.R;
+import com.gmail.tylerfilla.android.notes.core.Note;
 
 public class NoteEditor extends EditText {
+    
+    private Note note;
     
     private final Paint notepadLinePaint;
     private final Rect firstLineBounds;
@@ -57,74 +65,69 @@ public class NoteEditor extends EditText {
         super.onDraw(canvas);
     }
     
-    public String getNoteContent() {
-        Editable text = this.getText();
-        if (text instanceof Spannable) {
-            return this.spannableToNoteContent(text);
-        } else {
-            return text.toString();
-        }
+    public Note getNote() {
+        return this.note;
     }
     
-    public void setNoteContent(String noteContent) {
-        this.setText(this.noteContentToSpannable(noteContent));
+    public void setNote(Note note) {
+        this.note = note;
+        this.parseNoteContent();
     }
     
-    private Spannable noteContentToSpannable(String noteContent) {
-        SpannableStringBuilder contentBuilder = new SpannableStringBuilder();
-        
-        boolean escaped = false;
-        boolean bracketed = false;
-        
-        int bracketBegin = -1;
-        int bracketEnd = -1;
-        String bracketSequence = "";
-        
-        for (int ci = 0; ci < noteContent.length(); ci++) {
-            char c = noteContent.charAt(ci);
+    private void parseNoteContent() {
+        this.setText(Html.fromHtml(this.note.getContent(), null, new Html.TagHandler() {
             
-            if (bracketed) {
-                if (c == ']') {
-                    bracketed = false;
-                    bracketEnd = ci;
-                    
-                    this.handleBracketSequence(contentBuilder, bracketSequence, bracketBegin,
-                            bracketEnd);
-                    
-                    bracketSequence = "";
-                } else {
-                    bracketBegin = ci;
-                    bracketSequence += c;
-                }
-                continue;
-            } else {
-                if (escaped) {
-                    contentBuilder.append(c);
-                    escaped = false;
-                } else {
-                    if (c == '[') {
-                        bracketed = true;
-                    } else if (c == '\\') {
-                        escaped = true;
+            private final char[] bulletChars = new char[] { '\u2022', '\u25E6', '\u25AA', '\u25AB' };
+            private final Bitmap[] bulletBitmaps = new Bitmap[this.bulletChars.length];
+            private boolean bulletBitmapsGenerated;
+            
+            private final Deque<String> listStack = new ArrayDeque<String>();
+            
+            @Override
+            public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
+                if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
+                    if (opening) {
+                        output.setSpan(new StrikethroughSpan(), output.length(), output.length(),
+                                Spannable.SPAN_MARK_MARK);
                     } else {
-                        contentBuilder.append(c);
+                        StrikethroughSpan[] strikeSpans = output.getSpans(0, output.length(),
+                                StrikethroughSpan.class);
+                        StrikethroughSpan strikeSpan = strikeSpans[strikeSpans.length - 1];
+                        output.setSpan(strikeSpan, output.getSpanStart(strikeSpan),
+                                output.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                } else if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol")) {
+                    if (opening) {
+                        this.listStack.push(tag);
+                    } else {
+                        this.listStack.pop();
+                    }
+                } else if (tag.equalsIgnoreCase("li")) {
+                    if (this.listStack.size() > 0) {
+                        String list = this.listStack.peek();
+                        int level = this.listStack.size();
+                        
+                        if (opening) {
+                            if (list.equalsIgnoreCase("ul")) {
+                                if (!this.bulletBitmapsGenerated) {
+                                    this.generateBulletBitmaps();
+                                }
+                            } else if (list.equalsIgnoreCase("ol")) {
+                            }
+                        } else {
+                            if (list.equalsIgnoreCase("ul")) {
+                            } else if (list.equalsIgnoreCase("ol")) {
+                            }
+                        }
                     }
                 }
             }
-        }
-        
-        return contentBuilder;
-    }
-    
-    private String spannableToNoteContent(Spannable spannable) {
-        return null;
-    }
-    
-    private void handleBracketSequence(SpannableStringBuilder contentBuilder,
-            String bracketSequence, int begin, int end) {
-        String name = "";
-        HashMap<String, String> attributes = new HashMap<String, String>();
-        
+            
+            public void generateBulletBitmaps() {
+                this.bulletBitmapsGenerated = true;
+            }
+            
+        }));
     }
     
 }

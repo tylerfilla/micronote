@@ -1,16 +1,15 @@
 package com.gmail.tylerfilla.android.notes.core;
 
+import java.io.File;
 
 public class NoteMedia {
     
     private Note note;
-    private String type;
-    private String name;
+    private File file;
     
     public NoteMedia() {
         this.note = null;
-        this.type = null;
-        this.name = null;
+        this.file = null;
     }
     
     public Note getNote() {
@@ -21,20 +20,12 @@ public class NoteMedia {
         this.note = note;
     }
     
-    public String getType() {
-        return this.type;
+    public File getFile() {
+        return this.file;
     }
     
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    public String getName() {
-        return this.name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
+    public void setFile(File file) {
+        this.file = file;
     }
     
 }

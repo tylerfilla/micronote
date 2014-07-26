@@ -2,29 +2,34 @@ package com.gmail.tylerfilla.android.notes.core;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import android.os.Environment;
-import android.webkit.MimeTypeMap;
-
 public class NoteKeeper {
     
-    private static final File notesDirectory = new File(Environment.getExternalStorageDirectory()
-            .getAbsolutePath().concat("/Notes"));
+    private static String dirNotes;
+    private static String dirTemp;
     
     private NoteKeeper() {
+    }
+    
+    public static void setDirectories(String paramDirNotes, String paramDirTemp) {
+        dirNotes = paramDirNotes;
+        dirTemp = paramDirTemp;
     }
     
     public static File[] listNoteFiles() {
         ArrayList<File> noteFiles = new ArrayList<File>();
         
-        for (File noteFile : notesDirectory.listFiles()) {
+        for (File noteFile : new File(dirNotes).listFiles()) {
             if (checkNoteFile(noteFile)) {
                 noteFiles.add(noteFile);
             }
@@ -74,15 +79,47 @@ public class NoteKeeper {
         Enumeration<? extends ZipEntry> enumeration = zip.entries();
         while (enumeration.hasMoreElements()) {
             ZipEntry entry = enumeration.nextElement();
-            if (entry.getName().startsWith("media/")) {
-                NoteMedia media = new NoteMedia();
+            
+            if (entry.getName().startsWith("media/") && entry.getName().length() > 6) {
+                String filename = entry.getName().substring(6);
                 
-                media.setType(MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                        MimeTypeMap.getFileExtensionFromUrl(entry.getName())));
-                media.setNote(note);
-                media.setName(entry.getName());
+                InputStream input = null;
+                OutputStream output = null;
                 
-                note.addMedia(media);
+                try {
+                    File file = new File(dirTemp, filename);
+                    
+                    if (file.exists()) {
+                        if (!file.delete()) {
+                            continue;
+                        }
+                    }
+                    
+                    input = zip.getInputStream(entry);
+                    output = new FileOutputStream(file);
+                    
+                    byte[] buffer = new byte[1024];
+                    int count = 0;
+                    while ((count = input.read(buffer, 0, buffer.length)) > 0) {
+                        output.write(buffer, 0, count);
+                    }
+                    
+                    NoteMedia media = new NoteMedia();
+                    
+                    media.setNote(note);
+                    media.setFile(file);
+                    
+                    note.addMedia(media);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (input != null) {
+                        input.close();
+                    }
+                    if (output != null) {
+                        output.close();
+                    }
+                }
             }
         }
         
@@ -160,6 +197,12 @@ public class NoteKeeper {
         note.setTitle("Untitled Note");
         
         return note;
+    }
+    
+    public static void clearTempFiles() {
+        for (File tempFile : new File(dirTemp).listFiles()) {
+            tempFile.delete();
+        }
     }
     
 }

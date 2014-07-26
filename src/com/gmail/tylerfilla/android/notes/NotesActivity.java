@@ -12,6 +12,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,16 +41,43 @@ public class NotesActivity extends Activity {
         
         this.setContentView(R.layout.activity_notes);
         
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File dirNotes = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
+                    "Notes");
+            File dirCache = new File(this.getExternalCacheDir().getAbsolutePath(), "Notes");
+            
+            dirNotes.mkdir();
+            dirCache.mkdir();
+            
+            NoteKeeper.setDirectories(dirNotes.getAbsolutePath(), dirCache.getAbsolutePath());
+        } else {
+            File dirNotes = new File(this.getFilesDir(), "Notes");
+            File dirCache = new File(this.getFilesDir(), "TempMedia");
+            
+            dirNotes.mkdir();
+            dirCache.mkdir();
+            
+            NoteKeeper.setDirectories(dirNotes.getAbsolutePath(), dirCache.getAbsolutePath());
+        }
+        
         ActionBar actionBar = this.getActionBar();
         actionBar.setCustomView(R.layout.actionbar_activity_notes);
         
         this.populateNoteList();
     }
     
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        
+        NoteKeeper.clearTempFiles();
+    }
+    
     private void populateNoteList() {
-        LinearLayout notesListEmpty = (LinearLayout) this.findViewById(R.id.notesListEmpty);
-        ScrollView notesListScroll = (ScrollView) this.findViewById(R.id.notesListScroll);
         LinearLayout notesListLayout = (LinearLayout) this.findViewById(R.id.notesListLayout);
+        ScrollView notesListScroll = (ScrollView) this.findViewById(R.id.notesListScroll);
+        LinearLayout notesListEmpty = (LinearLayout) this.findViewById(R.id.notesListEmpty);
+        ImageButton buttonActionSearch = (ImageButton) this.findViewById(R.id.buttonActionSearch);
         
         notesListLayout.removeAllViews();
         
@@ -76,13 +105,16 @@ public class NotesActivity extends Activity {
                 notesListLayout.addView(listEntry);
                 notesListLayout.addView(listEntryDivider);
             }
+            
+            notesListScroll.invalidate();
+            notesListScroll.requestLayout();
         } else {
             notesListEmpty.setVisibility(View.VISIBLE);
-            ((ImageButton) this.findViewById(R.id.buttonActionSearch)).setVisibility(View.GONE);
         }
         
-        notesListScroll.invalidate();
-        notesListScroll.requestLayout();
+        if (noteFiles.length < 2) {
+            buttonActionSearch.setVisibility(View.GONE);
+        }
     }
     
     public void buildNoteListEntry(LinearLayout entryView, final Note entryNote) {
@@ -108,7 +140,7 @@ public class NotesActivity extends Activity {
         
         if (entryNote != null) {
             listEntryTitle.setText(entryNote.getTitle());
-            listEntryPreview.setText(this.generateNoteContentPreview(entryNote.getContent()));
+            listEntryPreview.setText(Html.fromHtml(entryNote.getContent()));
             
             entryView.setOnClickListener(new OnClickListener() {
                 
