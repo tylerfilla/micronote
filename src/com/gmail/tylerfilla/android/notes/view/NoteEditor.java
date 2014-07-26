@@ -7,7 +7,6 @@ import org.xml.sax.XMLReader;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -15,6 +14,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.style.StrikethroughSpan;
+import android.text.style.TypefaceSpan;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -77,11 +77,10 @@ public class NoteEditor extends EditText {
     private void parseNoteContent() {
         this.setText(Html.fromHtml(this.note.getContent(), null, new Html.TagHandler() {
             
-            private final char[] bulletChars = new char[] { '\u2022', '\u25E6', '\u25AA', '\u25AB' };
-            private final Bitmap[] bulletBitmaps = new Bitmap[this.bulletChars.length];
-            private boolean bulletBitmapsGenerated;
+            private static final String bulletLadder = "\u2022\u25E6\u25AA\u25AB";
             
             private final Deque<String> listStack = new ArrayDeque<String>();
+            private final Deque<Integer> listCount = new ArrayDeque<Integer>();
             
             @Override
             public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
@@ -99,35 +98,42 @@ public class NoteEditor extends EditText {
                 } else if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol")) {
                     if (opening) {
                         this.listStack.push(tag);
+                        this.listCount.push(0);
                     } else {
                         this.listStack.pop();
+                        this.listCount.pop();
                     }
                 } else if (tag.equalsIgnoreCase("li")) {
-                    if (this.listStack.size() > 0) {
-                        String list = this.listStack.peek();
-                        int level = this.listStack.size();
-                        
-                        if (opening) {
-                            if (list.equalsIgnoreCase("ul")) {
-                                if (!this.bulletBitmapsGenerated) {
-                                    this.generateBulletBitmaps();
-                                }
-                            } else if (list.equalsIgnoreCase("ol")) {
+                    if (opening) {
+                        if (this.listStack.size() > 0) {
+                            String list = this.listStack.peek();
+                            int level = this.listStack.size() - 1;
+                            
+                            String prefix = "\n";
+                            
+                            for (int i = 0; i < level; i++) {
+                                prefix += ' ';
                             }
-                        } else {
+                            
                             if (list.equalsIgnoreCase("ul")) {
+                                prefix += bulletLadder.charAt(Math.min(level, bulletLadder.length()));
                             } else if (list.equalsIgnoreCase("ol")) {
+                                this.listCount.push(this.listCount.pop() + 1);
+                                prefix += this.listCount.peek() + ".";
                             }
+                            
+                            prefix += ' ';
+                            
+                            int prefixPos = output.length();
+                            
+                            output.append(prefix);
+                            output.setSpan(new TypefaceSpan("monospace"), prefixPos,
+                                    output.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
                     }
                 }
             }
             
-            public void generateBulletBitmaps() {
-                this.bulletBitmapsGenerated = true;
-            }
-            
         }));
     }
-    
 }
