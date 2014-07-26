@@ -13,6 +13,8 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import android.util.Log;
+
 public class NoteKeeper {
     
     private static String dirNotes;
@@ -190,6 +192,7 @@ public class NoteKeeper {
     }
     
     public static void writeNote(Note note) throws IOException {
+        Log.d("", "write note");
     }
     
     public static Note createBlankNote() {

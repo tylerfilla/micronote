@@ -73,6 +73,10 @@ public class NoteEditor extends EditText {
         this.parseNoteContent();
     }
     
+    public void writeNoteContent() {
+        this.note.setContent(Html.toHtml(this.getText()));
+    }
+    
     private void parseNoteContent() {
         this.setText(Html.fromHtml(this.note.getContent(), null, new Html.TagHandler() {
             
@@ -131,4 +135,5 @@ public class NoteEditor extends EditText {
             
         }));
     }
+    
 }
