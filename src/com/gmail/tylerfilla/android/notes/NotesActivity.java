@@ -30,6 +30,13 @@ public class NotesActivity extends Activity {
         this.setContentView(R.layout.activity_notes);
         this.getActionBar().setCustomView(R.layout.actionbar_activity_notes);
         
+        //this.refreshNoteList();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
         this.refreshNoteList();
     }
     

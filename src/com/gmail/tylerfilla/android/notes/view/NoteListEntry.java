@@ -36,7 +36,7 @@ public class NoteListEntry extends LinearLayout {
         listEntryTitle.setTextAppearance(this.getContext(), R.style.AppThemeNoteListEntryTitleText);
         listEntryTitle.setSingleLine();
         listEntryTitle.setEllipsize(TruncateAt.END);
-        listEntryTitle.setText(note.getTitle() != null ? note.getTitle() : "No title available");
+        listEntryTitle.setText(note.getTitle() != null ? note.getTitle() : "No title");
         
         TextView listEntryPreview = new TextView(this.getContext());
         listEntryPreview.setTextAppearance(this.getContext(),
@@ -44,7 +44,7 @@ public class NoteListEntry extends LinearLayout {
         listEntryPreview.setSingleLine();
         listEntryPreview.setEllipsize(TruncateAt.END);
         listEntryPreview.setText(Html.fromHtml(note.getContent() != null ? note.getContent()
-                : "No content preview available"));
+                : "No content"));
         
         this.addView(listEntryTitle);
         this.addView(listEntryPreview);

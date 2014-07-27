@@ -6,10 +6,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -75,7 +87,6 @@ public class NoteKeeper {
             saxParser.parse(noteFile, new DefaultHandler() {
                 
                 boolean infoTitle = false;
-                boolean infoAuthor = false;
                 boolean content = false;
                 
                 @Override
@@ -93,8 +104,6 @@ public class NoteKeeper {
                         }
                     } else if (qName.equalsIgnoreCase("title")) {
                         infoTitle = true;
-                    } else if (qName.equalsIgnoreCase("author")) {
-                        infoAuthor = true;
                     } else if (qName.equalsIgnoreCase("content")) {
                         content = true;
                     }
@@ -105,8 +114,6 @@ public class NoteKeeper {
                         throws SAXException {
                     if (qName.equalsIgnoreCase("title")) {
                         infoTitle = false;
-                    } else if (qName.equalsIgnoreCase("author")) {
-                        infoAuthor = false;
                     } else if (qName.equalsIgnoreCase("content")) {
                         content = false;
                     }
@@ -119,27 +126,74 @@ public class NoteKeeper {
                     if (!string.trim().isEmpty()) {
                         if (infoTitle) {
                             note.setTitle(string);
-                        } else if (infoAuthor) {
-                            note.setAuthor(string);
                         } else if (content) {
-                            note.setContent(new String(Base64.decode(string.getBytes(),
-                                    Base64.DEFAULT)));
+                            String currentContent = note.getContent() != null ? note.getContent()
+                                    : "";
+                            note.setContent(currentContent.concat(new String(Base64.decode(
+                                    string.getBytes(), Base64.DEFAULT))));
                         }
                     }
                 }
                 
             });
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            throw new NoteIOException(e);
         } catch (SAXException e) {
-            e.printStackTrace();
+            throw new NoteIOException(e);
         }
         
         return note;
     }
     
     public void writeNote(Note note) throws IOException {
+        if (note.getFile() == null) {
+            note.setFile(new File(this.dirNotes, note.getTitle().toLowerCase()
+                    .replaceAll("[^A-Za-z0-9]", "-").concat(".note")));
+            while (note.getFile().exists()) {
+                note.setFile(new File(note.getFile().getParentFile(), "_".concat(note.getFile()
+                        .getName())));
+            }
+        }
         
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        try {
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Transformer transformer = transformerFactory.newTransformer();
+            
+            Document document = documentBuilder.newDocument();
+            
+            Node tagNote = document.createElement("note");
+            Attr tagNoteAttrVersion = document.createAttribute("version");
+            tagNoteAttrVersion.setValue(String.valueOf(note.getVersion()));
+            tagNote.getAttributes().setNamedItem(tagNoteAttrVersion);
+            document.appendChild(tagNote);
+            
+            Node tagNoteInfo = document.createElement("info");
+            tagNote.appendChild(tagNoteInfo);
+            
+            Node tagNoteInfoTitle = document.createElement("title");
+            tagNoteInfoTitle.setTextContent(note.getTitle());
+            tagNoteInfo.appendChild(tagNoteInfoTitle);
+            
+            Node tagNoteContent = document.createElement("content");
+            tagNoteContent.setTextContent(Base64.encodeToString(note.getContent().getBytes(),
+                    Base64.DEFAULT));
+            tagNote.appendChild(tagNoteContent);
+            
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+            transformer.setOutputProperty(OutputKeys.INDENT, "no");
+            
+            transformer.transform(new DOMSource(document), new StreamResult(note.getFile()));
+        } catch (ParserConfigurationException e) {
+            throw new NoteIOException(e);
+        } catch (TransformerConfigurationException e) {
+            throw new NoteIOException(e);
+        } catch (TransformerException e) {
+            throw new NoteIOException(e);
+        }
     }
     
     private static Collection<File> scanDirectory(File directory) {
@@ -156,6 +210,16 @@ public class NoteKeeper {
         }
         
         return collection;
+    }
+    
+    private static class NoteIOException extends IOException {
+        
+        private static final long serialVersionUID = 4869480158190405839L;
+        
+        public NoteIOException(Throwable cause) {
+            super(cause);
+        }
+        
     }
     
 }

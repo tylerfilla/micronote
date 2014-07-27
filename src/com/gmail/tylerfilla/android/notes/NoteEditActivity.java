@@ -35,7 +35,7 @@ public class NoteEditActivity extends Activity {
         }
         
         if (noteFilePath == null) {
-            note = new Note();
+            note = Note.createBlank();
         } else {
             try {
                 note = this.noteKeeper.readNote(new File(noteFilePath));
@@ -51,9 +51,17 @@ public class NoteEditActivity extends Activity {
         actionbarActivityNoteEditTitle.setSelected(true);
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.noteEditor);
+        this.noteEditor.setNote(note);
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
         
-        if (note.getContent() != null) {
-            this.noteEditor.setNote(note);
+        try {
+            this.noteKeeper.writeNote(this.noteEditor.getNote());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     

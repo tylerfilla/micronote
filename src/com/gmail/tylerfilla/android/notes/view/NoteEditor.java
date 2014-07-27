@@ -75,8 +75,11 @@ public class NoteEditor extends EditText {
     
     public void setNote(Note note) {
         this.note = note;
-        this.setText(Html.fromHtml(this.note.getContent(), new NoteContentHtmlImageGetter(),
-                new NoteContentHtmlTagHandler()));
+        
+        if (this.note != null && this.note.getContent() != null) {
+            this.setText(Html.fromHtml(this.note.getContent(), new NoteContentHtmlImageGetter(),
+                    new NoteContentHtmlTagHandler()));
+        }
     }
     
     private class NoteContentHtmlImageGetter implements Html.ImageGetter {

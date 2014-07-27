@@ -2,7 +2,6 @@ package com.gmail.tylerfilla.android.notes.core;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Note {
@@ -10,33 +9,30 @@ public class Note {
     private File file;
     
     private int version;
-    
     private String title;
-    private String author;
-    
-    private Date dateCreated;
-    private Date dateModified;
     
     private String content;
     private final ArrayList<NoteMedia> media;
     
     private boolean changed;
     
-    public Note() {
+    Note() {
         this.file = null;
         
         this.version = 0;
-        
         this.title = null;
-        this.author = null;
-        
-        this.dateCreated = null;
-        this.dateModified = null;
         
         this.content = null;
         this.media = new ArrayList<NoteMedia>();
         
         this.changed = false;
+    }
+    
+    public static Note createBlank() {
+        Note note = new Note();
+        note.setVersion(1);
+        note.setTitle("Untitled Note");
+        return note;
     }
     
     public File getFile() {
@@ -79,36 +75,6 @@ public class Note {
         }
         
         this.title = title;
-    }
-    
-    public String getAuthor() {
-        return this.author;
-    }
-    
-    public void setAuthor(String author) {
-        if (this.author != null) {
-            this.changed = !this.author.equals(author);
-        } else if (author != null) {
-            this.changed = true;
-        }
-        
-        this.author = author;
-    }
-    
-    public Date getDateCreated() {
-        return this.dateCreated;
-    }
-    
-    void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-    
-    public Date getDateModified() {
-        return this.dateModified;
-    }
-    
-    void setDateModified(Date dateModified) {
-        this.dateModified = dateModified;
     }
     
     public String getContent() {
