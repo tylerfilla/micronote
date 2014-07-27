@@ -10,6 +10,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -65,77 +66,83 @@ public class NoteEditor extends EditText {
     }
     
     public Note getNote() {
+        if (this.note != null) {
+            this.note.setContent(Html.toHtml(this.getText()));
+        }
+        
         return this.note;
     }
     
     public void setNote(Note note) {
         this.note = note;
-        this.parseNoteContent();
+        this.setText(Html.fromHtml(this.note.getContent(), new NoteContentHtmlImageGetter(),
+                new NoteContentHtmlTagHandler()));
     }
     
-    public void writeNoteContent() {
-        if (this.note != null) {
-            this.note.setContent(Html.toHtml(this.getText()));
+    private class NoteContentHtmlImageGetter implements Html.ImageGetter {
+        
+        @Override
+        public Drawable getDrawable(String source) {
+            return null;
         }
+        
     }
     
-    private void parseNoteContent() {
-        this.setText(Html.fromHtml(this.note.getContent(), null, new Html.TagHandler() {
-            
-            private static final String bulletLadder = "\u2022\u25E6\u25AA\u25AB";
-            
-            private final Deque<String> listStack = new ArrayDeque<String>();
-            private final Deque<Integer> listCount = new ArrayDeque<Integer>();
-            
-            @Override
-            public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-                if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
-                    if (opening) {
-                        output.setSpan(new StrikethroughSpan(), output.length(), output.length(),
-                                Spannable.SPAN_MARK_MARK);
-                    } else {
-                        StrikethroughSpan[] strikeSpans = output.getSpans(0, output.length(),
-                                StrikethroughSpan.class);
-                        StrikethroughSpan strikeSpan = strikeSpans[strikeSpans.length - 1];
-                        output.setSpan(strikeSpan, output.getSpanStart(strikeSpan),
-                                output.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                } else if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol")) {
-                    if (opening) {
-                        this.listStack.push(tag);
-                        this.listCount.push(0);
-                    } else {
-                        this.listStack.pop();
-                        this.listCount.pop();
-                    }
-                } else if (tag.equalsIgnoreCase("li")) {
-                    if (opening) {
-                        if (this.listStack.size() > 0) {
-                            String list = this.listStack.peek();
-                            int level = this.listStack.size() - 1;
-                            
-                            String prefix = "\n";
-                            
-                            for (int i = 0; i < level; i++) {
-                                prefix += '\t';
-                            }
-                            
-                            if (list.equalsIgnoreCase("ul")) {
-                                prefix += bulletLadder.charAt(Math.min(level, bulletLadder.length()));
-                            } else if (list.equalsIgnoreCase("ol")) {
-                                this.listCount.push(this.listCount.pop() + 1);
-                                prefix += this.listCount.peek() + ".";
-                            }
-                            
-                            prefix += ' ';
-                            
-                            output.append(prefix);
+    private class NoteContentHtmlTagHandler implements Html.TagHandler {
+        
+        private static final String bulletLadder = "\u2022\u25E6\u25AA\u25AB";
+        
+        private final Deque<String> listStack = new ArrayDeque<String>();
+        private final Deque<Integer> listCount = new ArrayDeque<Integer>();
+        
+        @Override
+        public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
+            if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
+                if (opening) {
+                    output.setSpan(new StrikethroughSpan(), output.length(), output.length(),
+                            Spannable.SPAN_MARK_MARK);
+                } else {
+                    StrikethroughSpan[] strikeSpans = output.getSpans(0, output.length(),
+                            StrikethroughSpan.class);
+                    StrikethroughSpan strikeSpan = strikeSpans[strikeSpans.length - 1];
+                    output.setSpan(strikeSpan, output.getSpanStart(strikeSpan), output.length(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            } else if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol")) {
+                if (opening) {
+                    this.listStack.push(tag);
+                    this.listCount.push(0);
+                } else {
+                    this.listStack.pop();
+                    this.listCount.pop();
+                }
+            } else if (tag.equalsIgnoreCase("li")) {
+                if (opening) {
+                    if (this.listStack.size() > 0) {
+                        String list = this.listStack.peek();
+                        int level = this.listStack.size() - 1;
+                        
+                        String prefix = "\n";
+                        
+                        for (int i = 0; i < level; i++) {
+                            prefix += '\t';
                         }
+                        
+                        if (list.equalsIgnoreCase("ul")) {
+                            prefix += bulletLadder.charAt(Math.min(level, bulletLadder.length()));
+                        } else if (list.equalsIgnoreCase("ol")) {
+                            this.listCount.push(this.listCount.pop() + 1);
+                            prefix += this.listCount.peek() + ".";
+                        }
+                        
+                        prefix += ' ';
+                        
+                        output.append(prefix);
                     }
                 }
             }
-            
-        }));
+        }
+        
     }
     
 }

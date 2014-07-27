@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">Notes</string>
-    <string name="intent_edit_note">com.gmail.tylerfilla.android.notes.ACTION_EDIT_NOTE
-    </string>
+    <string name="actionbar_activity_notes_title">Notes</string>
+    <string name="actionbar_activity_note_edit_title">Notes</string>
     <string name="note_list_empty_title">No Notes Taken</string>
     <string name="note_list_empty_body">Tap the pencil icon in the upper right-hand
         corner to begin taking notes</string>
