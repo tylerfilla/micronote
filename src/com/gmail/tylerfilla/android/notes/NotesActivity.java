@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -72,6 +73,15 @@ public class NotesActivity extends Activity {
                         }
                         
                     });
+                    noteListEntry.setOnLongClickListener(new OnLongClickListener() {
+                        
+                        @Override
+                        public boolean onLongClick(View v) {
+                            noteListEntryLongClicked(noteListEntry);
+                            return true;
+                        }
+                        
+                    });
                     
                     View noteListEntryDivider = new View(this);
                     noteListEntryDivider.setBackgroundResource(R.color.pad_line);
@@ -108,6 +118,9 @@ public class NotesActivity extends Activity {
     
     public void noteListEntryClicked(NoteListEntry noteListEntry) {
         this.enterNoteEditor(noteListEntry.getNote().getFile());
+    }
+    
+    public void noteListEntryLongClicked(NoteListEntry noteListEntry) {
     }
     
     private void enterNoteEditor(File noteFile) {

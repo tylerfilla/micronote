@@ -31,6 +31,7 @@ public class NoteListEntry extends LinearLayout {
                 LayoutParams.WRAP_CONTENT));
         this.setOrientation(LinearLayout.VERTICAL);
         this.setPadding(24, 36, 24, 36);
+        this.setLongClickable(true);
         
         TextView listEntryTitle = new TextView(this.getContext());
         listEntryTitle.setTextAppearance(this.getContext(), R.style.AppThemeNoteListEntryTitleText);
