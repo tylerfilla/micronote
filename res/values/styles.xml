@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+    <style
+        name="AppTheme"
+        parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/AppThemeActionBar</item>
     </style>
 
-    <style name="AppThemeActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style
+        name="AppThemeActionBar"
+        parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:displayOptions">showCustom</item>
         <item name="android:icon">@color/transparent</item>
         <item name="android:background">@drawable/background_actionbar</item>
         <item name="android:titleTextStyle">@style/AppThemeActionBarTitleText</item>
     </style>
 
-    <style name="AppThemeActionBarTitleText" parent="@android:style/TextAppearance">
+    <style
+        name="AppThemeActionBarTitleText"
+        parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/text_actionbar</item>
     </style>
 
-    <style name="AppThemeNoteListEntryTitleText" parent="@android:style/TextAppearance">
+    <style
+        name="AppThemeNoteListEntryTitleText"
+        parent="@android:style/TextAppearance">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/text_note_list_entry_title</item>
     </style>
 
-    <style name="AppThemeNoteListEntryPreviewText" parent="@android:style/TextAppearance">
+    <style
+        name="AppThemeNoteListEntryPreviewText"
+        parent="@android:style/TextAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/text_note_list_entry_preview</item>
     </style>
 
-    <style name="AppThemeNoteListEntryInfoText" parent="@android:style/TextAppearance">
+    <style
+        name="AppThemeNoteListEntryInfoText"
+        parent="@android:style/TextAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/text_note_list_entry_info</item>
     </style>
