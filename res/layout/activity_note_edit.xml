@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res/com.gmail.tylerfilla.android.notes"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/notesListScroll"
@@ -10,17 +9,17 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:padding="8dp"
+    android:background="@color/pad_background"
     android:fillViewport="true"
-    android:background="@color/pad_background" >
+    android:padding="8dp" >
 
     <com.gmail.tylerfilla.android.notes.view.NoteEditor
         android:id="@+id/noteEditor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         android:gravity="top|left"
         android:textSize="22sp"
-        android:background="@color/transparent"
         custom:notepadLineColor="@color/pad_line"
         custom:notepadLineStrokeWidth="1dp" />
 

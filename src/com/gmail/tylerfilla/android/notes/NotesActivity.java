@@ -61,18 +61,20 @@ public class NotesActivity extends Activity {
                     e.printStackTrace();
                 }
                 
-                NoteListEntry noteListEntry = new NoteListEntry(this);
-                noteListEntry.setNote(note);
-                
-                this.buildNoteListEntry(noteListEntry);
-                
-                ImageView noteListEntryDivider = new ImageView(this);
-                noteListEntryDivider.setBackgroundResource(R.color.pad_line);
-                noteListEntryDivider.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 3));
-                
-                noteListLayout.addView(noteListEntry);
-                noteListLayout.addView(noteListEntryDivider);
+                if (note != null) {
+                    NoteListEntry noteListEntry = new NoteListEntry(this);
+                    noteListEntry.setNote(note);
+                    
+                    this.buildNoteListEntry(noteListEntry);
+                    
+                    ImageView noteListEntryDivider = new ImageView(this);
+                    noteListEntryDivider.setBackgroundResource(R.color.pad_line);
+                    noteListEntryDivider.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, 3));
+                    
+                    noteListLayout.addView(noteListEntry);
+                    noteListLayout.addView(noteListEntryDivider);
+                }
             }
             
             noteListScroll.invalidate();

@@ -11,11 +11,11 @@ public class NoteListEntry extends LinearLayout {
     private Note note;
     
     public NoteListEntry(Context context) {
-        this(context, null, 0);
+        super(context);
     }
     
     public NoteListEntry(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
     
     public NoteListEntry(Context context, AttributeSet attrs, int defStyle) {
