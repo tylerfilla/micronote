@@ -13,6 +13,7 @@
     <string name="content_buttonActionBack">Back</string>
     <string name="content_buttonActionMore">More</string>
     <string name="content_buttonActionClip">Clip</string>
-    <string name="content_buttonActionLess">Less</string>
+    <string name="content_buttonActionSelectDone">Done</string>
+    <string name="content_buttonActionSelectDelete">Delete</string>
 
 </resources>

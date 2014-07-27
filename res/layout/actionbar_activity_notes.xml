@@ -2,21 +2,22 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/actionbarActivityNotesTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="@string/app_name"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/actionbar_activity_notes_title"
         android:textColor="@color/text_actionbar"
         android:textSize="24sp" />
 
     <ImageButton
+        android:id="@+id/actionbarActivityButtonSettings"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="left"
+        android:layout_gravity="center_vertical|left"
         android:background="@drawable/background_button_actionbar"
         android:contentDescription="@string/content_buttonActionSettings"
         android:onClick="buttonActionClicked"
@@ -24,7 +25,7 @@
         android:tag="settings" />
 
     <ImageButton
-        android:id="@+id/buttonActionSearch"
+        android:id="@+id/actionbarActivityButtonSearch"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
@@ -36,6 +37,7 @@
         android:tag="search" />
 
     <ImageButton
+        android:id="@+id/actionbarActivityButtonNoteNew"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
@@ -44,5 +46,29 @@
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_new"
         android:tag="new" />
+
+    <ImageButton
+        android:id="@+id/actionbarActivityButtonSelectDone"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|left"
+        android:background="@drawable/background_button_actionbar"
+        android:visibility="gone"
+        android:contentDescription="@string/content_buttonActionSelectDone"
+        android:onClick="buttonActionClicked"
+        android:src="@drawable/ic_action_select_done"
+        android:tag="select_done" />
+
+    <ImageButton
+        android:id="@+id/actionbarActivityButtonSelectDelete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|right"
+        android:background="@drawable/background_button_actionbar"
+        android:visibility="gone"
+        android:contentDescription="@string/content_buttonActionSelectDelete"
+        android:onClick="buttonActionClicked"
+        android:src="@drawable/ic_action_select_delete"
+        android:tag="select_delete" />
 
 </FrameLayout>
