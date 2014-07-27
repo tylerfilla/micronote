@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
@@ -67,6 +69,11 @@ public class NoteEditActivity extends Activity {
     
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
+            InputMethodManager inputMethodManager = (InputMethodManager) this
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+            
             this.finish();
         }
     }
