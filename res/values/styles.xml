@@ -16,20 +16,20 @@
         <item name="android:textColor">@color/text_actionbar</item>
     </style>
 
-    <style name="AppThemeNotesListEntryTitleText" parent="@android:style/TextAppearance">
+    <style name="AppThemeNoteListEntryTitleText" parent="@android:style/TextAppearance">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/text_notes_list_entry_title</item>
+        <item name="android:textColor">@color/text_note_list_entry_title</item>
     </style>
 
-    <style name="AppThemeNotesListEntryPreviewText" parent="@android:style/TextAppearance">
+    <style name="AppThemeNoteListEntryPreviewText" parent="@android:style/TextAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/text_notes_list_entry_preview</item>
+        <item name="android:textColor">@color/text_note_list_entry_preview</item>
     </style>
 
-    <style name="AppThemeNotesListEntryInfoText" parent="@android:style/TextAppearance">
+    <style name="AppThemeNoteListEntryInfoText" parent="@android:style/TextAppearance">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_notes_list_entry_info</item>
+        <item name="android:textColor">@color/text_note_list_entry_info</item>
     </style>
 
 </resources>

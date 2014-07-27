@@ -3,10 +3,8 @@ package com.gmail.tylerfilla.android.notes;
 import java.io.File;
 import java.io.IOException;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +19,8 @@ public class NoteEditActivity extends Activity {
     
     private static int AUTOSAVE_PERIOD = 5000;
     
+    private NoteKeeper noteKeeper;
+    
     private NoteEditor noteEditor;
     private Note note;
     
@@ -31,26 +31,10 @@ public class NoteEditActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        this.setContentView(R.layout.activity_note_edit);
+        this.noteKeeper = NoteKeeper.getInstance(this);
         
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dirNotes = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
-                    "Notes");
-            File dirCache = new File(this.getExternalCacheDir().getAbsolutePath(), "Notes");
-            
-            dirNotes.mkdir();
-            dirCache.mkdir();
-            
-            NoteKeeper.setDirectories(dirNotes.getAbsolutePath(), dirCache.getAbsolutePath());
-        } else {
-            File dirNotes = new File(this.getFilesDir(), "Notes");
-            File dirCache = new File(this.getFilesDir(), "TempMedia");
-            
-            dirNotes.mkdir();
-            dirCache.mkdir();
-            
-            NoteKeeper.setDirectories(dirNotes.getAbsolutePath(), dirCache.getAbsolutePath());
-        }
+        this.setContentView(R.layout.activity_note_edit);
+        this.getActionBar().setCustomView(R.layout.actionbar_activity_note_edit);
         
         String noteFilePath = null;
         
@@ -60,18 +44,15 @@ public class NoteEditActivity extends Activity {
         }
         
         if (noteFilePath == null) {
-            this.note = NoteKeeper.createBlankNote();
+            this.note = new Note();
         } else {
             try {
-                this.note = NoteKeeper.readNoteFile(new File(noteFilePath));
+                this.note = this.noteKeeper.readNote(new File(noteFilePath));
             } catch (IOException e) {
                 e.printStackTrace();
                 this.finish();
             }
         }
-        
-        ActionBar actionBar = this.getActionBar();
-        actionBar.setCustomView(R.layout.actionbar_activity_note_edit);
         
         ((TextView) this.findViewById(R.id.actionbarActivityNoteEditTitle)).setText(this.note
                 .getTitle());
@@ -91,12 +72,14 @@ public class NoteEditActivity extends Activity {
             public void run() {
                 NoteEditActivity.this.noteEditor.writeNoteContent();
                 
-                try {
-                    NoteKeeper.writeNote(NoteEditActivity.this.note);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(NoteEditActivity.this, "Autosave failed: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
+                if (NoteEditActivity.this.note.getChanged()) {
+                    try {
+                        NoteEditActivity.this.noteKeeper.writeNote(NoteEditActivity.this.note);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(NoteEditActivity.this, "Autosave failed: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
                 
                 autosaveHandler.postDelayed(this, autosavePeriodFinal);
@@ -113,10 +96,12 @@ public class NoteEditActivity extends Activity {
         this.autosaveHandler.removeCallbacks(this.autosaveHandlerRunnable);
         
         this.noteEditor.writeNoteContent();
-        try {
-            NoteKeeper.writeNote(this.note);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (this.note != null) {
+            try {
+                this.noteKeeper.writeNote(this.note);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     

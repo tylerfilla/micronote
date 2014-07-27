@@ -9,6 +9,8 @@ public class Note {
     
     private File file;
     
+    private int version;
+    
     private String title;
     private String author;
     
@@ -18,8 +20,12 @@ public class Note {
     private String content;
     private final ArrayList<NoteMedia> media;
     
+    private boolean changed;
+    
     public Note() {
         this.file = null;
+        
+        this.version = 0;
         
         this.title = null;
         this.author = null;
@@ -29,6 +35,8 @@ public class Note {
         
         this.content = null;
         this.media = new ArrayList<NoteMedia>();
+        
+        this.changed = false;
     }
     
     public File getFile() {
@@ -36,7 +44,27 @@ public class Note {
     }
     
     public void setFile(File file) {
+        if (this.file != null) {
+            this.changed = !this.file.equals(file);
+        } else if (file != null) {
+            this.changed = true;
+        }
+        
         this.file = file;
+    }
+    
+    public int getVersion() {
+        return this.version;
+    }
+    
+    public void setVersion(int version) {
+        if (this.version != 0) {
+            this.changed = this.version != version;
+        } else if (version != 0) {
+            this.changed = true;
+        }
+        
+        this.version = version;
     }
     
     public String getTitle() {
@@ -44,6 +72,12 @@ public class Note {
     }
     
     public void setTitle(String title) {
+        if (this.title != null) {
+            this.changed = !this.title.equals(title);
+        } else if (title != null) {
+            this.changed = true;
+        }
+        
         this.title = title;
     }
     
@@ -52,6 +86,12 @@ public class Note {
     }
     
     public void setAuthor(String author) {
+        if (this.author != null) {
+            this.changed = !this.author.equals(author);
+        } else if (author != null) {
+            this.changed = true;
+        }
+        
         this.author = author;
     }
     
@@ -59,7 +99,7 @@ public class Note {
         return this.dateCreated;
     }
     
-    public void setDateCreated(Date dateCreated) {
+    void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
     
@@ -67,7 +107,7 @@ public class Note {
         return this.dateModified;
     }
     
-    public void setDateModified(Date dateModified) {
+    void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
     }
     
@@ -76,6 +116,12 @@ public class Note {
     }
     
     public void setContent(String content) {
+        if (this.content != null) {
+            this.changed = !this.content.equals(content);
+        } else if (content != null) {
+            this.changed = true;
+        }
+        
         this.content = content;
     }
     
@@ -84,11 +130,21 @@ public class Note {
     }
     
     public void addMedia(NoteMedia media) {
+        this.changed = true;
         this.media.add(media);
     }
     
     public boolean removeMedia(NoteMedia media) {
+        this.changed = true;
         return this.media.remove(media);
+    }
+    
+    public boolean getChanged() {
+        return this.changed;
+    }
+    
+    public void clearChanged() {
+        this.changed = false;
     }
     
 }

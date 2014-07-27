@@ -74,7 +74,9 @@ public class NoteEditor extends EditText {
     }
     
     public void writeNoteContent() {
-        this.note.setContent(Html.toHtml(this.getText()));
+        if (this.note != null) {
+            this.note.setContent(Html.toHtml(this.getText()));
+        }
     }
     
     private void parseNoteContent() {

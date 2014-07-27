@@ -1,7 +1,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/notesListScroll"
+    android:id="@+id/noteListScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
@@ -18,7 +18,7 @@
 
         <!-- 'No Notes Taken' message -->
         <LinearLayout
-            android:id="@+id/notesListEmpty"
+            android:id="@+id/noteListEmpty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/note_list_empty_title"
-                android:textColor="@color/text_notes_list_empty_title"
+                android:textColor="@color/text_note_list_empty_title"
                 android:textSize="26sp" />
 
             <TextView
@@ -37,14 +37,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/note_list_empty_body"
-                android:textColor="@color/text_notes_list_empty_body"
+                android:textColor="@color/text_note_list_empty_body"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
         <!-- List content -->
         <LinearLayout
-            android:id="@+id/notesListLayout"
+            android:id="@+id/noteListLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >

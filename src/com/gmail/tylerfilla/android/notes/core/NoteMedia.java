@@ -5,11 +5,11 @@ import java.io.File;
 public class NoteMedia {
     
     private Note note;
-    private File file;
+    private File tempFile;
     
     public NoteMedia() {
         this.note = null;
-        this.file = null;
+        this.tempFile = null;
     }
     
     public Note getNote() {
@@ -20,12 +20,12 @@ public class NoteMedia {
         this.note = note;
     }
     
-    public File getFile() {
-        return this.file;
+    public File getTempFile() {
+        return this.tempFile;
     }
     
-    public void setFile(File file) {
-        this.file = file;
+    void setFile(File file) {
+        this.tempFile = file;
     }
     
 }
