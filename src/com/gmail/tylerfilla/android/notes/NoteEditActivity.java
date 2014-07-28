@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
@@ -47,10 +51,20 @@ public class NoteEditActivity extends Activity {
             }
         }
         
-        TextView actionbarActivityNoteEditTitle = (TextView) this
+        final TextView actionbarActivityNoteEditTitle = (TextView) this
                 .findViewById(R.id.actionbarActivityNoteEditTitle);
         actionbarActivityNoteEditTitle.setText(note.getTitle());
         actionbarActivityNoteEditTitle.setSelected(true);
+        actionbarActivityNoteEditTitle.setLongClickable(true);
+        actionbarActivityNoteEditTitle.setOnLongClickListener(new OnLongClickListener() {
+            
+            @Override
+            public boolean onLongClick(View v) {
+                NoteEditActivity.this.editTitle(actionbarActivityNoteEditTitle);
+                return true;
+            }
+            
+        });
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.noteEditor);
         this.noteEditor.setNote(note);
@@ -68,6 +82,32 @@ public class NoteEditActivity extends Activity {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public void editTitle(final TextView actionbarActivityNoteEditTitle) {
+        AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
+        
+        titlePrompt.setTitle("Edit Title");
+        titlePrompt.setMessage("Input new title:");
+        
+        final EditText titlePromptInput = new EditText(this);
+        titlePromptInput.setMaxLines(1);
+        titlePromptInput.setHint(this.noteEditor.getNote().getTitle());
+        titlePrompt.setView(titlePromptInput);
+        
+        titlePrompt.setNegativeButton("Cancel", null);
+        titlePrompt.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String title = titlePromptInput.getText().toString();
+                NoteEditActivity.this.noteEditor.getNote().setTitle(title);
+                actionbarActivityNoteEditTitle.setText(title);
+            }
+            
+        });
+        
+        titlePrompt.show();
     }
     
     public void buttonActionClicked(View view) {
