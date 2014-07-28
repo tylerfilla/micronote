@@ -3,13 +3,13 @@ package com.gmail.tylerfilla.android.notes;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -111,12 +111,12 @@ public class NotesActivity extends ListActivity {
     private class NoteListAdapter extends BaseAdapter {
         
         private final LayoutInflater layoutInflater;
-        private final SparseBooleanArray selection;
+        private final HashSet<Integer> selection;
         
         public NoteListAdapter() {
             this.layoutInflater = (LayoutInflater) NotesActivity.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            this.selection = new SparseBooleanArray();
+            this.selection = new HashSet<Integer>();
         }
         
         @Override
@@ -165,12 +165,21 @@ public class NotesActivity extends ListActivity {
         }
         
         public boolean getSelected(int position) {
-            return this.selection.get(position);
+            return this.selection.contains(position);
         }
         
         public void setSelected(int position, boolean selected) {
-            this.selection.put(position, selected);
-            this.notifyDataSetChanged();
+            if (selected) {
+                this.selection.add(position);
+                this.notifyDataSetChanged();
+            } else {
+                this.selection.remove(position);
+                this.notifyDataSetChanged();
+            }
+        }
+        
+        public int getSelectionCount() {
+            return this.selection.size();
         }
         
         public void clearSelection() {
@@ -218,6 +227,8 @@ public class NotesActivity extends ListActivity {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
                 boolean checked) {
             this.noteListAdapter.setSelected(position, checked);
+            mode.setTitle(this.noteListAdapter.getSelectionCount() + " note"
+                    + (this.noteListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
         }
         
     }
