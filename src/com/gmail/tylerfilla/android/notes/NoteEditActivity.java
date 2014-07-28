@@ -5,12 +5,10 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -74,6 +72,7 @@ public class NoteEditActivity extends Activity {
     protected void onPause() {
         super.onPause();
         
+        this.noteEditor.clearComposingText();
         Note note = this.noteEditor.getNote();
         if (note != null && note.getContent() != null && !note.getContent().isEmpty()) {
             try {
@@ -114,11 +113,6 @@ public class NoteEditActivity extends Activity {
     
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
-            InputMethodManager inputMethodManager = (InputMethodManager) this
-                    .getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-            
             this.finish();
         }
     }
