@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,8 +57,7 @@ public class NotesActivity extends ListActivity {
     }
     
     private void refreshNoteList() {
-        ImageButton buttonActionSearch = (ImageButton) this
-                .findViewById(R.id.actionbarActivityButtonSearch);
+        this.noteList.clear();
         
         File[] noteFiles = this.noteKeeper.listNoteFiles();
         
@@ -77,12 +75,18 @@ public class NotesActivity extends ListActivity {
                     this.noteList.add(note);
                 }
             }
+            
+            this.getListView().setVisibility(View.VISIBLE);
+            this.findViewById(R.id.activityNotesNoteListEmpty).setVisibility(View.GONE);
+        } else {
+            this.getListView().setVisibility(View.GONE);
+            this.findViewById(R.id.activityNotesNoteListEmpty).setVisibility(View.VISIBLE);
         }
         
         if (noteFiles.length >= 2) {
-            buttonActionSearch.setVisibility(View.VISIBLE);
+            this.findViewById(R.id.actionbarActivityButtonSearch).setVisibility(View.VISIBLE);
         } else {
-            buttonActionSearch.setVisibility(View.GONE);
+            this.findViewById(R.id.actionbarActivityButtonSearch).setVisibility(View.GONE);
         }
         
         ((BaseAdapter) this.getListView().getAdapter()).notifyDataSetChanged();
@@ -212,7 +216,31 @@ public class NotesActivity extends ListActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
             case R.id.activityNotesNoteListSelectCABDelete:
+                HashSet<Note> deletedNotes = new HashSet<Note>();
+                
+                for (int i = 0; i < this.noteListAdapter.getCount(); i++) {
+                    if (this.noteListAdapter.getSelected(i)) {
+                        Note note = (Note) this.noteListAdapter.getItem(i);
+                        
+                        try {
+                            NotesActivity.this.noteKeeper.deleteNote(note);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        
+                        deletedNotes.add(note);
+                    }
+                }
+                
+                for (Note note : deletedNotes) {
+                    NotesActivity.this.noteList.remove(note);
+                }
+                
+                this.noteListAdapter.notifyDataSetChanged();
                 mode.finish();
+                
+                NotesActivity.this.refreshNoteList();
+                
                 break;
             }
             return true;

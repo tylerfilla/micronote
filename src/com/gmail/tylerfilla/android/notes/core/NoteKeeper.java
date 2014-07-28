@@ -196,6 +196,16 @@ public class NoteKeeper {
         }
     }
     
+    public void deleteNote(Note note) throws IOException {
+        File noteFile = note.getFile();
+        
+        if (noteFile != null) {
+            noteFile.delete();
+        }
+        
+        note.setFile(null);
+    }
+    
     private static Collection<File> scanDirectory(File directory) {
         Collection<File> collection = new HashSet<File>();
         
