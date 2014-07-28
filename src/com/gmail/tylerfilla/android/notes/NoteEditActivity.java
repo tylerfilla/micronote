@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -89,6 +90,8 @@ public class NoteEditActivity extends Activity {
         final EditText titlePromptInput = new EditText(this);
         titlePromptInput.setMaxLines(1);
         titlePromptInput.setHint(this.noteEditor.getNote().getTitle());
+        titlePromptInput.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         titlePrompt.setView(titlePromptInput);
         
         titlePrompt.setNegativeButton("Cancel", null);
