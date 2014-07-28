@@ -14,7 +14,7 @@
     android:fillViewport="true"
     android:padding="8dp">
 
-    <com.gmail.tylerfilla.android.notes.view.NoteEditor
+    <com.gmail.tylerfilla.android.notes.widget.NoteEditor
         android:id="@+id/noteEditor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

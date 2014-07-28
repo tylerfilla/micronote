@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes.view;
+package com.gmail.tylerfilla.android.notes.widget;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

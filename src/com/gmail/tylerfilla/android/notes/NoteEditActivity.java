@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
-import com.gmail.tylerfilla.android.notes.view.NoteEditor;
+import com.gmail.tylerfilla.android.notes.widget.NoteEditor;
 
 public class NoteEditActivity extends Activity {
     
@@ -60,10 +60,13 @@ public class NoteEditActivity extends Activity {
     protected void onPause() {
         super.onPause();
         
-        try {
-            this.noteKeeper.writeNote(this.noteEditor.getNote());
-        } catch (IOException e) {
-            e.printStackTrace();
+        Note note = this.noteEditor.getNote();
+        if (note != null && note.getContent() != null && !note.getContent().isEmpty()) {
+            try {
+                this.noteKeeper.writeNote(note);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     

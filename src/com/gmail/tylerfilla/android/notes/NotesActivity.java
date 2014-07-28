@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,11 +44,13 @@ public class NotesActivity extends ListActivity {
         this.setContentView(R.layout.activity_notes);
         
         ListView listView = this.getListView();
+        listView.setDividerHeight(2);
         listView.setAdapter(new NoteListAdapter());
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
-                (NoteListAdapter) this.getListView().getAdapter()));
-        listView.setDividerHeight(2);
+                (NoteListAdapter) listView.getAdapter()));
+        listView.setOnItemClickListener(new NoteListOnItemClickListener((NoteListAdapter) listView
+                .getAdapter()));
     }
     
     @Override
@@ -189,6 +193,25 @@ public class NotesActivity extends ListActivity {
         public void clearSelection() {
             this.selection.clear();
             this.notifyDataSetChanged();
+        }
+        
+    }
+    
+    private class NoteListOnItemClickListener implements OnItemClickListener {
+        
+        private final NoteListAdapter noteListAdapter;
+        
+        public NoteListOnItemClickListener(NoteListAdapter noteListAdapter) {
+            this.noteListAdapter = noteListAdapter;
+        }
+        
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Note note = (Note) this.noteListAdapter.getItem(position);
+            
+            if (note.getFile() != null) {
+                NotesActivity.this.enterNoteEditor(note.getFile());
+            }
         }
         
     }
