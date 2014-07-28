@@ -85,7 +85,7 @@ public class NoteEditActivity extends Activity {
         AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
         
         titlePrompt.setTitle("Edit Title");
-        titlePrompt.setMessage("Input new title:");
+        titlePrompt.setMessage("Please enter a new title:");
         
         final EditText titlePromptInput = new EditText(this);
         titlePromptInput.setMaxLines(1);
@@ -101,9 +101,11 @@ public class NoteEditActivity extends Activity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String title = titlePromptInput.getText().toString();
                 
-                NoteEditActivity.this.noteEditor.getNote().setTitle(title);
-                ((TextView) NoteEditActivity.this.findViewById(R.id.activityNoteEditActionbarTitle))
-                        .setText(title);
+                if (!title.isEmpty()) {
+                    NoteEditActivity.this.noteEditor.getNote().setTitle(title);
+                    ((TextView) NoteEditActivity.this
+                            .findViewById(R.id.activityNoteEditActionbarTitle)).setText(title);
+                }
             }
             
         });
