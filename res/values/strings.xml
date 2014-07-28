@@ -13,7 +13,6 @@
     <string name="content_buttonActionBack">Back</string>
     <string name="content_buttonActionMore">More</string>
     <string name="content_buttonActionClip">Clip</string>
-    <string name="content_buttonActionSelectDone">Done</string>
-    <string name="content_buttonActionSelectDelete">Delete</string>
+    <string name="menu_text_activityNotesNoteListSelectCABDelete">Delete</string>
 
 </resources>
