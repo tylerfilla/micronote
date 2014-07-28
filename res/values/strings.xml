@@ -5,14 +5,16 @@
     <string name="actionbar_activity_notes_title">Notes</string>
     <string name="actionbar_activity_note_edit_title">Notes</string>
     <string name="note_list_empty_title">No Notes Taken</string>
-    <string name="note_list_empty_body">Tap the pencil icon in the upper right-hand
-        corner to begin taking notes</string>
-    <string name="content_buttonActionSettings">Settings</string>
-    <string name="content_buttonActionSearch">Search</string>
-    <string name="content_buttonActionNoteNew">New note</string>
-    <string name="content_buttonActionBack">Back</string>
-    <string name="content_buttonActionMore">More</string>
-    <string name="content_buttonActionClip">Clip</string>
+    <string name="note_list_empty_body">Tap the pencil icon in the upper right-hand corner to begin taking notes</string>
+    <string name="search_empty_title">No Search Results</string>
+    <string name="search_empty_body">Notes attempts to match all words of a given query. In general, it is best to keep queries succinct.</string>
+    <string name="content_actionbarActivityNotesButtonSearchClose">Close</string>
+    <string name="content_actionbarActivityNotesButtonSettings">Settings</string>
+    <string name="content_actionbarActivityNotesButtonSearch">Search</string>
+    <string name="content_actionbarActivityNotesButtonNoteNew">New note</string>
+    <string name="content_actionbarActivityNotesButtonMore">More</string>
+    <string name="content_actionbarActivityNoteEditButtonBack">Back</string>
+    <string name="content_actionbarActivityNoteEditButtonClip">Clip</string>
     <string name="menu_text_activityNotesNoteListSelectCABDelete">Delete</string>
 
 </resources>

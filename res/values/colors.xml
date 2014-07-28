@@ -7,11 +7,11 @@
     <color name="pad_background">#FDFCC5</color>
     <color name="pad_line">#D6D4AD</color>
     <color name="text_actionbar">#F0F0F0</color>
-    <color name="text_note_list_entry_title">#C00000</color>
-    <color name="text_note_list_entry_preview">#888888</color>
-    <color name="text_note_list_entry_info">#888888</color>
+    <color name="text_note_list_item_title">#C00000</color>
+    <color name="text_note_list_item_preview">#888888</color>
     <color name="text_note_list_empty_title">#C00000</color>
     <color name="text_note_list_empty_body">#AAAAAA</color>
+    <color name="text_note_list_footer">#666666</color>
     <color name="background_button_actionbar_selected">#33FFFFFF</color>
     <color name="background_note_list_entry_selected">#C1C09B</color>
 

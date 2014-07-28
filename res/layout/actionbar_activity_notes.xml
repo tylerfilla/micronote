@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/actionbarActivityNotesTitle"
@@ -14,35 +13,47 @@
         android:textSize="24sp" />
 
     <ImageButton
-        android:id="@+id/actionbarActivityButtonSettings"
+        android:id="@+id/actionbarActivityNotesButtonSearchClose"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|left"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_buttonActionSettings"
+        android:contentDescription="@string/content_actionbarActivityNotesButtonSearchClose"
+        android:onClick="buttonActionClicked"
+        android:src="@drawable/ic_action_search_close"
+        android:tag="search_close"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/actionbarActivityNotesButtonSettings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|left"
+        android:background="@drawable/background_button_actionbar"
+        android:contentDescription="@string/content_actionbarActivityNotesButtonSettings"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_settings"
         android:tag="settings" />
 
     <ImageButton
-        android:id="@+id/actionbarActivityButtonSearch"
+        android:id="@+id/actionbarActivityNotesButtonSearch"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
         android:layout_marginRight="48dp"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_buttonActionSearch"
+        android:contentDescription="@string/content_actionbarActivityNotesButtonSearch"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_search"
         android:tag="search" />
 
     <ImageButton
-        android:id="@+id/actionbarActivityButtonNoteNew"
+        android:id="@+id/actionbarActivityNotesButtonNoteNew"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_buttonActionNoteNew"
+        android:contentDescription="@string/content_actionbarActivityNotesButtonNoteNew"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_new"
         android:tag="new" />

@@ -18,18 +18,18 @@
 
     <style name="AppThemeNoteListItemTitleText" parent="@android:style/TextAppearance">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/text_note_list_entry_title</item>
+        <item name="android:textColor">@color/text_note_list_item_title</item>
     </style>
 
     <style name="AppThemeNoteListItemContentPreviewText" parent="@android:style/TextAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/text_note_list_entry_preview</item>
+        <item name="android:textColor">@color/text_note_list_item_preview</item>
     </style>
 
-    <style name="AppThemeNoteListItemInfoText" parent="@android:style/TextAppearance">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_note_list_entry_info</item>
+    <style name="AppThemeNoteListFooterText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_note_list_footer</item>
     </style>
 
 </resources>
