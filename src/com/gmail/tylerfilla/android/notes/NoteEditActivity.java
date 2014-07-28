@@ -60,7 +60,7 @@ public class NoteEditActivity extends Activity {
             
             @Override
             public boolean onLongClick(View v) {
-                NoteEditActivity.this.editTitle(actionbarActivityNoteEditTitle);
+                NoteEditActivity.this.editNoteTitle();
                 return true;
             }
             
@@ -84,7 +84,7 @@ public class NoteEditActivity extends Activity {
         }
     }
     
-    public void editTitle(final TextView actionbarActivityNoteEditTitle) {
+    private void editNoteTitle() {
         AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
         
         titlePrompt.setTitle("Edit Title");
@@ -101,8 +101,10 @@ public class NoteEditActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 String title = titlePromptInput.getText().toString();
+                
                 NoteEditActivity.this.noteEditor.getNote().setTitle(title);
-                actionbarActivityNoteEditTitle.setText(title);
+                ((TextView) NoteEditActivity.this.findViewById(R.id.actionbarActivityNoteEditTitle))
+                        .setText(title);
             }
             
         });
