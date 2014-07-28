@@ -161,7 +161,7 @@ public class NotesActivity extends ListActivity {
             this.getListView().requestFocus();
             ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE))
                     .hideSoftInputFromWindow(searchBubble.getWindowToken(),
-                            InputMethodManager.HIDE_IMPLICIT_ONLY);
+                            InputMethodManager.HIDE_NOT_ALWAYS);
         } else {
             this.searchMode = true;
             this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_search);
