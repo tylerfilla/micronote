@@ -185,6 +185,7 @@ public class NotesActivity extends ListActivity {
             };
             
             searchBubble.setVisibility(View.VISIBLE);
+            searchBubble.setText("");
             searchBubble.addTextChangedListener(this.searchBubbleTextChangedListener);
             searchBubble.requestFocus();
             ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE))
