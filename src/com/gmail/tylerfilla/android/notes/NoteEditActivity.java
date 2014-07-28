@@ -8,7 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnLongClickListener;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,7 +28,7 @@ public class NoteEditActivity extends Activity {
         this.noteKeeper = NoteKeeper.getInstance(this);
         
         this.setContentView(R.layout.activity_note_edit);
-        this.getActionBar().setCustomView(R.layout.actionbar_activity_note_edit);
+        this.getActionBar().setCustomView(R.layout.activity_note_edit_actionbar);
         
         Note note = null;
         String noteFilePath = null;
@@ -39,27 +39,24 @@ public class NoteEditActivity extends Activity {
         }
         
         if (noteFilePath == null) {
-            note = Note.createBlank();
+            note = Note.blank();
         } else {
             try {
                 note = this.noteKeeper.readNote(new File(noteFilePath));
             } catch (IOException e) {
                 e.printStackTrace();
-                this.finish();
             }
         }
         
-        final TextView actionbarActivityNoteEditTitle = (TextView) this
-                .findViewById(R.id.actionbarActivityNoteEditTitle);
+        TextView actionbarActivityNoteEditTitle = (TextView) this
+                .findViewById(R.id.activityNoteEditActionbarTitle);
         actionbarActivityNoteEditTitle.setText(note.getTitle());
         actionbarActivityNoteEditTitle.setSelected(true);
-        actionbarActivityNoteEditTitle.setLongClickable(true);
-        actionbarActivityNoteEditTitle.setOnLongClickListener(new OnLongClickListener() {
+        actionbarActivityNoteEditTitle.setOnClickListener(new OnClickListener() {
             
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 NoteEditActivity.this.editNoteTitle();
-                return true;
             }
             
         });
@@ -102,7 +99,7 @@ public class NoteEditActivity extends Activity {
                 String title = titlePromptInput.getText().toString();
                 
                 NoteEditActivity.this.noteEditor.getNote().setTitle(title);
-                ((TextView) NoteEditActivity.this.findViewById(R.id.actionbarActivityNoteEditTitle))
+                ((TextView) NoteEditActivity.this.findViewById(R.id.activityNoteEditActionbarTitle))
                         .setText(title);
             }
             

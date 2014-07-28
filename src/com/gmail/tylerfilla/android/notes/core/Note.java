@@ -28,7 +28,7 @@ public class Note {
         this.changed = false;
     }
     
-    public static Note createBlank() {
+    public static Note blank() {
         Note note = new Note();
         note.setVersion(1);
         note.setTitle("Untitled Note");

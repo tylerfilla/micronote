@@ -4,58 +4,44 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/actionbarActivityNotesTitle"
+        android:id="@+id/activityNotesActionbarListTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
-        android:text="@string/actionbar_activity_notes_title"
+        android:text="@string/activity_notes_actionbar_list_title"
         android:textColor="@color/text_actionbar"
         android:textSize="24sp" />
 
     <ImageButton
-        android:id="@+id/actionbarActivityNotesButtonSearchClose"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|left"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_actionbarActivityNotesButtonSearchClose"
-        android:onClick="buttonActionClicked"
-        android:src="@drawable/ic_action_search_close"
-        android:tag="search_close"
-        android:visibility="gone" />
-
-    <ImageButton
-        android:id="@+id/actionbarActivityNotesButtonSettings"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_vertical|left"
-        android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_actionbarActivityNotesButtonSettings"
+        android:contentDescription="@string/content_description_activityNotesActionbarListButtonSettings"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_settings"
-        android:tag="settings" />
+        android:tag="list_settings" />
 
     <ImageButton
-        android:id="@+id/actionbarActivityNotesButtonSearch"
+        android:id="@+id/activityNotesActionbarListButtonSearch"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
         android:layout_marginRight="48dp"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_actionbarActivityNotesButtonSearch"
+        android:contentDescription="@string/content_description_activityNotesActionbarListButtonSearch"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_search"
-        android:tag="search" />
+        android:tag="list_search" />
 
     <ImageButton
-        android:id="@+id/actionbarActivityNotesButtonNoteNew"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_actionbarActivityNotesButtonNoteNew"
+        android:contentDescription="@string/content_description_activityNotesActionbarListButtonNoteNew"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_new"
-        android:tag="new" />
+        android:tag="list_new" />
 
 </FrameLayout>

@@ -32,4 +32,9 @@
         <item name="android:textColor">@color/text_note_list_footer</item>
     </style>
 
+    <style name="AppThemeSearchBubbleInput" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/text_search_bubble_input</item>
+        <item name="android:textColorHint">@color/text_search_bubble_input_hint</item>
+    </style>
+
 </resources>

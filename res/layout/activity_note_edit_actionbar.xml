@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/actionbarActivityNoteEditTitle"
+        android:id="@+id/activityNoteEditActionbarTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:ellipsize="marquee"
@@ -22,7 +22,7 @@
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|left"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_actionbarActivityNoteEditButtonBack"
+        android:contentDescription="@string/content_description_activityNoteEditActionbarButtonBack"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_back"
         android:tag="back" />
@@ -32,7 +32,7 @@
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
         android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_actionbarActivityNoteEditButtonClip"
+        android:contentDescription="@string/content_description_activityNoteEditActionbarButtonClip"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_clip"
         android:tag="clip" />

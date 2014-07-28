@@ -9,7 +9,10 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:choiceMode="multipleChoiceModal"
+        android:dividerHeight="1dp"
+        android:footerDividersEnabled="false" />
 
     <LinearLayout
         android:id="@+id/activityNotesNoteListEmpty"
@@ -58,5 +61,22 @@
             android:text="@string/search_empty_body"
             android:textAppearance="@style/AppThemeNoteListItemContentPreviewText" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/activityNotesSearchBubble"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:background="@android:drawable/toast_frame"
+        android:hint="@string/activity_notes_search_bubble_hint"
+        android:maxLines="1"
+        android:orientation="horizontal"
+        android:textColor="@color/text_search_bubble_input"
+        android:textColorHint="@color/text_search_bubble_input_hint"
+        android:visibility="gone" >
+    </EditText>
 
 </RelativeLayout>
