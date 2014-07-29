@@ -57,14 +57,13 @@ public class NotesActivity extends ListActivity {
         this.setContentView(R.layout.activity_notes);
         
         ListView listView = this.getListView();
-        listView.setAdapter(this.noteListAdapter);
-        listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
-                (NoteListAdapter) listView.getAdapter()));
-        listView.setOnItemClickListener(new NoteListOnItemClickListener((NoteListAdapter) listView
-                .getAdapter()));
         listView.addFooterView(
                 this.getLayoutInflater().inflate(R.layout.activity_notes_list_footer, null), null,
                 false);
+        listView.setAdapter(this.noteListAdapter);
+        listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
+                this.noteListAdapter));
+        listView.setOnItemClickListener(new NoteListOnItemClickListener(this.noteListAdapter));
     }
     
     @Override
