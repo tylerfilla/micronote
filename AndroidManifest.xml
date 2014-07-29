@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gmail.tylerfilla.android.notes"
     android:versionCode="0"
-    android:versionName="DEV" >
+    android:versionName="DEV-3f8946bc6167e002c426819142959a0a47da8272" >
 
     <uses-sdk
         android:minSdkVersion="11"
