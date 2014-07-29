@@ -7,7 +7,7 @@
 
     <style name="AppThemeActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:displayOptions">showCustom</item>
-        <item name="android:icon">@color/transparent</item>
+        <item name="android:icon">@android:color/transparent</item>
         <item name="android:background">@drawable/background_actionbar</item>
     </style>
 

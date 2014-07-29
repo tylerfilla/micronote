@@ -132,8 +132,8 @@ public class NotesActivity extends ListActivity {
         listView.setOnItemClickListener(new NoteListOnItemClickListener((NoteListAdapter) listView
                 .getAdapter()));
         listView.addFooterView(
-                this.getLayoutInflater().inflate(R.layout.activity_notes_note_list_footer, null),
-                null, false);
+                this.getLayoutInflater().inflate(R.layout.activity_notes_list_footer, null), null,
+                false);
     }
     
     public void buttonActionClicked(View view) {
@@ -235,7 +235,7 @@ public class NotesActivity extends ListActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView != null ? convertView : NotesActivity.this.getLayoutInflater()
-                    .inflate(R.layout.activity_notes_note_list_item, parent, false);
+                    .inflate(R.layout.activity_notes_list_item, parent, false);
             Note note = NotesActivity.this.noteList.get(position);
             
             TextView title = (TextView) view.findViewById(R.id.activityNotesNoteListItemTitle);
@@ -253,10 +253,10 @@ public class NotesActivity extends ListActivity {
             
             if (this.getSelected(position)) {
                 view.setBackgroundColor(NotesActivity.this.getResources().getColor(
-                        R.color.background_note_list_entry_selected));
+                        R.color.background_note_list_item_selected));
             } else {
                 view.setBackgroundColor(NotesActivity.this.getResources().getColor(
-                        R.color.transparent));
+                        android.R.color.transparent));
             }
             
             return view;

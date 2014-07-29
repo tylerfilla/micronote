@@ -5,8 +5,8 @@
         android:angle="270"
         android:centerX="0.5"
         android:centerY="0.5"
-        android:endColor="@color/background_actionbar_bottom"
-        android:startColor="@color/background_actionbar_top"
+        android:endColor="@color/background_pad_bottom"
+        android:startColor="@color/background_pad_top"
         android:type="linear" />
 
 </shape>

@@ -14,7 +14,7 @@
         android:paddingRight="64dp"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textColor="@drawable/text_actionbar_activity_note_edit_title"
+        android:textColor="@drawable/text_activity_note_edit_actionbar_title"
         android:textSize="24sp" />
 
     <ImageButton

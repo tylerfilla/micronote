@@ -3,23 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <TextView
         android:id="@+id/activityNotesNoteListItemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/AppThemeNoteListItemTitleText"
+        android:ellipsize="end"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:textAppearance="@style/AppThemeNoteListItemTitleText" />
 
     <TextView
         android:id="@+id/activityNotesNoteListItemContentPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/AppThemeNoteListItemContentPreviewText"
+        android:ellipsize="end"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:textAppearance="@style/AppThemeNoteListItemContentPreviewText" />
 
 </LinearLayout>
