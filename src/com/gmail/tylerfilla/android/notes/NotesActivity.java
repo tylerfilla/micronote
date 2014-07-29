@@ -308,7 +308,7 @@ public class NotesActivity extends ListActivity {
         
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.activity_notes_note_list_select_cab, menu);
+            mode.getMenuInflater().inflate(R.menu.activity_notes_list_select_cab, menu);
             return true;
         }
         
