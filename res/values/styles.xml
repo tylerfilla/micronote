@@ -41,4 +41,10 @@
         <item name="android:textColorHint">@color/text_search_bubble_input_hint</item>
     </style>
 
-</resources>
+    <!-- Notes Activity -->
+
+    <style name="activityNoteEditEditorHeaderText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_note_list_item_title</item>
+    </style>
+</resources>

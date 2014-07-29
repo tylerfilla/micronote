@@ -2,8 +2,8 @@
 <resources>
 
     <declare-styleable name="NoteEditor">
-        <attr name="notepadLineColor" format="color" />
-        <attr name="notepadLineStrokeWidth" format="dimension" />
+        <attr name="lineColor" format="color" />
+        <attr name="lineSize" format="dimension" />
     </declare-styleable>
 
 </resources>

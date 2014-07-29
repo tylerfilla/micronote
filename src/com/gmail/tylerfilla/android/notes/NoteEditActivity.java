@@ -2,6 +2,8 @@ package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -62,7 +64,17 @@ public class NoteEditActivity extends Activity {
             
         });
         
-        this.noteEditor = (NoteEditor) this.findViewById(R.id.noteEditor);
+        TextView activityNoteEditEditorHeader = (TextView) this
+                .findViewById(R.id.activityNoteEditEditorHeader);
+        if (note.getFile() == null) {
+            activityNoteEditEditorHeader.setText("New note");
+        } else {
+            DateFormat dateFormatLastModified = DateFormat.getDateInstance();
+            activityNoteEditEditorHeader.setText(String.valueOf(dateFormatLastModified
+                    .format(new Date(note.getFile().lastModified()))));
+        }
+        
+        this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);
     }
     

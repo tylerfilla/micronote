@@ -12,8 +12,6 @@
     <color name="text_search_bubble_input_hint">#BBBBBB</color>
     <color name="text_note_list_item_title">#C00000</color>
     <color name="text_note_list_item_preview">#888888</color>
-    <color name="text_note_list_empty_title">#C00000</color>
-    <color name="text_note_list_empty_body">#AAAAAA</color>
     <color name="text_note_list_footer">#666666</color>
     <color name="pad_line">#D6D4AD</color>
 

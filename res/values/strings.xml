@@ -4,7 +4,6 @@
     <string name="app_name">Notes</string>
     <string name="activity_notes_actionbar_list_title">Notes</string>
     <string name="activity_notes_actionbar_search_title">Search</string>
-    <string name="activity_note_edit_actionbar_title">Notes</string>
     <string name="activity_settings_actionbar_title">Settings</string>
     <string name="note_list_empty_title">No Notes Taken</string>
     <string name="note_list_empty_body">Tap the pencil icon in the upper right-hand corner to begin taking notes</string>
@@ -13,13 +12,11 @@
     <string name="content_description_activityNotesActionbarListButtonSettings">Settings</string>
     <string name="content_description_activityNotesActionbarListButtonSearch">Search</string>
     <string name="content_description_activityNotesActionbarListButtonNoteNew">New note</string>
-    <string name="content_description_activityNotesActionbarListButtonMore">More</string>
     <string name="content_description_activityNotesActionbarSearchButtonClose">Close</string>
     <string name="content_description_activityNoteEditActionbarButtonBack">Back</string>
     <string name="content_description_activityNoteEditActionbarButtonClip">Clip</string>
     <string name="menu_text_activityNotesNoteListSelectCABDelete">Delete</string>
     <string name="activity_notes_search_bubble_hint">Type here to search</string>
-    <string name="title_activity_settings">SettingsActivity</string>
     <string name="pref_about_title">Notes {version}</string>
     <string name="pref_about_summary">&#169; 2014 Tyler Filla</string>
 

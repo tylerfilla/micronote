@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res/com.gmail.tylerfilla.android.notes"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/notesListScroll"
+    android:id="@+id/activityNoteEditScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
@@ -10,18 +10,39 @@
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
     android:background="@drawable/background_pad"
-    android:fillViewport="true"
-    android:padding="8dp" >
+    android:fillViewport="true" >
 
-    <com.gmail.tylerfilla.android.notes.widget.NoteEditor
-        android:id="@+id/noteEditor"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:gravity="top|left"
-        android:inputType="textCapSentences|textMultiLine"
-        android:textSize="22sp"
-        custom:notepadLineColor="@color/pad_line"
-        custom:notepadLineStrokeWidth="1dp" />
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp" >
+
+        <TextView
+            android:id="@+id/activityNoteEditEditorHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:gravity="right"
+            android:textAppearance="@style/activityNoteEditEditorHeaderText" />
+
+        <com.gmail.tylerfilla.android.notes.widget.NoteEditor
+            android:id="@+id/activityNoteEditEditor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="top|left"
+            android:inputType="textCapSentences|textMultiLine"
+            android:isScrollContainer="false"
+            android:paddingTop="4dp"
+            android:textSize="22sp"
+            custom:lineColor="@color/pad_line"
+            custom:lineSize="1dp" />
+    </LinearLayout>
 
 </ScrollView>

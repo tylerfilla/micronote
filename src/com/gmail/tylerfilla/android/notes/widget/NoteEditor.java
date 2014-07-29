@@ -39,10 +39,10 @@ public class NoteEditor extends EditText {
         for (int i = 0; i < styledAttrs.getIndexCount(); i++) {
             int attr = styledAttrs.getIndex(i);
             switch (attr) {
-            case R.styleable.NoteEditor_notepadLineColor:
+            case R.styleable.NoteEditor_lineColor:
                 this.notepadLinePaint.setColor(styledAttrs.getColor(attr, 0x000000));
                 break;
-            case R.styleable.NoteEditor_notepadLineStrokeWidth:
+            case R.styleable.NoteEditor_lineSize:
                 this.notepadLinePaint.setStrokeWidth(styledAttrs.getDimension(attr, 0.0f));
                 break;
             }
