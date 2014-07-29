@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
@@ -67,7 +68,7 @@ public class NoteEditActivity extends Activity {
         TextView activityNoteEditEditorHeader = (TextView) this
                 .findViewById(R.id.activityNoteEditEditorHeader);
         if (note.getFile() == null) {
-            activityNoteEditEditorHeader.setText("New note");
+            activityNoteEditEditorHeader.setText("New");
         } else {
             DateFormat dateFormatLastModified = DateFormat.getDateInstance();
             activityNoteEditEditorHeader.setText(String.valueOf(dateFormatLastModified
@@ -132,6 +133,8 @@ public class NoteEditActivity extends Activity {
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
             this.finish();
+        } else if ("clip".equals(view.getTag())) {
+            Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
         }
     }
     
