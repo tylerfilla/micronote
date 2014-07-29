@@ -25,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
@@ -33,6 +32,7 @@ import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
 public class NotesActivity extends ListActivity {
     
     private static final String ACTION_EDIT_NOTE = "com.gmail.tylerfilla.android.notes.ACTION_EDIT_NOTE";
+    private static final String ACTION_SETTINGS = "com.gmail.tylerfilla.android.notes.ACTION_SETTINGS";
     
     private NoteKeeper noteKeeper;
     
@@ -138,7 +138,7 @@ public class NotesActivity extends ListActivity {
     
     public void buttonActionClicked(View view) {
         if ("list_settings".equals(view.getTag())) {
-            Toast.makeText(this, "Settings not yet implemented", Toast.LENGTH_SHORT).show();
+            this.enterSettings();
         } else if ("list_search".equals(view.getTag())) {
             this.toggleSearchMode();
         } else if ("list_new".equals(view.getTag())) {
@@ -146,6 +146,10 @@ public class NotesActivity extends ListActivity {
         } else if ("search_close".equals(view.getTag())) {
             this.toggleSearchMode();
         }
+    }
+    
+    private void enterSettings() {
+        this.startActivity(new Intent(ACTION_SETTINGS));
     }
     
     private void toggleSearchMode() {
