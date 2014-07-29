@@ -2,8 +2,9 @@ package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -70,9 +71,8 @@ public class NoteEditActivity extends Activity {
         if (note.getFile() == null) {
             activityNoteEditEditorHeader.setText("New");
         } else {
-            DateFormat dateFormatLastModified = DateFormat.getDateInstance();
-            activityNoteEditEditorHeader.setText(String.valueOf(dateFormatLastModified
-                    .format(new Date(note.getFile().lastModified()))));
+            activityNoteEditEditorHeader.setText(new SimpleDateFormat("h:mm a   M/dd/yyyy",
+                    Locale.US).format(new Date(note.getFile().lastModified())));
         }
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
