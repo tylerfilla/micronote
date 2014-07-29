@@ -76,6 +76,10 @@ public class NoteEditActivity extends Activity {
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);
+        
+        if (note.getFile() == null) {
+            this.noteEditor.requestFocus();
+        }
     }
     
     @Override
