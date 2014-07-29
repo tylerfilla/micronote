@@ -72,7 +72,7 @@
         android:layout_marginRight="14dp"
         android:background="@android:drawable/toast_frame"
         android:hint="@string/activity_notes_search_bubble_hint"
-        android:maxLines="1"
+        android:inputType="text"
         android:orientation="horizontal"
         android:textColor="@color/text_search_bubble_input"
         android:textColorHint="@color/text_search_bubble_input_hint"
