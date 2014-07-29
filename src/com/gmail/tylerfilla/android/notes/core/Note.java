@@ -109,8 +109,4 @@ public class Note {
         return this.changed;
     }
     
-    public void clearChanged() {
-        this.changed = false;
-    }
-    
 }

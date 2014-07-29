@@ -146,6 +146,10 @@ public class NoteKeeper {
     }
     
     public void writeNote(Note note) throws IOException {
+        if (!note.getChanged()) {
+            return;
+        }
+        
         if (note.getFile() == null) {
             note.setFile(new File(this.dirNotes, note.getTitle().toLowerCase()
                     .replaceAll("[^A-Za-z0-9]", "-").concat(".note")));
