@@ -96,7 +96,7 @@ public class NoteEditor extends EditText {
         private static final String bulletLadder = "\u2022\u25E6\u25AA\u25AB";
         
         private final Deque<String> listStack = new ArrayDeque<String>();
-        private final Deque<Integer> listCount = new ArrayDeque<Integer>();
+        private final Deque<Integer> listCountStack = new ArrayDeque<Integer>();
         
         @Override
         public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
@@ -114,10 +114,10 @@ public class NoteEditor extends EditText {
             } else if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol")) {
                 if (opening) {
                     this.listStack.push(tag);
-                    this.listCount.push(0);
+                    this.listCountStack.push(0);
                 } else {
                     this.listStack.pop();
-                    this.listCount.pop();
+                    this.listCountStack.pop();
                 }
             } else if (tag.equalsIgnoreCase("li")) {
                 if (opening) {
@@ -134,8 +134,8 @@ public class NoteEditor extends EditText {
                         if (list.equalsIgnoreCase("ul")) {
                             prefix += bulletLadder.charAt(Math.min(level, bulletLadder.length()));
                         } else if (list.equalsIgnoreCase("ol")) {
-                            this.listCount.push(this.listCount.pop() + 1);
-                            prefix += this.listCount.peek() + ".";
+                            this.listCountStack.push(this.listCountStack.pop() + 1);
+                            prefix += this.listCountStack.peek() + ".";
                         }
                         
                         prefix += ' ';

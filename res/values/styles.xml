@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- AppTheme -->
+
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/AppThemeActionBar</item>
     </style>
@@ -16,23 +18,25 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="AppThemeNoteListItemTitleText" parent="@android:style/TextAppearance">
+    <!-- Notes Activity -->
+
+    <style name="activityNotesListItemTitleText" parent="@android:style/TextAppearance">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/text_note_list_item_title</item>
     </style>
 
-    <style name="AppThemeNoteListItemContentPreviewText" parent="@android:style/TextAppearance">
+    <style name="activityNotesListItemContentPreviewText" parent="@android:style/TextAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/text_note_list_item_preview</item>
     </style>
 
-    <style name="AppThemeNoteListFooterText" parent="@android:style/TextAppearance">
+    <style name="activityNotesListFooterText" parent="@android:style/TextAppearance">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/text_note_list_footer</item>
     </style>
 
-    <style name="AppThemeSearchBubbleInput" parent="@android:style/TextAppearance">
+    <style name="activityNotesSearchBubbleText" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/text_search_bubble_input</item>
         <item name="android:textColorHint">@color/text_search_bubble_input_hint</item>
     </style>

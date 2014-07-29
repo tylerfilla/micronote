@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/note_list_empty_title"
-            android:textAppearance="@style/AppThemeNoteListItemTitleText" />
+            android:textAppearance="@style/activityNotesListItemTitleText" />
 
         <TextView
             android:id="@+id/activityNotesNoteListEmptyBody"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/note_list_empty_body"
-            android:textAppearance="@style/AppThemeNoteListItemContentPreviewText" />
+            android:textAppearance="@style/activityNotesListItemContentPreviewText" />
     </LinearLayout>
 
     <LinearLayout
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/search_empty_title"
-            android:textAppearance="@style/AppThemeNoteListItemTitleText" />
+            android:textAppearance="@style/activityNotesListItemTitleText" />
 
         <TextView
             android:id="@+id/activityNotesSearchEmptyBody"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/search_empty_body"
-            android:textAppearance="@style/AppThemeNoteListItemContentPreviewText" />
+            android:textAppearance="@style/activityNotesListItemContentPreviewText" />
     </LinearLayout>
 
     <EditText

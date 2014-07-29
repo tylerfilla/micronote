@@ -1,6 +1,9 @@
 package com.gmail.tylerfilla.android.notes;
 
+import android.app.Activity;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
@@ -28,8 +31,21 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             this.addPreferencesFromResource(R.xml.pref);
+            
+            String versionName = null;
+            try {
+                Activity activity = this.getActivity();
+                versionName = activity.getPackageManager().getPackageInfo(
+                        activity.getPackageName(), 0).versionName;
+            } catch (NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (versionName != null) {
+                Preference prefAbout = this.findPreference("pref_about");
+                prefAbout.setTitle(prefAbout.getTitle().toString()
+                        .replace("{version}", versionName));
+            }
         }
-        
     }
     
 }

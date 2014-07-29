@@ -31,16 +31,13 @@ import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
 
 public class NotesActivity extends ListActivity {
     
-    private static final String ACTION_EDIT_NOTE = "com.gmail.tylerfilla.android.notes.ACTION_EDIT_NOTE";
-    private static final String ACTION_SETTINGS = "com.gmail.tylerfilla.android.notes.ACTION_SETTINGS";
-    
     private NoteKeeper noteKeeper;
     
     private ArrayList<Note> noteList;
     private NoteListAdapter noteListAdapter;
     
-    private String searchQuery;
     private boolean searchMode;
+    private String searchQuery;
     private TextWatcher searchBubbleTextChangedListener;
     
     @Override
@@ -52,14 +49,22 @@ public class NotesActivity extends ListActivity {
         this.noteList = new ArrayList<Note>();
         this.noteListAdapter = new NoteListAdapter();
         
-        this.searchQuery = "";
         this.searchMode = false;
+        this.searchQuery = "";
         this.searchBubbleTextChangedListener = null;
         
         this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_list);
         this.setContentView(R.layout.activity_notes);
         
-        this.initListView();
+        ListView listView = this.getListView();
+        listView.setAdapter(this.noteListAdapter);
+        listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
+                (NoteListAdapter) listView.getAdapter()));
+        listView.setOnItemClickListener(new NoteListOnItemClickListener((NoteListAdapter) listView
+                .getAdapter()));
+        listView.addFooterView(
+                this.getLayoutInflater().inflate(R.layout.activity_notes_list_footer, null), null,
+                false);
     }
     
     @Override
@@ -123,19 +128,6 @@ public class NotesActivity extends ListActivity {
         this.noteListAdapter.notifyDataSetChanged();
     }
     
-    private void initListView() {
-        ListView listView = this.getListView();
-        
-        listView.setAdapter(this.noteListAdapter);
-        listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
-                (NoteListAdapter) listView.getAdapter()));
-        listView.setOnItemClickListener(new NoteListOnItemClickListener((NoteListAdapter) listView
-                .getAdapter()));
-        listView.addFooterView(
-                this.getLayoutInflater().inflate(R.layout.activity_notes_list_footer, null), null,
-                false);
-    }
-    
     public void buttonActionClicked(View view) {
         if ("list_settings".equals(view.getTag())) {
             this.enterSettings();
@@ -149,7 +141,7 @@ public class NotesActivity extends ListActivity {
     }
     
     private void enterSettings() {
-        this.startActivity(new Intent(ACTION_SETTINGS));
+        this.startActivity(new Intent(this, SettingsActivity.class));
     }
     
     private void toggleSearchMode() {
@@ -200,10 +192,10 @@ public class NotesActivity extends ListActivity {
     }
     
     private void enterNoteEditor(File noteFile) {
-        Intent noteEditIntent = new Intent(ACTION_EDIT_NOTE);
+        Intent noteEditIntent = new Intent(this, NoteEditActivity.class);
         
         if (noteFile != null) {
-            noteEditIntent.putExtra("noteFilePath", noteFile.getAbsolutePath());
+            noteEditIntent.putExtra("file", noteFile.getAbsolutePath());
         }
         
         this.startActivity(noteEditIntent);

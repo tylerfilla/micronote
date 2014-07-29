@@ -28,15 +28,15 @@ public class NoteEditActivity extends Activity {
         
         this.noteKeeper = NoteKeeper.getInstance(this);
         
-        this.setContentView(R.layout.activity_note_edit);
         this.getActionBar().setCustomView(R.layout.activity_note_edit_actionbar);
+        this.setContentView(R.layout.activity_note_edit);
         
         Note note = null;
         String noteFilePath = null;
         
         Bundle startingIntentExtras = this.getIntent().getExtras();
         if (startingIntentExtras != null) {
-            noteFilePath = startingIntentExtras.getString("noteFilePath");
+            noteFilePath = startingIntentExtras.getString("file");
         }
         
         if (noteFilePath == null) {
@@ -85,7 +85,7 @@ public class NoteEditActivity extends Activity {
         AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
         
         titlePrompt.setTitle("Edit Title");
-        titlePrompt.setMessage("Please enter a new title:");
+        titlePrompt.setMessage("Please enter a new title for this note:");
         
         final EditText titlePromptInput = new EditText(this);
         titlePromptInput.setMaxLines(1);
