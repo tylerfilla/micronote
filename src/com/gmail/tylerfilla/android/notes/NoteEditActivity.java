@@ -135,6 +135,8 @@ public class NoteEditActivity extends Activity {
             this.finish();
         } else if ("clip".equals(view.getTag())) {
             Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
+        } else if ("menu".equals(view.getTag())) {
+            Toast.makeText(this, "Menu not yet implemented", Toast.LENGTH_SHORT).show();
         }
     }
     

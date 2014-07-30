@@ -3,20 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/activityNoteEditActionbarTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:ellipsize="marquee"
-        android:gravity="center_horizontal|center_vertical"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:paddingLeft="64dp"
-        android:paddingRight="64dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textColor="@drawable/text_activity_note_edit_actionbar_title"
-        android:textSize="24sp" />
-
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -27,14 +13,40 @@
         android:src="@drawable/ic_action_back"
         android:tag="back" />
 
+    <TextView
+        android:id="@+id/activityNoteEditActionbarTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="96dp"
+        android:layout_marginRight="96dp"
+        android:ellipsize="marquee"
+        android:gravity="center_horizontal|center_vertical"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@drawable/text_activity_note_edit_actionbar_title"
+        android:textSize="24sp" />
+
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="48dp"
         android:background="@drawable/background_button_actionbar"
         android:contentDescription="@string/content_description_activityNoteEditActionbarButtonClip"
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_clip"
         android:tag="clip" />
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|right"
+        android:background="@drawable/background_button_actionbar"
+        android:contentDescription="@string/content_description_activityNoteEditActionbarButtonMenu"
+        android:onClick="buttonActionClicked"
+        android:src="@drawable/ic_action_overflow"
+        android:tag="menu" />
 
 </FrameLayout>

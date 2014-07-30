@@ -3,14 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/activityNotesActionbarSearchTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/activity_notes_actionbar_search_title"
-        android:textAppearance="@style/AppThemeActionBarTitleText" />
-
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -20,5 +12,13 @@
         android:onClick="buttonActionClicked"
         android:src="@drawable/ic_action_search_close"
         android:tag="search_close" />
+
+    <TextView
+        android:id="@+id/activityNotesActionbarSearchTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/activity_notes_actionbar_search_title"
+        android:textAppearance="@style/AppThemeActionBarTitleText" />
 
 </FrameLayout>
