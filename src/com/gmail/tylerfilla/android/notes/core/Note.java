@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 public class Note {
     
     private static final String BLANK_NOTE_TITLE = "Untitled Note";
@@ -52,8 +50,6 @@ public class Note {
             this.changed = true;
         }
         
-        Log.d("", String.valueOf(this.changed));
-        
         this.file = file;
     }
     
@@ -67,8 +63,6 @@ public class Note {
         } else if (version != 0) {
             this.changed = true;
         }
-        
-        Log.d("", String.valueOf(this.changed));
         
         this.version = version;
     }
@@ -84,8 +78,6 @@ public class Note {
             this.changed = true;
         }
         
-        Log.d("", String.valueOf(this.changed));
-        
         this.title = title;
     }
     
@@ -99,8 +91,6 @@ public class Note {
         } else if (content != null) {
             this.changed = true;
         }
-        
-        Log.d("", String.valueOf(this.changed));
         
         this.content = content;
     }
@@ -125,8 +115,6 @@ public class Note {
     
     public void clearChanged() {
         this.changed = false;
-        
-        Log.d("", String.valueOf(this.changed));
     }
     
 }
