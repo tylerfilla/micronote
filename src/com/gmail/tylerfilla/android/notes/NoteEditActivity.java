@@ -36,20 +36,25 @@ public class NoteEditActivity extends Activity {
         this.setContentView(R.layout.activity_note_edit);
         
         Note note = null;
-        String noteFilePath = null;
         
-        Bundle startingIntentExtras = this.getIntent().getExtras();
-        if (startingIntentExtras != null) {
-            noteFilePath = startingIntentExtras.getString("file");
-        }
-        
-        if (noteFilePath == null) {
-            note = Note.blank();
+        if (this.noteKeeper.hasPersistentNote()) {
+            note = this.noteKeeper.popPersistentNote();
         } else {
-            try {
-                note = this.noteKeeper.readNote(new File(noteFilePath));
-            } catch (IOException e) {
-                e.printStackTrace();
+            String noteFilePath = null;
+            
+            Bundle startingIntentExtras = this.getIntent().getExtras();
+            if (startingIntentExtras != null) {
+                noteFilePath = startingIntentExtras.getString("file");
+            }
+            
+            if (noteFilePath == null) {
+                note = Note.blank();
+            } else {
+                try {
+                    note = this.noteKeeper.readNote(new File(noteFilePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         
@@ -88,6 +93,7 @@ public class NoteEditActivity extends Activity {
         super.onPause();
         
         this.noteEditor.clearComposingText();
+        
         Note note = this.noteEditor.getNote();
         if (note != null && note.getContent() != null && !note.getContent().isEmpty()) {
             try {
@@ -96,6 +102,13 @@ public class NoteEditActivity extends Activity {
                 e.printStackTrace();
             }
         }
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        this.noteKeeper.pushPersistentNote(this.noteEditor.getNote());
     }
     
     private void editNoteTitle() {

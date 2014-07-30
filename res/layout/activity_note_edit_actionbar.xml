@@ -21,6 +21,7 @@
         android:layout_marginLeft="96dp"
         android:layout_marginRight="96dp"
         android:ellipsize="marquee"
+        android:freezesText="true"
         android:gravity="center_horizontal|center_vertical"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"

@@ -2,6 +2,7 @@ package com.gmail.tylerfilla.android.notes.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -37,6 +38,8 @@ public class NoteKeeper {
     private File dirNotes;
     private File dirTemp;
     
+    private final ArrayDeque<Note> persistentNoteStack;
+    
     private NoteKeeper(Context context) {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             this.dirNotes = new File(Environment.getExternalStorageDirectory(), "Notes");
@@ -48,6 +51,8 @@ public class NoteKeeper {
         
         this.dirNotes.mkdirs();
         this.dirTemp.mkdirs();
+        
+        this.persistentNoteStack = new ArrayDeque<Note>();
     }
     
     public static NoteKeeper getInstance(Context context) {
@@ -142,6 +147,8 @@ public class NoteKeeper {
             throw new NoteIOException(e);
         }
         
+        note.clearChanged();
+        
         return note;
     }
     
@@ -208,6 +215,18 @@ public class NoteKeeper {
         }
         
         note.setFile(null);
+    }
+    
+    public void pushPersistentNote(Note note) {
+        this.persistentNoteStack.push(note);
+    }
+    
+    public Note popPersistentNote() {
+        return this.persistentNoteStack.pop();
+    }
+    
+    public boolean hasPersistentNote() {
+        return !this.persistentNoteStack.isEmpty();
     }
     
     private static Collection<File> scanDirectory(File directory) {
