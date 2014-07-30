@@ -1,9 +1,7 @@
 package com.gmail.tylerfilla.android.notes.widget;
 
-import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
 
 import org.xml.sax.XMLReader;
 
@@ -16,19 +14,12 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.DynamicDrawableSpan;
 import android.text.style.StrikethroughSpan;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.EditText;
 
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.core.Note;
-import com.gmail.tylerfilla.android.notes.util.CheckboxSpan;
-import com.gmail.tylerfilla.android.notes.util.CheckboxSpanClickRef;
 
 public class NoteEditor extends EditText {
     
@@ -58,8 +49,6 @@ public class NoteEditor extends EditText {
         }
         
         styledAttrs.recycle();
-        
-        this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
     
     @Override
@@ -73,23 +62,16 @@ public class NoteEditor extends EditText {
             canvas.drawLine(0.0f, linePos, this.getWidth(), linePos, this.notepadLinePaint);
         }
         
-        for (DynamicDrawableSpan span : this.getText().getSpans(0, this.getText().length(),
-                DynamicDrawableSpan.class)) {
-            int start = this.getText().getSpanStart(span);
-            int end = this.getText().getSpanEnd(span);
-            
-            this.getText().removeSpan(span);
-            this.getText().setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        
         super.onDraw(canvas);
     }
     
     public Note getNote() {
-        /*
-         * if (this.note != null) { String newContent = CustomSpannedToHtml.toHtml(this.getText());
-         * if (!newContent.equals(note.getContent())) { this.note.setContent(newContent); } }
-         */
+        if (this.note != null) {
+            String newContent = Html.toHtml(this.getText());
+            if (!newContent.equals(note.getContent())) {
+                this.note.setContent(newContent);
+            }
+        }
         
         return this.note;
     }
@@ -97,25 +79,11 @@ public class NoteEditor extends EditText {
     public void setNote(Note note) {
         this.note = note;
         
-        /*
-         * if (note != null && note.getContent() != null) { note.clearChanged();
-         * this.setText(Html.fromHtml(note.getContent(), new NoteContentHtmlImageGetter(), new
-         * NoteContentHtmlTagHandler())); }
-         */
-        /*
-         * this.setText(Html.fromHtml("<input type='checkbox' value='1' />", new
-         * NoteContentHtmlImageGetter(), new NoteContentHtmlTagHandler()));
-         */
-        this.setMovementMethod(new LinkMovementMethod());
-        
-        CheckboxSpan c = new CheckboxSpan(this);
-        CheckboxSpanClickRef cr = new CheckboxSpanClickRef(c);
-        
-        SpannableStringBuilder ss = new SpannableStringBuilder();
-        ss.append(" * ");
-        ss.setSpan(cr, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(c, 1, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        this.setText(ss, BufferType.SPANNABLE);
+        if (note != null && note.getContent() != null) {
+            note.clearChanged();
+            this.setText(Html.fromHtml(note.getContent(), new NoteContentHtmlImageGetter(),
+                    new NoteContentHtmlTagHandler()));
+        }
     }
     
     private class NoteContentHtmlImageGetter implements Html.ImageGetter {
@@ -133,8 +101,6 @@ public class NoteEditor extends EditText {
         
         private final Deque<String> listStack = new ArrayDeque<String>();
         private final Deque<Integer> listCountStack = new ArrayDeque<Integer>();
-        
-        private final HashMap<String, String> customAttributes = new HashMap<String, String>();
         
         @Override
         public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
@@ -181,54 +147,6 @@ public class NoteEditor extends EditText {
                         output.append(prefix);
                     }
                 }
-            } else if (tag.equalsIgnoreCase("input")) {
-                try {
-                    this.loadCustomAttributes(xmlReader);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                }
-                
-                if (!this.customAttributes.isEmpty()) {
-                    if ("checkbox".equalsIgnoreCase(this.customAttributes.get("type"))) {
-                        
-                    }
-                }
-            }
-        }
-        
-        private void loadCustomAttributes(XMLReader xmlReader) throws IllegalAccessException,
-                IllegalArgumentException, NoSuchFieldException {
-            this.customAttributes.clear();
-            
-            // A little 'dark magic' as suggested by @narkis at http://stackoverflow.com/q/20788393
-            // Based on a solution by @rekire at http://stackoverflow.com/a/15196299
-            
-            Field fieldElement = xmlReader.getClass().getDeclaredField("theNewElement");
-            fieldElement.setAccessible(true);
-            Object element = fieldElement.get(xmlReader);
-            
-            if (element == null) {
-                return;
-            }
-            
-            Field fieldAttributes = element.getClass().getDeclaredField("theAtts");
-            fieldAttributes.setAccessible(true);
-            Object attributes = fieldAttributes.get(element);
-            
-            Field fieldAttributeData = attributes.getClass().getDeclaredField("data");
-            fieldAttributeData.setAccessible(true);
-            String[] attributeData = (String[]) fieldAttributeData.get(attributes);
-            
-            Field fieldLength = attributes.getClass().getDeclaredField("length");
-            fieldLength.setAccessible(true);
-            int length = (Integer) fieldLength.get(attributes);
-            
-            for (int i = 0; i < length; i++) {
-                this.customAttributes.put(attributeData[i * 5 + 1], attributeData[i * 5 + 4]);
             }
         }
         
