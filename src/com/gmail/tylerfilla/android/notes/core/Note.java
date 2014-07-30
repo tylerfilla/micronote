@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Note {
     
+    private static final String BLANK_NOTE_TITLE = "Untitled Note";
+    
     private File file;
     
     private int version;
@@ -31,7 +33,7 @@ public class Note {
     public static Note blank() {
         Note note = new Note();
         note.setVersion(1);
-        note.setTitle("Untitled Note");
+        note.setTitle(BLANK_NOTE_TITLE);
         return note;
     }
     
@@ -41,7 +43,7 @@ public class Note {
     
     public void setFile(File file) {
         if (this.file != null) {
-            this.changed = !this.file.equals(file);
+            this.changed = this.changed || !this.file.equals(file);
         } else if (file != null) {
             this.changed = true;
         }
@@ -55,7 +57,7 @@ public class Note {
     
     public void setVersion(int version) {
         if (this.version != 0) {
-            this.changed = this.version != version;
+            this.changed = this.changed || this.version != version;
         } else if (version != 0) {
             this.changed = true;
         }
@@ -69,7 +71,7 @@ public class Note {
     
     public void setTitle(String title) {
         if (this.title != null) {
-            this.changed = !this.title.equals(title);
+            this.changed = this.changed || !this.title.equals(title);
         } else if (title != null) {
             this.changed = true;
         }
@@ -83,7 +85,7 @@ public class Note {
     
     public void setContent(String content) {
         if (this.content != null) {
-            this.changed = !this.content.equals(content);
+            this.changed = this.changed || !this.content.equals(content);
         } else if (content != null) {
             this.changed = true;
         }
