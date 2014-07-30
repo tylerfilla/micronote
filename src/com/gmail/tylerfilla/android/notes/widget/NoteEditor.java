@@ -67,7 +67,10 @@ public class NoteEditor extends EditText {
     
     public Note getNote() {
         if (this.note != null) {
-            this.note.setContent(Html.toHtml(this.getText()));
+            String newContent = Html.toHtml(this.getText());
+            if (!newContent.equals(note.getContent())) {
+                this.note.setContent(newContent);
+            }
         }
         
         return this.note;
@@ -76,8 +79,9 @@ public class NoteEditor extends EditText {
     public void setNote(Note note) {
         this.note = note;
         
-        if (this.note != null && this.note.getContent() != null) {
-            this.setText(Html.fromHtml(this.note.getContent(), new NoteContentHtmlImageGetter(),
+        if (note != null && note.getContent() != null) {
+            note.clearChanged();
+            this.setText(Html.fromHtml(note.getContent(), new NoteContentHtmlImageGetter(),
                     new NoteContentHtmlTagHandler()));
         }
     }
