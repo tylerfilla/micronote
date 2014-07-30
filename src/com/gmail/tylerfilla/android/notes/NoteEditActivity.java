@@ -95,7 +95,7 @@ public class NoteEditActivity extends Activity {
         this.noteEditor.clearComposingText();
         
         Note note = this.noteEditor.getNote();
-        if (note != null) {
+        if (note != null && note.getChanged()) {
             try {
                 this.noteKeeper.writeNote(note);
             } catch (IOException e) {

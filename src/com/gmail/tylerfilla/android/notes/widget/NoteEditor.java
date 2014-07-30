@@ -66,7 +66,7 @@ public class NoteEditor extends EditText {
     }
     
     public Note getNote() {
-        if (this.note != null && this.note.getChanged()) {
+        if (this.note != null) {
             this.note.setContent(Html.toHtml(this.getText()));
         }
         
