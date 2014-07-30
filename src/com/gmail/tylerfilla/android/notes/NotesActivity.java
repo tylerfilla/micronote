@@ -234,11 +234,16 @@ public class NotesActivity extends ListActivity {
                     .findViewById(R.id.activityNotesNoteListItemContentPreview);
             
             if (note != null) {
-                if (note.getTitle() != null) {
+                if (note.getTitle() != null && !note.getTitle().isEmpty()) {
                     title.setText(note.getTitle());
+                } else {
+                    title.setText("No Title");
                 }
-                if (note.getContent() != null) {
+                
+                if (note.getContent() != null && !note.getContent().isEmpty()) {
                     contentPreview.setText(Html.fromHtml(note.getContent()));
+                } else {
+                    contentPreview.setText("No content");
                 }
             }
             
