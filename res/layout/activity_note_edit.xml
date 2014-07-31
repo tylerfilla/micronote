@@ -5,7 +5,7 @@
     android:id="@+id/activityNoteEditScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_pad"
+    android:background="@color/background_pad"
     android:fillViewport="true" >
 
     <RelativeLayout
@@ -36,7 +36,7 @@
             android:inputType="textCapSentences|textMultiLine"
             android:paddingTop="4dp"
             android:textSize="22sp"
-            custom:lineColor="@color/pad_line"
+            custom:lineColor="@color/background_pad_line"
             custom:lineSize="1dp" />
     </RelativeLayout>
 

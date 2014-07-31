@@ -24,8 +24,8 @@ public class NoteMedia {
         return this.tempFile;
     }
     
-    void setFile(File file) {
-        this.tempFile = file;
+    void setTempFile(File tempFile) {
+        this.tempFile = tempFile;
     }
     
 }
