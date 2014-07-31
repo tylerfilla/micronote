@@ -148,42 +148,46 @@ public class NoteEditActivity extends Activity {
         titlePrompt.show();
     }
     
+    private void showMenu() {
+        PopupMenu popupMenu = new PopupMenu(this,
+                this.findViewById(R.id.activityNoteEditActionbarButtonMenu));
+        popupMenu.getMenuInflater().inflate(R.menu.activity_note_edit_menu, popupMenu.getMenu());
+        
+        try {
+            Field mPopup = PopupMenu.class.getDeclaredField("mPopup");
+            mPopup.setAccessible(true);
+            mPopup.get(popupMenu).getClass().getMethod("setForceShowIcon", boolean.class)
+                    .invoke(mPopup.get(popupMenu), true);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        
+        popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                NoteEditActivity.this.buttonMenuClicked(item);
+                return true;
+            }
+            
+        });
+        
+        popupMenu.show();
+    }
+    
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
             this.finish();
         } else if ("menu".equals(view.getTag())) {
-            PopupMenu popupMenu = new PopupMenu(this, view);
-            popupMenu.getMenuInflater()
-                    .inflate(R.menu.activity_note_edit_menu, popupMenu.getMenu());
-            
-            try {
-                Field mPopup = PopupMenu.class.getDeclaredField("mPopup");
-                mPopup.setAccessible(true);
-                mPopup.get(popupMenu).getClass().getMethod("setForceShowIcon", boolean.class)
-                        .invoke(mPopup.get(popupMenu), true);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-            
-            popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    NoteEditActivity.this.buttonMenuClicked(item);
-                    return true;
-                }
-                
-            });
-            
-            popupMenu.show();
+            this.showMenu();
         }
     }
     

@@ -30,6 +30,7 @@
         android:textSize="24sp" />
 
     <ImageButton
+        android:id="@+id/activityNoteEditActionbarButtonMenu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical|right"
