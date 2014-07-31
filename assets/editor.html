@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>NoteEditor</title>
+		<style type="text/CSS">
+		#editArea {
+			width: 100%;
+			height: 100%;
+			margin: 4px;
+			font-size: 1em;
+		}
+		</style>
+		<script type="text/JavaScript">
+		function getEditorContent() {
+			NoteEditor.respondEditorContent(document.getElementById("editArea").innerHTML);
+		}
+		
+		function setEditorContent(editorContent) {
+			document.getElementById("editArea").innerHTML = editorContent;
+		}
+		</script>
+	</head>
+	<body>
+		<div id="editArea" contentEditable="true"></div>
+	</body>
+</html>

@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -75,15 +72,6 @@ public class NoteEditActivity extends Activity {
             }
             
         });
-        
-        TextView activityNoteEditEditorHeader = (TextView) this
-                .findViewById(R.id.activityNoteEditEditorHeader);
-        if (note.getFile() == null) {
-            activityNoteEditEditorHeader.setText("New");
-        } else {
-            activityNoteEditEditorHeader.setText(new SimpleDateFormat("h:mm a   M/dd/yyyy",
-                    Locale.US).format(new Date(note.getFile().lastModified())));
-        }
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);

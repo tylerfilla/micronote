@@ -34,6 +34,7 @@ public class Note {
         Note note = new Note();
         note.setVersion(1);
         note.setTitle(BLANK_NOTE_TITLE);
+        note.setContent("I am a blank note!");
         note.clearChanged();
         
         return note;
