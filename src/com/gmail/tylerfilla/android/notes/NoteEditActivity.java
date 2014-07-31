@@ -2,6 +2,8 @@ package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -11,9 +13,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -146,10 +151,47 @@ public class NoteEditActivity extends Activity {
     public void buttonActionClicked(View view) {
         if ("back".equals(view.getTag())) {
             this.finish();
-        } else if ("clip".equals(view.getTag())) {
-            Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
         } else if ("menu".equals(view.getTag())) {
-            Toast.makeText(this, "Menu not yet implemented", Toast.LENGTH_SHORT).show();
+            PopupMenu popupMenu = new PopupMenu(this, view);
+            popupMenu.getMenuInflater()
+                    .inflate(R.menu.activity_note_edit_menu, popupMenu.getMenu());
+            
+            try {
+                Field mPopup = PopupMenu.class.getDeclaredField("mPopup");
+                mPopup.setAccessible(true);
+                mPopup.get(popupMenu).getClass().getMethod("setForceShowIcon", boolean.class)
+                        .invoke(mPopup.get(popupMenu), true);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+            
+            popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    NoteEditActivity.this.buttonMenuClicked(item);
+                    return true;
+                }
+                
+            });
+            
+            popupMenu.show();
+        }
+    }
+    
+    private void buttonMenuClicked(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+        case R.id.activityNoteEditMenuClip:
+            Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
+            break;
         }
     }
     
