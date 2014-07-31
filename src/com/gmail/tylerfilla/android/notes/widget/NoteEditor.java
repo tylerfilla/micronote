@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -18,6 +18,7 @@ public class NoteEditor extends WebView {
     private Note note;
     private Note pendingNote;
     
+    private String editorContent;
     private boolean editorLoaded;
     
     public NoteEditor(Context context, AttributeSet attrs) {
@@ -35,9 +36,9 @@ public class NoteEditor extends WebView {
     
     public Note getNote() {
         if (this.note != null) {
-            String newContent = this.getEditorContent();
-            if (!newContent.equals(this.note.getContent())) {
-                this.note.setContent(newContent);
+            String editorContent = this.getEditorContent();
+            if (!editorContent.equals(this.note.getContent())) {
+                this.note.setContent(editorContent);
             }
         }
         
@@ -80,27 +81,25 @@ public class NoteEditor extends WebView {
             }
             
         });
+        
+        this.setWebChromeClient(new WebChromeClient() {
+            
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                NoteEditor.this.editorContent = message;
+                result.confirm();
+                return true;
+            }
+            
+        });
     }
     
     private String getEditorContent() {
-        final String[] content = new String[1];
-        
-        this.addJavascriptInterface(new Object() {
-            
-            @JavascriptInterface
-            public void respondEditorContent(String editorContent) {
-                Log.d("", editorContent);
-            }
-            
-        }, "NoteEditor");
-        
-        this.loadUrl("javascript:getEditorContent();");
-        
-        return content[0];
+        return this.editorContent;
     }
     
     private void setEditorContent(String editorContent) {
-        Log.d("", editorContent);
+        this.editorContent = editorContent;
         this.loadUrl("javascript:setEditorContent('" + editorContent + "');");
     }
     

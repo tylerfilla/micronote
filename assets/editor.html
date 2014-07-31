@@ -10,16 +10,12 @@
 		}
 		</style>
 		<script type="text/JavaScript">
-		function getEditorContent() {
-			NoteEditor.respondEditorContent(document.getElementById("editArea").innerHTML);
-		}
-		
 		function setEditorContent(editorContent) {
 			document.getElementById("editArea").innerHTML = editorContent;
 		}
 		</script>
 	</head>
 	<body>
-		<div id="editArea" contentEditable="true"></div>
+		<div id="editArea" contentEditable="true" onKeyUp="alert(this.innerHTML);"></div>
 	</body>
 </html>
