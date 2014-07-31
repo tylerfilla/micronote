@@ -97,8 +97,6 @@ public class NoteEditActivity extends Activity {
     protected void onPause() {
         super.onPause();
         
-        this.noteEditor.clearComposingText();
-        
         Note note = this.noteEditor.getNote();
         if (note != null) {
             try {

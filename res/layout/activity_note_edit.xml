@@ -30,14 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/activityNoteEditEditorHeader"
-            android:background="@android:color/transparent"
-            android:gravity="top|left"
-            android:inputType="textCapSentences|textMultiLine"
-            android:paddingTop="4dp"
-            android:textSize="22sp"
-            custom:lineColor="@color/background_pad_line"
-            custom:lineSize="1dp" />
+            android:layout_below="@id/activityNoteEditEditorHeader" />
     </RelativeLayout>
 
 </ScrollView>
