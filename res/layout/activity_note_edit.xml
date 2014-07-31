@@ -1,36 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res/com.gmail.tylerfilla.android.notes"
+<com.gmail.tylerfilla.android.notes.widget.NoteEditor xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activityNoteEditScroll"
+    android:id="@+id/activityNoteEditEditor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_pad"
-    android:fillViewport="true" >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="beforeDescendants"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:padding="8dp" >
-
-        <TextView
-            android:id="@+id/activityNoteEditEditorHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="8dp"
-            android:gravity="right"
-            android:textAppearance="@style/activityNoteEditEditorHeaderText" />
-
-        <com.gmail.tylerfilla.android.notes.widget.NoteEditor
-            android:id="@+id/activityNoteEditEditor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/activityNoteEditEditorHeader" />
-    </RelativeLayout>
-
-</ScrollView>
+    android:layout_height="wrap_content" />
