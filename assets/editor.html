@@ -2,11 +2,33 @@
 	<head>
 		<title>NoteEditor</title>
 		<style type="text/CSS">
-		#editArea {
+		* {
+			-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+			-webkit-focus-ring-color: rgba(255, 255, 255, 0) !important;
+			outline: none !important;
+		}
+		
+		body {
+			background: #FCF9B0;
+		}
+		
+		#headerBar {
+			position: absolute;
+			left: 0;
+			top: 0;
+			
 			width: 100%;
-			height: 100%;
-			margin: 4px;
-			font-size: 1em;
+			height: 40px;
+		}
+		
+		#editArea {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			top: 40px;
+			right: 0;
+			
+			font-size: 1.5em;
 		}
 		</style>
 		<script type="text/JavaScript">
@@ -16,6 +38,7 @@
 		</script>
 	</head>
 	<body>
-		<div id="editArea" contentEditable="true" onKeyUp="alert(this.innerHTML);"></div>
+		<div id="headerBar">Header stuff</div>
+		<div id="editArea" contentEditable="true" onKeyUp="window.alert(this.innerHTML);"></div>
 	</body>
 </html>
