@@ -148,15 +148,6 @@ public class NoteEditor extends WebView {
             }
             
         });
-        /*
-         * this.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
-         * 
-         * @Override public boolean onPreDraw() { NoteEditor.this.contentHeight =
-         * NoteEditor.this.(); Log.d("", String.valueOf(NoteEditor.this.contentHeight)); return
-         * true; }
-         * 
-         * });
-         */
     }
     
     private void handleReport(String report) {
