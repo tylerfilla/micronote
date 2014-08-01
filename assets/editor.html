@@ -54,16 +54,20 @@
 		}
 		
 		function onLoad() {
-			var testElement = document.getElementById("testLine");
-			window.alert("lineSize:" + testElement.clientHeight*window.devicePixelRatio);
-			window.alert("lineOffset:" + (testElement.getBoundingClientRect().top + window.pageYOffset - testElement.ownerDocument.documentElement.clientTop));
+			var editArea = document.getElementById("editArea");
+			var metricsElement = document.getElementById("metricsElement");
+			
+			window.alert("lineWidth:" + editArea.clientWidth*window.devicePixelRatio);
+			window.alert("lineOffsetX:" + metricsElement.getBoundingClientRect().left*window.devicePixelRatio);
+			window.alert("lineOffsetY:" + (metricsElement.getBoundingClientRect().top + window.pageYOffset - metricsElement.ownerDocument.documentElement.clientTop)*window.devicePixelRatio);
+			window.alert("lineOffsetText:" + metricsElement.clientHeight*window.devicePixelRatio);
 		}
 		</script>
 	</head>
 	<body onLoad="onLoad()">
 		<div id="headerBar"></div>
 		<div id="editArea" contentEditable="true" onKeyUp="window.alert('content:' + this.innerHTML);">
-			<div id="testLine">test</div>
+			<div id="metricsElement" style="width: 100%;">Yay, metrics!</div>
 		</div>
 	</body>
 </html>

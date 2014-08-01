@@ -17,6 +17,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.core.Note;
 
 public class NoteEditor extends WebView {
@@ -27,8 +28,11 @@ public class NoteEditor extends WebView {
     private String editorContent;
     private boolean editorLoaded;
     
-    private int lineSize;
-    private int lineOffset;
+    private int lineWidth;
+    private int lineOffsetX;
+    private int lineOffsetY;
+    private int lineOffsetText;
+    private final Paint linePaint;
     
     public NoteEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,7 +40,14 @@ public class NoteEditor extends WebView {
         this.note = null;
         this.editorLoaded = false;
         
-        this.lineSize = 0;
+        this.lineWidth = 0;
+        this.lineOffsetX = 0;
+        this.lineOffsetY = 0;
+        this.lineOffsetText = 0;
+        this.linePaint = new Paint();
+        
+        this.linePaint.setColor(context.getResources().getColor(R.color.background_pad_line));
+        this.linePaint.setStrokeWidth(2.0f);
         
         try {
             this.loadEditor();
@@ -49,17 +60,11 @@ public class NoteEditor extends WebView {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        Paint paint = new Paint();
-        paint.setColor(0xFFFF0000);
-        
-        canvas.drawLine(8.0f, this.lineOffset + this.lineSize, 500.0f, this.lineOffset
-                + this.lineSize, paint);
-        canvas.drawLine(8.0f, this.lineOffset + this.lineSize * 2, 500.0f, this.lineOffset
-                + this.lineSize * 2, paint);
-        canvas.drawLine(8.0f, this.lineOffset + this.lineSize * 3, 500.0f, this.lineOffset
-                + this.lineSize * 3, paint);
-        canvas.drawLine(8.0f, this.lineOffset + this.lineSize * 4, 500.0f, this.lineOffset
-                + this.lineSize * 4, paint);
+        for (int i = 1; i < 50; i++) {
+            canvas.drawLine(this.lineOffsetX, this.lineOffsetY + this.lineOffsetText * i,
+                    this.lineOffsetX + this.lineWidth, this.lineOffsetY + this.lineOffsetText * i,
+                    this.linePaint);
+        }
     }
     
     public Note getNote() {
@@ -134,10 +139,14 @@ public class NoteEditor extends WebView {
         Log.d("", command);
         if (command.startsWith("content:") && command.length() > 8) {
             this.editorContent = command.substring(8);
-        } else if (command.startsWith("lineSize:") && command.length() > 9) {
-            this.lineSize = Integer.parseInt(command.substring(9));
-        } else if (command.startsWith("lineOffset:") && command.length() > 11) {
-            this.lineOffset = Integer.parseInt(command.substring(11));
+        } else if (command.startsWith("lineWidth:") && command.length() > 10) {
+            this.lineWidth = Integer.parseInt(command.substring(10));
+        } else if (command.startsWith("lineOffsetX:") && command.length() > 12) {
+            this.lineOffsetX = Integer.parseInt(command.substring(12));
+        } else if (command.startsWith("lineOffsetY:") && command.length() > 12) {
+            this.lineOffsetY = Integer.parseInt(command.substring(12));
+        } else if (command.startsWith("lineOffsetText:") && command.length() > 15) {
+            this.lineOffsetText = Integer.parseInt(command.substring(15));
         }
     }
     
