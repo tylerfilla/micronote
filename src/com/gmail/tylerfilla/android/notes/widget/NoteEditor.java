@@ -163,15 +163,15 @@ public class NoteEditor extends WebView {
         if (report.startsWith("content:") && report.length() > 8) {
             this.content = report.substring(8);
         } else if (report.startsWith("contentHeight:") && report.length() > 14) {
-            this.contentHeight = Integer.parseInt(report.substring(14));
+            this.contentHeight = (int) Double.parseDouble(report.substring(14));
         } else if (report.startsWith("lineWidth:") && report.length() > 10) {
-            this.lineWidth = Integer.parseInt(report.substring(10));
+            this.lineWidth = (int) Double.parseDouble(report.substring(10));
         } else if (report.startsWith("lineHeight:") && report.length() > 11) {
-            this.lineHeight = Integer.parseInt(report.substring(11));
+            this.lineHeight = (int) Double.parseDouble(report.substring(11));
         } else if (report.startsWith("lineOffsetX:") && report.length() > 12) {
-            this.lineOffsetX = Integer.parseInt(report.substring(12));
+            this.lineOffsetX = (int) Double.parseDouble(report.substring(12));
         } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
-            this.lineOffsetY = Integer.parseInt(report.substring(12));
+            this.lineOffsetY = (int) Double.parseDouble(report.substring(12));
         }
     }
     
