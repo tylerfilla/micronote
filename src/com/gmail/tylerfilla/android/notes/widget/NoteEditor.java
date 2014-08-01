@@ -154,7 +154,8 @@ public class NoteEditor extends WebView {
         if (report.startsWith("content:") && report.length() > 8) {
             this.content = report.substring(8);
         } else if (report.startsWith("contentHeight:") && report.length() > 14) {
-            this.contentHeight = (int) Double.parseDouble(report.substring(14));
+            this.contentHeight = Math.max(this.contentHeight,
+                    (int) Double.parseDouble(report.substring(14)));
         } else if (report.startsWith("lineWidth:") && report.length() > 10) {
             this.lineWidth = (int) Double.parseDouble(report.substring(10));
         } else if (report.startsWith("lineHeight:") && report.length() > 11) {
