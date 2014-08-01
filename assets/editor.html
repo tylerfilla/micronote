@@ -16,29 +16,54 @@
 			position: absolute;
 			left: 0;
 			top: 0;
+			right: 0;
 			
 			width: 100%;
 			height: 40px;
+			
+			color: #C00000;
+			font-size: 1.2em;
+			line-height: 40px;
+			text-align: right;
+		}
+		
+		#headerBar span {
+			margin-right: 16px;
 		}
 		
 		#editArea {
 			position: absolute;
 			left: 0;
-			bottom: 0;
 			top: 40px;
 			right: 0;
+			bottom: 0;
 			
-			font-size: 1.5em;
+			margin-left: 8px;
+			margin-right: 8px;
+			
+			font-size: 1.3em;
 		}
 		</style>
 		<script type="text/JavaScript">
+		function setHeaderContent(headerContent) {
+			document.getElementById("headerBar").innerHTML = "<span>" + headerContent + "</span>";
+		}
+		
 		function setEditorContent(editorContent) {
 			document.getElementById("editArea").innerHTML = editorContent;
 		}
+		
+		function onLoad() {
+			var testElement = document.getElementById("testLine");
+			window.alert("lineSize:" + testElement.clientHeight*window.devicePixelRatio);
+			window.alert("lineOffset:" + (testElement.getBoundingClientRect().top + window.pageYOffset - testElement.ownerDocument.documentElement.clientTop));
+		}
 		</script>
 	</head>
-	<body>
-		<div id="headerBar">Header stuff</div>
-		<div id="editArea" contentEditable="true" onKeyUp="window.alert(this.innerHTML);"></div>
+	<body onLoad="onLoad()">
+		<div id="headerBar"></div>
+		<div id="editArea" contentEditable="true" onKeyUp="window.alert('content:' + this.innerHTML);">
+			<div id="testLine">test</div>
+		</div>
 	</body>
 </html>
