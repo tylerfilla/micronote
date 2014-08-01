@@ -93,13 +93,28 @@ public class NoteEditActivity extends Activity {
                 e.printStackTrace();
             }
         }
+        
+        this.noteEditor.onPause();
+        
+        if (this.isFinishing()) {
+            this.noteEditor.destroy();
+        }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        this.noteEditor.onResume();
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         
-        this.noteKeeper.pushPersistentNote(this.noteEditor.getNote());
+        if (!this.isFinishing()) {
+            this.noteKeeper.pushPersistentNote(this.noteEditor.getNote());
+        }
     }
     
     private void editNoteTitle() {

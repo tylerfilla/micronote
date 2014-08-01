@@ -11,9 +11,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -25,25 +25,32 @@ public class NoteEditor extends WebView {
     private Note note;
     private Note pendingNote;
     
-    private String editorContent;
     private boolean editorLoaded;
     
+    private String content;
+    private int contentHeight;
+    
     private int lineWidth;
+    private int lineHeight;
     private int lineOffsetX;
     private int lineOffsetY;
-    private int lineOffsetText;
     private final Paint linePaint;
     
     public NoteEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
         
         this.note = null;
+        this.pendingNote = null;
+        
         this.editorLoaded = false;
         
+        this.content = null;
+        this.contentHeight = 0;
+        
         this.lineWidth = 0;
+        this.lineHeight = 0;
         this.lineOffsetX = 0;
         this.lineOffsetY = 0;
-        this.lineOffsetText = 0;
         this.linePaint = new Paint();
         
         this.linePaint.setColor(context.getResources().getColor(R.color.background_pad_line));
@@ -60,10 +67,14 @@ public class NoteEditor extends WebView {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        for (int i = 1; i < 50; i++) {
-            canvas.drawLine(this.lineOffsetX, this.lineOffsetY + this.lineOffsetText * i,
-                    this.lineOffsetX + this.lineWidth, this.lineOffsetY + this.lineOffsetText * i,
-                    this.linePaint);
+        if (this.contentHeight > 0 && this.lineWidth > 0 && this.lineHeight > 0
+                && this.lineOffsetX > 0 && this.lineOffsetY > 0) {
+            for (int i = 1; i < Math.max(this.contentHeight / this.lineHeight,
+                    this.content.length()); i++) {
+                canvas.drawLine(this.lineOffsetX, this.lineOffsetY + this.lineHeight * i,
+                        this.lineOffsetX + this.lineWidth, this.lineOffsetY + this.lineHeight * i,
+                        this.linePaint);
+            }
         }
     }
     
@@ -96,6 +107,7 @@ public class NoteEditor extends WebView {
     
     private void loadEditor() throws IOException {
         this.getSettings().setJavaScriptEnabled(true);
+        this.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         
         StringBuilder internalCodeBuilder = new StringBuilder();
         BufferedReader internalCodeReader = new BufferedReader(new InputStreamReader(this
@@ -127,35 +139,48 @@ public class NoteEditor extends WebView {
             
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                NoteEditor.this.handleCommand(message);
+                if (!message.equals("nop")) {
+                    NoteEditor.this.handleReport(message);
+                }
+                
                 result.confirm();
                 return true;
             }
             
         });
+        /*
+         * this.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+         * 
+         * @Override public boolean onPreDraw() { NoteEditor.this.contentHeight =
+         * NoteEditor.this.(); Log.d("", String.valueOf(NoteEditor.this.contentHeight)); return
+         * true; }
+         * 
+         * });
+         */
     }
     
-    private void handleCommand(String command) {
-        Log.d("", command);
-        if (command.startsWith("content:") && command.length() > 8) {
-            this.editorContent = command.substring(8);
-        } else if (command.startsWith("lineWidth:") && command.length() > 10) {
-            this.lineWidth = Integer.parseInt(command.substring(10));
-        } else if (command.startsWith("lineOffsetX:") && command.length() > 12) {
-            this.lineOffsetX = Integer.parseInt(command.substring(12));
-        } else if (command.startsWith("lineOffsetY:") && command.length() > 12) {
-            this.lineOffsetY = Integer.parseInt(command.substring(12));
-        } else if (command.startsWith("lineOffsetText:") && command.length() > 15) {
-            this.lineOffsetText = Integer.parseInt(command.substring(15));
+    private void handleReport(String report) {
+        if (report.startsWith("content:") && report.length() > 8) {
+            this.content = report.substring(8);
+        } else if (report.startsWith("contentHeight:") && report.length() > 14) {
+            this.contentHeight = Integer.parseInt(report.substring(14));
+        } else if (report.startsWith("lineWidth:") && report.length() > 10) {
+            this.lineWidth = Integer.parseInt(report.substring(10));
+        } else if (report.startsWith("lineHeight:") && report.length() > 11) {
+            this.lineHeight = Integer.parseInt(report.substring(11));
+        } else if (report.startsWith("lineOffsetX:") && report.length() > 12) {
+            this.lineOffsetX = Integer.parseInt(report.substring(12));
+        } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
+            this.lineOffsetY = Integer.parseInt(report.substring(12));
         }
     }
     
     private String getEditorContent() {
-        return this.editorContent;
+        return this.content;
     }
     
     private void setEditorContent(String editorContent) {
-        this.editorContent = editorContent;
+        this.content = editorContent;
         this.loadUrl("javascript:setEditorContent('" + editorContent + "');");
     }
     
