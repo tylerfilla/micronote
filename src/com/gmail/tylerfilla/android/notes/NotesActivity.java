@@ -241,7 +241,8 @@ public class NotesActivity extends ListActivity {
                 }
                 
                 if (note.getContent() != null && !note.getContent().isEmpty()) {
-                    contentPreview.setText(Html.fromHtml(note.getContent()));
+                    contentPreview.setText(Html.fromHtml(note.getContent()).toString()
+                            .replace('\n', ' ').replaceAll("\\s+", " ").trim());
                 } else {
                     contentPreview.setText("No content");
                 }
