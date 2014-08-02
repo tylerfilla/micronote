@@ -29,15 +29,13 @@ function reportMetrics() {
 	window.alert("lineHeight:" + lineHeight);
 	window.alert("lineOffsetX:" + lineOffsetX);
 	window.alert("lineOffsetY:" + lineOffsetY);
+	window.alert("contentHeight:" + editArea.offsetHeight*window.devicePixelRatio);
 	
 	reportContent();
 }
 
 function reportContent() {
-	var editArea = document.getElementById("editArea");
-	
-	window.alert("content:" + editArea.innerHTML);
-	window.alert("contentHeight:" + editArea.offsetHeight*window.devicePixelRatio);
+	window.alert("content:" + document.getElementById("editArea").innerHTML);
 }
 
 function createListOrdered() {
