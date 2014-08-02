@@ -108,10 +108,10 @@ public class NoteEditor extends WebView {
     public void performAction(Action action) {
         switch (action) {
         case CREATE_LIST_BULLET:
-            this.loadUrl("javascript:document.execCommand('insertUnorderedList', false, null);");
+            this.loadUrl("javascript:createListUnordered();");
             break;
         case CREATE_LIST_NUMBER:
-            this.loadUrl("javascript:document.execCommand('insertOrderedList', false, null);");
+            this.loadUrl("javascript:createListOrdered();");
             break;
         }
     }

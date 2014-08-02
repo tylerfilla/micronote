@@ -40,6 +40,16 @@ function reportContent() {
 	window.alert("contentHeight:" + editArea.offsetHeight*window.devicePixelRatio);
 }
 
+function createListOrdered() {
+	document.getElementById("editArea").focus();
+	document.execCommand('insertOrderedList', false, null);
+}
+
+function createListUnordered() {
+	document.getElementById("editArea").focus();
+	document.execCommand('insertUnorderedList', false, null);
+}
+
 function setHeaderContent(headerContent) {
 	document.getElementById("headerBar").innerHTML = "<span>" + headerContent + "</span>";
 }
