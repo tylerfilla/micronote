@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -28,12 +29,12 @@ public class NoteEditor extends WebView {
     private boolean editorLoaded;
     
     private String content;
-    private int contentHeight;
+    private float contentHeight;
     
-    private int lineWidth;
-    private int lineHeight;
-    private int lineOffsetX;
-    private int lineOffsetY;
+    private float lineWidth;
+    private float lineHeight;
+    private float lineOffsetX;
+    private float lineOffsetY;
     private final Paint linePaint;
     
     public NoteEditor(Context context, AttributeSet attrs) {
@@ -45,12 +46,12 @@ public class NoteEditor extends WebView {
         this.editorLoaded = false;
         
         this.content = null;
-        this.contentHeight = 0;
+        this.contentHeight = 0.0f;
         
-        this.lineWidth = 0;
-        this.lineHeight = 0;
-        this.lineOffsetX = 0;
-        this.lineOffsetY = 0;
+        this.lineWidth = 0.0f;
+        this.lineHeight = 0.0f;
+        this.lineOffsetX = 0.0f;
+        this.lineOffsetY = 0.0f;
         this.linePaint = new Paint();
         
         this.linePaint.setColor(context.getResources().getColor(R.color.background_pad_line));
@@ -67,8 +68,8 @@ public class NoteEditor extends WebView {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        if (this.contentHeight > 0 && this.lineWidth > 0 && this.lineHeight > 0
-                && this.lineOffsetX > 0 && this.lineOffsetY > 0) {
+        if (this.contentHeight > 0.0f && this.lineWidth > 0.0f && this.lineHeight > 0.0f
+                && this.lineOffsetX > 0.0f && this.lineOffsetY > 0.0f) {
             for (int i = 1; i < Math.max(this.contentHeight / this.lineHeight,
                     this.content.length()); i++) {
                 canvas.drawLine(this.lineOffsetX, this.lineOffsetY + this.lineHeight * i,
@@ -162,19 +163,20 @@ public class NoteEditor extends WebView {
     }
     
     private void handleReport(String report) {
+        Log.d("NoteEditor", report);
         if (report.startsWith("content:") && report.length() > 8) {
             this.content = report.substring(8);
         } else if (report.startsWith("contentHeight:") && report.length() > 14) {
             this.contentHeight = Math.max(this.contentHeight,
-                    (int) Double.parseDouble(report.substring(14)));
+                    Float.parseFloat(report.substring(14)));
         } else if (report.startsWith("lineWidth:") && report.length() > 10) {
-            this.lineWidth = (int) Double.parseDouble(report.substring(10));
+            this.lineWidth = Float.parseFloat(report.substring(10));
         } else if (report.startsWith("lineHeight:") && report.length() > 11) {
-            this.lineHeight = (int) Double.parseDouble(report.substring(11));
+            this.lineHeight = Float.parseFloat(report.substring(11));
         } else if (report.startsWith("lineOffsetX:") && report.length() > 12) {
-            this.lineOffsetX = (int) Double.parseDouble(report.substring(12));
+            this.lineOffsetX = Float.parseFloat(report.substring(12));
         } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
-            this.lineOffsetY = (int) Double.parseDouble(report.substring(12));
+            this.lineOffsetY = Float.parseFloat(report.substring(12));
         }
     }
     
@@ -197,9 +199,7 @@ public class NoteEditor extends WebView {
     
     public static enum Action {
         
-        CREATE_LIST_BULLET,
-        
-        CREATE_LIST_NUMBER,
+        CREATE_LIST_BULLET, CREATE_LIST_NUMBER,
         
     }
     

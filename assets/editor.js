@@ -42,12 +42,18 @@ function reportContent() {
 
 function createListOrdered() {
 	document.getElementById("editArea").focus();
-	document.execCommand('insertOrderedList', false, null);
+	
+	document.execCommand("insertText", false, " ");
+	document.execCommand("insertOrderedList", false, null);
+	document.execCommand("delete", false, null);
 }
 
 function createListUnordered() {
 	document.getElementById("editArea").focus();
-	document.execCommand('insertUnorderedList', false, null);
+	
+	document.execCommand("insertText", false, " ");
+	document.execCommand("insertUnorderedList", false, null);
+	document.execCommand("delete", false, null);
 }
 
 function setHeaderContent(headerContent) {
@@ -56,4 +62,8 @@ function setHeaderContent(headerContent) {
 
 function setEditorContent(editorContent) {
 	document.getElementById("editArea").innerHTML = editorContent;
+}
+
+function onKeyPress(editArea) {
+	// TODO: Watch for URLs and hyperlink them
 }

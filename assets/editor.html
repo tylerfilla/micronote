@@ -6,7 +6,7 @@
 	</head>
 	<body onLoad="reportMetrics();">
 		<div id="headerBar"></div>
-		<div id="editArea" contentEditable="true" onKeyUp="reportContent();">
+		<div id="editArea" contentEditable="true" onKeyPress="onKeyPress(this);" onKeyUp="reportContent();">
 			<div id="metricsElement" style="width: 100%;">Measuring, please wait...</div>
 		</div>
 	</body>
