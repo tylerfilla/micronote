@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.xml.sax.XMLReader;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -241,8 +243,18 @@ public class NotesActivity extends ListActivity {
                 }
                 
                 if (note.getContent() != null && !note.getContent().isEmpty()) {
-                    contentPreview.setText(Html.fromHtml(note.getContent()).toString()
-                            .replace('\n', ' ').replaceAll("\\s+", " ").trim());
+                    contentPreview.setText(Html
+                            .fromHtml(note.getContent(), null, new Html.TagHandler() {
+                                
+                                @Override
+                                public void handleTag(boolean opening, String tag, Editable output,
+                                        XMLReader xmlReader) {
+                                    if (tag.equalsIgnoreCase("li") && opening) {
+                                        output.append(' ');
+                                    }
+                                }
+                                
+                            }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim());
                 } else {
                     contentPreview.setText("No content");
                 }
