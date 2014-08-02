@@ -5,12 +5,10 @@
         android:id="@+id/activityNoteEditMenuUL"
         android:icon="@drawable/ic_menu_ul"
         android:title="@string/menu_text_activityNoteEditMenuUL"/>
-
     <item
         android:id="@+id/activityNoteEditMenuOL"
         android:icon="@drawable/ic_menu_ol"
         android:title="@string/menu_text_activityNoteEditMenuOL"/>
-
     <item
         android:id="@+id/activityNoteEditMenuClip"
         android:icon="@drawable/ic_menu_clip"

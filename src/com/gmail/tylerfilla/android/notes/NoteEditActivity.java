@@ -195,10 +195,10 @@ public class NoteEditActivity extends Activity {
     private void buttonMenuClicked(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
         case R.id.activityNoteEditMenuUL:
-            Toast.makeText(this, "Bullets not yet implemented", Toast.LENGTH_SHORT).show();
+            this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_BULLET);
             break;
         case R.id.activityNoteEditMenuOL:
-            Toast.makeText(this, "Numbering not yet implemented", Toast.LENGTH_SHORT).show();
+            this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_NUMBER);
             break;
         case R.id.activityNoteEditMenuClip:
             Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();

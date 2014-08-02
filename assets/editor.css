@@ -42,3 +42,8 @@ body {
 	
 	font-size: 1.3em;
 }
+
+#editArea ul, ol, li {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}

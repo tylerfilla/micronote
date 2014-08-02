@@ -105,6 +105,17 @@ public class NoteEditor extends WebView {
         }
     }
     
+    public void performAction(Action action) {
+        switch (action) {
+        case CREATE_LIST_BULLET:
+            this.loadUrl("javascript:document.execCommand('insertUnorderedList', false, null);");
+            break;
+        case CREATE_LIST_NUMBER:
+            this.loadUrl("javascript:document.execCommand('insertOrderedList', false, null);");
+            break;
+        }
+    }
+    
     private void loadEditor() throws IOException {
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -182,6 +193,14 @@ public class NoteEditor extends WebView {
     
     private String formatHeaderDate(Date date) {
         return new SimpleDateFormat("h:mm a 'on' M/dd/yyyy", Locale.US).format(date);
+    }
+    
+    public static enum Action {
+        
+        CREATE_LIST_BULLET,
+        
+        CREATE_LIST_NUMBER,
+        
     }
     
 }
