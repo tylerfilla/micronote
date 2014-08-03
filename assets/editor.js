@@ -47,6 +47,7 @@ function createListOrdered() {
 	document.execCommand("insertOrderedList", false, null);
 	document.execCommand("delete", false, null);
 	
+	reportContent();
 	reportIndentControlActive();
 }
 
@@ -57,6 +58,7 @@ function createListUnordered() {
 	document.execCommand("insertUnorderedList", false, null);
 	document.execCommand("delete", false, null);
 	
+	reportContent();
 	reportIndentControlActive();
 }
 
@@ -65,7 +67,7 @@ function indentDecrease() {
 	document.execCommand('outdent', false, null);
 	document.execCommand("delete", false, null);
 	
-	reportIndentControlActive();
+	reportContent();
 }
 
 function indentIncrease() {
@@ -73,7 +75,7 @@ function indentIncrease() {
 	document.execCommand('indent', false, null);
 	document.execCommand("delete", false, null);
 	
-	reportIndentControlActive();
+	reportContent();
 }
 
 function reportIndentControlActive() {
