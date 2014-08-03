@@ -179,8 +179,12 @@ public class NoteEditor extends WebView {
     private void handleReport(String report) {
         Log.d("NoteEditor-Report", report);
         
-        if (report.startsWith("content:") && report.length() > 8) {
-            this.content = report.substring(8);
+        if (report.startsWith("content:")) {
+            if (report.length() == 8) {
+                this.content = "";
+            } else if (report.length() > 8) {
+                this.content = report.substring(8);
+            }
         } else if (report.startsWith("contentHeight:") && report.length() > 14) {
             this.contentHeight = Math.max(this.contentHeight,
                     Float.parseFloat(report.substring(14)));
