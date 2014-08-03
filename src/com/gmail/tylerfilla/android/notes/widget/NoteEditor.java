@@ -72,13 +72,15 @@ public class NoteEditor extends WebView {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        if (this.contentHeight > 0.0f && this.lineWidth > 0.0f && this.lineHeight > 0.0f
-                && this.lineOffsetX > 0.0f && this.lineOffsetY > 0.0f) {
-            for (int i = 1; i < Math.max(this.contentHeight / this.lineHeight,
-                    this.content.length()); i++) {
-                canvas.drawLine(this.lineOffsetX, this.lineOffsetY + this.lineHeight * i,
-                        this.lineOffsetX + this.lineWidth, this.lineOffsetY + this.lineHeight * i,
-                        this.linePaint);
+        if (this.content != null) {
+            if (this.contentHeight > 0.0f && this.lineWidth > 0.0f && this.lineHeight > 0.0f
+                    && this.lineOffsetX > 0.0f && this.lineOffsetY > 0.0f) {
+                for (int i = 1; i < Math.max(this.contentHeight / this.lineHeight,
+                        this.content.length()); i++) {
+                    canvas.drawLine(this.lineOffsetX, this.lineOffsetY + this.lineHeight * i,
+                            this.lineOffsetX + this.lineWidth, this.lineOffsetY + this.lineHeight
+                                    * i, this.linePaint);
+                }
             }
         }
     }
