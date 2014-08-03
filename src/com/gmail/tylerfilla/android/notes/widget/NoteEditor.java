@@ -169,9 +169,7 @@ public class NoteEditor extends WebView {
             
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                if (!message.equals("nop")) {
-                    NoteEditor.this.handleReport(message);
-                }
+                NoteEditor.this.handleReport(message);
                 
                 result.confirm();
                 return true;
