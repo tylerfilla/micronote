@@ -14,23 +14,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/background_activityNoteEditIndentControl"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="1.0" >
 
         <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:background="@drawable/ic_edit_indent_decrease"
+            android:contentDescription="@string/content_description_activityNoteEditIndentControlButtonDecrease"
             android:onClick="buttonEditClicked"
+            android:src="@drawable/ic_edit_indent_decrease"
             android:tag="indent_decrease" />
 
         <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:background="@drawable/ic_edit_indent_increase"
+            android:contentDescription="@string/content_description_activityNoteEditIndentControlButtonIncrease"
             android:onClick="buttonEditClicked"
+            android:src="@drawable/ic_edit_indent_increase"
             android:tag="indent_increase" />
     </LinearLayout>
 

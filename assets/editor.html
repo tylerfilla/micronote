@@ -1,12 +1,12 @@
 <html>
 	<head>
 		<title>NoteEditor</title>
-		<link rel="stylesheet" type="text/CSS" href="editor.css" />
-		<script type="text/JavaScript" src="editor.js"></script>
+		<link rel="stylesheet" type="text/css" href="editor.css" />
+		<script type="text/javascript" src="editor.js"></script>
 	</head>
 	<body onLoad="reportMetrics();">
 		<div id="headerBar"></div>
-		<div id="editArea" contentEditable="true" onKeyUp="onKeyUp(this);" onClick="onClick(this);">
+		<div id="editArea" contenteditable="true" onkeyup="onKeyUp();" onclick="onClick();">
 			<div id="metricsElement">Measuring, please wait...</div>
 		</div>
 	</body>

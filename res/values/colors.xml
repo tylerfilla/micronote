@@ -7,6 +7,7 @@
     <color name="background_pad">#FCF9B0</color>
     <color name="background_pad_line">#E5E3B9</color>
     <color name="background_note_list_item_selected">#C1C09B</color>
+    <color name="background_activityNoteEditIndentControl">#222222</color>
     <color name="text_actionbar">#F0F0F0</color>
     <color name="text_search_bubble_input">#DDDDDD</color>
     <color name="text_search_bubble_input_hint">#BBBBBB</color>

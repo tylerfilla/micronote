@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -36,6 +37,8 @@ public class NoteEditor extends WebView {
     private float lineOffsetY;
     private final Paint linePaint;
     
+    private Responder responder;
+    
     public NoteEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
         
@@ -52,6 +55,8 @@ public class NoteEditor extends WebView {
         this.lineOffsetX = 0.0f;
         this.lineOffsetY = 0.0f;
         this.linePaint = new Paint();
+        
+        this.responder = null;
         
         this.linePaint.setColor(context.getResources().getColor(R.color.background_pad_line));
         this.linePaint.setStrokeWidth(2.0f);
@@ -122,8 +127,13 @@ public class NoteEditor extends WebView {
         }
     }
     
+    public void setResponder(Responder responder) {
+        this.responder = responder;
+    }
+    
     private void loadEditor() throws IOException {
         this.getSettings().setJavaScriptEnabled(true);
+        this.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
         
         StringBuilder internalCodeBuilder = new StringBuilder();
         BufferedReader internalCodeReader = new BufferedReader(new InputStreamReader(this
@@ -167,7 +177,8 @@ public class NoteEditor extends WebView {
     }
     
     private void handleReport(String report) {
-        Log.d("NoteEditor", report);
+        Log.d("NoteEditor-Report", report);
+        
         if (report.startsWith("content:") && report.length() > 8) {
             this.content = report.substring(8);
         } else if (report.startsWith("contentHeight:") && report.length() > 14) {
@@ -181,6 +192,15 @@ public class NoteEditor extends WebView {
             this.lineOffsetX = Float.parseFloat(report.substring(12));
         } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
             this.lineOffsetY = Float.parseFloat(report.substring(12));
+        } else if (report.startsWith("responder/") && report.length() > 10) {
+            String responderCommand = report.substring(10);
+            if (responderCommand.startsWith("indentControlActive:")
+                    && responderCommand.length() > 20) {
+                if (this.responder != null) {
+                    this.responder.onIndentControlActive(Boolean.parseBoolean(responderCommand
+                            .substring(20)));
+                }
+            }
         }
     }
     
@@ -204,6 +224,12 @@ public class NoteEditor extends WebView {
     public static enum Action {
         
         CREATE_LIST_BULLET, CREATE_LIST_NUMBER, INDENT_INCREASE, INDENT_DECREASE,
+        
+    }
+    
+    public static interface Responder {
+        
+        public void onIndentControlActive(boolean active);
         
     }
     

@@ -41,31 +41,48 @@ function reportContent() {
 }
 
 function createListOrdered() {
-	document.getElementById("editArea").focus();
-	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertOrderedList", false, null);
 	document.execCommand("delete", false, null);
+	
+	reportIndentControlActive();
 }
 
 function createListUnordered() {
-	document.getElementById("editArea").focus();
-	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertUnorderedList", false, null);
 	document.execCommand("delete", false, null);
-}
-
-function indentIncrease() {
-	document.execCommand("insertText", false, " ");
-	document.execCommand('indent', false, null);
-	document.execCommand("delete", false, null);
+	
+	reportIndentControlActive();
 }
 
 function indentDecrease() {
 	document.execCommand("insertText", false, " ");
 	document.execCommand('outdent', false, null);
 	document.execCommand("delete", false, null);
+	
+	reportIndentControlActive();
+}
+
+function indentIncrease() {
+	document.execCommand("insertText", false, " ");
+	document.execCommand('indent', false, null);
+	document.execCommand("delete", false, null);
+	
+	reportIndentControlActive();
+}
+
+function reportIndentControlActive() {
+	var report = "responder/indentControlActive:";
+	
+	var nodeName = window.getSelection().anchorNode.parentNode.nodeName.toLowerCase();
+	if (nodeName == "li" || nodeName == "ul" || nodeName == "ol") {
+		report += "true";
+	} else {
+		report += "false";
+	}
+	
+	window.alert(report);
 }
 
 function setHeaderContent(headerContent) {
@@ -76,11 +93,7 @@ function setEditorContent(editorContent) {
 	document.getElementById("editArea").innerHTML = editorContent;
 }
 
-function onKeyUp(editArea) {
-	reportContent();
-}
-
-function onClick(editArea) {
+function scrollFix() {
 	var target = document.body.scrollTop;
 	var prev = 0;
 	var goal = 5;
@@ -99,4 +112,14 @@ function onClick(editArea) {
 		}
 		prev = scroll;
 	}, 50);
+}
+
+function onKeyUp() {
+	reportContent();
+	reportIndentControlActive();
+}
+
+function onClick() {
+	scrollFix();
+	reportIndentControlActive();
 }

@@ -76,9 +76,20 @@ public class NoteEditActivity extends Activity {
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);
         
-        if (note.getFile() == null) {
-            this.noteEditor.requestFocus();
-        }
+        this.noteEditor.setResponder(new NoteEditor.Responder() {
+            
+            @Override
+            public void onIndentControlActive(boolean active) {
+                if (active) {
+                    NoteEditActivity.this.findViewById(R.id.activityNoteEditIndentControl)
+                            .setVisibility(View.VISIBLE);
+                } else {
+                    NoteEditActivity.this.findViewById(R.id.activityNoteEditIndentControl)
+                            .setVisibility(View.GONE);
+                }
+            }
+            
+        });
     }
     
     @Override
@@ -93,19 +104,6 @@ public class NoteEditActivity extends Activity {
                 e.printStackTrace();
             }
         }
-        
-        this.noteEditor.onPause();
-        
-        if (this.isFinishing()) {
-            this.noteEditor.destroy();
-        }
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        this.noteEditor.onResume();
     }
     
     @Override

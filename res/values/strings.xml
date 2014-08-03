@@ -16,6 +16,8 @@
     <string name="content_description_activityNoteEditActionbarButtonBack">Back</string>
     <string name="content_description_activityNoteEditActionbarButtonClip">Clip</string>
     <string name="content_description_activityNoteEditActionbarButtonMenu">Menu</string>
+    <string name="content_description_activityNoteEditIndentControlButtonIncrease">Increase indent</string>
+    <string name="content_description_activityNoteEditIndentControlButtonDecrease">Decrease indent</string>
     <string name="activity_notes_search_bubble_hint">Type here to search</string>
     <string name="menu_text_activityNotesNoteListSelectCABDelete">Delete</string>
     <string name="menu_text_activityNoteEditMenuClip">Clip</string>
