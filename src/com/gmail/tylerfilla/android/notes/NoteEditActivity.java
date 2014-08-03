@@ -192,6 +192,14 @@ public class NoteEditActivity extends Activity {
         }
     }
     
+    public void buttonEditClicked(View view) {
+        if ("indent_increase".equals(view.getTag())) {
+            this.noteEditor.performAction(NoteEditor.Action.INDENT_INCREASE);
+        } else if ("indent_decrease".equals(view.getTag())) {
+            this.noteEditor.performAction(NoteEditor.Action.INDENT_DECREASE);
+        }
+    }
+    
     private void buttonMenuClicked(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
         case R.id.activityNoteEditMenuUL:

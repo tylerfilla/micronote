@@ -56,6 +56,18 @@ function createListUnordered() {
 	document.execCommand("delete", false, null);
 }
 
+function indentIncrease() {
+	document.execCommand("insertText", false, " ");
+	document.execCommand('indent', false, null);
+	document.execCommand("delete", false, null);
+}
+
+function indentDecrease() {
+	document.execCommand("insertText", false, " ");
+	document.execCommand('outdent', false, null);
+	document.execCommand("delete", false, null);
+}
+
 function setHeaderContent(headerContent) {
 	document.getElementById("headerBar").innerHTML = "<span>" + headerContent + "</span>";
 }

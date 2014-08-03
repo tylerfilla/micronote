@@ -113,6 +113,12 @@ public class NoteEditor extends WebView {
         case CREATE_LIST_NUMBER:
             this.loadUrl("javascript:createListOrdered();");
             break;
+        case INDENT_INCREASE:
+            this.loadUrl("javascript:indentIncrease();");
+            break;
+        case INDENT_DECREASE:
+            this.loadUrl("javascript:indentDecrease();");
+            break;
         }
     }
     
@@ -197,7 +203,7 @@ public class NoteEditor extends WebView {
     
     public static enum Action {
         
-        CREATE_LIST_BULLET, CREATE_LIST_NUMBER,
+        CREATE_LIST_BULLET, CREATE_LIST_NUMBER, INDENT_INCREASE, INDENT_DECREASE,
         
     }
     
