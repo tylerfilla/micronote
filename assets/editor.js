@@ -41,6 +41,8 @@ function reportContent() {
 }
 
 function createListOrdered() {
+	document.getElementById("editArea").focus();
+	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertOrderedList", false, null);
 	document.execCommand("delete", false, null);
@@ -49,6 +51,8 @@ function createListOrdered() {
 }
 
 function createListUnordered() {
+	document.getElementById("editArea").focus();
+	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertUnorderedList", false, null);
 	document.execCommand("delete", false, null);
