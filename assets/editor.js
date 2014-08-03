@@ -76,18 +76,14 @@ function onClick(editArea) {
 	
 	var interval = window.setInterval(function() {
 		var scroll = document.body.scrollTop;
-		alert("scroll:" + scroll);
 		if (scroll == prev) {
 			count++;
-			alert("count:" + count);
 			if (count >= goal) {
-				alert("goal met");
 				window.clearInterval(interval);
 				window.scrollTo(0, target);
 			}
 		} else {
 			count = 0;
-			alert("count:" + count);
 		}
 		prev = scroll;
 	}, 50);
