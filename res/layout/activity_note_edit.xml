@@ -4,11 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.gmail.tylerfilla.android.notes.widget.NoteEditor
-        android:id="@+id/activityNoteEditEditor"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <LinearLayout
         android:id="@+id/activityNoteEditIndentControl"
         android:layout_width="match_parent"
@@ -37,5 +32,11 @@
             android:src="@drawable/ic_edit_indent_increase"
             android:tag="indent_increase" />
     </LinearLayout>
+
+    <com.gmail.tylerfilla.android.notes.widget.NoteEditor
+        android:id="@+id/activityNoteEditEditor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/activityNoteEditIndentControl" />
 
 </RelativeLayout>
