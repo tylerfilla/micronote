@@ -242,21 +242,26 @@ public class NotesActivity extends ListActivity {
                     title.setText("No Title");
                 }
                 
-                if (note.getContent() != null && !note.getContent().isEmpty()) {
-                    contentPreview.setText(Html
-                            .fromHtml(note.getContent(), null, new Html.TagHandler() {
-                                
-                                @Override
-                                public void handleTag(boolean opening, String tag, Editable output,
-                                        XMLReader xmlReader) {
-                                    if (tag.equalsIgnoreCase("li") && opening) {
-                                        output.append(' ');
-                                    }
-                                }
-                                
-                            }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim());
-                } else {
+                if (note.getContent() == null) {
                     contentPreview.setText("No content");
+                } else {
+                    String content = Html.fromHtml(note.getContent(), null, new Html.TagHandler() {
+                        
+                        @Override
+                        public void handleTag(boolean opening, String tag, Editable output,
+                                XMLReader xmlReader) {
+                            if (tag.equalsIgnoreCase("li") && opening) {
+                                output.append(' ');
+                            }
+                        }
+                        
+                    }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim();
+                    
+                    if (content.isEmpty()) {
+                        contentPreview.setText("No content");
+                    } else {
+                        contentPreview.setText(content);
+                    }
                 }
             }
             

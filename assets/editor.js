@@ -1,6 +1,8 @@
 
 // Written by Tyler Filla
 
+var baselineScrollTop = 20;
+
 function reportMetrics() {
 	var editArea = document.getElementById("editArea");
 	var metricsElement = document.getElementById("metricsElement");
@@ -62,6 +64,31 @@ function setEditorContent(editorContent) {
 	document.getElementById("editArea").innerHTML = editorContent;
 }
 
-function onKeyPress(editArea) {
-	// TODO: Watch for URLs and hyperlink them
+function onKeyUp(editArea) {
+	reportContent();
+}
+
+function onClick(editArea) {
+	var target = document.body.scrollTop;
+	var prev = 0;
+	var goal = 5;
+	var count = 0;
+	
+	var interval = window.setInterval(function() {
+		var scroll = document.body.scrollTop;
+		alert("scroll:" + scroll);
+		if (scroll == prev) {
+			count++;
+			alert("count:" + count);
+			if (count >= goal) {
+				alert("goal met");
+				window.clearInterval(interval);
+				window.scrollTo(0, target);
+			}
+		} else {
+			count = 0;
+			alert("count:" + count);
+		}
+		prev = scroll;
+	}, 50);
 }

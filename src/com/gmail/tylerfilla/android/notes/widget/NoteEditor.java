@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -119,7 +118,6 @@ public class NoteEditor extends WebView {
     
     private void loadEditor() throws IOException {
         this.getSettings().setJavaScriptEnabled(true);
-        this.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         
         StringBuilder internalCodeBuilder = new StringBuilder();
         BufferedReader internalCodeReader = new BufferedReader(new InputStreamReader(this
