@@ -4,9 +4,9 @@
 		<link rel="stylesheet" type="text/css" href="editor.css" />
 		<script type="text/javascript" src="editor.js"></script>
 	</head>
-	<body onload="reportMetrics();">
+	<body onload="bodyOnLoad();">
 		<div id="headerBar"></div>
-		<div id="editArea" contenteditable="true" onkeyup="onKeyUp();" onclick="onClick();">
+		<div id="editArea" contenteditable="true" onkeyup="editAreaOnKeyUp();" onclick="editAreaOnClick();">
 			<div id="metricsElement">Measuring, please wait...</div>
 		</div>
 	</body>

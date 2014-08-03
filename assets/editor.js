@@ -1,18 +1,31 @@
 
-// Written by Tyler Filla
+/* Written by Tyler Filla */
 
-var baselineScrollTop = 20;
+// Variables
+
+var headerBar, editArea, metricsElement;
+
+// Incoming set functions
+
+function setHeaderContent(headerContent) {
+	headerBar.innerHTML = "<span>" + headerContent + "</span>";
+}
+
+function setEditorContent(editorContent) {
+	editArea.innerHTML = editorContent;
+}
+
+// Outgoing report functions
+
+function report(message) {
+	window.alert(message);
+}
 
 function reportMetrics() {
-	var editArea = document.getElementById("editArea");
-	var metricsElement = document.getElementById("metricsElement");
-	
 	var lineWidth = 0;
 	var lineHeight = 0;
 	var lineOffsetX = 0;
 	var lineOffsetY = 0;
-	
-	window.alert("nop"); // Certain devices freeze during following loops without this
 	
 	while (lineWidth <= 0) {
 		lineWidth = editArea.clientWidth*window.devicePixelRatio;
@@ -27,21 +40,34 @@ function reportMetrics() {
 		lineOffsetY = (metricsElement.getBoundingClientRect().top + window.pageYOffset - metricsElement.ownerDocument.documentElement.clientTop)*window.devicePixelRatio;
 	}
 	
-	window.alert("lineWidth:" + lineWidth);
-	window.alert("lineHeight:" + lineHeight);
-	window.alert("lineOffsetX:" + lineOffsetX);
-	window.alert("lineOffsetY:" + lineOffsetY);
-	window.alert("contentHeight:" + editArea.offsetHeight*window.devicePixelRatio);
-	
-	reportContent();
+	report("lineWidth:" + lineWidth);
+	report("lineHeight:" + lineHeight);
+	report("lineOffsetX:" + lineOffsetX);
+	report("lineOffsetY:" + lineOffsetY);
+	report("contentHeight:" + editArea.offsetHeight*window.devicePixelRatio);
 }
 
 function reportContent() {
-	window.alert("content:" + document.getElementById("editArea").innerHTML);
+	report("content:" + document.getElementById("editArea").innerHTML);
 }
 
+function reportIndentControlActive() {
+	var message = "responder/indentControlActive:";
+	
+	var nodeName = window.getSelection().anchorNode.parentNode.nodeName.toLowerCase();
+	if (nodeName == "li" || nodeName == "ul" || nodeName == "ol") {
+		message += "true";
+	} else {
+		message += "false";
+	}
+	
+	report(message);
+}
+
+// Edit functions
+
 function createListOrdered() {
-	document.getElementById("editArea").focus();
+	editArea.focus();
 	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertOrderedList", false, null);
@@ -52,7 +78,7 @@ function createListOrdered() {
 }
 
 function createListUnordered() {
-	document.getElementById("editArea").focus();
+	editArea.focus();
 	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertUnorderedList", false, null);
@@ -80,31 +106,37 @@ function indentIncrease() {
 	reportIndentControlActive();
 }
 
-function reportIndentControlActive() {
-	var report = "responder/indentControlActive:";
+// Event handlers
+
+function bodyOnLoad() {
+	headerBar = document.getElementById("headerBar");
+	editArea = document.getElementById("editArea");
+	metricsElement = document.getElementById("metricsElement");
 	
-	var nodeName = window.getSelection().anchorNode.parentNode.nodeName.toLowerCase();
-	if (nodeName == "li" || nodeName == "ul" || nodeName == "ol") {
-		report += "true";
-	} else {
-		report += "false";
-	}
+	report();
+	reportMetrics();
+}
+
+function editAreaOnKeyUp() {
+	reportContent();
+	reportIndentControlActive();
+}
+
+function editAreaOnClick() {
+	reportIndentControlActive();
+	fixScrollPosition();
+}
+
+// Miscellaneous
+
+function fixScrollPosition() {
+	// The page tends to scroll up upon (re-)focusing the editArea.
+	// This function waits until this is done, then resets.
+	// This is a workaround, and although a little ugly, it works just fine.
 	
-	window.alert(report);
-}
-
-function setHeaderContent(headerContent) {
-	document.getElementById("headerBar").innerHTML = "<span>" + headerContent + "</span>";
-}
-
-function setEditorContent(editorContent) {
-	document.getElementById("editArea").innerHTML = editorContent;
-}
-
-function scrollFix() {
 	var target = document.body.scrollTop;
 	var prev = 0;
-	var goal = 5;
+	var goal = 6;
 	var count = 0;
 	
 	var interval = window.setInterval(function() {
@@ -120,14 +152,4 @@ function scrollFix() {
 		}
 		prev = scroll;
 	}, 50);
-}
-
-function onKeyUp() {
-	reportContent();
-	reportIndentControlActive();
-}
-
-function onClick() {
-	scrollFix();
-	reportIndentControlActive();
 }

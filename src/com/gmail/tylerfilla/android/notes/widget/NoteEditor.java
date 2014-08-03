@@ -99,7 +99,9 @@ public class NoteEditor extends WebView {
     public void setNote(Note note) {
         if (this.editorLoaded) {
             this.note = note;
-            this.setEditorContent(note.getContent());
+            this.content = note.getContent();
+            
+            this.setEditorContent(this.content);
             
             if (note.getFile() == null) {
                 this.setHeaderContent("New");
