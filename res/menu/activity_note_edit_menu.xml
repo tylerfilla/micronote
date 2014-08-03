@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_menu_ol"
         android:title="@string/menu_text_activityNoteEditMenuOL"/>
     <item
+        android:id="@+id/activityNoteEditMenuChecklist"
+        android:icon="@drawable/ic_menu_checklist"
+        android:title="@string/menu_text_activityNoteEditMenuChecklist"/>
+    <item
         android:id="@+id/activityNoteEditMenuClip"
         android:icon="@drawable/ic_menu_clip"
         android:title="@string/menu_text_activityNoteEditMenuClip"/>

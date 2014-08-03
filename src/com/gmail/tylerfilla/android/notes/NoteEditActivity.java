@@ -206,6 +206,9 @@ public class NoteEditActivity extends Activity {
         case R.id.activityNoteEditMenuOL:
             this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_NUMBER);
             break;
+        case R.id.activityNoteEditMenuChecklist:
+            Toast.makeText(this, "Checklist not yet implemented", Toast.LENGTH_SHORT).show();
+            break;
         case R.id.activityNoteEditMenuClip:
             Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
             break;
