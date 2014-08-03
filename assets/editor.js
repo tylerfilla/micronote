@@ -68,6 +68,7 @@ function indentDecrease() {
 	document.execCommand("delete", false, null);
 	
 	reportContent();
+	reportIndentControlActive();
 }
 
 function indentIncrease() {
@@ -76,6 +77,7 @@ function indentIncrease() {
 	document.execCommand("delete", false, null);
 	
 	reportContent();
+	reportIndentControlActive();
 }
 
 function reportIndentControlActive() {
