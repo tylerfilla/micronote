@@ -91,8 +91,30 @@ function createListOrdered() {
 		return;
 	}
 	
+	var selection = window.getSelection();
+	var range = selection.getRangeAt(0);
+	
 	document.execCommand("insertText", false, " ");
-	document.execCommand("insertOrderedList", false, null);
+	
+	var existingContent = "<br />";
+	if (selection.anchorNode && selection.anchorNode.parentNode) {
+		var existingContent = selection.anchorNode.parentNode.innerHTML;
+		selection.anchorNode.parentNode.removeChild(selection.anchorNode);
+	}
+	
+	var nodeList = document.createElement("ol");
+	
+	var nodeListItem = document.createElement("li");
+	nodeListItem.innerHTML = existingContent;
+	
+	nodeList.appendChild(nodeListItem);
+	
+	range.insertNode(nodeList);
+	selection.removeAllRanges();
+	range.setEndAfter(nodeListItem);
+	range.collapse();
+	selection.addRange(range);
+	
 	document.execCommand("delete", false, null);
 	
 	reportContent();
@@ -106,8 +128,30 @@ function createListUnordered() {
 		return;
 	}
 	
+	var selection = window.getSelection();
+	var range = selection.getRangeAt(0);
+	
 	document.execCommand("insertText", false, " ");
-	document.execCommand("insertUnorderedList", false, null);
+	
+	var existingContent = "<br />";
+	if (selection.anchorNode && selection.anchorNode.parentNode) {
+		var existingContent = selection.anchorNode.parentNode.innerHTML;
+		selection.anchorNode.parentNode.removeChild(selection.anchorNode);
+	}
+	
+	var nodeList = document.createElement("ul");
+	
+	var nodeListItem = document.createElement("li");
+	nodeListItem.innerHTML = existingContent;
+	
+	nodeList.appendChild(nodeListItem);
+	
+	range.insertNode(nodeList);
+	selection.removeAllRanges();
+	range.setEndAfter(nodeListItem);
+	range.collapse();
+	selection.addRange(range);
+	
 	document.execCommand("delete", false, null);
 	
 	reportContent();
@@ -121,23 +165,34 @@ function createListCheckbox() {
 		return;
 	}
 	
-	document.execCommand("insertText", false, " ");
-	document.execCommand("insertUnorderedList", false, null);
-	document.execCommand("delete", false, null);
+	var selection = window.getSelection();
+	var range = selection.getRangeAt(0);
 	
-	var node = window.getSelection().anchorNode.parentNode;
-	if (node.nodeName.toLowerCase() == "li") {
-		node.classList.add("checkboxListItem");
-		node.classList.add("unchecked");
-		node = node.parentNode;
+	document.execCommand("insertText", false, " ");
+	
+	var existingContent = "<br />";
+	if (selection.anchorNode && selection.anchorNode.parentNode) {
+		var existingContent = selection.anchorNode.parentNode.innerHTML;
+		selection.anchorNode.parentNode.removeChild(selection.anchorNode);
 	}
-	if (node.nodeName.toLowerCase() == "ul") {
-		node.classList.add("checkboxList");
-		if (node.firstChild && node.firstChild.nodeName.toLowerCase() == "li") {
-			node.firstChild.classList.add("checkboxListItem");
-			node.firstChild.classList.add("unchecked");
-		}
-	}
+	
+	var nodeList = document.createElement("ul");
+	nodeList.classList.add("checkboxList");
+	
+	var nodeListItem = document.createElement("li");
+	nodeListItem.classList.add("checkboxListItem");
+	nodeListItem.classList.add("unchecked");
+	nodeListItem.innerHTML = existingContent;
+	
+	nodeList.appendChild(nodeListItem);
+	
+	range.insertNode(nodeList);
+	selection.removeAllRanges();
+	range.setEndAfter(nodeListItem);
+	range.collapse();
+	selection.addRange(range);
+	
+	document.execCommand("delete", false, null);
 	
 	reportContent();
 }
