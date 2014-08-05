@@ -3,7 +3,12 @@
 
 // Variables
 
-var headerBar, editArea, metricsElement;
+var headerBar;
+var contentArea;
+var metricsElement;
+var checkboxArea;
+
+var checkboxListItemEdit;
 
 // Incoming set functions
 
@@ -12,7 +17,7 @@ function setHeaderContent(headerContent) {
 }
 
 function setEditorContent(editorContent) {
-	editArea.innerHTML = editorContent;
+	contentArea.innerHTML = editorContent;
 }
 
 // Outgoing report functions
@@ -26,9 +31,10 @@ function reportMetrics() {
 	var lineHeight = 0;
 	var lineOffsetX = 0;
 	var lineOffsetY = 0;
+	var contentHeight = 0;
 	
 	while (lineWidth <= 0) {
-		lineWidth = editArea.clientWidth*window.devicePixelRatio;
+		lineWidth = contentArea.clientWidth*window.devicePixelRatio;
 	}
 	while (lineHeight <= 0) {
 		lineHeight = metricsElement.clientHeight*window.devicePixelRatio;
@@ -39,53 +45,72 @@ function reportMetrics() {
 	while (lineOffsetY <= 0) {
 		lineOffsetY = (metricsElement.getBoundingClientRect().top + window.pageYOffset - metricsElement.ownerDocument.documentElement.clientTop)*window.devicePixelRatio;
 	}
+	while (contentHeight <= 0) {
+		contentHeight = contentArea.offsetHeight*window.devicePixelRatio;
+	}
 	
 	report("lineWidth:" + lineWidth);
 	report("lineHeight:" + lineHeight);
 	report("lineOffsetX:" + lineOffsetX);
 	report("lineOffsetY:" + lineOffsetY);
-	report("contentHeight:" + editArea.offsetHeight*window.devicePixelRatio);
+	report("contentHeight:" + contentHeight);
 }
 
 function reportContent() {
-	report("content:" + document.getElementById("editArea").innerHTML);
+	report("content:" + contentArea.innerHTML);
 }
 
-function reportIndentControlActive() {
-	var message = "responder/indentControlActive:";
+function reportIndentControlState() {
+	var node = window.getSelection().anchorNode.parentNode;
+	var nodeName = node.nodeName.toLowerCase();
 	
-	var nodeName = window.getSelection().anchorNode.parentNode.nodeName.toLowerCase();
-	if (nodeName == "li" || nodeName == "ul" || nodeName == "ol") {
-		message += "true";
-	} else {
-		message += "false";
-	}
-	
-	report(message);
+	report("responder/indentControlState:" + ((nodeName == "ul" || nodeName == "ol" || nodeName == "li") && !isListCheckbox(node)));
 }
 
 // Edit functions
 
 function createListOrdered() {
-	editArea.focus();
+	contentArea.focus();
 	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertOrderedList", false, null);
 	document.execCommand("delete", false, null);
 	
 	reportContent();
-	reportIndentControlActive();
+	reportIndentControlState();
 }
 
 function createListUnordered() {
-	editArea.focus();
+	contentArea.focus();
 	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertUnorderedList", false, null);
 	document.execCommand("delete", false, null);
 	
 	reportContent();
-	reportIndentControlActive();
+	reportIndentControlState();
+}
+
+function createListCheckbox() {
+	contentArea.focus();
+
+	document.execCommand("insertText", false, " ");
+	document.execCommand("insertUnorderedList", false, null);
+	document.execCommand("delete", false, null);
+	
+	var node = window.getSelection().anchorNode.parentNode;
+	if (node.nodeName.toLowerCase() == "li") {
+		node.classList.add("checkboxListItem");
+		node.classList.add("unchecked");
+	} else if (node.nodeName.toLowerCase() == "ul") {
+		node.classList.add("checkboxList");
+		if (node.firstChild && node.firstChild.nodeName.toLowerCase() == "li") {
+			node.firstChild.classList.add("checkboxListItem");
+			node.firstChild.classList.add("unchecked");
+		}
+	}
+	
+	reportContent();
 }
 
 function indentDecrease() {
@@ -94,7 +119,7 @@ function indentDecrease() {
 	document.execCommand("delete", false, null);
 	
 	reportContent();
-	reportIndentControlActive();
+	reportIndentControlState();
 }
 
 function indentIncrease() {
@@ -103,28 +128,58 @@ function indentIncrease() {
 	document.execCommand("delete", false, null);
 	
 	reportContent();
-	reportIndentControlActive();
+	reportIndentControlState();
+}
+
+// Checkbox list functions
+
+function handleListCheckboxItemOnClick() {
+	window.getSelection().removeAllRanges();
+	
+	var listItem = window.event.target || window.event.srcElement;
+	
+	if (listItem.classList.contains("unchecked")) {
+		listItem.classList.remove("unchecked");
+		listItem.classList.add("checked");
+	} else if (listItem.classList.contains("checked")) {
+		listItem.classList.remove("checked");
+		listItem.classList.add("unchecked");
+	}
+	
+	reportContent();
+}
+
+function isListCheckbox(element) {
+	return element.classList.contains("checkboxList") || element.classList.contains("checkboxListItem");
 }
 
 // Event handlers
 
 function bodyOnLoad() {
 	headerBar = document.getElementById("headerBar");
-	editArea = document.getElementById("editArea");
+	contentArea = document.getElementById("contentArea");
 	metricsElement = document.getElementById("metricsElement");
+	checkboxArea = document.getElementById("checkboxArea");
 	
 	report();
 	reportMetrics();
-}
-
-function editAreaOnKeyUp() {
 	reportContent();
-	reportIndentControlActive();
 }
 
-function editAreaOnClick() {
-	reportIndentControlActive();
+function contentAreaOnClick() {
 	fixScrollPosition();
+	
+	var clickedNode = window.event.target || window.event.srcElement;
+	if (clickedNode && isListCheckbox(clickedNode)) {
+		handleListCheckboxItemOnClick();
+	}
+	
+	reportIndentControlState();
+}
+
+function contentAreaOnKeyUp() {
+	reportContent();
+	reportIndentControlState();
 }
 
 // Miscellaneous

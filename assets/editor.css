@@ -8,7 +8,7 @@
 }
 
 body {
-	background: #FCF9B0;
+	background-color: #FCF9B0;
 }
 
 #headerBar {
@@ -30,7 +30,7 @@ body {
 	margin-right: 16px;
 }
 
-#editArea {
+#contentArea {
 	position: absolute;
 	left: 0px;
 	top: 40px;
@@ -43,12 +43,33 @@ body {
 	font-size: 24px;
 }
 
-#editArea ul, ol, li {
+#contentArea #metricsElement {
+	width: 100%;
+	color: rgba(0, 0, 0, 0);
+}
+
+#contentArea ul, ol, li {
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
-#metricsElement {
-	width: 100%;
-	color: rgba(0, 0, 0, 0);
+#contentArea .checkboxList {
+	margin-left: -24px;
+	list-style: none;
+}
+
+#contentArea .checkboxList .checkboxListItem {
+	padding-left: 32px; 
+	
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-size: 24px 24px;
+}
+
+#contentArea .checkboxList .checkboxListItem.unchecked {
+	background-image: url("img/checkbox-unchecked.png");
+}
+
+#contentArea .checkboxList .checkboxListItem.checked {
+	background-image: url("img/checkbox-checked.png");
 }

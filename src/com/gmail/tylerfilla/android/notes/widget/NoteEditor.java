@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -122,6 +121,9 @@ public class NoteEditor extends WebView {
         case CREATE_LIST_NUMBER:
             this.loadUrl("javascript:createListOrdered();");
             break;
+        case CREATE_LIST_CHECKBOX:
+            this.loadUrl("javascript:createListCheckbox();");
+            break;
         case INDENT_INCREASE:
             this.loadUrl("javascript:indentIncrease();");
             break;
@@ -137,7 +139,6 @@ public class NoteEditor extends WebView {
     
     private void loadEditor() throws IOException {
         this.getSettings().setJavaScriptEnabled(true);
-        this.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
         
         StringBuilder internalCodeBuilder = new StringBuilder();
         BufferedReader internalCodeReader = new BufferedReader(new InputStreamReader(this
@@ -200,11 +201,11 @@ public class NoteEditor extends WebView {
             this.lineOffsetY = Float.parseFloat(report.substring(12));
         } else if (report.startsWith("responder/") && report.length() > 10) {
             String responderCommand = report.substring(10);
-            if (responderCommand.startsWith("indentControlActive:")
-                    && responderCommand.length() > 20) {
+            if (responderCommand.startsWith("indentControlState:")
+                    && responderCommand.length() > 19) {
                 if (this.responder != null) {
-                    this.responder.onIndentControlActive(Boolean.parseBoolean(responderCommand
-                            .substring(20)));
+                    this.responder.onIndentControlState(Boolean.parseBoolean(responderCommand
+                            .substring(19)));
                 }
             }
         }
@@ -229,13 +230,17 @@ public class NoteEditor extends WebView {
     
     public static enum Action {
         
-        CREATE_LIST_BULLET, CREATE_LIST_NUMBER, INDENT_INCREASE, INDENT_DECREASE,
+        CREATE_LIST_BULLET,
+        CREATE_LIST_NUMBER,
+        CREATE_LIST_CHECKBOX,
+        INDENT_INCREASE,
+        INDENT_DECREASE,
         
     }
     
     public static interface Responder {
         
-        public void onIndentControlActive(boolean active);
+        public void onIndentControlState(boolean active);
         
     }
     

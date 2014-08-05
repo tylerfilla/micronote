@@ -79,7 +79,7 @@ public class NoteEditActivity extends Activity {
         this.noteEditor.setResponder(new NoteEditor.Responder() {
             
             @Override
-            public void onIndentControlActive(boolean active) {
+            public void onIndentControlState(boolean active) {
                 if (active) {
                     NoteEditActivity.this.findViewById(R.id.activityNoteEditIndentControl)
                             .setVisibility(View.VISIBLE);
@@ -207,7 +207,7 @@ public class NoteEditActivity extends Activity {
             this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_NUMBER);
             break;
         case R.id.activityNoteEditMenuChecklist:
-            Toast.makeText(this, "Checklists not yet implemented", Toast.LENGTH_SHORT).show();
+            this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_CHECKBOX);
             break;
         case R.id.activityNoteEditMenuClip:
             Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
