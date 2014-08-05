@@ -199,14 +199,19 @@ public class NoteEditor extends WebView {
             this.lineOffsetX = Float.parseFloat(report.substring(12));
         } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
             this.lineOffsetY = Float.parseFloat(report.substring(12));
-        } else if (report.startsWith("responder/") && report.length() > 10) {
+        } else if (this.responder != null && report.startsWith("responder/")
+                && report.length() > 10) {
             String responderCommand = report.substring(10);
             if (responderCommand.startsWith("indentControlState:")
                     && responderCommand.length() > 19) {
-                if (this.responder != null) {
-                    this.responder.onIndentControlState(Boolean.parseBoolean(responderCommand
-                            .substring(19)));
-                }
+                String[] components = responderCommand.substring(19).split(",");
+                
+                boolean controlActive = Boolean.parseBoolean(components[0]);
+                boolean enableDecrease = Boolean.parseBoolean(components[1]);
+                boolean enableIncrease = Boolean.parseBoolean(components[2]);
+                
+                this.responder.updateIndentControlState(controlActive, enableDecrease,
+                        enableIncrease);
             }
         }
     }
@@ -240,7 +245,8 @@ public class NoteEditor extends WebView {
     
     public static interface Responder {
         
-        public void onIndentControlState(boolean active);
+        public void updateIndentControlState(boolean controlActive, boolean enableDecrease,
+                boolean enableIncrease);
         
     }
     

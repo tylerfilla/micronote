@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
@@ -79,14 +81,23 @@ public class NoteEditActivity extends Activity {
         this.noteEditor.setResponder(new NoteEditor.Responder() {
             
             @Override
-            public void onIndentControlState(boolean active) {
-                if (active) {
-                    NoteEditActivity.this.findViewById(R.id.activityNoteEditIndentControl)
-                            .setVisibility(View.VISIBLE);
+            public void updateIndentControlState(boolean controlActive, boolean enableDecrease,
+                    boolean enableIncrease) {
+                LinearLayout activityNoteEditIndentControl = (LinearLayout) NoteEditActivity.this
+                        .findViewById(R.id.activityNoteEditIndentControl);
+                ImageButton activityNoteEditIndentControlButtonDecrease = (ImageButton) NoteEditActivity.this
+                        .findViewById(R.id.activityNoteEditIndentControlButtonDecrease);
+                ImageButton activityNoteEditIndentControlButtonIncrease = (ImageButton) NoteEditActivity.this
+                        .findViewById(R.id.activityNoteEditIndentControlButtonIncrease);
+                
+                if (controlActive) {
+                    activityNoteEditIndentControl.setVisibility(View.VISIBLE);
                 } else {
-                    NoteEditActivity.this.findViewById(R.id.activityNoteEditIndentControl)
-                            .setVisibility(View.GONE);
+                    activityNoteEditIndentControl.setVisibility(View.GONE);
                 }
+                
+                activityNoteEditIndentControlButtonDecrease.setEnabled(enableDecrease);
+                activityNoteEditIndentControlButtonIncrease.setEnabled(enableIncrease);
             }
             
         });

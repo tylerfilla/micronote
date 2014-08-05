@@ -15,6 +15,7 @@
         android:weightSum="1.0" >
 
         <ImageButton
+            android:id="@+id/activityNoteEditIndentControlButtonDecrease"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
@@ -24,6 +25,7 @@
             android:tag="indent_decrease" />
 
         <ImageButton
+            android:id="@+id/activityNoteEditIndentControlButtonIncrease"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.5"

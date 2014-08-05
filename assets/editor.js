@@ -1,6 +1,10 @@
 
 /* Written by Tyler Filla */
 
+// Constants
+
+const listLevelMax = 4;
+
 // Variables
 
 var headerBar;
@@ -61,10 +65,21 @@ function reportContent() {
 }
 
 function reportIndentControlState() {
+	var controlActive = false;
+	var enableDecrease = false;
+	var enableIncrease = false;
+	
 	var node = window.getSelection().anchorNode.parentNode;
 	var nodeName = node.nodeName.toLowerCase();
+	if ((nodeName == "ul" || nodeName == "ol" || nodeName == "li") && !isListCheckbox(node)) {
+		controlActive = true;
+		
+		var listLevel = getListLevel(node);
+		enableDecrease = listLevel > 0;
+		enableIncrease = listLevel < listLevelMax;
+	}
 	
-	report("responder/indentControlState:" + ((nodeName == "ul" || nodeName == "ol" || nodeName == "li") && !isListCheckbox(node)));
+	report("responder/indentControlState:" + controlActive + "," + enableDecrease + "," + enableIncrease);
 }
 
 // Edit functions
@@ -207,4 +222,18 @@ function fixScrollPosition() {
 		}
 		prev = scroll;
 	}, 50);
+}
+
+function getListLevel(listItem) {
+	var level = 0;
+	
+	while (listItem.parentNode) {
+		var nodeName = listItem.nodeName.toLowerCase();
+		if (nodeName == "ul" || nodeName == "ol") {
+			level++;
+		}
+		listItem = listItem.parentNode;
+	}
+	
+	return level;
 }
