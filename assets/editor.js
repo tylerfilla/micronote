@@ -12,7 +12,7 @@ var contentArea;
 var metricsElement;
 var checkboxArea;
 
-var checkboxListItemEdit;
+var lastRange;
 
 // Incoming set functions
 
@@ -222,6 +222,10 @@ function handleListCheckboxItemOnClick() {
 		return;
 	}
 	
+	var selection = window.getSelection();
+	selection.removeAllRanges();
+	selection.addRange(lastRange);
+	
 	var listItem = window.event.target || window.event.srcElement;
 	
 	if (listItem.classList.contains("unchecked")) {
@@ -279,6 +283,8 @@ function contentAreaOnClick() {
 	}
 	
 	reportIndentControlState();
+	
+	lastRange = window.getSelection().getRangeAt(0);
 }
 
 function contentAreaOnKeyUp() {
