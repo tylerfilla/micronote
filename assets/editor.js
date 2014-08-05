@@ -87,6 +87,10 @@ function reportIndentControlState() {
 function createListOrdered() {
 	contentArea.focus();
 	
+	if (getListLevel(window.getSelection().anchorNode) > 0) {
+		return;
+	}
+	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertOrderedList", false, null);
 	document.execCommand("delete", false, null);
@@ -98,6 +102,10 @@ function createListOrdered() {
 function createListUnordered() {
 	contentArea.focus();
 	
+	if (getListLevel(window.getSelection().anchorNode) > 0) {
+		return;
+	}
+	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertUnorderedList", false, null);
 	document.execCommand("delete", false, null);
@@ -108,7 +116,11 @@ function createListUnordered() {
 
 function createListCheckbox() {
 	contentArea.focus();
-
+	
+	if (getListLevel(window.getSelection().anchorNode) > 0) {
+		return;
+	}
+	
 	document.execCommand("insertText", false, " ");
 	document.execCommand("insertUnorderedList", false, null);
 	document.execCommand("delete", false, null);
@@ -117,7 +129,9 @@ function createListCheckbox() {
 	if (node.nodeName.toLowerCase() == "li") {
 		node.classList.add("checkboxListItem");
 		node.classList.add("unchecked");
-	} else if (node.nodeName.toLowerCase() == "ul") {
+		node = node.parentNode;
+	}
+	if (node.nodeName.toLowerCase() == "ul") {
 		node.classList.add("checkboxList");
 		if (node.firstChild && node.firstChild.nodeName.toLowerCase() == "li") {
 			node.firstChild.classList.add("checkboxListItem");
@@ -149,7 +163,9 @@ function indentIncrease() {
 // Checkbox list functions
 
 function handleListCheckboxItemOnClick() {
-	window.getSelection().removeAllRanges();
+	if (window.event.clientX > 40) {
+		return;
+	}
 	
 	var listItem = window.event.target || window.event.srcElement;
 	
@@ -166,6 +182,24 @@ function handleListCheckboxItemOnClick() {
 
 function isListCheckbox(element) {
 	return element.classList.contains("checkboxList") || element.classList.contains("checkboxListItem");
+}
+
+function onListCheckboxItemAdded(listItem) {
+	if (listItem.classList.contains("checkboxList")) {
+		var items = listItem.getElementsByTagName("li");
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+			if (item.innerText.trim() == "") {
+				listItem = item;
+				break;
+			}
+		}
+	}
+	
+	if (listItem.classList.contains("checked")) {
+		listItem.classList.remove("checked");
+		listItem.classList.add("unchecked");
+	}
 }
 
 // Event handlers
@@ -193,6 +227,14 @@ function contentAreaOnClick() {
 }
 
 function contentAreaOnKeyUp() {
+	var keyCode = window.event.which || window.event.keyCode;
+	if (keyCode == 13) {
+		var node = window.getSelection().anchorNode.parentNode;
+		if (isListCheckbox(node)) {
+			onListCheckboxItemAdded(node);
+		}
+	}
+	
 	reportContent();
 	reportIndentControlState();
 }
@@ -225,6 +267,10 @@ function fixScrollPosition() {
 }
 
 function getListLevel(listItem) {
+	if (!listItem) {
+		return;
+	}
+	
 	var level = 0;
 	
 	while (listItem.parentNode) {
