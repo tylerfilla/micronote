@@ -130,6 +130,12 @@ public class NoteEditor extends WebView {
         case INDENT_DECREASE:
             this.loadUrl("javascript:indentDecrease();");
             break;
+        case FOCUS:
+            this.loadUrl("javascript:contentAreaFocus();");
+            break;
+        case BLUR:
+            this.loadUrl("javascript:contentAreaBlur();");
+            break;
         }
     }
     
@@ -162,6 +168,15 @@ public class NoteEditor extends WebView {
                     NoteEditor.this.setNote(NoteEditor.this.pendingNote);
                     NoteEditor.this.pendingNote = null;
                 }
+            }
+            
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (NoteEditor.this.responder != null) {
+                    NoteEditor.this.responder.onExternalRequest(url);
+                }
+                
+                return true;
             }
             
         });
@@ -210,7 +225,7 @@ public class NoteEditor extends WebView {
                 boolean enableDecrease = Boolean.parseBoolean(components[1]);
                 boolean enableIncrease = Boolean.parseBoolean(components[2]);
                 
-                this.responder.updateIndentControlState(controlActive, enableDecrease,
+                this.responder.onUpdateIndentControlState(controlActive, enableDecrease,
                         enableIncrease);
             }
         }
@@ -235,6 +250,8 @@ public class NoteEditor extends WebView {
     
     public static enum Action {
         
+        FOCUS,
+        BLUR,
         CREATE_LIST_BULLET,
         CREATE_LIST_NUMBER,
         CREATE_LIST_CHECKBOX,
@@ -245,8 +262,10 @@ public class NoteEditor extends WebView {
     
     public static interface Responder {
         
-        public void updateIndentControlState(boolean controlActive, boolean enableDecrease,
+        public void onUpdateIndentControlState(boolean controlActive, boolean enableDecrease,
                 boolean enableIncrease);
+        
+        public void onExternalRequest(String request);
         
     }
     
