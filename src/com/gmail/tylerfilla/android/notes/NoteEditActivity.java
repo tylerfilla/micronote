@@ -117,6 +117,8 @@ public class NoteEditActivity extends Activity {
                         } else {
                             NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.BLUR);
                         }
+                        
+                        NoteEditActivity.this.noteEditor.postInvalidate();
                     }
                     
                 });

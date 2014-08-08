@@ -30,7 +30,6 @@ function setEditorContent(editorContent) {
 
 function contentAreaFocus() {
 	contentArea.focus();
-	window.scrollTo(0, 0);
 	
 	featureClear();
 }
@@ -336,7 +335,7 @@ function featureScan(element) {
 				selection.removeAllRanges();
 				selection.addRange(range);
 				
-				document.execCommand("delete", false, null);
+				document.execCommand("insertHTML", false, "&nbsp;");
 				range.insertNode(node);
 				
 				selection.removeAllRanges();
