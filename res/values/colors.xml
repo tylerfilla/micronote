@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="background_actionbar_top">#70463A</color>
+    <color name="background_actionbar_top">#5B382F</color>
     <color name="background_actionbar_bottom">#30231B</color>
     <color name="background_actionbar_button_selected">#33FFFFFF</color>
     <color name="background_pad">#FCF9B0</color>

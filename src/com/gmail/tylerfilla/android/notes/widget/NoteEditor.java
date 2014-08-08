@@ -149,8 +149,9 @@ public class NoteEditor extends WebView {
             internalCodeBuilder.append(line).append('\n');
         }
         
-        this.loadDataWithBaseURL("file:///android_asset/", internalCodeBuilder.toString(),
-                "text/html", "utf-8", null);
+        this.loadDataWithBaseURL("file:///android_asset/",
+                this.preprocessEditorDocument(internalCodeBuilder.toString()), "text/html",
+                "utf-8", null);
         
         this.setWebViewClient(new WebViewClient() {
             
@@ -177,6 +178,14 @@ public class NoteEditor extends WebView {
             }
             
         });
+    }
+    
+    private String preprocessEditorDocument(String source) {
+        return source.replace(
+                "$BODY-BACKGROUND-COLOR$",
+                "#"
+                        + Integer.toHexString(this.getContext().getResources()
+                                .getColor(R.color.background_pad) & 0x00FFFFFF));
     }
     
     private void handleReport(String report) {
