@@ -8,11 +8,14 @@ import java.lang.reflect.InvocationTargetException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -81,26 +84,42 @@ public class NoteEditActivity extends Activity {
         this.noteEditor.setResponder(new NoteEditor.Responder() {
             
             @Override
-            public void updateIndentControlState(boolean controlActive, boolean enableDecrease,
+            public void onUpdateIndentControlState(boolean controlActive, boolean enableDecrease,
                     boolean enableIncrease) {
-                LinearLayout activityNoteEditIndentControl = (LinearLayout) NoteEditActivity.this
-                        .findViewById(R.id.activityNoteEditIndentControl);
-                ImageButton activityNoteEditIndentControlButtonDecrease = (ImageButton) NoteEditActivity.this
-                        .findViewById(R.id.activityNoteEditIndentControlButtonDecrease);
-                ImageButton activityNoteEditIndentControlButtonIncrease = (ImageButton) NoteEditActivity.this
-                        .findViewById(R.id.activityNoteEditIndentControlButtonIncrease);
-                
-                if (controlActive) {
-                    activityNoteEditIndentControl.setVisibility(View.VISIBLE);
-                } else {
-                    activityNoteEditIndentControl.setVisibility(View.GONE);
-                }
-                
-                activityNoteEditIndentControlButtonDecrease.setEnabled(enableDecrease);
-                activityNoteEditIndentControlButtonIncrease.setEnabled(enableIncrease);
+                ((LinearLayout) NoteEditActivity.this
+                        .findViewById(R.id.activityNoteEditIndentControl))
+                        .setVisibility(controlActive ? View.VISIBLE : View.GONE);
+                ((ImageButton) NoteEditActivity.this
+                        .findViewById(R.id.activityNoteEditIndentControlButtonDecrease))
+                        .setEnabled(enableDecrease);
+                ((ImageButton) NoteEditActivity.this
+                        .findViewById(R.id.activityNoteEditIndentControlButtonIncrease))
+                        .setEnabled(enableIncrease);
+            }
+            
+            @Override
+            public void onExternalRequest(String request) {
+                NoteEditActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                        .parse(request)));
             }
             
         });
+        
+        final View activityNoteEditView = this.findViewById(android.R.id.content);
+        activityNoteEditView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new OnGlobalLayoutListener() {
+                    
+                    @Override
+                    public void onGlobalLayout() {
+                        if (activityNoteEditView.getRootView().getHeight()
+                                - activityNoteEditView.getHeight() > 400) {
+                            NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.FOCUS);
+                        } else {
+                            NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.BLUR);
+                        }
+                    }
+                    
+                });
     }
     
     @Override

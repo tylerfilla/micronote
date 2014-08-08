@@ -13,8 +13,9 @@ var metricsElement;
 var checkboxArea;
 
 var lastRange;
+var featureScanTemp;
 
-// Incoming set functions
+// Incoming control functions
 
 function setHeaderContent(headerContent) {
 	headerBar.innerHTML = "<span>" + headerContent + "</span>";
@@ -22,6 +23,22 @@ function setHeaderContent(headerContent) {
 
 function setEditorContent(editorContent) {
 	contentArea.innerHTML = editorContent;
+	contentArea.blur();
+	
+	featureScan();
+}
+
+function contentAreaFocus() {
+	contentArea.focus();
+	window.scrollTo(0, 0);
+	
+	featureClear();
+}
+
+function contentAreaBlur() {
+	contentArea.blur();
+	
+	featureScan();
 }
 
 // Outgoing report functions
@@ -69,14 +86,17 @@ function reportIndentControlState() {
 	var enableDecrease = false;
 	var enableIncrease = false;
 	
-	var node = window.getSelection().anchorNode.parentNode;
-	var nodeName = node.nodeName.toLowerCase();
-	if ((nodeName == "ul" || nodeName == "ol" || nodeName == "li") && !isListCheckbox(node)) {
-		controlActive = true;
-		
-		var listLevel = getListLevel(node);
-		enableDecrease = listLevel > 0;
-		enableIncrease = listLevel < listLevelMax;
+	var node = window.getSelection().anchorNode;
+	if (node) {
+		node = node.parentNode;
+		var nodeName = node.nodeName.toLowerCase();
+		if ((nodeName == "ul" || nodeName == "ol" || nodeName == "li") && !isListCheckbox(node)) {
+			controlActive = true;
+			
+			var listLevel = getListLevel(node);
+			enableDecrease = listLevel > 0;
+			enableIncrease = listLevel < listLevelMax;
+		}
 	}
 	
 	report("responder/indentControlState:" + controlActive + "," + enableDecrease + "," + enableIncrease);
@@ -86,12 +106,13 @@ function reportIndentControlState() {
 
 function createListOrdered() {
 	contentArea.focus();
+
+	var selection = window.getSelection();
 	
-	if (getListLevel(window.getSelection().anchorNode) > 0) {
+	if (getListLevel(selection.anchorNode) > 0) {
 		return;
 	}
 	
-	var selection = window.getSelection();
 	var range = selection.getRangeAt(0);
 	
 	document.execCommand("insertText", false, " ");
@@ -123,12 +144,13 @@ function createListOrdered() {
 
 function createListUnordered() {
 	contentArea.focus();
+
+	var selection = window.getSelection();
 	
-	if (getListLevel(window.getSelection().anchorNode) > 0) {
+	if (getListLevel(selection.anchorNode) > 0) {
 		return;
 	}
 	
-	var selection = window.getSelection();
 	var range = selection.getRangeAt(0);
 	
 	document.execCommand("insertText", false, " ");
@@ -160,12 +182,13 @@ function createListUnordered() {
 
 function createListCheckbox() {
 	contentArea.focus();
+
+	var selection = window.getSelection();
 	
-	if (getListLevel(window.getSelection().anchorNode) > 0) {
+	if (getListLevel(selection.anchorNode) > 0) {
 		return;
 	}
 	
-	var selection = window.getSelection();
 	var range = selection.getRangeAt(0);
 	
 	document.execCommand("insertText", false, " ");
@@ -261,6 +284,161 @@ function onListCheckboxItemAdded(listItem) {
 	}
 }
 
+// Feature recognition
+
+function featureClear() {
+	var elements = contentArea.getElementsByTagName("*");
+	for (var i = 0; i < elements.length; i++) {
+		var element = elements[i];
+		
+		if (element.classList.contains("feature")) {
+			if (element.nodeName.toLowerCase() == "a" && element.href) {
+				var selection = window.getSelection();
+				
+				var oldRange = selection.getRangeAt(0);
+				var linkRange = document.createRange();
+				linkRange.selectNode(element);
+				
+				selection.removeAllRanges();
+				selection.addRange(linkRange);
+				
+				document.execCommand("unlink", false, null);
+				document.execCommand("removeFormat", false, null);
+				
+				selection.removeAllRanges();
+				selection.addRange(oldRange);
+			}
+		}
+	}
+	report(contentArea.innerHTML);
+}
+
+function featureScan(element) {
+	if (!element) {
+		featureScanTemp = new Array();
+		
+		featureScan(contentArea);
+		
+		while (featureScanTemp.length > 0) {
+			var action = featureScanTemp.pop();
+			switch (action) {
+			case "insertNodeAtRange":
+				var node = featureScanTemp.pop();
+				var range = featureScanTemp.pop();
+				
+				var selection = window.getSelection();
+				var oldRanges = new Array();
+				
+				for (var i = 0; i < selection.rangeCount; i++) {
+					oldRanges.push(selection.getRangeAt(i));
+				}
+				
+				selection.removeAllRanges();
+				selection.addRange(range);
+				
+				document.execCommand("delete", false, null);
+				range.insertNode(node);
+				
+				selection.removeAllRanges();
+				
+				for (var i = 0; i < oldRanges.length; i++) {
+					selection.addRange(oldRanges[i]);
+				}
+				report(contentArea.innerHTML);
+				
+				break;
+			}
+		}
+		
+		return;
+	}
+	
+	var children = element.childNodes;
+	for (var i = 0; i < children.length; i++) {
+		featureScan(children[i]);
+	}
+	
+	if (element.nodeType == 3) {
+		var type = "";
+		var end = false;
+		
+		var startPos = -1;
+		var endPos = -1;
+	
+		var accum = "";
+		var accumLink = "";
+		
+		for (var i = 0; i < element.data.length; i++) {
+			var char = element.data.charAt(i);
+			
+			if (startPos < 0) {
+				startPos = i;
+			}
+			
+			if (i == element.data.length - 1
+					|| char == ' '
+					|| char == '\t'
+					|| char == '\n'
+					|| char == '\u00A0') { // &nbsp;
+				end = true;
+				endPos = i + 1;
+			}
+			
+			switch (type) {
+			case "link":
+				accumLink += char;
+				
+				if (end) {
+					var selection = window.getSelection();
+					
+					var linkRange = document.createRange();
+					linkRange.setStart(element, startPos);
+					linkRange.setEnd(element, endPos);
+					
+					selection.removeAllRanges();
+					selection.addRange(linkRange);
+					
+					var linkNode = document.createElement("a");
+					linkNode.href = normalizeUrl(accumLink.trim());
+					linkNode.classList.add("feature");
+					linkNode.innerText = accumLink;
+					
+					featureScanTemp.push(linkRange);
+					featureScanTemp.push(linkNode);
+					featureScanTemp.push("insertNodeAtRange");
+					
+					selection.removeAllRanges();
+					
+					report(contentArea.innerHTML);
+				}
+				break;
+			default:
+				accum += char;
+				
+				if (accum.toLowerCase().indexOf("http://") == 0
+						|| accum.toLowerCase().indexOf("https://") == 0
+						|| accum.toLowerCase().indexOf("www.") == 0) {
+					type = "link";
+					accumLink = accum;
+					accum = "";
+				}
+				break;
+			}
+			
+			if (end) {
+				type = "";
+				end = false;
+				
+				startPos = -1;
+				endPos = -1;
+				
+				accum = "";
+				accumLink = "";
+			}
+		}
+	}
+}
+
 // Event handlers
 
 function bodyOnLoad() {
@@ -278,13 +456,22 @@ function contentAreaOnClick() {
 	fixScrollPosition();
 	
 	var clickedNode = window.event.target || window.event.srcElement;
-	if (clickedNode && isListCheckbox(clickedNode)) {
-		handleListCheckboxItemOnClick();
+	if (clickedNode) {
+		if (clickedNode.href) {
+			contentArea.blur();
+			window.location = clickedNode.href;
+		} else if (isListCheckbox(clickedNode)) {
+			handleListCheckboxItemOnClick();
+		}
 	}
 	
 	reportIndentControlState();
 	
-	lastRange = window.getSelection().getRangeAt(0);
+	if (window.getSelection().rangeCount > 0) {
+		lastRange = window.getSelection().getRangeAt(0);
+	} else {
+		lastRange = null;
+	}
 }
 
 function contentAreaOnKeyUp() {
@@ -343,4 +530,12 @@ function getListLevel(listItem) {
 	}
 	
 	return level;
+}
+
+function normalizeUrl(url) {
+	if (url.search("://") < 0) {
+		url = "http://" + url;
+	}
+	
+	return url;
 }
