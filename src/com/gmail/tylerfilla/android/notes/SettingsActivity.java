@@ -33,6 +33,7 @@ public class SettingsActivity extends PreferenceActivity {
             this.addPreferencesFromResource(R.xml.pref);
             
             String versionName = null;
+            
             try {
                 Activity activity = this.getActivity();
                 versionName = activity.getPackageManager().getPackageInfo(
@@ -40,6 +41,7 @@ public class SettingsActivity extends PreferenceActivity {
             } catch (NameNotFoundException e) {
                 e.printStackTrace();
             }
+            
             if (versionName != null) {
                 Preference prefAbout = this.findPreference("pref_about");
                 prefAbout.setTitle(prefAbout.getTitle().toString()

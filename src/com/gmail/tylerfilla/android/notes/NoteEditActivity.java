@@ -30,6 +30,8 @@ import com.gmail.tylerfilla.android.notes.widget.NoteEditor;
 
 public class NoteEditActivity extends Activity {
     
+    private static Note persistentNote;
+    
     private NoteKeeper noteKeeper;
     private NoteEditor noteEditor;
     
@@ -44,8 +46,8 @@ public class NoteEditActivity extends Activity {
         
         Note note = null;
         
-        if (this.noteKeeper.hasPersistentNote()) {
-            note = this.noteKeeper.popPersistentNote();
+        if (NoteEditActivity.persistentNote != null) {
+            note = NoteEditActivity.persistentNote;
         } else {
             String noteFilePath = null;
             
@@ -65,11 +67,11 @@ public class NoteEditActivity extends Activity {
             }
         }
         
-        TextView actionbarActivityNoteEditTitle = (TextView) this
+        TextView activityNoteEditActionbarTitle = (TextView) this
                 .findViewById(R.id.activityNoteEditActionbarTitle);
-        actionbarActivityNoteEditTitle.setText(note.getTitle());
-        actionbarActivityNoteEditTitle.setSelected(true);
-        actionbarActivityNoteEditTitle.setOnClickListener(new OnClickListener() {
+        activityNoteEditActionbarTitle.setText(note.getTitle());
+        activityNoteEditActionbarTitle.setSelected(true);
+        activityNoteEditActionbarTitle.setOnClickListener(new OnClickListener() {
             
             @Override
             public void onClick(View v) {
@@ -143,7 +145,7 @@ public class NoteEditActivity extends Activity {
         super.onSaveInstanceState(outState);
         
         if (!this.isFinishing()) {
-            this.noteKeeper.pushPersistentNote(this.noteEditor.getNote());
+            NoteEditActivity.persistentNote = this.noteEditor.getNote();
         }
     }
     
@@ -214,7 +216,7 @@ public class NoteEditActivity extends Activity {
         popupMenu.show();
     }
     
-    public void buttonActionClicked(View view) {
+    public void onActionButtonClick(View view) {
         if ("back".equals(view.getTag())) {
             this.finish();
         } else if ("menu".equals(view.getTag())) {
@@ -222,10 +224,10 @@ public class NoteEditActivity extends Activity {
         }
     }
     
-    public void buttonEditClicked(View view) {
-        if ("indent_increase".equals(view.getTag())) {
+    public void onIndentControlButtonClick(View view) {
+        if ("increase".equals(view.getTag())) {
             this.noteEditor.performAction(NoteEditor.Action.INDENT_INCREASE);
-        } else if ("indent_decrease".equals(view.getTag())) {
+        } else if ("decrease".equals(view.getTag())) {
             this.noteEditor.performAction(NoteEditor.Action.INDENT_DECREASE);
         }
     }

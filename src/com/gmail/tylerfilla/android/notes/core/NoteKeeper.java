@@ -2,15 +2,14 @@ package com.gmail.tylerfilla.android.notes.core;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -35,10 +34,8 @@ public class NoteKeeper {
     
     private static NoteKeeper instance = null;
     
-    private File dirNotes;
-    private File dirTemp;
-    
-    private final ArrayDeque<Note> persistentNoteStack;
+    private final File dirNotes;
+    private final File dirTemp;
     
     private NoteKeeper(Context context) {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -51,8 +48,6 @@ public class NoteKeeper {
         
         this.dirNotes.mkdirs();
         this.dirTemp.mkdirs();
-        
-        this.persistentNoteStack = new ArrayDeque<Note>();
     }
     
     public static NoteKeeper getInstance(Context context) {
@@ -63,7 +58,7 @@ public class NoteKeeper {
         return instance;
     }
     
-    public File[] listNoteFiles() {
+    public File[] listFiles() {
         Collection<File> dirNotesContents = scanDirectory(this.dirNotes);
         ArrayList<File> noteFileList = new ArrayList<File>();
         
@@ -76,7 +71,7 @@ public class NoteKeeper {
         return noteFileList.toArray(new File[noteFileList.size()]);
     }
     
-    public void cleanup() {
+    public void cleanDirTemp() {
         for (File tempFile : this.dirTemp.listFiles()) {
             tempFile.delete();
         }
@@ -86,13 +81,11 @@ public class NoteKeeper {
         final Note note = new Note();
         note.setFile(noteFile);
         
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
-            SAXParser saxParser = saxParserFactory.newSAXParser();
-            saxParser.parse(noteFile, new DefaultHandler() {
+            SAXParserFactory.newInstance().newSAXParser().parse(noteFile, new DefaultHandler() {
                 
-                boolean infoTitle = false;
-                boolean content = false;
+                private boolean infoTitle = false;
+                private boolean content = false;
                 
                 @Override
                 public void startElement(String uri, String localName, String qName,
@@ -108,9 +101,9 @@ public class NoteKeeper {
                             }
                         }
                     } else if (qName.equalsIgnoreCase("title")) {
-                        infoTitle = true;
+                        this.infoTitle = true;
                     } else if (qName.equalsIgnoreCase("content")) {
-                        content = true;
+                        this.content = true;
                     }
                 }
                 
@@ -118,9 +111,9 @@ public class NoteKeeper {
                 public void endElement(String uri, String localName, String qName)
                         throws SAXException {
                     if (qName.equalsIgnoreCase("title")) {
-                        infoTitle = false;
+                        this.infoTitle = false;
                     } else if (qName.equalsIgnoreCase("content")) {
-                        content = false;
+                        this.content = false;
                     }
                 }
                 
@@ -129,13 +122,11 @@ public class NoteKeeper {
                     String string = new String(ch, start, length);
                     
                     if (!string.trim().isEmpty()) {
-                        if (infoTitle) {
+                        if (this.infoTitle) {
                             note.setTitle(string);
-                        } else if (content) {
-                            String currentContent = note.getContent() != null ? note.getContent()
-                                    : "";
-                            note.setContent(currentContent.concat(new String(Base64.decode(
-                                    string.getBytes(), Base64.DEFAULT))));
+                        } else if (this.content) {
+                            note.setContent((note.getContent() != null ? note.getContent() : "")
+                                    + new String(Base64.decode(string.getBytes(), Base64.DEFAULT)));
                         }
                     }
                 }
@@ -158,7 +149,7 @@ public class NoteKeeper {
         }
         
         if (note.getFile() == null) {
-            note.setFile(new File(this.dirNotes, note.getTitle().toLowerCase()
+            note.setFile(new File(this.dirNotes, note.getTitle().toLowerCase(Locale.US)
                     .replaceAll("[^A-Za-z0-9]", "-").concat(".note")));
             while (note.getFile().exists()) {
                 note.setFile(new File(note.getFile().getParentFile(), "_".concat(note.getFile()
@@ -166,11 +157,10 @@ public class NoteKeeper {
             }
         }
         
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
         try {
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Transformer transformer = transformerFactory.newTransformer();
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
             
             Document document = documentBuilder.newDocument();
             
@@ -215,18 +205,6 @@ public class NoteKeeper {
         }
         
         note.setFile(null);
-    }
-    
-    public void pushPersistentNote(Note note) {
-        this.persistentNoteStack.push(note);
-    }
-    
-    public Note popPersistentNote() {
-        return this.persistentNoteStack.pop();
-    }
-    
-    public boolean hasPersistentNote() {
-        return !this.persistentNoteStack.isEmpty();
     }
     
     private static Collection<File> scanDirectory(File directory) {

@@ -1,44 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    style="@style/Notes.Activity.NoteEdit.Root" >
 
     <LinearLayout
         android:id="@+id/activityNoteEditIndentControl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/background_activityNoteEditIndentControl"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:weightSum="1.0" >
+        style="@style/Notes.Activity.NoteEdit.IndentControl.Root" >
 
         <ImageButton
             android:id="@+id/activityNoteEditIndentControlButtonDecrease"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:contentDescription="@string/content_description_activityNoteEditIndentControlButtonDecrease"
-            android:onClick="buttonEditClicked"
+            style="@style/Notes.Activity.NoteEdit.IndentControl.Button"
+            android:contentDescription="@string/activity_note_edit_indent_control_button_decrease_content_description"
             android:src="@drawable/ic_edit_indent_decrease"
-            android:tag="indent_decrease" />
+            android:tag="decrease" />
 
         <ImageButton
             android:id="@+id/activityNoteEditIndentControlButtonIncrease"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:contentDescription="@string/content_description_activityNoteEditIndentControlButtonIncrease"
-            android:onClick="buttonEditClicked"
+            style="@style/Notes.Activity.NoteEdit.IndentControl.Button"
+            android:contentDescription="@string/activity_note_edit_indent_control_button_increase_content_description"
             android:src="@drawable/ic_edit_indent_increase"
-            android:tag="indent_increase" />
+            android:tag="increase" />
     </LinearLayout>
 
     <com.gmail.tylerfilla.android.notes.widget.NoteEditor
         android:id="@+id/activityNoteEditEditor"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/activityNoteEditIndentControl" />
+        style="@style/Notes.Activity.NoteEdit.Editor" />
 
 </RelativeLayout>

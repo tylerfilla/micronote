@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    style="@style/Notes.Widget.ActionBar" >
 
     <ImageButton
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|left"
-        android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_description_activityNotesActionbarSearchButtonClose"
-        android:onClick="buttonActionClicked"
+        android:contentDescription="@string/activity_notes_actionbar_search_button_close_content_description"
         android:src="@drawable/ic_action_search_close"
         android:tag="search_close" />
 
     <TextView
         android:id="@+id/activityNotesActionbarSearchTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/activity_notes_actionbar_search_title"
-        android:textAppearance="@style/AppThemeActionBarTitleText" />
+        style="@style/Notes.Widget.ActionBar.Title"
+        android:text="@string/activity_notes_actionbar_search_title" />
 
 </FrameLayout>

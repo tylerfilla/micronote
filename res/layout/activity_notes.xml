@@ -1,82 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_pad"
-    android:orientation="vertical" >
+    style="@style/Notes.Activity.Notes.Root" >
 
     <ListView
         android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="multipleChoiceModal"
-        android:dividerHeight="1dp"
-        android:footerDividersEnabled="false" />
+        style="@style/Notes.Activity.Notes.List.Root" />
 
     <LinearLayout
-        android:id="@+id/activityNotesNoteListEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:id="@+id/activityNotesMessageListEmpty"
+        style="@style/Notes.Activity.Notes.Message.Root" >
 
         <TextView
-            android:id="@+id/activityNotesNoteListEmptyTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/note_list_empty_title"
-            android:textAppearance="@style/activityNotesListItemTitleText" />
+            android:id="@+id/activityNotesMessageListEmptyTitle"
+            style="@style/Notes.Activity.Notes.Message.Title"
+            android:text="@string/activity_notes_list_empty_title" />
 
         <TextView
-            android:id="@+id/activityNotesNoteListEmptyBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/note_list_empty_body"
-            android:textAppearance="@style/activityNotesListItemContentPreviewText" />
+            android:id="@+id/activityNotesMessageListEmptyBody"
+            style="@style/Notes.Activity.Notes.Message.Body"
+            android:text="@string/activity_notes_list_empty_body" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/activityNotesSearchEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:id="@+id/activityNotesMessageSearchOpen"
+        style="@style/Notes.Activity.Notes.Message.Root" >
 
         <TextView
-            android:id="@+id/activityNotesSearchEmptyTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/search_empty_title"
-            android:textAppearance="@style/activityNotesListItemTitleText" />
+            android:id="@+id/activityNotesMessageSearchOpenTitle"
+            style="@style/Notes.Activity.Notes.Message.Title"
+            android:text="@string/activity_notes_search_open_title" />
 
         <TextView
-            android:id="@+id/activityNotesSearchEmptyBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/search_empty_body"
-            android:textAppearance="@style/activityNotesListItemContentPreviewText" />
+            android:id="@+id/activityNotesMessageSearchOpenBody"
+            style="@style/Notes.Activity.Notes.Message.Body"
+            android:text="@string/activity_notes_search_open_body" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activityNotesMessageSearchEmpty"
+        style="@style/Notes.Activity.Notes.Message.Root" >
+
+        <TextView
+            android:id="@+id/activityNotesMessageSearchEmptyTitle"
+            style="@style/Notes.Activity.Notes.Message.Title"
+            android:text="@string/activity_notes_search_empty_title" />
+
+        <TextView
+            android:id="@+id/activityNotesMessageSearchEmptyBody"
+            style="@style/Notes.Activity.Notes.Message.Body"
+            android:text="@string/activity_notes_search_empty_body" />
     </LinearLayout>
 
     <EditText
         android:id="@+id/activityNotesSearchBubble"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="14dp"
-        android:background="@android:drawable/toast_frame"
-        android:hint="@string/activity_notes_search_bubble_hint"
-        android:inputType="text"
-        android:orientation="horizontal"
-        android:textColor="@color/text_search_bubble_input"
-        android:textColorHint="@color/text_search_bubble_input_hint"
-        android:visibility="gone" >
+        style="@style/Notes.Activity.Notes.SearchBubble" >
     </EditText>
 
 </RelativeLayout>

@@ -25,7 +25,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
@@ -76,13 +79,26 @@ public class NotesActivity extends ListActivity {
     }
     
     private void refresh() {
-        this.findViewById(R.id.activityNotesNoteListEmpty).setVisibility(View.GONE);
-        this.findViewById(R.id.activityNotesSearchEmpty).setVisibility(View.GONE);
-        this.findViewById(R.id.activityNotesNoteListFooter).setVisibility(View.GONE);
+        TextView activityNotesListFooter = (TextView) this
+                .findViewById(R.id.activityNotesListFooter);
+        LinearLayout activityNotesMessageListEmpty = (LinearLayout) this
+                .findViewById(R.id.activityNotesMessageListEmpty);
+        LinearLayout activityNotesMessageSearchOpen = (LinearLayout) this
+                .findViewById(R.id.activityNotesMessageSearchOpen);
+        LinearLayout activityNotesMessageSearchEmpty = (LinearLayout) this
+                .findViewById(R.id.activityNotesMessageSearchEmpty);
+        
+        activityNotesListFooter.setVisibility(View.GONE);
+        activityNotesMessageListEmpty.setVisibility(View.GONE);
+        activityNotesMessageSearchOpen.setVisibility(View.GONE);
+        activityNotesMessageSearchEmpty.setVisibility(View.GONE);
         
         this.noteList.clear();
         
-        File[] noteFiles = this.noteKeeper.listNoteFiles();
+        File[] noteFiles = this.noteKeeper.listFiles();
+        
+        int numNotesAdded = 0;
+        int numNotesTotal = 0;
         
         if (noteFiles.length > 0) {
             for (File noteFile : noteFiles) {
@@ -96,40 +112,47 @@ public class NotesActivity extends ListActivity {
                 
                 if (note != null) {
                     if (this.searchMode) {
-                        String noteContent = note.getContent();
-                        if (noteContent != null) {
-                            noteContent = Html.fromHtml(noteContent).toString().toLowerCase();
-                            boolean match = true;
-                            
-                            for (String queryWord : this.searchQuery.toLowerCase().split(" ")) {
-                                match = match && noteContent.contains(queryWord);
-                            }
-                            
-                            if (match) {
-                                this.noteList.add(note);
-                            }
+                        if (this.filterSearchNote(note)) {
+                            this.noteList.add(note);
+                            numNotesAdded++;
                         }
                     } else {
                         this.noteList.add(note);
+                        numNotesAdded++;
                     }
+                    numNotesTotal++;
                 }
             }
-        } else if (!this.searchMode) {
-            this.findViewById(R.id.activityNotesNoteListEmpty).setVisibility(View.VISIBLE);
         }
         
-        if (this.noteList.size() > 0) {
-            ((TextView) this.findViewById(R.id.activityNotesNoteListFooter)).setText(this.noteList
-                    .size() + " note" + (this.noteList.size() == 1 ? "" : "s"));
-            this.findViewById(R.id.activityNotesNoteListFooter).setVisibility(View.VISIBLE);
-        } else if (this.searchMode) {
-            this.findViewById(R.id.activityNotesSearchEmpty).setVisibility(View.VISIBLE);
+        if (this.searchMode) {
+            if (this.searchQuery.isEmpty()) {
+                activityNotesMessageSearchOpen.setVisibility(View.VISIBLE);
+            } else if (numNotesAdded == 0) {
+                activityNotesMessageSearchEmpty.setVisibility(View.VISIBLE);
+            } else {
+                activityNotesListFooter.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (numNotesAdded == 0) {
+                activityNotesMessageListEmpty.setVisibility(View.VISIBLE);
+            } else {
+                activityNotesListFooter.setVisibility(View.VISIBLE);
+            }
+        }
+        
+        if (numNotesAdded == numNotesTotal) {
+            activityNotesListFooter.setText(numNotesAdded + " note"
+                    + (numNotesAdded == 1 ? "" : "s"));
+        } else {
+            activityNotesListFooter.setText(numNotesAdded + " of " + numNotesTotal + " note"
+                    + (numNotesTotal == 1 ? "" : "s"));
         }
         
         this.noteListAdapter.notifyDataSetChanged();
     }
     
-    public void buttonActionClicked(View view) {
+    public void onActionButtonClick(View view) {
         if ("list_settings".equals(view.getTag())) {
             this.enterSettings();
         } else if ("list_search".equals(view.getTag())) {
@@ -145,12 +168,23 @@ public class NotesActivity extends ListActivity {
         this.startActivity(new Intent(this, SettingsActivity.class));
     }
     
+    private void enterNoteEditor(File noteFile) {
+        Intent noteEditIntent = new Intent(this, NoteEditActivity.class);
+        
+        if (noteFile != null) {
+            noteEditIntent.putExtra("file", noteFile.getAbsolutePath());
+        }
+        
+        this.startActivity(noteEditIntent);
+    }
+    
     private void toggleSearchMode() {
         EditText searchBubble = (EditText) this.findViewById(R.id.activityNotesSearchBubble);
         
         if (this.searchMode) {
             this.searchMode = false;
             this.searchQuery = "";
+            
             this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_list);
             
             searchBubble.setVisibility(View.GONE);
@@ -161,6 +195,7 @@ public class NotesActivity extends ListActivity {
                             InputMethodManager.HIDE_NOT_ALWAYS);
         } else {
             this.searchMode = true;
+            
             this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_search);
             
             this.searchBubbleTextChangedListener = new TextWatcher() {
@@ -192,14 +227,16 @@ public class NotesActivity extends ListActivity {
         this.refresh();
     }
     
-    private void enterNoteEditor(File noteFile) {
-        Intent noteEditIntent = new Intent(this, NoteEditActivity.class);
+    private boolean filterSearchNote(Note note) {
+        String noteContentText = Html.fromHtml(note.getContent()).toString().toLowerCase();
         
-        if (noteFile != null) {
-            noteEditIntent.putExtra("file", noteFile.getAbsolutePath());
+        boolean result = !this.searchQuery.isEmpty();
+        
+        for (String queryWord : this.searchQuery.toLowerCase().split(" ")) {
+            result = result && noteContentText.contains(queryWord);
         }
         
-        this.startActivity(noteEditIntent);
+        return result;
     }
     
     private class NoteListAdapter extends BaseAdapter {
@@ -231,9 +268,9 @@ public class NotesActivity extends ListActivity {
                     .inflate(R.layout.activity_notes_list_item, parent, false);
             Note note = NotesActivity.this.noteList.get(position);
             
-            TextView title = (TextView) view.findViewById(R.id.activityNotesNoteListItemTitle);
+            TextView title = (TextView) view.findViewById(R.id.activityNotesListItemTitle);
             TextView contentPreview = (TextView) view
-                    .findViewById(R.id.activityNotesNoteListItemContentPreview);
+                    .findViewById(R.id.activityNotesListItemContentPreview);
             
             if (note != null) {
                 if (note.getTitle() != null && !note.getTitle().isEmpty()) {
@@ -267,10 +304,10 @@ public class NotesActivity extends ListActivity {
             
             if (this.getSelected(position)) {
                 view.setBackgroundColor(NotesActivity.this.getResources().getColor(
-                        R.color.background_note_list_item_selected));
+                        R.color.background_activity_notes_list_item_selected));
             } else {
                 view.setBackgroundColor(NotesActivity.this.getResources().getColor(
-                        android.R.color.transparent));
+                        R.color.background_activity_notes_list_item));
             }
             
             return view;

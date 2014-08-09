@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    style="@style/Notes.Widget.ActionBar" >
 
     <ImageButton
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|left"
-        android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_description_activityNotesActionbarListButtonSettings"
-        android:onClick="buttonActionClicked"
+        android:contentDescription="@string/activity_notes_actionbar_list_button_settings_content_description"
         android:src="@drawable/ic_action_settings"
         android:tag="list_settings" />
 
     <TextView
         android:id="@+id/activityNotesActionbarListTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/activity_notes_actionbar_list_title"
-        android:textAppearance="@style/AppThemeActionBarTitleText" />
+        style="@style/Notes.Widget.ActionBar.Title"
+        android:text="@string/activity_notes_actionbar_list_title" />
 
     <ImageButton
         android:id="@+id/activityNotesActionbarListButtonSearch"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|right"
         android:layout_marginRight="48dp"
-        android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_description_activityNotesActionbarListButtonSearch"
-        android:onClick="buttonActionClicked"
+        android:contentDescription="@string/activity_notes_actionbar_list_button_search_content_description"
         android:src="@drawable/ic_action_search"
         android:tag="list_search" />
 
     <ImageButton
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|right"
-        android:background="@drawable/background_button_actionbar"
-        android:contentDescription="@string/content_description_activityNotesActionbarListButtonNoteNew"
-        android:onClick="buttonActionClicked"
+        android:contentDescription="@string/activity_notes_actionbar_list_button_new_content_description"
         android:src="@drawable/ic_action_note_new"
         android:tag="list_new" />
 

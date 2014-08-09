@@ -5,6 +5,6 @@
         android:id="@+id/activityNotesNoteListSelectCABDelete"
         android:icon="@android:drawable/ic_menu_delete"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/menu_text_activityNotesNoteListSelectCABDelete"/>
+        android:title="@string/activity_note_edit_cab_menu_item_delete"/>
 
 </menu>
