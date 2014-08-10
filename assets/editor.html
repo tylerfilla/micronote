@@ -1,18 +1,19 @@
 <!DOCTYPE html>
+
+<!-- Written by Tyler Filla -->
+
 <html>
 	<head>
-		<title>NoteEditor</title>
 		<link rel="stylesheet" type="text/css" href="editor.css" />
-		<script type="text/javascript" src="editor.js"></script>
 		<style type="text/css">
 		body {
-			background-color: $BODY-BACKGROUND-COLOR$;
+			background-color: <!--[[ res color hexcolor background_pad ]]-->;
 		}
 		</style>
 	</head>
-	<body onload="bodyOnLoad();">
+	<body>
 		<div id="headerBar"></div>
-		<div id="contentArea" contenteditable="true" onclick="contentAreaOnClick();" onkeyup="contentAreaOnKeyUp();">
+		<div id="contentArea" contenteditable="true">
 			<div id="metricsElement">Measuring, please wait...</div>
 		</div>
 	</body>

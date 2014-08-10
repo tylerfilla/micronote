@@ -6,11 +6,15 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -20,6 +24,9 @@ import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.core.Note;
 
 public class NoteEditor extends WebView {
+    
+    private static final Pattern editorDocumentPreprocessorDirectivePattern = Pattern
+            .compile("(?s)<!--\\[\\[(.*?)\\]\\]-->");
     
     private Note note;
     private Note pendingNote;
@@ -84,13 +91,6 @@ public class NoteEditor extends WebView {
     }
     
     public Note getNote() {
-        if (this.note != null) {
-            String editorContent = this.getEditorContent();
-            if (!editorContent.equals(this.note.getContent())) {
-                this.note.setContent(editorContent);
-            }
-        }
-        
         return this.note;
     }
     
@@ -104,8 +104,8 @@ public class NoteEditor extends WebView {
             if (note.getFile() == null) {
                 this.setHeaderContent("New");
             } else {
-                this.setHeaderContent(this
-                        .formatHeaderDate(new Date(note.getFile().lastModified())));
+                this.setHeaderContent(new SimpleDateFormat("h:mm a 'on' M/dd/yyyy", Locale.US)
+                        .format(new Date(note.getFile().lastModified())));
             }
         } else {
             this.pendingNote = note;
@@ -138,6 +138,10 @@ public class NoteEditor extends WebView {
         }
     }
     
+    public Responder getResponder() {
+        return this.responder;
+    }
+    
     public void setResponder(Responder responder) {
         this.responder = responder;
     }
@@ -148,15 +152,14 @@ public class NoteEditor extends WebView {
         StringBuilder internalCodeBuilder = new StringBuilder();
         BufferedReader internalCodeReader = new BufferedReader(new InputStreamReader(this
                 .getContext().getAssets().open("editor.html")));
-        
         String line = null;
         while ((line = internalCodeReader.readLine()) != null) {
             internalCodeBuilder.append(line).append('\n');
         }
+        String internalCode = internalCodeBuilder.toString();
         
         this.loadDataWithBaseURL("file:///android_asset/",
-                this.preprocessEditorDocument(internalCodeBuilder.toString()), "text/html",
-                "utf-8", null);
+                this.preprocessEditorDocument(internalCode), "text/html", "utf-8", null);
         
         this.setWebViewClient(new WebViewClient() {
             
@@ -189,7 +192,9 @@ public class NoteEditor extends WebView {
             
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                NoteEditor.this.handleReport(message);
+                if (message != null) {
+                    NoteEditor.this.handleReport(message);
+                }
                 
                 result.confirm();
                 return true;
@@ -199,23 +204,63 @@ public class NoteEditor extends WebView {
     }
     
     private String preprocessEditorDocument(String source) {
-        return source.replace(
-                "$BODY-BACKGROUND-COLOR$",
-                "#"
-                        + Integer.toHexString(this.getContext().getResources()
-                                .getColor(R.color.background_pad) & 0x00FFFFFF));
+        Matcher matcher = NoteEditor.editorDocumentPreprocessorDirectivePattern.matcher(source);
+        
+        int offset = 0;
+        while (matcher.find()) {
+            String replacement = this.handleEditorDocumentPreprocessorDirective(matcher.group(1)
+                    .trim());
+            
+            int lengthBefore = source.length();
+            source = source.substring(0, matcher.start() + offset) + replacement
+                    + source.substring(matcher.end() + offset);
+            offset += source.length() - lengthBefore;
+        }
+        Log.d("", source);
+        return source;
+    }
+    
+    private String handleEditorDocumentPreprocessorDirective(String directive) {
+        String result = "<!-- An internal error has occurred -->";
+        
+        String[] components = directive.split(" ");
+        if (components.length > 0) {
+            if (components[0].equals("res") && components.length == 4) {
+                String type = components[1];
+                String format = components[2];
+                String resource = components[3];
+                
+                int resourceId = -1;
+                
+                for (Class<?> memberClass : R.class.getClasses()) {
+                    if (memberClass.getName().endsWith(type)) {
+                        try {
+                            resourceId = memberClass.getField(resource).getInt(null);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchFieldException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                
+                Resources resources = this.getContext().getResources();
+                if (format.equals("hexcolor")) {
+                    result = "#" + Integer.toHexString(resources.getColor(resourceId));
+                }
+            }
+        }
+        
+        return result;
     }
     
     private void handleReport(String report) {
         if (report.startsWith("content:")) {
-            if (report.length() == 8) {
-                this.content = "";
-            } else if (report.length() > 8) {
-                this.content = report.substring(8);
-            }
+            this.content = report.substring(8);
         } else if (report.startsWith("contentHeight:") && report.length() > 14) {
-            this.contentHeight = Math.max(this.contentHeight,
-                    Float.parseFloat(report.substring(14)));
+            this.contentHeight = Float.parseFloat(report.substring(14));
         } else if (report.startsWith("lineWidth:") && report.length() > 10) {
             this.lineWidth = Float.parseFloat(report.substring(10));
         } else if (report.startsWith("lineHeight:") && report.length() > 11) {
@@ -224,8 +269,7 @@ public class NoteEditor extends WebView {
             this.lineOffsetX = Float.parseFloat(report.substring(12));
         } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
             this.lineOffsetY = Float.parseFloat(report.substring(12));
-        } else if (this.responder != null && report.startsWith("responder/")
-                && report.length() > 10) {
+        } else if (report.startsWith("responder/") && report.length() > 10) {
             String responderCommand = report.substring(10);
             if (responderCommand.startsWith("indentControlState:")
                     && responderCommand.length() > 19) {
@@ -235,27 +279,20 @@ public class NoteEditor extends WebView {
                 boolean enableDecrease = Boolean.parseBoolean(components[1]);
                 boolean enableIncrease = Boolean.parseBoolean(components[2]);
                 
-                this.responder.onUpdateIndentControlState(controlActive, enableDecrease,
-                        enableIncrease);
+                if (this.responder != null) {
+                    this.responder.onUpdateIndentControlState(controlActive, enableDecrease,
+                            enableIncrease);
+                }
             }
         }
     }
     
-    private String getEditorContent() {
-        return this.content;
-    }
-    
     private void setEditorContent(String editorContent) {
-        this.content = editorContent;
         this.loadUrl("javascript:setEditorContent('" + editorContent + "');");
     }
     
     private void setHeaderContent(String headerContent) {
         this.loadUrl("javascript:setHeaderContent('" + headerContent + "');");
-    }
-    
-    private String formatHeaderDate(Date date) {
-        return new SimpleDateFormat("h:mm a 'on' M/dd/yyyy", Locale.US).format(date);
     }
     
     public static enum Action {

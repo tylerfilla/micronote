@@ -15,7 +15,6 @@ import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -112,24 +111,20 @@ public class NoteEditActivity extends Activity {
             }
             
         });
-        
-        final View activityNoteEditView = this.findViewById(android.R.id.content);
-        activityNoteEditView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new OnGlobalLayoutListener() {
-                    
-                    @Override
-                    public void onGlobalLayout() {
-                        if (activityNoteEditView.getRootView().getHeight()
-                                - activityNoteEditView.getHeight() > 400) {
-                            NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.FOCUS);
-                        } else {
-                            NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.BLUR);
-                        }
-                        
-                        NoteEditActivity.this.noteEditor.postInvalidate();
-                    }
-                    
-                });
+        /*
+         * final View activityNoteEditView = this.findViewById(android.R.id.content);
+         * activityNoteEditView.getViewTreeObserver().addOnGlobalLayoutListener( new
+         * OnGlobalLayoutListener() {
+         * 
+         * @Override public void onGlobalLayout() { if
+         * (activityNoteEditView.getRootView().getHeight() - activityNoteEditView.getHeight() > 400)
+         * { NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.FOCUS); } else {
+         * NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.BLUR); }
+         * 
+         * NoteEditActivity.this.noteEditor.postInvalidate(); }
+         * 
+         * });
+         */
     }
     
     @Override
