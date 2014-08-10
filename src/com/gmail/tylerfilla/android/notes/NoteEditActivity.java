@@ -86,6 +86,18 @@ public class NoteEditActivity extends Activity {
         this.noteEditor.setResponder(new NoteEditor.Responder() {
             
             @Override
+            public void onExternalRequest(String request) {
+                NoteEditActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                        .parse(request)));
+            }
+            
+            @Override
+            public void onPageLoad(String url) {
+                NoteEditActivity.this.findViewById(R.id.activityNoteEditEditorCover).setVisibility(
+                        View.GONE);
+            }
+            
+            @Override
             public void onUpdateIndentControlState(boolean controlActive, boolean enableDecrease,
                     boolean enableIncrease) {
                 ((LinearLayout) NoteEditActivity.this
@@ -97,12 +109,6 @@ public class NoteEditActivity extends Activity {
                 ((ImageButton) NoteEditActivity.this
                         .findViewById(R.id.activityNoteEditIndentControlButtonIncrease))
                         .setEnabled(enableIncrease);
-            }
-            
-            @Override
-            public void onExternalRequest(String request) {
-                NoteEditActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                        .parse(request)));
             }
             
         });

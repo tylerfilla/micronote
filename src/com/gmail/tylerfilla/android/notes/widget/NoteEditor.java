@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -169,6 +168,10 @@ public class NoteEditor extends WebView {
                     NoteEditor.this.setNote(NoteEditor.this.pendingNote);
                     NoteEditor.this.pendingNote = null;
                 }
+                
+                if (NoteEditor.this.responder != null) {
+                    NoteEditor.this.responder.onPageLoad(url);
+                }
             }
             
             @Override
@@ -204,8 +207,6 @@ public class NoteEditor extends WebView {
     }
     
     private void handleReport(String report) {
-        Log.d("NoteEditor-Report", report);
-        
         if (report.startsWith("content:")) {
             if (report.length() == 8) {
                 this.content = "";
@@ -271,10 +272,12 @@ public class NoteEditor extends WebView {
     
     public static interface Responder {
         
+        public void onExternalRequest(String request);
+        
+        public void onPageLoad(String url);
+        
         public void onUpdateIndentControlState(boolean controlActive, boolean enableDecrease,
                 boolean enableIncrease);
-        
-        public void onExternalRequest(String request);
         
     }
     
