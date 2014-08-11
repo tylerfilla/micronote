@@ -3,6 +3,10 @@ package com.gmail.tylerfilla.android.notes.widget;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -192,8 +196,8 @@ public class NoteEditor extends WebView {
             
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                if (message != null) {
-                    NoteEditor.this.handleReport(message);
+                if (message != null && message.startsWith("report:")) {
+                    NoteEditor.this.handleReport(message.substring(7));
                 }
                 
                 result.confirm();
@@ -216,7 +220,7 @@ public class NoteEditor extends WebView {
                     + source.substring(matcher.end() + offset);
             offset += source.length() - lengthBefore;
         }
-        Log.d("", source);
+        
         return source;
     }
     
@@ -248,7 +252,7 @@ public class NoteEditor extends WebView {
                 
                 Resources resources = this.getContext().getResources();
                 if (format.equals("hexcolor")) {
-                    result = "#" + Integer.toHexString(resources.getColor(resourceId));
+                    result = "#" + Integer.toHexString(resources.getColor(resourceId) & 0x00FFFFFF);
                 }
             }
         }
@@ -257,27 +261,109 @@ public class NoteEditor extends WebView {
     }
     
     private void handleReport(String report) {
-        if (report.startsWith("content:")) {
-            this.content = report.substring(8);
-        } else if (report.startsWith("contentHeight:") && report.length() > 14) {
-            this.contentHeight = Float.parseFloat(report.substring(14));
-        } else if (report.startsWith("lineWidth:") && report.length() > 10) {
-            this.lineWidth = Float.parseFloat(report.substring(10));
-        } else if (report.startsWith("lineHeight:") && report.length() > 11) {
-            this.lineHeight = Float.parseFloat(report.substring(11));
-        } else if (report.startsWith("lineOffsetX:") && report.length() > 12) {
-            this.lineOffsetX = Float.parseFloat(report.substring(12));
-        } else if (report.startsWith("lineOffsetY:") && report.length() > 12) {
-            this.lineOffsetY = Float.parseFloat(report.substring(12));
-        } else if (report.startsWith("responder/") && report.length() > 10) {
-            String responderCommand = report.substring(10);
-            if (responderCommand.startsWith("indentControlState:")
-                    && responderCommand.length() > 19) {
-                String[] components = responderCommand.substring(19).split(",");
+        Log.d("NoteEditor-Report", report);
+        
+        String[] components;
+        if (report.contains("=")) {
+            components = report.split("=");
+            
+            String key = components[0];
+            String value = components[1];
+            
+            try {
+                Field keyField = NoteEditor.class.getDeclaredField(key);
+                Type keyFieldType = keyField.getType();
                 
-                boolean controlActive = Boolean.parseBoolean(components[0]);
-                boolean enableDecrease = Boolean.parseBoolean(components[1]);
-                boolean enableIncrease = Boolean.parseBoolean(components[2]);
+                keyField.setAccessible(true);
+                
+                if (keyFieldType.equals(String.class)) {
+                    keyField.set(this, value);
+                } else if (keyFieldType.equals(Boolean.class)) {
+                    keyField.setBoolean(this, Boolean.parseBoolean(value));
+                } else if (keyFieldType.equals(Integer.class)) {
+                    keyField.setInt(this, Integer.parseInt(value));
+                } else if (keyFieldType.equals(Long.class)) {
+                    keyField.setLong(this, Long.parseLong(value));
+                } else if (keyFieldType.equals(Float.class)) {
+                    keyField.setFloat(this, Float.parseFloat(value));
+                } else if (keyFieldType.equals(Double.class)) {
+                    keyField.setDouble(this, Double.parseDouble(value));
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        } else if (report.startsWith("responder->") && report.contains(":")) {
+            String methodName = report.substring(11, report.indexOf(":"));
+            String[] methodParams = report.substring(report.indexOf(":")).split(",");
+            
+            for (Method method : Responder.class.getDeclaredMethods()) {
+                method.setAccessible(true);
+                
+                if (method.getName().equals(methodName)) {
+                    Class<?>[] paramTypes = method.getParameterTypes();
+                    Object[] params = new Object[paramTypes.length];
+                    
+                    for (int i = 0; i < paramTypes.length; i++) {
+                        String methodParam = methodParams[i];
+                        Class<?> paramType = paramTypes[i];
+                        
+                        try {
+                            if (paramType.equals(String.class)) {
+                                params[i] = methodParam;
+                            } else if (paramType.equals(Boolean.class)) {
+                                params[i] = Boolean.parseBoolean(methodParam);
+                            } else if (paramType.equals(Integer.class)) {
+                                params[i] = Integer.parseInt(methodParam);
+                            } else if (paramType.equals(Long.class)) {
+                                params[i] = Long.parseLong(methodParam);
+                            } else if (paramType.equals(Float.class)) {
+                                params[i] = Float.parseFloat(methodParam);
+                            } else if (paramType.equals(Double.class)) {
+                                params[i] = Double.parseDouble(methodParam);
+                            }
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        
+                        try {
+                            method.invoke(this, params);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (report.startsWith("content=")) {
+            this.content = report.substring(8);
+        } else if (report.startsWith("contentHeight=") && report.length() > 14) {
+            this.contentHeight = Float.parseFloat(report.substring(14));
+        } else if (report.startsWith("lineWidth=") && report.length() > 10) {
+            this.lineWidth = Float.parseFloat(report.substring(10));
+        } else if (report.startsWith("lineHeight=") && report.length() > 11) {
+            this.lineHeight = Float.parseFloat(report.substring(11));
+        } else if (report.startsWith("lineOffsetX=") && report.length() > 12) {
+            this.lineOffsetX = Float.parseFloat(report.substring(12));
+        } else if (report.startsWith("lineOffsetY=") && report.length() > 12) {
+            this.lineOffsetY = Float.parseFloat(report.substring(12));
+        } else if (report.startsWith("responder->") && report.length() > 11) {
+            String responderCommand = report.substring(11);
+            if (responderCommand.startsWith("indentControlState=")
+                    && responderCommand.length() > 19) {
+                String[] subcomponents = responderCommand.substring(19).split(",");
+                
+                boolean controlActive = Boolean.parseBoolean(subcomponents[0]);
+                boolean enableDecrease = Boolean.parseBoolean(subcomponents[1]);
+                boolean enableIncrease = Boolean.parseBoolean(subcomponents[2]);
                 
                 if (this.responder != null) {
                     this.responder.onUpdateIndentControlState(controlActive, enableDecrease,
