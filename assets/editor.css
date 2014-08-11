@@ -8,6 +8,8 @@
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
 }
 
+/* Header bar */
+
 #headerBar {
 	position: absolute;
 	left: 0px;
@@ -26,6 +28,8 @@
 #headerBar span {
 	margin-right: 16px;
 }
+
+/* Note content */
 
 #contentArea {
 	position: absolute;
@@ -51,6 +55,8 @@
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
+/* Checklists */
 
 #contentArea .checkboxList {
 	margin-left: -24px;
