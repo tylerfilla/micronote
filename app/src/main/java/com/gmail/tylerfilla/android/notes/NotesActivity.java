@@ -29,9 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.gmail.tylerfilla.android.notes.core.Note;
-import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
-
 public class NotesActivity extends ListActivity {
     
     private NoteKeeper noteKeeper;

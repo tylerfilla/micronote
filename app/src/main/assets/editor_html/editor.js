@@ -1,11 +1,13 @@
 
 // Written by Tyler Filla
 
+/* Document components */
+
 var headerBar;
 var contentArea;
 var metricsElement;
 
-// Events
+/* Events */
 
 window.onload = function() {
     headerBar = document.getElementById("headerBar");
@@ -17,7 +19,7 @@ window.onload = function() {
     metricsElement.parentNode.removeChild(metricsElement);
 }
 
-// Reporting
+/* Communication */
 
 function report(message) {
     alert("report:" + message);

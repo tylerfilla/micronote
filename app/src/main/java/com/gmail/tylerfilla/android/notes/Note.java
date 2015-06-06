@@ -1,12 +1,11 @@
-package com.gmail.tylerfilla.android.notes.core;
+package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Note {
     
-    private static final String BLANK_NOTE_TITLE = "Untitled Note";
+    private static final String TITLE_NOTE_BLANK = "Untitled Note";
     
     private File file;
     
@@ -14,7 +13,6 @@ public class Note {
     private String title;
     
     private String content;
-    private final ArrayList<NoteMedia> media;
     
     private boolean changed;
     
@@ -25,7 +23,6 @@ public class Note {
         this.title = "";
         
         this.content = "";
-        this.media = new ArrayList<NoteMedia>();
         
         this.changed = false;
     }
@@ -33,7 +30,7 @@ public class Note {
     public static Note blank() {
         Note note = new Note();
         note.setVersion(1);
-        note.setTitle(BLANK_NOTE_TITLE);
+        note.setTitle(TITLE_NOTE_BLANK);
         note.clearChanged();
         
         return note;
@@ -93,20 +90,6 @@ public class Note {
         }
         
         this.content = content;
-    }
-    
-    public List<NoteMedia> getMedia() {
-        return this.media;
-    }
-    
-    public void addMedia(NoteMedia media) {
-        this.changed = true;
-        this.media.add(media);
-    }
-    
-    public boolean removeMedia(NoteMedia media) {
-        this.changed = true;
-        return this.media.remove(media);
     }
     
     public boolean getChanged() {

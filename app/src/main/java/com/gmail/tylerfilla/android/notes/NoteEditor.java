@@ -24,8 +24,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.gmail.tylerfilla.android.notes.core.Note;
-
 public class NoteEditor extends WebView {
     
     private static final Pattern editorDocumentPreprocessorDirectivePattern = Pattern

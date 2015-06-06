@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes.core;
+package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
 import java.io.IOException;

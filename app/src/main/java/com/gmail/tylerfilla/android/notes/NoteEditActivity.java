@@ -23,9 +23,6 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gmail.tylerfilla.android.notes.core.Note;
-import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
-
 public class NoteEditActivity extends Activity {
     
     private static Note persistentNote;
