@@ -35,7 +35,7 @@ ADDED from AndroidManifest.xml:13:5
 		ADDED from AndroidManifest.xml:15:9
 	android:theme
 		ADDED from AndroidManifest.xml:17:9
-activity#com.gmail.tylerfilla.android.notes.NotesActivity
+activity#com.gmail.tylerfilla.android.notes.activity.ActivityList
 ADDED from AndroidManifest.xml:19:9
 	android:name
 		ADDED from AndroidManifest.xml:19:19
@@ -49,11 +49,11 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:24:17
 	android:name
 		ADDED from AndroidManifest.xml:24:27
-activity#com.gmail.tylerfilla.android.notes.NoteEditActivity
+activity#com.gmail.tylerfilla.android.notes.activity.ActivityEdit
 ADDED from AndroidManifest.xml:30:9
 	android:name
 		ADDED from AndroidManifest.xml:30:19
-activity#com.gmail.tylerfilla.android.notes.SettingsActivity
+activity#com.gmail.tylerfilla.android.notes.activity.ActivitySettings
 ADDED from AndroidManifest.xml:32:9
 	android:label
 		ADDED from AndroidManifest.xml:34:13

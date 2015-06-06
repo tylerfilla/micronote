@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-
+    
     <Preference
         android:key="pref_about"
         android:summary="@string/pref_about_summary"
         android:title="@string/pref_about_title" />
-
-</PreferenceScreen><!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/xml/pref.xml -->
+    
+</PreferenceScreen>
+<!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/xml/pref.xml -->
