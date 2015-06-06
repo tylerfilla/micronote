@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes.widget;
+package com.gmail.tylerfilla.android.notes;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +24,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.core.Note;
 
 public class NoteEditor extends WebView {
@@ -155,7 +154,7 @@ public class NoteEditor extends WebView {
         
         StringBuilder internalCodeBuilder = new StringBuilder();
         BufferedReader internalCodeReader = new BufferedReader(new InputStreamReader(this
-                .getContext().getAssets().open("editor.html")));
+                .getContext().getAssets().open("editor_html/editor.html")));
         String line = null;
         while ((line = internalCodeReader.readLine()) != null) {
             internalCodeBuilder.append(line).append('\n');

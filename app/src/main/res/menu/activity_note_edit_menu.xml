@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
     <item
         android:id="@+id/activityNoteEditMenuUL"
         android:icon="@drawable/ic_menu_ul"
@@ -17,5 +17,5 @@
         android:id="@+id/activityNoteEditMenuClip"
         android:icon="@drawable/ic_menu_clip"
         android:title="@string/activity_note_edit_menu_item_clip"/>
-
+    
 </menu>

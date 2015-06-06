@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteKeeper;
-import com.gmail.tylerfilla.android.notes.widget.NoteEditor;
 
 public class NoteEditActivity extends Activity {
     
