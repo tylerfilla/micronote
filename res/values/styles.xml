@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Notes" />
+
+    <style name="Notes.Activity" />
+
+    <style name="Notes.Activity.Notes" />
+
+    <style name="Notes.Activity.Notes.Root">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.Message" />
+
+    <style name="Notes.Activity.Notes.Message.Root">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.Message.Title">
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAppearance">@style/Notes.Theme.TextAppearance.Title</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.Message.Body">
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAppearance">@style/Notes.Theme.TextAppearance.Subtitle</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.List" />
+
+    <style name="Notes.Activity.Notes.List.Root">
+        <item name="android:choiceMode">multipleChoiceModal</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:footerDividersEnabled">false</item>
+        <item name="android:layout_above">@id/activityNotesSearchBubble</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.List.Footer">
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textAppearance">@style/Notes.Theme.TextAppearance.Footer</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.List.Item" />
+
+    <style name="Notes.Activity.Notes.List.Item.Root">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.List.Item.ContentPreview">
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAppearance">@style/Notes.Theme.TextAppearance.Subtitle</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.List.Item.Title">
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAppearance">@style/Notes.Theme.TextAppearance.Title</item>
+    </style>
+
+    <style name="Notes.Activity.Notes.SearchBubble">
+        <item name="android:background">@android:drawable/toast_frame</item>
+        <item name="android:hint">@string/activity_notes_search_bubble_hint</item>
+        <item name="android:inputType">text</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginLeft">14dp</item>
+        <item name="android:layout_marginRight">14dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/text_activity_notes_search_bubble</item>
+        <item name="android:textColorHint">@color/text_activity_notes_search_bubble_hint</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="Notes.Activity.NoteEdit" />
+
+    <style name="Notes.Activity.NoteEdit.Root">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Notes.Activity.NoteEdit.Editor">
+        <item name="android:layout_above">@id/activityNoteEditIndentControl</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Notes.Activity.NoteEdit.EditorCover">
+        <item name="android:background">@color/background_pad</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="Notes.Activity.NoteEdit.IndentControl" />
+
+    <style name="Notes.Activity.NoteEdit.IndentControl.Root">
+        <item name="android:background">@color/background_activity_note_edit_indent_control</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:weightSum">1.0</item>
+    </style>
+
+    <style name="Notes.Activity.NoteEdit.IndentControl.Button" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:onClick">onIndentControlButtonClick</item>
+    </style>
+
+    <style name="Notes.Activity.Settings" />
+
+    <style name="Notes.Activity.Settings.Root">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Notes.Activity.Settings.List">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Notes.Theme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/Notes.Widget.ActionBar</item>
+        <item name="android:windowBackground">@color/background_pad</item>
+    </style>
+
+    <style name="Notes.Theme.TextAppearance" parent="@android:style/TextAppearance" />
+
+    <style name="Notes.Theme.TextAppearance.ActionbarTitle">
+        <item name="android:textColor">@color/text_actionbar_title</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Notes.Theme.TextAppearance.Footer">
+        <item name="android:textColor">@color/text_footer</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Notes.Theme.TextAppearance.Subtitle">
+        <item name="android:textColor">@color/text_subtitle</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="Notes.Theme.TextAppearance.Title">
+        <item name="android:textColor">@color/text_title</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Notes.Widget" />
+
+    <style name="Notes.Widget.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@drawable/background_actionbar</item>
+        <item name="android:displayOptions">showCustom</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:titleTextStyle">@style/Notes.Widget.ActionBar.Title</item>
+    </style>
+
+    <style name="Notes.Widget.ActionBar.Button" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/background_actionbar_button</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:onClick">onActionButtonClick</item>
+    </style>
+
+    <style name="Notes.Widget.ActionBar.Title">
+        <item name="android:layout_gravity">center_horizontal|center_vertical</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/Notes.Theme.TextAppearance.ActionbarTitle</item>
+    </style>
+
+</resources>

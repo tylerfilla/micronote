@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Notes.Widget.ActionBar" >
+
+    <ImageButton
+        style="@style/Notes.Widget.ActionBar.Button"
+        android:layout_gravity="center_vertical|left"
+        android:contentDescription="@string/activity_notes_actionbar_search_button_close_content_description"
+        android:src="@drawable/ic_action_search_close"
+        android:tag="search_close" />
+
+    <TextView
+        android:id="@+id/activityNotesActionbarSearchTitle"
+        style="@style/Notes.Widget.ActionBar.Title"
+        android:text="@string/activity_notes_actionbar_search_title" />
+
+</FrameLayout>
