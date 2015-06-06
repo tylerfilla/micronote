@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Notes.Activity.Settings.Root" >
+
+    <ListView
+        android:id="@android:id/list"
+        style="@style/Notes.Activity.Settings.List" />
+
+</RelativeLayout><!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/layout/activity_settings.xml -->

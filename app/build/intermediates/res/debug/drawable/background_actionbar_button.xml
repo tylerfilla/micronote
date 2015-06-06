@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <item android:drawable="@color/background_actionbar_button_selected" android:state_pressed="true"/>
+    <item android:drawable="@color/background_actionbar_button_selected" android:state_focused="true"/>
+    <item android:drawable="@color/background_actionbar_button"/>
+
+</selector><!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/drawable/background_actionbar_button.xml -->

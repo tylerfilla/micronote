@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activityNotesListFooter"
+    style="@style/Notes.Activity.Notes.List.Footer" /><!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/layout/activity_notes_list_footer.xml -->

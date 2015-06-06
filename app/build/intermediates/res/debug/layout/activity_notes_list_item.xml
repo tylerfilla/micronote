@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Notes.Activity.Notes.List.Item.Root" >
+
+    <TextView
+        android:id="@+id/activityNotesListItemTitle"
+        style="@style/Notes.Activity.Notes.List.Item.Title" />
+
+    <TextView
+        android:id="@+id/activityNotesListItemContentPreview"
+        style="@style/Notes.Activity.Notes.List.Item.ContentPreview" />
+
+</LinearLayout><!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/layout/activity_notes_list_item.xml -->

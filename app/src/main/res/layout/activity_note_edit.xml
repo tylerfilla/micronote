@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Notes.Activity.NoteEdit.Root" >
+
+    <LinearLayout
+        android:id="@+id/activityNoteEditIndentControl"
+        style="@style/Notes.Activity.NoteEdit.IndentControl.Root" >
+
+        <ImageButton
+            android:id="@+id/activityNoteEditIndentControlButtonDecrease"
+            style="@style/Notes.Activity.NoteEdit.IndentControl.Button"
+            android:contentDescription="@string/activity_note_edit_indent_control_button_decrease_content_description"
+            android:src="@drawable/ic_edit_indent_decrease"
+            android:tag="decrease" />
+
+        <ImageButton
+            android:id="@+id/activityNoteEditIndentControlButtonIncrease"
+            style="@style/Notes.Activity.NoteEdit.IndentControl.Button"
+            android:contentDescription="@string/activity_note_edit_indent_control_button_increase_content_description"
+            android:src="@drawable/ic_edit_indent_increase"
+            android:tag="increase" />
+    </LinearLayout>
+
+    <com.gmail.tylerfilla.android.notes.widget.NoteEditor
+        android:id="@+id/activityNoteEditEditor"
+        style="@style/Notes.Activity.NoteEdit.Editor" />
+
+    <LinearLayout
+        android:id="@+id/activityNoteEditEditorCover"
+        style="@style/Notes.Activity.NoteEdit.EditorCover" />
+
+</RelativeLayout>
