@@ -13,12 +13,12 @@
         <TextView
             android:id="@+id/activityNotesMessageListEmptyTitle"
             style="@style/Notes.Activity.Notes.Message.Title"
-            android:text="@string/activity_notes_list_empty_title" />
+            android:text="@string/activity_list_list_empty_title" />
         
         <TextView
             android:id="@+id/activityNotesMessageListEmptyBody"
             style="@style/Notes.Activity.Notes.Message.Body"
-            android:text="@string/activity_notes_list_empty_body" />
+            android:text="@string/activity_list_list_empty_body" />
         
     </LinearLayout>
     
@@ -29,12 +29,12 @@
         <TextView
             android:id="@+id/activityNotesMessageSearchOpenTitle"
             style="@style/Notes.Activity.Notes.Message.Title"
-            android:text="@string/activity_notes_search_open_title" />
+            android:text="@string/activity_list_search_open_title" />
         
         <TextView
             android:id="@+id/activityNotesMessageSearchOpenBody"
             style="@style/Notes.Activity.Notes.Message.Body"
-            android:text="@string/activity_notes_search_open_body" />
+            android:text="@string/activity_list_search_open_body" />
         
     </LinearLayout>
     
@@ -45,12 +45,12 @@
         <TextView
             android:id="@+id/activityNotesMessageSearchEmptyTitle"
             style="@style/Notes.Activity.Notes.Message.Title"
-            android:text="@string/activity_notes_search_empty_title" />
+            android:text="@string/activity_list_search_empty_title" />
         
         <TextView
             android:id="@+id/activityNotesMessageSearchEmptyBody"
             style="@style/Notes.Activity.Notes.Message.Body"
-            android:text="@string/activity_notes_search_empty_body" />
+            android:text="@string/activity_list_search_empty_body" />
         
     </LinearLayout>
     

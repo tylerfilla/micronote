@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes;
+package com.gmail.tylerfilla.android.notes.activity;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class NotesActivity extends ListActivity {
+import com.gmail.tylerfilla.android.notes.Note;
+import com.gmail.tylerfilla.android.notes.NoteKeeper;
+import com.gmail.tylerfilla.android.notes.R;
+
+public class ActivityList extends ListActivity {
     
     private NoteKeeper noteKeeper;
     
@@ -53,12 +57,12 @@ public class NotesActivity extends ListActivity {
         this.searchQuery = "";
         this.searchBubbleTextChangedListener = null;
         
-        this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_list);
-        this.setContentView(R.layout.activity_notes);
+        this.getActionBar().setCustomView(R.layout.activity_list_actionbar_list);
+        this.setContentView(R.layout.activity_list);
         
         ListView listView = this.getListView();
         listView.addFooterView(
-                this.getLayoutInflater().inflate(R.layout.activity_notes_list_footer, null), null,
+                this.getLayoutInflater().inflate(R.layout.activity_list_list_footer, null), null,
                 false);
         listView.setAdapter(this.noteListAdapter);
         listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
@@ -160,11 +164,11 @@ public class NotesActivity extends ListActivity {
     }
     
     private void enterSettings() {
-        this.startActivity(new Intent(this, SettingsActivity.class));
+        this.startActivity(new Intent(this, ActivitySettings.class));
     }
     
     private void enterNoteEditor(File noteFile) {
-        Intent noteEditIntent = new Intent(this, NoteEditActivity.class);
+        Intent noteEditIntent = new Intent(this, ActivityEdit.class);
         
         if (noteFile != null) {
             noteEditIntent.putExtra("file", noteFile.getAbsolutePath());
@@ -180,7 +184,7 @@ public class NotesActivity extends ListActivity {
             this.searchMode = false;
             this.searchQuery = "";
             
-            this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_list);
+            this.getActionBar().setCustomView(R.layout.activity_list_actionbar_list);
             
             searchBubble.setVisibility(View.GONE);
             searchBubble.removeTextChangedListener(this.searchBubbleTextChangedListener);
@@ -191,7 +195,7 @@ public class NotesActivity extends ListActivity {
         } else {
             this.searchMode = true;
             
-            this.getActionBar().setCustomView(R.layout.activity_notes_actionbar_search);
+            this.getActionBar().setCustomView(R.layout.activity_list_actionbar_search);
             
             this.searchBubbleTextChangedListener = new TextWatcher() {
                 
@@ -201,8 +205,8 @@ public class NotesActivity extends ListActivity {
                 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    NotesActivity.this.searchQuery = s.toString();
-                    NotesActivity.this.refresh();
+                    ActivityList.this.searchQuery = s.toString();
+                    ActivityList.this.refresh();
                 }
                 
                 @Override
@@ -244,12 +248,12 @@ public class NotesActivity extends ListActivity {
         
         @Override
         public int getCount() {
-            return NotesActivity.this.noteList.size();
+            return ActivityList.this.noteList.size();
         }
         
         @Override
         public Object getItem(int position) {
-            return NotesActivity.this.noteList.get(position);
+            return ActivityList.this.noteList.get(position);
         }
         
         @Override
@@ -259,9 +263,9 @@ public class NotesActivity extends ListActivity {
         
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView != null ? convertView : NotesActivity.this.getLayoutInflater()
-                    .inflate(R.layout.activity_notes_list_item, parent, false);
-            Note note = NotesActivity.this.noteList.get(position);
+            View view = convertView != null ? convertView : ActivityList.this.getLayoutInflater()
+                    .inflate(R.layout.activity_list_list_item, parent, false);
+            Note note = ActivityList.this.noteList.get(position);
             
             TextView title = (TextView) view.findViewById(R.id.activityNotesListItemTitle);
             TextView contentPreview = (TextView) view
@@ -298,11 +302,11 @@ public class NotesActivity extends ListActivity {
             }
             
             if (this.getSelected(position)) {
-                view.setBackgroundColor(NotesActivity.this.getResources().getColor(
-                        R.color.background_activity_notes_list_item_selected));
+                view.setBackgroundColor(ActivityList.this.getResources().getColor(
+                        R.color.background_activity_list_list_item_selected));
             } else {
-                view.setBackgroundColor(NotesActivity.this.getResources().getColor(
-                        R.color.background_activity_notes_list_item));
+                view.setBackgroundColor(ActivityList.this.getResources().getColor(
+                        R.color.background_activity_list_list_item));
             }
             
             return view;
@@ -346,7 +350,7 @@ public class NotesActivity extends ListActivity {
             Note note = (Note) this.noteListAdapter.getItem(position);
             
             if (note.getFile() != null) {
-                NotesActivity.this.enterNoteEditor(note.getFile());
+                ActivityList.this.enterNoteEditor(note.getFile());
             }
         }
         
@@ -362,7 +366,7 @@ public class NotesActivity extends ListActivity {
         
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.activity_notes_list_select_cab, menu);
+            mode.getMenuInflater().inflate(R.menu.activity_list_list_select_cab, menu);
             return true;
         }
         
@@ -382,7 +386,7 @@ public class NotesActivity extends ListActivity {
                         Note note = (Note) this.noteListAdapter.getItem(i);
                         
                         try {
-                            NotesActivity.this.noteKeeper.deleteNote(note);
+                            ActivityList.this.noteKeeper.deleteNote(note);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -392,13 +396,13 @@ public class NotesActivity extends ListActivity {
                 }
                 
                 for (Note note : deletedNotes) {
-                    NotesActivity.this.noteList.remove(note);
+                    ActivityList.this.noteList.remove(note);
                 }
                 
                 this.noteListAdapter.notifyDataSetChanged();
                 mode.finish();
                 
-                NotesActivity.this.refresh();
+                ActivityList.this.refresh();
                 
                 break;
             }

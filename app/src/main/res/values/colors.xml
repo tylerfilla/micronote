@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <color name="background_actionbar_top">#FF5B382F</color>
     <color name="background_actionbar_bottom">#FF30231B</color>
     <color name="background_actionbar_button">#00000000</color>
     <color name="background_actionbar_button_selected">#33FFFFFF</color>
+    <color name="background_actionbar_top">#FF5B382F</color>
+    <color name="background_activity_edit_indent_control">#FF222222</color>
+    <color name="background_activity_list_list_item">#00000000</color>
+    <color name="background_activity_list_list_item_selected">#FFC1C09B</color>
     <color name="background_pad">#FFFCF9B0</color>
     <color name="background_pad_line">#FFE5E3B9</color>
-    <color name="background_activity_notes_list_item">#00000000</color>
-    <color name="background_activity_notes_list_item_selected">#FFC1C09B</color>
-    <color name="background_activity_note_edit_indent_control">#FF222222</color>
+    
+    <color name="text_actionbar_title">#FFF0F0F0</color>
+    <color name="text_activity_list_search_bubble">#FFDDDDDD</color>
+    <color name="text_activity_list_search_bubble_hint">#FFBBBBBB</color>
+    <color name="text_footer">#FF666666</color>
     <color name="text_title">#FFC00000</color>
     <color name="text_subtitle">#FF888888</color>
-    <color name="text_footer">#FF666666</color>
-    <color name="text_actionbar_title">#FFF0F0F0</color>
-    <color name="text_activity_notes_search_bubble">#FFDDDDDD</color>
-    <color name="text_activity_notes_search_bubble_hint">#FFBBBBBB</color>
     
 </resources>

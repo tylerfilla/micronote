@@ -9,14 +9,14 @@
         <ImageButton
             android:id="@+id/activityNoteEditIndentControlButtonDecrease"
             style="@style/Notes.Activity.NoteEdit.IndentControl.Button"
-            android:contentDescription="@string/activity_note_edit_indent_control_button_decrease_content_description"
+            android:contentDescription="@string/activity_edit_indent_control_button_decrease_content_description"
             android:src="@drawable/ic_edit_indent_decrease"
             android:tag="decrease" />
         
         <ImageButton
             android:id="@+id/activityNoteEditIndentControlButtonIncrease"
             style="@style/Notes.Activity.NoteEdit.IndentControl.Button"
-            android:contentDescription="@string/activity_note_edit_indent_control_button_increase_content_description"
+            android:contentDescription="@string/activity_edit_indent_control_button_increase_content_description"
             android:src="@drawable/ic_edit_indent_increase"
             android:tag="increase" />
         

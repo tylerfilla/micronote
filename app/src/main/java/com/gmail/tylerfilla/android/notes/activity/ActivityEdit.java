@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes;
+package com.gmail.tylerfilla.android.notes.activity;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,12 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NoteEditActivity extends Activity {
+import com.gmail.tylerfilla.android.notes.Note;
+import com.gmail.tylerfilla.android.notes.NoteEditor;
+import com.gmail.tylerfilla.android.notes.NoteKeeper;
+import com.gmail.tylerfilla.android.notes.R;
+
+public class ActivityEdit extends Activity {
     
     private static Note persistentNote;
     
@@ -36,13 +41,13 @@ public class NoteEditActivity extends Activity {
         
         this.noteKeeper = NoteKeeper.getInstance(this);
         
-        this.getActionBar().setCustomView(R.layout.activity_note_edit_actionbar);
-        this.setContentView(R.layout.activity_note_edit);
+        this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
+        this.setContentView(R.layout.activity_edit);
         
         Note note = null;
         
-        if (NoteEditActivity.persistentNote != null) {
-            note = NoteEditActivity.persistentNote;
+        if (ActivityEdit.persistentNote != null) {
+            note = ActivityEdit.persistentNote;
         } else {
             String noteFilePath = null;
             
@@ -70,7 +75,7 @@ public class NoteEditActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                NoteEditActivity.this.editNoteTitle();
+                ActivityEdit.this.editNoteTitle();
             }
             
         });
@@ -82,26 +87,26 @@ public class NoteEditActivity extends Activity {
             
             @Override
             public void onExternalRequest(String request) {
-                NoteEditActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                ActivityEdit.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
                         .parse(request)));
             }
             
             @Override
             public void onPageLoad(String url) {
-                NoteEditActivity.this.findViewById(R.id.activityNoteEditEditorCover).setVisibility(
+                ActivityEdit.this.findViewById(R.id.activityNoteEditEditorCover).setVisibility(
                         View.GONE);
             }
             
             @Override
             public void onUpdateIndentControlState(boolean controlActive, boolean enableDecrease,
                     boolean enableIncrease) {
-                ((LinearLayout) NoteEditActivity.this
+                ((LinearLayout) ActivityEdit.this
                         .findViewById(R.id.activityNoteEditIndentControl))
                         .setVisibility(controlActive ? View.VISIBLE : View.GONE);
-                ((ImageButton) NoteEditActivity.this
+                ((ImageButton) ActivityEdit.this
                         .findViewById(R.id.activityNoteEditIndentControlButtonDecrease))
                         .setEnabled(enableDecrease);
-                ((ImageButton) NoteEditActivity.this
+                ((ImageButton) ActivityEdit.this
                         .findViewById(R.id.activityNoteEditIndentControlButtonIncrease))
                         .setEnabled(enableIncrease);
             }
@@ -142,7 +147,7 @@ public class NoteEditActivity extends Activity {
         super.onSaveInstanceState(outState);
         
         if (!this.isFinishing()) {
-            NoteEditActivity.persistentNote = this.noteEditor.getNote();
+            ActivityEdit.persistentNote = this.noteEditor.getNote();
         }
     }
     
@@ -167,8 +172,8 @@ public class NoteEditActivity extends Activity {
                 String title = titlePromptInput.getText().toString();
                 
                 if (!title.isEmpty()) {
-                    NoteEditActivity.this.noteEditor.getNote().setTitle(title);
-                    ((TextView) NoteEditActivity.this
+                    ActivityEdit.this.noteEditor.getNote().setTitle(title);
+                    ((TextView) ActivityEdit.this
                             .findViewById(R.id.activityNoteEditActionbarTitle)).setText(title);
                 }
             }
@@ -181,7 +186,7 @@ public class NoteEditActivity extends Activity {
     private void showMenu() {
         PopupMenu popupMenu = new PopupMenu(this,
                 this.findViewById(R.id.activityNoteEditActionbarButtonMenu));
-        popupMenu.getMenuInflater().inflate(R.menu.activity_note_edit_menu, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.activity_edit_menu, popupMenu.getMenu());
         
         try {
             Field mPopup = PopupMenu.class.getDeclaredField("mPopup");
@@ -204,7 +209,7 @@ public class NoteEditActivity extends Activity {
             
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                NoteEditActivity.this.buttonMenuClicked(item);
+                ActivityEdit.this.buttonMenuClicked(item);
                 return true;
             }
             

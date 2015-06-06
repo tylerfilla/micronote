@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes;
+package com.gmail.tylerfilla.android.notes.activity;
 
 import android.app.Activity;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -7,7 +7,9 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
-public class SettingsActivity extends PreferenceActivity {
+import com.gmail.tylerfilla.android.notes.R;
+
+public class ActivitySettings extends PreferenceActivity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

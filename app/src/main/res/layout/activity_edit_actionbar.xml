@@ -5,7 +5,7 @@
     <ImageButton
         style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|left"
-        android:contentDescription="@string/activity_note_edit_actionbar_button_back_content_description"
+        android:contentDescription="@string/activity_edit_actionbar_button_back_content_description"
         android:src="@drawable/ic_action_back"
         android:tag="back" />
     
@@ -24,7 +24,7 @@
         android:id="@+id/activityNoteEditActionbarButtonMenu"
         style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|right"
-        android:contentDescription="@string/activity_note_edit_actionbar_button_menu_content_description"
+        android:contentDescription="@string/activity_edit_actionbar_button_menu_content_description"
         android:src="@drawable/ic_action_overflow"
         android:tag="menu" />
     

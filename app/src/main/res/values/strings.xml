@@ -2,30 +2,34 @@
 <resources>
     
     <string name="app_name">μNote</string>
+    
     <string name="pref_about_title">μNote {version}</string>
-    <string name="pref_about_summary">&#169; 2014 Tyler Filla</string>
-    <string name="activity_notes_actionbar_list_title">Notes</string>
-    <string name="activity_notes_actionbar_list_button_settings_content_description">Settings</string>
-    <string name="activity_notes_actionbar_list_button_search_content_description">Search</string>
-    <string name="activity_notes_actionbar_list_button_new_content_description">New note</string>
-    <string name="activity_notes_actionbar_search_title">Search</string>
-    <string name="activity_notes_actionbar_search_button_close_content_description">Close</string>
-    <string name="activity_notes_list_empty_title">No Notes Taken</string>
-    <string name="activity_notes_list_empty_body">Tap the pencil icon in the upper right-hand corner to begin taking notes.</string>
-    <string name="activity_notes_search_open_title">Search Notes</string>
-    <string name="activity_notes_search_open_body">Enter a query in the bubble below to begin searching through your notes.</string>
-    <string name="activity_notes_search_empty_title">No Search Results</string>
-    <string name="activity_notes_search_empty_body">Your search did not turn up any results. Try narrowing your query.</string>
-    <string name="activity_notes_search_bubble_hint">Type here to search</string>
-    <string name="activity_note_edit_actionbar_button_back_content_description">Back</string>
-    <string name="activity_note_edit_actionbar_button_menu_content_description">Menu</string>
-    <string name="activity_note_edit_cab_menu_item_delete">Delete</string>
-    <string name="activity_note_edit_menu_item_list_unordered">Bullets</string>
-    <string name="activity_note_edit_menu_item_list_ordered">Numbering</string>
-    <string name="activity_note_edit_menu_item_checklist">Checklist</string>
-    <string name="activity_note_edit_menu_item_clip">Clip</string>
-    <string name="activity_note_edit_indent_control_button_increase_content_description">Increase indent</string>
-    <string name="activity_note_edit_indent_control_button_decrease_content_description">Decrease indent</string>
+    <string name="pref_about_summary">&#169; 2015 Tyler Filla</string>
+    
+    <string name="activity_list_actionbar_list_button_new_content_description">New note</string>
+    <string name="activity_list_actionbar_list_button_search_content_description">Search</string>
+    <string name="activity_list_actionbar_list_button_settings_content_description">Settings</string>
+    <string name="activity_list_actionbar_list_title">Notes</string>
+    <string name="activity_list_actionbar_search_button_close_content_description">Close</string>
+    <string name="activity_list_actionbar_search_title">Search</string>
+    <string name="activity_list_list_empty_body">Tap the pencil icon in the upper right-hand corner to begin taking notes.</string>
+    <string name="activity_list_list_empty_title">No Notes Taken</string>
+    <string name="activity_list_search_bubble_hint">Type here to search</string>
+    <string name="activity_list_search_empty_title">No Search Results</string>
+    <string name="activity_list_search_empty_body">Your search did not turn up any results. Try narrowing your query.</string>
+    <string name="activity_list_search_open_title">Search Notes</string>
+    <string name="activity_list_search_open_body">Enter a query in the bubble below to begin searching through your notes.</string>
+    
+    <string name="activity_edit_actionbar_button_back_content_description">Back</string>
+    <string name="activity_edit_actionbar_button_menu_content_description">Menu</string>
+    <string name="activity_edit_cab_menu_item_delete">Delete</string>
+    <string name="activity_edit_indent_control_button_decrease_content_description">Decrease indent</string>
+    <string name="activity_edit_indent_control_button_increase_content_description">Increase indent</string>
+    <string name="activity_edit_menu_item_checklist">Checklist</string>
+    <string name="activity_edit_menu_item_clip">Clip</string>
+    <string name="activity_edit_menu_item_list_unordered">Bullets</string>
+    <string name="activity_edit_menu_item_list_ordered">Numbering</string>
+    
     <string name="activity_settings_actionbar_title">Settings</string>
     
 </resources>

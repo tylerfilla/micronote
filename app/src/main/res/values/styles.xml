@@ -82,7 +82,7 @@
     
     <style name="Notes.Activity.Notes.SearchBubble">
         <item name="android:background">@android:drawable/toast_frame</item>
-        <item name="android:hint">@string/activity_notes_search_bubble_hint</item>
+        <item name="android:hint">@string/activity_list_search_bubble_hint</item>
         <item name="android:inputType">text</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_height">wrap_content</item>
@@ -90,8 +90,8 @@
         <item name="android:layout_marginLeft">14dp</item>
         <item name="android:layout_marginRight">14dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">@color/text_activity_notes_search_bubble</item>
-        <item name="android:textColorHint">@color/text_activity_notes_search_bubble_hint</item>
+        <item name="android:textColor">@color/text_activity_list_search_bubble</item>
+        <item name="android:textColorHint">@color/text_activity_list_search_bubble_hint</item>
         <item name="android:visibility">gone</item>
     </style>
     
@@ -118,7 +118,7 @@
     <style name="Notes.Activity.NoteEdit.IndentControl" />
     
     <style name="Notes.Activity.NoteEdit.IndentControl.Root">
-        <item name="android:background">@color/background_activity_note_edit_indent_control</item>
+        <item name="android:background">@color/background_activity_edit_indent_control</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
