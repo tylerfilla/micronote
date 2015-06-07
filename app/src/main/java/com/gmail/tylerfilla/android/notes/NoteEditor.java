@@ -68,6 +68,7 @@ public class NoteEditor extends WebView {
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 NoteEditor.this.onReceiveEditorMessage(message);
                 
+                result.confirm();
                 return true;
             }
             

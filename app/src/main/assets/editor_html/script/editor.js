@@ -27,19 +27,51 @@ function createNotepadLines() {
     }
 }
 
+/* Communication */
+
+function uploadContent() {
+    alert("content=" + text.innerHTML);
+}
+
 /* Initialization */
 
 function initialize() {
-    // Make contentArea editable
-    text.contentEditable = true;
-    
     // Give us a notepad feel...
     createNotepadLines();
+    
+    // Make contentArea editable
+    text.contentEditable = true;
 }
 
-/* Events */
+/* Event handling */
 
-window.onload = function() {
+function contentOnClick() {
+    // Redirect focus to text area
+    text.focus();
+    
+    // Move caret to end
+    var range = document.createRange();
+    range.selectNodeContents(text);
+    range.collapse(false);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+function textOnClick(event) {
+    // Don't propagate event
+    event.cancelBubble = true;
+}
+
+function textOnKeyUp() {
+    // Create notepad lines in background
+    createNotepadLines();
+    
+    // Upload content to app
+    uploadContent();
+}
+
+function windowOnLoad() {
     // Localize document elements
     header  = document.getElementById("header");
     content = document.getElementById("content"); 
@@ -49,11 +81,16 @@ window.onload = function() {
     // Initialize
     initialize();
     
-    content.onclick = function() {
-        text.focus();
-    }
-    
-    text.onkeyup = function() {
-        createNotepadLines();
-    }
+    // Register events that rely on window having loaded
+    content.onclick = contentOnClick;
+    text.onclick    = textOnClick;
+    text.onkeyup    = textOnKeyUp;
 }
+
+function windowOnResize() {
+    // Create notepad lines in background
+    createNotepadLines();
+}
+
+window.onload   = windowOnLoad;
+window.onresize = windowOnResize;
