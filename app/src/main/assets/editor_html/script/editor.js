@@ -1,7 +1,7 @@
 
 // Written by Tyler Filla
 
-/* Document elements */
+/* Localized document elements */
 
 var headerBar;
 var contentArea;
@@ -9,7 +9,7 @@ var contentArea;
 /* Events */
 
 window.onload = function() {
-    // Localize reused document elements
+    // Localize document elements
     headerBar   = document.getElementById("headerBar");
     contentArea = document.getElementById("contentArea");
     

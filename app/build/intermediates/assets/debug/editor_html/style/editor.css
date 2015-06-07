@@ -8,28 +8,25 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
 }
 
-/* Header bar */
+body {
+    background: transparent;
+}
 
 #headerBar {
     position: absolute;
-    left:  0px;
-    top:   0px;
-    right: 0px;
+    left:  0;
+    top:   0;
+    right: 0;
     
-    width:  100%;
     height: 40px;
+    
+    padding-right: 16px;
     
     color:       #C00000;
     font-size:   1.2em;
     line-height: 40px;
     text-align:  right;
 }
-
-#headerBar span {
-    margin-right: 16px;
-}
-
-/* Note content */
 
 #contentArea {
     position: absolute;
@@ -44,12 +41,6 @@
     
     font-size:   22px;
     line-height: 28px;
-}
-
-#contentArea #metricsElement {
-    width: 100%;
-    
-    color: rgba(0, 0, 0, 0);
 }
 
 #contentArea ul, ol, li {

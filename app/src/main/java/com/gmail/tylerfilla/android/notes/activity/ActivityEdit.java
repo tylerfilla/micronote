@@ -79,6 +79,9 @@ public class ActivityEdit extends Activity {
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);
+        
+        while (!this.noteEditor.getEditorLoaded()) {}
+        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
     }
     
     @Override

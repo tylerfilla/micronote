@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
@@ -82,6 +83,9 @@ public class NoteEditor extends WebView {
         
         // Load editor document
         this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
+        
+        // Set editorLoaded
+        this.editorLoaded = true;
     }
     
     public void onReceiveEditorMessage(String message) {

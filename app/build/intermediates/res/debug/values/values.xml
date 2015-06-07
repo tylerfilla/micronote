@@ -53,6 +53,7 @@
     <style name="Notes.Activity"/>
     <style name="Notes.Activity.NoteEdit"/>
     <style name="Notes.Activity.NoteEdit.Editor">
+        <item name="android:background">@color/background_pad</item>
         <item name="android:layout_above">@id/activityNoteEditIndentControl</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
