@@ -1,7 +1,6 @@
 package com.gmail.tylerfilla.android.notes;
 
 import java.io.File;
-import java.util.List;
 
 public class Note {
     

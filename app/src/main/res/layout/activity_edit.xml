@@ -26,8 +26,4 @@
         android:id="@+id/activityNoteEditEditor"
         style="@style/Notes.Activity.NoteEdit.Editor" />
     
-    <LinearLayout
-        android:id="@+id/activityNoteEditEditorCover"
-        style="@style/Notes.Activity.NoteEdit.EditorCover" />
-    
 </RelativeLayout>

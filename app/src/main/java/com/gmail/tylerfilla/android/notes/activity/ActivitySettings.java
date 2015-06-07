@@ -15,8 +15,7 @@ public class ActivitySettings extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment()).commit();
+        this.getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
         
         this.getActionBar().setCustomView(R.layout.activity_settings_actionbar);
         this.setContentView(R.layout.activity_settings);
@@ -34,20 +33,19 @@ public class ActivitySettings extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             this.addPreferencesFromResource(R.xml.pref);
             
+            // Get version name
             String versionName = null;
-            
             try {
                 Activity activity = this.getActivity();
-                versionName = activity.getPackageManager().getPackageInfo(
-                        activity.getPackageName(), 0).versionName;
+                versionName = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
             } catch (NameNotFoundException e) {
                 e.printStackTrace();
             }
             
+            // Set version name in pref_about
             if (versionName != null) {
                 Preference prefAbout = this.findPreference("pref_about");
-                prefAbout.setTitle(prefAbout.getTitle().toString()
-                        .replace("{version}", versionName));
+                prefAbout.setTitle(prefAbout.getTitle().toString().replace("{version}", versionName));
             }
         }
     }

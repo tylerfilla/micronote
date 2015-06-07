@@ -8,20 +8,13 @@ import java.lang.reflect.InvocationTargetException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.NoteEditor;
@@ -82,50 +75,6 @@ public class ActivityEdit extends Activity {
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);
-        
-        this.noteEditor.setResponder(new NoteEditor.Responder() {
-            
-            @Override
-            public void onExternalRequest(String request) {
-                ActivityEdit.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                        .parse(request)));
-            }
-            
-            @Override
-            public void onPageLoad(String url) {
-                ActivityEdit.this.findViewById(R.id.activityNoteEditEditorCover).setVisibility(
-                        View.GONE);
-            }
-            
-            @Override
-            public void onUpdateIndentControlState(boolean controlActive, boolean enableDecrease,
-                    boolean enableIncrease) {
-                ((LinearLayout) ActivityEdit.this
-                        .findViewById(R.id.activityNoteEditIndentControl))
-                        .setVisibility(controlActive ? View.VISIBLE : View.GONE);
-                ((ImageButton) ActivityEdit.this
-                        .findViewById(R.id.activityNoteEditIndentControlButtonDecrease))
-                        .setEnabled(enableDecrease);
-                ((ImageButton) ActivityEdit.this
-                        .findViewById(R.id.activityNoteEditIndentControlButtonIncrease))
-                        .setEnabled(enableIncrease);
-            }
-            
-        });
-        /*
-         * final View activityNoteEditView = this.findViewById(android.R.id.content);
-         * activityNoteEditView.getViewTreeObserver().addOnGlobalLayoutListener( new
-         * OnGlobalLayoutListener() {
-         * 
-         * @Override public void onGlobalLayout() { if
-         * (activityNoteEditView.getRootView().getHeight() - activityNoteEditView.getHeight() > 400)
-         * { NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.FOCUS); } else {
-         * NoteEditActivity.this.noteEditor.performAction(NoteEditor.Action.BLUR); }
-         * 
-         * NoteEditActivity.this.noteEditor.postInvalidate(); }
-         * 
-         * });
-         */
     }
     
     @Override
@@ -166,18 +115,18 @@ public class ActivityEdit extends Activity {
         
         titlePrompt.setNegativeButton("Cancel", null);
         titlePrompt.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            
+    
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 String title = titlePromptInput.getText().toString();
-                
+        
                 if (!title.isEmpty()) {
                     ActivityEdit.this.noteEditor.getNote().setTitle(title);
                     ((TextView) ActivityEdit.this
                             .findViewById(R.id.activityNoteEditActionbarTitle)).setText(title);
                 }
             }
-            
+    
         });
         
         titlePrompt.show();
@@ -193,28 +142,10 @@ public class ActivityEdit extends Activity {
             mPopup.setAccessible(true);
             mPopup.get(popupMenu).getClass().getMethod("setForceShowIcon", boolean.class)
                     .invoke(mPopup.get(popupMenu), true);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                ActivityEdit.this.buttonMenuClicked(item);
-                return true;
-            }
-            
-        });
-        
+    
         popupMenu.show();
     }
     
@@ -223,31 +154,6 @@ public class ActivityEdit extends Activity {
             this.finish();
         } else if ("menu".equals(view.getTag())) {
             this.showMenu();
-        }
-    }
-    
-    public void onIndentControlButtonClick(View view) {
-        if ("increase".equals(view.getTag())) {
-            this.noteEditor.performAction(NoteEditor.Action.INDENT_INCREASE);
-        } else if ("decrease".equals(view.getTag())) {
-            this.noteEditor.performAction(NoteEditor.Action.INDENT_DECREASE);
-        }
-    }
-    
-    private void buttonMenuClicked(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-        case R.id.activityNoteEditMenuUL:
-            this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_BULLET);
-            break;
-        case R.id.activityNoteEditMenuOL:
-            this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_NUMBER);
-            break;
-        case R.id.activityNoteEditMenuChecklist:
-            this.noteEditor.performAction(NoteEditor.Action.CREATE_LIST_CHECKBOX);
-            break;
-        case R.id.activityNoteEditMenuClip:
-            Toast.makeText(this, "Clipping not yet implemented", Toast.LENGTH_SHORT).show();
-            break;
         }
     }
     

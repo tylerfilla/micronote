@@ -108,13 +108,6 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="Notes.Activity.NoteEdit.EditorCover">
-        <item name="android:background">@color/background_pad</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:orientation">horizontal</item>
-    </style>
-    
     <style name="Notes.Activity.NoteEdit.IndentControl" />
     
     <style name="Notes.Activity.NoteEdit.IndentControl.Root">

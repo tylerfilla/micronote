@@ -1,7 +1,7 @@
 
 // Written by Tyler Filla
 
-/* Document components */
+/* Document elements */
 
 var headerBar;
 var contentArea;
@@ -10,8 +10,8 @@ var metricsElement;
 /* Events */
 
 window.onload = function() {
-    headerBar = document.getElementById("headerBar");
-    contentArea = document.getElementById("contentArea");
+    headerBar      = document.getElementById("headerBar");
+    contentArea    = document.getElementById("contentArea");
     metricsElement = document.getElementById("metricsElement");
     
     reportMetrics();

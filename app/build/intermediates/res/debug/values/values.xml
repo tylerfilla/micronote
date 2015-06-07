@@ -43,6 +43,8 @@
     <string name="activity_list_search_open_title">Search Notes</string>
     <string name="activity_settings_actionbar_title">Settings</string>
     <string name="app_name">μNote</string>
+    <string name="app_version_code">0</string>
+    <string name="app_version_name">DEV-git</string>
     <string name="pref_about_summary">© 2015 Tyler Filla</string>
     <string name="pref_about_title">μNote {version}</string>
     <!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/values/styles.xml -->
@@ -54,12 +56,6 @@
         <item name="android:layout_above">@id/activityNoteEditIndentControl</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-    </style>
-    <style name="Notes.Activity.NoteEdit.EditorCover">
-        <item name="android:background">@color/background_pad</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:orientation">horizontal</item>
     </style>
     <style name="Notes.Activity.NoteEdit.IndentControl"/>
     <style name="Notes.Activity.NoteEdit.IndentControl.Button" parent="@android:style/Widget.Holo.Light.Button">
