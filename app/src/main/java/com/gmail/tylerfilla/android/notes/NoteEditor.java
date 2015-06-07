@@ -5,7 +5,11 @@ import java.io.IOException;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class NoteEditor extends WebView {
     
@@ -29,15 +33,6 @@ public class NoteEditor extends WebView {
         }
     }
     
-    @SuppressLint("SetJavaScriptEnabled")
-    private void loadEditor() throws IOException {
-        // Enable JavaScript
-        this.getSettings().setJavaScriptEnabled(true);
-        
-        // Load editor document
-        this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
-    }
-    
     public boolean getEditorLoaded() {
         return this.editorLoaded;
     }
@@ -48,6 +43,48 @@ public class NoteEditor extends WebView {
     
     public void setNote(Note note) {
         this.note = note;
+    }
+    
+    @SuppressLint("SetJavaScriptEnabled")
+    private void loadEditor() throws IOException {
+        /* Event listening */
+        
+        // Add a WebView client
+        this.setWebViewClient(new WebViewClient() {
+            
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                NoteEditor.this.editorLoaded = true;
+            }
+            
+        });
+        
+        // Add a Chrome client
+        this.setWebChromeClient(new WebChromeClient() {
+            
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                NoteEditor.this.onReceiveEditorMessage(message);
+                
+                return true;
+            }
+            
+        });
+        
+        /* Settings */
+        
+        WebSettings settings = this.getSettings();
+        
+        // Enable JavaScript
+        settings.setJavaScriptEnabled(true);
+        
+        /* Action */
+        
+        // Load editor document
+        this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
+    }
+    
+    public void onReceiveEditorMessage(String message) {
     }
     
 }

@@ -7,10 +7,12 @@ import java.util.HashSet;
 
 import org.xml.sax.XMLReader;
 
+import android.app.ActivityManager;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -69,6 +71,10 @@ public class ActivityList extends ListActivity {
         listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
                 this.noteListAdapter));
         listView.setOnItemClickListener(new NoteListOnItemClickListener(this.noteListAdapter));
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
+        }
     }
     
     @Override
@@ -154,21 +160,21 @@ public class ActivityList extends ListActivity {
     
     public void onActionButtonClick(View view) {
         if ("list_settings".equals(view.getTag())) {
-            this.enterSettings();
+            this.openSettings();
         } else if ("list_search".equals(view.getTag())) {
             this.toggleSearchMode();
         } else if ("list_new".equals(view.getTag())) {
-            this.enterNoteEditor(null);
+            this.openNote(null);
         } else if ("search_close".equals(view.getTag())) {
             this.toggleSearchMode();
         }
     }
     
-    private void enterSettings() {
+    private void openSettings() {
         this.startActivity(new Intent(this, ActivitySettings.class));
     }
     
-    private void enterNoteEditor(File noteFile) {
+    private void openNote(File noteFile) {
         Intent intentEdit = new Intent(this, ActivityEdit.class);
         intentEdit.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
         
@@ -352,7 +358,7 @@ public class ActivityList extends ListActivity {
             Note note = (Note) this.noteListAdapter.getItem(position);
             
             if (note.getFile() != null) {
-                ActivityList.this.enterNoteEditor(note.getFile());
+                ActivityList.this.openNote(note.getFile());
             }
         }
         

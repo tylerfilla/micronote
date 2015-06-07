@@ -20,12 +20,13 @@ public final class R {
         public static final int background_activity_list_list_item_selected=0x7f050006;
         public static final int background_pad=0x7f050007;
         public static final int background_pad_line=0x7f050008;
-        public static final int text_actionbar_title=0x7f050009;
-        public static final int text_activity_list_search_bubble=0x7f05000a;
-        public static final int text_activity_list_search_bubble_hint=0x7f05000b;
-        public static final int text_footer=0x7f05000c;
-        public static final int text_subtitle=0x7f05000d;
-        public static final int text_title=0x7f05000e;
+        public static final int task_primary=0x7f050009;
+        public static final int text_actionbar_title=0x7f05000a;
+        public static final int text_activity_list_search_bubble=0x7f05000b;
+        public static final int text_activity_list_search_bubble_hint=0x7f05000c;
+        public static final int text_footer=0x7f05000d;
+        public static final int text_subtitle=0x7f05000e;
+        public static final int text_title=0x7f05000f;
     }
     public static final class drawable {
         public static final int background_actionbar=0x7f020000;

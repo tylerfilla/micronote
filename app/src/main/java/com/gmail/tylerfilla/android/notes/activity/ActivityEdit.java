@@ -3,11 +3,13 @@ package com.gmail.tylerfilla.android.notes.activity;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -59,18 +61,21 @@ public class ActivityEdit extends Activity {
             note = Note.blank();
         }
         
-        TextView activityNoteEditActionbarTitle = (TextView) this
-                .findViewById(R.id.activityNoteEditActionbarTitle);
+        TextView activityNoteEditActionbarTitle = (TextView) this.findViewById(R.id.activityNoteEditActionbarTitle);
         activityNoteEditActionbarTitle.setText(note.getTitle());
         activityNoteEditActionbarTitle.setSelected(true);
         activityNoteEditActionbarTitle.setOnClickListener(new OnClickListener() {
-            
+    
             @Override
             public void onClick(View v) {
-                ActivityEdit.this.editNoteTitle();
+                ActivityEdit.this.promptNewTitle();
             }
-            
+    
         });
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.setTaskDescription(new ActivityManager.TaskDescription(note.getTitle(), null, this.getResources().getColor(R.color.task_primary)));
+        }
         
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
         this.noteEditor.setNote(note);
@@ -99,7 +104,7 @@ public class ActivityEdit extends Activity {
         }
     }
     
-    private void editNoteTitle() {
+    private void promptNewTitle() {
         AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
         
         titlePrompt.setTitle("Edit Title");
@@ -108,24 +113,22 @@ public class ActivityEdit extends Activity {
         final EditText titlePromptInput = new EditText(this);
         titlePromptInput.setMaxLines(1);
         titlePromptInput.setHint(this.noteEditor.getNote().getTitle());
-        titlePromptInput.setInputType(InputType.TYPE_CLASS_TEXT
-                | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        titlePromptInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         titlePrompt.setView(titlePromptInput);
         
         titlePrompt.setNegativeButton("Cancel", null);
         titlePrompt.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-    
+            
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 String title = titlePromptInput.getText().toString();
         
                 if (!title.isEmpty()) {
                     ActivityEdit.this.noteEditor.getNote().setTitle(title);
-                    ((TextView) ActivityEdit.this
-                            .findViewById(R.id.activityNoteEditActionbarTitle)).setText(title);
+                    ((TextView) ActivityEdit.this.findViewById(R.id.activityNoteEditActionbarTitle)).setText(title);
                 }
             }
-    
+            
         });
         
         titlePrompt.show();
@@ -144,7 +147,7 @@ public class ActivityEdit extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+        
         popupMenu.show();
     }
     

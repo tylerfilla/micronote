@@ -1,7 +1,9 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -19,6 +21,10 @@ public class ActivitySettings extends PreferenceActivity {
         
         this.getActionBar().setCustomView(R.layout.activity_settings_actionbar);
         this.setContentView(R.layout.activity_settings);
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
+        }
     }
     
     @Override
