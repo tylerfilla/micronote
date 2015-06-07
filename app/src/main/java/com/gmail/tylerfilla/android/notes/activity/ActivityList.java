@@ -170,6 +170,7 @@ public class ActivityList extends ListActivity {
     
     private void enterNoteEditor(File noteFile) {
         Intent intentEdit = new Intent(this, ActivityEdit.class);
+        intentEdit.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
         
         if (noteFile != null) {
             intentEdit.setData(Uri.fromFile(noteFile));
