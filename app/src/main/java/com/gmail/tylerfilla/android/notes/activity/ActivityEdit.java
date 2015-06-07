@@ -42,12 +42,7 @@ public class ActivityEdit extends Activity {
         if (ActivityEdit.persistentNote != null) {
             note = ActivityEdit.persistentNote;
         } else {
-            String noteFilePath = null;
-            
-            Bundle startingIntentExtras = this.getIntent().getExtras();
-            if (startingIntentExtras != null) {
-                noteFilePath = startingIntentExtras.getString("file");
-            }
+            String noteFilePath = this.getIntent().getDataString();
             
             if (noteFilePath == null) {
                 note = Note.blank();
@@ -58,6 +53,10 @@ public class ActivityEdit extends Activity {
                     e.printStackTrace();
                 }
             }
+        }
+        
+        if (note == null) {
+            note = Note.blank();
         }
         
         TextView activityNoteEditActionbarTitle = (TextView) this

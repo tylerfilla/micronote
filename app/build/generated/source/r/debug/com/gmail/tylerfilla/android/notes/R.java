@@ -114,10 +114,9 @@ public final class R {
         public static final int activity_list_search_open_title=0x7f060015;
         public static final int activity_settings_actionbar_title=0x7f060016;
         public static final int app_name=0x7f060017;
-        public static final int app_version_code=0x7f060018;
-        public static final int app_version_name=0x7f060019;
-        public static final int pref_about_summary=0x7f06001a;
-        public static final int pref_about_title=0x7f06001b;
+        public static final int app_version=0x7f060018;
+        public static final int pref_about_summary=0x7f060019;
+        public static final int pref_about_title=0x7f06001a;
     }
     public static final class style {
         public static final int Notes=0x7f070000;

@@ -27,7 +27,20 @@
             
         </activity>
         
-        <activity android:name=".activity.ActivityEdit" />
+        <activity android:name=".activity.ActivityEdit">
+            
+            <intent-filter>
+                
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.note" />
+                
+            </intent-filter>
+            
+        </activity>
         
         <activity
             android:name=".activity.ActivitySettings"
@@ -36,4 +49,3 @@
     </application>
     
 </manifest>
-

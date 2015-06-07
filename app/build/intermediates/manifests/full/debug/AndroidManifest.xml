@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gmail.tylerfilla.android.notes"
     android:versionCode="0"
-    android:versionName="@string/app_version_name" >
+    android:versionName="@string/app_version" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -22,7 +22,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gmail.tylerfilla.android.notes.activity.ActivityEdit" />
+        <activity android:name="com.gmail.tylerfilla.android.notes.activity.ActivityEdit" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.note" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.gmail.tylerfilla.android.notes.activity.ActivitySettings"
             android:label="Settings" />

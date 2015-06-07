@@ -53,9 +53,23 @@ activity#com.gmail.tylerfilla.android.notes.activity.ActivityEdit
 ADDED from AndroidManifest.xml:30:9
 	android:name
 		ADDED from AndroidManifest.xml:30:19
-activity#com.gmail.tylerfilla.android.notes.activity.ActivitySettings
-ADDED from AndroidManifest.xml:32:9
-	android:label
-		ADDED from AndroidManifest.xml:34:13
+intent-filter#android.intent.action.VIEW+android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:32:13
+action#android.intent.action.VIEW
+ADDED from AndroidManifest.xml:34:17
 	android:name
-		ADDED from AndroidManifest.xml:33:13
+		ADDED from AndroidManifest.xml:34:25
+category#android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:35:17
+	android:name
+		ADDED from AndroidManifest.xml:35:27
+data
+ADDED from AndroidManifest.xml:37:17
+	android:scheme
+		ADDED from AndroidManifest.xml:37:23
+activity#com.gmail.tylerfilla.android.notes.activity.ActivitySettings
+ADDED from AndroidManifest.xml:45:9
+	android:label
+		ADDED from AndroidManifest.xml:47:13
+	android:name
+		ADDED from AndroidManifest.xml:46:13

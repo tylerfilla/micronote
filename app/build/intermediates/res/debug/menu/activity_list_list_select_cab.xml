@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item
+        android:id="@+id/activityNotesNoteListSelectCABDelete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/activity_edit_cab_menu_item_delete"/>
+    
+</menu>
+<!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/menu/activity_list_list_select_cab.xml -->

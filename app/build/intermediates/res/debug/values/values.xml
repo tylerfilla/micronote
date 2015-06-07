@@ -43,8 +43,7 @@
     <string name="activity_list_search_open_title">Search Notes</string>
     <string name="activity_settings_actionbar_title">Settings</string>
     <string name="app_name">μNote</string>
-    <string name="app_version_code">0</string>
-    <string name="app_version_name">DEV-git</string>
+    <string name="app_version">DEV-git</string>
     <string name="pref_about_summary">© 2015 Tyler Filla</string>
     <string name="pref_about_title">μNote {version}</string>
     <!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/values/styles.xml -->

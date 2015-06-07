@@ -80,6 +80,9 @@ public class NoteKeeper {
     public Note readNote(File noteFile) throws IOException {
         final Note note = new Note();
         note.setFile(noteFile);
+        note.setTitle("");
+        note.setContent("");
+        note.setVersion(1);
         
         try {
             SAXParserFactory.newInstance().newSAXParser().parse(noteFile, new DefaultHandler() {

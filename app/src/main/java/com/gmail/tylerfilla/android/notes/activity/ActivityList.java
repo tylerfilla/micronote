@@ -10,6 +10,7 @@ import org.xml.sax.XMLReader;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -168,13 +169,13 @@ public class ActivityList extends ListActivity {
     }
     
     private void enterNoteEditor(File noteFile) {
-        Intent noteEditIntent = new Intent(this, ActivityEdit.class);
+        Intent intentEdit = new Intent(this, ActivityEdit.class);
         
         if (noteFile != null) {
-            noteEditIntent.putExtra("file", noteFile.getAbsolutePath());
+            intentEdit.setData(Uri.fromFile(noteFile));
         }
         
-        this.startActivity(noteEditIntent);
+        this.startActivity(intentEdit);
     }
     
     private void toggleSearchMode() {
