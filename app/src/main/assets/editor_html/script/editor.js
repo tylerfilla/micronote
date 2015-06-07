@@ -1,8 +1,11 @@
 
 // Written by Tyler Filla
 
-/* Localized document elements */
+/* Globals */
 
+var autoUploadCounter = 0;
+
+// Localized document elements
 var header;
 var content;
 var text;
@@ -27,10 +30,20 @@ function createNotepadLines() {
     }
 }
 
-/* Communication */
+/* Content uploading */
 
 function uploadContent() {
     alert("content=" + text.innerHTML);
+}
+
+function handleAutoUpload() {
+    autoUploadCounter--;
+    
+    if (autoUploadCounter == 0) {
+        uploadContent();
+    } else if (autoUploadCounter < 0) {
+        autoUploadCounter = -1;
+    }
 }
 
 /* Initialization */
@@ -41,6 +54,9 @@ function initialize() {
     
     // Make contentArea editable
     text.contentEditable = true;
+    
+    // Set auto upload interval
+    setInterval(handleAutoUpload, 100);
 }
 
 /* Event handling */
@@ -67,8 +83,8 @@ function textOnKeyUp() {
     // Create notepad lines in background
     createNotepadLines();
     
-    // Upload content to app
-    uploadContent();
+    // Trigger auto upload
+    autoUploadCounter = 10;
 }
 
 function windowOnLoad() {
