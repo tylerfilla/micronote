@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -89,6 +90,7 @@ public class NoteEditor extends WebView {
     }
     
     public void onReceiveEditorMessage(String message) {
+        Log.d("", message);
     }
     
 }
