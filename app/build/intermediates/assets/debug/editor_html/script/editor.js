@@ -49,6 +49,10 @@ window.onload = function() {
     // Initialize
     initialize();
     
+    content.onclick = function() {
+        text.focus();
+    }
+    
     text.onkeyup = function() {
         createNotepadLines();
     }
