@@ -46,7 +46,7 @@ public class NoteEditor extends WebView {
         this.note = note;
         
         // Send content to page
-        this.sendPageMessage("~content=" + note.getContent());
+        this.sendAppMessage("~content=" + note.getContent());
     }
     
     @SuppressLint("SetJavaScriptEnabled")
@@ -101,7 +101,7 @@ public class NoteEditor extends WebView {
         }
     }
     
-    public void sendPageMessage(String message) {
+    public void sendAppMessage(String message) {
         while (!this.editorLoaded) {}
         this.loadUrl("javascript:onReceiveAppMessage(\"" + message + "\");");
     }

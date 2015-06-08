@@ -33,7 +33,7 @@ function createNotepadLines() {
 /* Content uploading */
 
 function uploadContent() {
-    sendAppMessage("~content=" + text.innerHTML);
+    sendPageMessage("~content=" + text.innerHTML);
 }
 
 function handleAutoUpload() {
@@ -68,7 +68,7 @@ function onReceiveAppMessage(message) {
     }
 }
 
-function sendAppMessage(message) {
+function sendPageMessage(message) {
     alert(message);
 }
 
@@ -123,6 +123,9 @@ function windowOnLoad() {
     // Initialize
     initialize();
     
+    // Simulate a window resize
+    windowOnResize();
+    
     // Register events that rely on window having loaded
     content.onclick = contentOnClick;
     text.onclick    = textOnClick;
@@ -130,6 +133,9 @@ function windowOnLoad() {
 }
 
 function windowOnResize() {
+    // Resize content height
+    content.style.height = (window.innerHeight - 60) + "px";
+    
     // Create notepad lines in background
     createNotepadLines();
 }
