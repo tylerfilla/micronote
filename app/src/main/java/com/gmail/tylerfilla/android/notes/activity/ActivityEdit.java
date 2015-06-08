@@ -1,5 +1,7 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import android.app.Activity;
@@ -19,8 +21,11 @@ import android.widget.TextView;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.NoteEditor;
 import com.gmail.tylerfilla.android.notes.R;
+import com.gmail.tylerfilla.android.notes.io.NoteIO;
 
 public class ActivityEdit extends Activity {
+    
+    private File noteFile;
     
     private NoteEditor noteEditor;
     
@@ -31,15 +36,21 @@ public class ActivityEdit extends Activity {
         /* Handle intent */
         
         // Note to be edited
-        Note note = null;
+        Note note = new Note();
         
-        // Handle intent data input
+        // Attempt to read note described by intent
         String noteFilePath = this.getIntent().getDataString();
         if (noteFilePath == null) {
-            note = Note.create();
+            this.noteFile = null; // TODO: Create file for note
         } else {
-            // TODO: Load note from file
-            note = Note.create();
+            this.noteFile = new File(noteFilePath);
+            
+            // Try to read note from file
+            try {
+                NoteIO.readNote(note, this.noteFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         
         /* Handle layout and appearance */
@@ -69,24 +80,39 @@ public class ActivityEdit extends Activity {
         
         /* Initialize editor */
         
+        // Get editor reference
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
+        
+        // Pass note to editor
         this.noteEditor.setNote(note);
         
-        while (!this.noteEditor.getEditorLoaded()) {}
+        // Set transparent background
         this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
+        
+        // Set up a NoteWatcher to track note changes
+        this.noteEditor.setNoteWatcher(new NoteEditor.NoteWatcher() {
+            
+            @Override
+            public void onNoteContentUpdate(String content) {
+                ActivityEdit.this.handleNoteContentUpdate(content);
+            }
+            
+        });
     }
     
     @Override
     public void onPause() {
         super.onPause();
         
+        // Pause editor
         this.noteEditor.onPause();
     }
     
     @Override
     public void onResume() {
         super.onPause();
-    
+        
+        // Resume editor
         this.noteEditor.onResume();
     }
     
@@ -94,7 +120,7 @@ public class ActivityEdit extends Activity {
         AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
         
         titlePrompt.setTitle("Edit Title");
-        titlePrompt.setMessage("Enter new title:");
+        titlePrompt.setMessage("Please enter a new title below.");
         
         final EditText titlePromptInput = new EditText(this);
         titlePromptInput.setMaxLines(1);
@@ -104,22 +130,22 @@ public class ActivityEdit extends Activity {
         
         titlePrompt.setNegativeButton("Cancel", null);
         titlePrompt.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            
+    
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 String title = titlePromptInput.getText().toString();
-                
+        
                 if (!title.isEmpty()) {
-                    ActivityEdit.this.handleTitleChange(title);
+                    ActivityEdit.this.handleNoteTitleUpdate(title);
                 }
             }
-            
+    
         });
         
         titlePrompt.show();
     }
     
-    private void handleTitleChange(String title) {
+    private void handleNoteTitleUpdate(String title) {
         // Set note title
         this.noteEditor.getNote().setTitle(title);
         
@@ -132,13 +158,23 @@ public class ActivityEdit extends Activity {
         }
     }
     
+    private void handleNoteContentUpdate(String content) {
+        // Try to write note to file
+        try {
+            NoteIO.writeNote(this.noteEditor.getNote(), this.noteFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void handleClose() {
         // Lollipop gets special treatment here...
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.finishAndRemoveTask();
+            return;
         }
         
-        // Finish normally
+        // Everyone else finishes normally
         this.finish();
     }
     
@@ -159,8 +195,9 @@ public class ActivityEdit extends Activity {
     }
     
     public void onActionButtonClick(View view) {
+        // Why would the tag ever be null here? Who really cares....
         if (view.getTag() == null) {
-            return;
+            return; // Die, NullPointException! DIE!
         }
         
         // Delegate to appropriate handler

@@ -1,48 +1,24 @@
 package com.gmail.tylerfilla.android.notes;
 
-import java.io.File;
-
 public class Note {
     
     private static final String TITLE_NOTE_BLANK = "Untitled Note";
-    
-    private File file;
     
     private String title;
     private String content;
     
     private boolean changed;
     
-    private Note() {
-        this.file = null;
-        
-        this.title = "";
-        this.content = "";
+    public Note(String title, String content) {
+        this.title   = title;
+        this.content = content;
         
         this.changed = false;
     }
     
-    public static Note create() {
-        Note note = new Note();
-        note.setTitle(Note.TITLE_NOTE_BLANK);
-        note.setContent("");
-        note.resetChanged();
-        
-        return note;
-    }
-    
-    public File getFile() {
-        return this.file;
-    }
-    
-    public void setFile(File file) {
-        if (this.file != null) {
-            this.changed = this.changed || !this.file.equals(file);
-        } else if (file != null) {
-            this.changed = true;
-        }
-        
-        this.file = file;
+    public Note() {
+        this.title   = Note.TITLE_NOTE_BLANK;
+        this.content = "";
     }
     
     public String getTitle() {
@@ -77,8 +53,8 @@ public class Note {
         return this.changed;
     }
     
-    public void resetChanged() {
-        this.changed = false;
+    public void setChanged(boolean changed) {
+        this.changed = changed;
     }
     
 }

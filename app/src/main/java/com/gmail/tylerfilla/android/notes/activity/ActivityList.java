@@ -33,12 +33,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.Note;
-import com.gmail.tylerfilla.android.notes.NoteKeeper;
 import com.gmail.tylerfilla.android.notes.R;
 
 public class ActivityList extends ListActivity {
-    
-    private NoteKeeper noteKeeper;
     
     private ArrayList<Note> noteList;
     private NoteListAdapter noteListAdapter;
@@ -50,8 +47,6 @@ public class ActivityList extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        this.noteKeeper = NoteKeeper.getInstance(this);
         
         this.noteList = new ArrayList<Note>();
         this.noteListAdapter = new NoteListAdapter();
@@ -101,7 +96,7 @@ public class ActivityList extends ListActivity {
         
         this.noteList.clear();
         
-        File[] noteFiles = this.noteKeeper.listFiles();
+        File[] noteFiles = new File[0];
         
         int numNotesAdded = 0;
         int numNotesTotal = 0;
@@ -109,13 +104,13 @@ public class ActivityList extends ListActivity {
         if (noteFiles.length > 0) {
             for (File noteFile : noteFiles) {
                 Note note = null;
-                
+                /*
                 try {
                     note = this.noteKeeper.readNote(noteFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                
+                */
                 if (note != null) {
                     if (this.searchMode) {
                         if (this.filterSearchNote(note)) {
@@ -365,10 +360,11 @@ public class ActivityList extends ListActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Note note = (Note) this.noteListAdapter.getItem(position);
-            
+            /*
             if (note.getFile() != null) {
                 ActivityList.this.openNote(note.getFile());
             }
+            */
         }
         
     }
@@ -402,11 +398,13 @@ public class ActivityList extends ListActivity {
                     if (this.noteListAdapter.getSelected(i)) {
                         Note note = (Note) this.noteListAdapter.getItem(i);
                         
+                        /*
                         try {
                             ActivityList.this.noteKeeper.deleteNote(note);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        */
                         
                         deletedNotes.add(note);
                     }

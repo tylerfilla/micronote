@@ -61,10 +61,6 @@ function onReceiveAppMessage(message) {
         if (message.substring(0, 6) == "header") {
             text.innerText = message.substring(7);
         }
-    } else if (message.charAt(0) == '!') {
-        message = message.substring(1);
-        
-        // Handle commands here
     }
 }
 
@@ -130,6 +126,11 @@ function windowOnLoad() {
     content.onclick = contentOnClick;
     text.onclick    = textOnClick;
     text.onkeyup    = textOnKeyUp;
+    
+    // Update message interval
+    setInterval(function() {
+        sendPageMessage("!update");
+    }, 100);
 }
 
 function windowOnResize() {
