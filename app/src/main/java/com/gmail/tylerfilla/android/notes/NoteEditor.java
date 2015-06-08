@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JsResult;
@@ -66,9 +65,8 @@ public class NoteEditor extends WebView {
             
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                NoteEditor.this.onReceiveEditorMessage(message);
-                
                 result.confirm();
+                NoteEditor.this.onReceivePageMessage(message);
                 return true;
             }
             
@@ -90,8 +88,18 @@ public class NoteEditor extends WebView {
         this.editorLoaded = true;
     }
     
-    public void onReceiveEditorMessage(String message) {
-        Log.d("", message);
+    public void onReceivePageMessage(String message) {
+        Log.d("onReceivePageMessage", message);
+        
+        if (message.startsWith("~")) {
+            // TODO: Handle assignment
+        } else if (message.startsWith("!")) {
+            // TODO: Handle command
+        }
+    }
+    
+    public void sendPageMessage(String message) {
+        this.loadUrl("javascript:onReceiveAppMessage(\"" + message + "\");");
     }
     
 }

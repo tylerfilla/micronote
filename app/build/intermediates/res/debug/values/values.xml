@@ -32,7 +32,7 @@
     <string name="activity_list_actionbar_list_button_new_content_description">New note</string>
     <string name="activity_list_actionbar_list_button_search_content_description">Search</string>
     <string name="activity_list_actionbar_list_button_settings_content_description">Settings</string>
-    <string name="activity_list_actionbar_list_title">Notes</string>
+    <string name="activity_list_actionbar_list_title">μNote</string>
     <string name="activity_list_actionbar_search_button_close_content_description">Close</string>
     <string name="activity_list_actionbar_search_title">Search</string>
     <string name="activity_list_list_empty_body">Tap the pencil icon in the upper right-hand corner to begin taking notes.</string>

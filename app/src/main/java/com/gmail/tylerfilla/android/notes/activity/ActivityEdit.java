@@ -156,7 +156,11 @@ public class ActivityEdit extends Activity {
     
     public void onActionButtonClick(View view) {
         if ("back".equals(view.getTag())) {
-            this.finish();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                this.finishAndRemoveTask();
+            } else {
+                this.finish();
+            }
         } else if ("menu".equals(view.getTag())) {
             this.showMenu();
         }

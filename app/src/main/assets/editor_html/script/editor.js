@@ -33,7 +33,7 @@ function createNotepadLines() {
 /* Content uploading */
 
 function uploadContent() {
-    alert("content=" + text.innerHTML);
+    sendAppMessage("~content=" + text.innerHTML);
 }
 
 function handleAutoUpload() {
@@ -44,6 +44,20 @@ function handleAutoUpload() {
     } else if (autoUploadCounter < 0) {
         autoUploadCounter = -1;
     }
+}
+
+/* Communication */
+
+function onReceiveAppMessage(message) {
+    if (message.charAt(0) == '~') {
+        // TODO: Handle assignment
+    } else if (message.charAt(0) == '!') {
+        // TODO: Handle command
+    }
+}
+
+function sendAppMessage(message) {
+    alert(message);
 }
 
 /* Initialization */
