@@ -76,6 +76,20 @@ public class ActivityEdit extends Activity {
         this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
     }
     
+    @Override
+    public void onPause() {
+        super.onPause();
+        
+        this.noteEditor.onPause();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onPause();
+    
+        this.noteEditor.onResume();
+    }
+    
     private void promptNewTitle() {
         AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
         

@@ -62,7 +62,9 @@ function onReceiveAppMessage(message) {
             text.innerText = message.substring(7);
         }
     } else if (message.charAt(0) == '!') {
-        // TODO: Handle command
+        message = message.substring(1);
+        
+        // Handle commands here
     }
 }
 
@@ -76,7 +78,7 @@ function initialize() {
     // Give us a notepad feel...
     createNotepadLines();
     
-    // Make contentArea editable
+    // Make content area editable
     text.contentEditable = true;
     
     // Set auto upload interval
