@@ -31,7 +31,7 @@ public final class R {
     public static final class drawable {
         public static final int background_actionbar=0x7f020000;
         public static final int background_actionbar_button=0x7f020001;
-        public static final int ic_action_back=0x7f020002;
+        public static final int ic_action_edit_close=0x7f020002;
         public static final int ic_action_note_new=0x7f020003;
         public static final int ic_action_overflow=0x7f020004;
         public static final int ic_action_search=0x7f020005;

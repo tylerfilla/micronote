@@ -8,29 +8,25 @@ public class Note {
     
     private File file;
     
-    private int version;
     private String title;
-    
     private String content;
     
     private boolean changed;
     
-    Note() {
+    private Note() {
         this.file = null;
         
-        this.version = 0;
         this.title = "";
-        
         this.content = "";
         
         this.changed = false;
     }
     
-    public static Note blank() {
+    public static Note create() {
         Note note = new Note();
-        note.setVersion(1);
-        note.setTitle(TITLE_NOTE_BLANK);
-        note.clearChanged();
+        note.setTitle(Note.TITLE_NOTE_BLANK);
+        note.setContent("");
+        note.resetChanged();
         
         return note;
     }
@@ -47,20 +43,6 @@ public class Note {
         }
         
         this.file = file;
-    }
-    
-    public int getVersion() {
-        return this.version;
-    }
-    
-    public void setVersion(int version) {
-        if (this.version != 0) {
-            this.changed = this.changed || this.version != version;
-        } else if (version != 0) {
-            this.changed = true;
-        }
-        
-        this.version = version;
     }
     
     public String getTitle() {
@@ -95,7 +77,7 @@ public class Note {
         return this.changed;
     }
     
-    public void clearChanged() {
+    public void resetChanged() {
         this.changed = false;
     }
     

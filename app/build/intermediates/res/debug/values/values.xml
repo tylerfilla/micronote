@@ -11,7 +11,7 @@
     <color name="background_activity_list_list_item_selected">#FFC1C09B</color>
     <color name="background_pad">#FFFCF9B0</color>
     <color name="background_pad_line">#FFE5E3B9</color>
-    <color name="task_primary">#FF5B382F</color>
+    <color name="task_primary">#462E25</color>
     <color name="text_actionbar_title">#FFF0F0F0</color>
     <color name="text_activity_list_search_bubble">#FFDDDDDD</color>
     <color name="text_activity_list_search_bubble_hint">#FFBBBBBB</color>
@@ -20,7 +20,7 @@
     <color name="text_title">#FFC00000</color>
     <!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="activity_edit_actionbar_button_back_content_description">Back</string>
+    <string name="activity_edit_actionbar_button_back_content_description">Close</string>
     <string name="activity_edit_actionbar_button_menu_content_description">Menu</string>
     <string name="activity_edit_cab_menu_item_delete">Delete</string>
     <string name="activity_edit_indent_control_button_decrease_content_description">Decrease indent</string>

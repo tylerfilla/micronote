@@ -6,8 +6,8 @@
         style="@style/Notes.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|left"
         android:contentDescription="@string/activity_edit_actionbar_button_back_content_description"
-        android:src="@drawable/ic_action_back"
-        android:tag="back" />
+        android:src="@drawable/ic_action_edit_close"
+        android:tag="close" />
     
     <TextView
         android:id="@+id/activityNoteEditActionbarTitle"

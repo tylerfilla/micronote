@@ -44,6 +44,9 @@ public class NoteEditor extends WebView {
     
     public void setNote(Note note) {
         this.note = note;
+        
+        // Send content to page
+        this.sendPageMessage("~content=" + note.getContent());
     }
     
     @SuppressLint("SetJavaScriptEnabled")
@@ -57,12 +60,12 @@ public class NoteEditor extends WebView {
             public void onPageFinished(WebView view, String url) {
                 NoteEditor.this.editorLoaded = true;
             }
-            
+    
         });
         
         // Add a Chrome client
         this.setWebChromeClient(new WebChromeClient() {
-            
+        
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 result.confirm();
@@ -99,6 +102,7 @@ public class NoteEditor extends WebView {
     }
     
     public void sendPageMessage(String message) {
+        while (!this.editorLoaded) {}
         this.loadUrl("javascript:onReceiveAppMessage(\"" + message + "\");");
     }
     

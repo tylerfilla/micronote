@@ -77,7 +77,7 @@ public class NoteKeeper {
         }
     }
     
-    public Note readNote(File noteFile) throws IOException {
+    public Note readNote(File noteFile) throws IOException {/*
         final Note note = new Note();
         note.setFile(noteFile);
         note.setTitle("");
@@ -141,12 +141,13 @@ public class NoteKeeper {
             throw new NoteIOException(e);
         }
         
-        note.clearChanged();
+        note.resetChanged();
         
-        return note;
+        return note;*/
+        return null;
     }
     
-    public void writeNote(Note note) throws IOException {
+    public void writeNote(Note note) throws IOException {/*
         if (!note.getChanged()) {
             return;
         }
@@ -197,7 +198,7 @@ public class NoteKeeper {
             throw new NoteIOException(e);
         } catch (TransformerException e) {
             throw new NoteIOException(e);
-        }
+        }*/
     }
     
     public void deleteNote(Note note) throws IOException {
