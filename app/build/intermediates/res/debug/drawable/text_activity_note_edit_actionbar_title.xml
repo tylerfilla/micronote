@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
-
-    <item android:state_pressed="true" android:color="@android:color/darker_gray"/>
-    <item android:state_focused="true" android:color="@android:color/darker_gray"/>
-    <item android:color="@android:color/white"/>
-
-</selector><!-- From: file:/home/tyler/AndroidStudioProjects/μNote/app/src/main/res/drawable/text_activity_note_edit_actionbar_title.xml -->
