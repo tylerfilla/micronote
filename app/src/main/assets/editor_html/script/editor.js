@@ -14,7 +14,7 @@ var lines;
 /* Styling */
 
 function createNotepadLines() {
-    var targetNumLines  = Math.floor(Math.max(content.clientHeight, text.clientHeight)/28 + 0.5);
+    var targetNumLines  = Math.floor(Math.max(content.clientHeight, text.clientHeight)/28);
     var currentNumLines = lines.childNodes.length;
     
     if (currentNumLines < targetNumLines) {
