@@ -35,9 +35,9 @@ public class ActivityList extends ListActivity {
     
     private ArrayList<File> noteFileList;
     
-    private NoteListAdapter                 noteListAdapter;
-    private NoteListOnItemClickListener     noteListOnItemClickListener;
-    private NoteListMultiChoiceModeListener noteListMultiChoiceModeListener;
+    private NoteFileListAdapter                 noteFileListAdapter;
+    private NoteFileListOnItemClickListener     noteFileListOnItemClickListener;
+    private NoteFileListMultiChoiceModeListener noteFileListMultiChoiceModeListener;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class ActivityList extends ListActivity {
         
         this.noteFileList = new ArrayList<>();
         
-        this.noteListAdapter                 = new NoteListAdapter();
-        this.noteListOnItemClickListener     = new NoteListOnItemClickListener();
-        this.noteListMultiChoiceModeListener = new NoteListMultiChoiceModeListener();
+        this.noteFileListAdapter                 = new NoteFileListAdapter();
+        this.noteFileListOnItemClickListener     = new NoteFileListOnItemClickListener();
+        this.noteFileListMultiChoiceModeListener = new NoteFileListMultiChoiceModeListener();
         
         /* Layout and appearance */
         
@@ -60,9 +60,9 @@ public class ActivityList extends ListActivity {
         listView.addFooterView(this.getLayoutInflater().inflate(R.layout.activity_list_list_footer, null), null, false);
         
         // Set adapter and listeners
-        listView.setAdapter(this.noteListAdapter);
-        listView.setOnItemClickListener(this.noteListOnItemClickListener);
-        listView.setMultiChoiceModeListener(this.noteListMultiChoiceModeListener);
+        listView.setAdapter(this.noteFileListAdapter);
+        listView.setOnItemClickListener(this.noteFileListOnItemClickListener);
+        listView.setMultiChoiceModeListener(this.noteFileListMultiChoiceModeListener);
         
         // Set task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -114,11 +114,11 @@ public class ActivityList extends ListActivity {
         }
     }
     
-    private class NoteListAdapter extends BaseAdapter {
+    private class NoteFileListAdapter extends BaseAdapter {
         
         private final HashSet<Integer> selection;
         
-        public NoteListAdapter() {
+        public NoteFileListAdapter() {
             this.selection = new HashSet<>();
         }
         
@@ -231,7 +231,7 @@ public class ActivityList extends ListActivity {
         
     }
     
-    private class NoteListOnItemClickListener implements OnItemClickListener {
+    private class NoteFileListOnItemClickListener implements OnItemClickListener {
         
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -240,7 +240,7 @@ public class ActivityList extends ListActivity {
         
     }
     
-    private class NoteListMultiChoiceModeListener implements AbsListView.MultiChoiceModeListener {
+    private class NoteFileListMultiChoiceModeListener implements AbsListView.MultiChoiceModeListener {
         
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -263,16 +263,16 @@ public class ActivityList extends ListActivity {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             // Clear selection
-            ActivityList.this.noteListAdapter.clearSelection();
+            ActivityList.this.noteFileListAdapter.clearSelection();
         }
         
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             // Add to selection
-            ActivityList.this.noteListAdapter.setSelected(position, checked);
+            ActivityList.this.noteFileListAdapter.setSelected(position, checked);
             
             // Display number of selected notes
-            mode.setTitle(ActivityList.this.noteListAdapter.getSelectionCount() + " note" + (ActivityList.this.noteListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
+            mode.setTitle(ActivityList.this.noteFileListAdapter.getSelectionCount() + " note" + (ActivityList.this.noteFileListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
         }
         
     }

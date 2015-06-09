@@ -56,7 +56,7 @@
     
     <EditText
         android:id="@+id/activityListSearchBubble"
-        style="@style/uNote.ActivityList.SearchBubble" >
+        style="@style/uNote.ActivityList.SearchBubble">
     </EditText>
     
 </RelativeLayout>
