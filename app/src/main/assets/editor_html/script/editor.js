@@ -4,12 +4,42 @@
 /* Globals */
 
 var autoUploadCounter = 0;
+var contentPrevious = "";
 
 // Localized document elements
 var header;
 var content;
 var text;
 var lines;
+
+/* Function */
+
+function uploadContent() {
+    sendPageMessage("~content=" + text.innerHTML);
+}
+
+function handleAutoUpload() {
+    autoUploadCounter--;
+    
+    if (autoUploadCounter == 0) {
+        uploadContent();
+    } else if (autoUploadCounter < 0) {
+        autoUploadCounter = -1;
+    }
+}
+
+function detectContentChange() {
+    if (text.innerHTML != contentPrevious) {
+        // Save copy of content for future comparison
+        contentPrevious = text.innerHTML;
+        
+        // Create notepad lines in background
+        createNotepadLines();
+        
+        // Trigger auto upload
+        autoUploadCounter = 10;
+    }
+}
 
 /* Styling */
 
@@ -30,22 +60,6 @@ function createNotepadLines() {
     }
 }
 
-/* Content uploading */
-
-function uploadContent() {
-    sendPageMessage("~content=" + text.innerHTML);
-}
-
-function handleAutoUpload() {
-    autoUploadCounter--;
-    
-    if (autoUploadCounter == 0) {
-        uploadContent();
-    } else if (autoUploadCounter < 0) {
-        autoUploadCounter = -1;
-    }
-}
-
 /* Communication */
 
 function onReceiveAppMessage(message) {
@@ -62,7 +76,7 @@ function onReceiveAppMessage(message) {
         
         // Header updates
         if (message.substring(0, 6) == "header") {
-            text.innerText = message.substring(7);
+            header.innerText = message.substring(7);
         }
     }
 }
@@ -104,14 +118,6 @@ function textOnClick(event) {
     event.cancelBubble = true;
 }
 
-function textOnKeyUp() {
-    // Create notepad lines in background
-    createNotepadLines();
-    
-    // Trigger auto upload
-    autoUploadCounter = 10;
-}
-
 function windowOnLoad() {
     // Localize document elements
     header  = document.getElementById("header");
@@ -128,12 +134,16 @@ function windowOnLoad() {
     // Register events that rely on window having loaded
     content.onclick = contentOnClick;
     text.onclick    = textOnClick;
-    text.onkeyup    = textOnKeyUp;
     
     // Update message interval
     setInterval(function() {
         sendPageMessage("!update");
-    }, 100);
+    }, 50);
+    
+    // Content change detection interval
+    setInterval(function() {
+        detectContentChange();
+    }, 50);
 }
 
 function windowOnResize() {

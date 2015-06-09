@@ -6,12 +6,14 @@ public class Note {
     
     private String title;
     private String content;
+    private long   lastModified;
     
     private boolean changed;
     
     public Note(String title, String content) {
-        this.title   = title;
-        this.content = content;
+        this.title        = title;
+        this.content      = content;
+        this.lastModified = 0l;
         
         this.changed = false;
     }
@@ -31,6 +33,10 @@ public class Note {
         } else if (title != null) {
             this.changed = true;
         }
+    
+        if (this.changed) {
+            this.lastModified = System.currentTimeMillis();
+        }
         
         this.title = title;
     }
@@ -46,7 +52,19 @@ public class Note {
             this.changed = true;
         }
         
+        if (this.changed) {
+            this.lastModified = System.currentTimeMillis();
+        }
+        
         this.content = content;
+    }
+    
+    public long getLastModified() {
+        return this.lastModified;
+    }
+    
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
     
     public boolean getChanged() {
@@ -55,6 +73,10 @@ public class Note {
     
     public void setChanged(boolean changed) {
         this.changed = changed;
+    
+        if (this.changed) {
+            this.lastModified = System.currentTimeMillis();
+        }
     }
     
 }

@@ -1,7 +1,11 @@
 package com.gmail.tylerfilla.android.notes;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -35,15 +39,11 @@ public class NoteEditor extends WebView {
         
         this.note = null;
         
-        try {
-            this.loadEditor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.loadEditor();
     }
     
     @SuppressLint("SetJavaScriptEnabled")
-    private void loadEditor() throws IOException {
+    private void loadEditor() {
         /* Event listening */
         
         // Add a WebView client
@@ -94,6 +94,25 @@ public class NoteEditor extends WebView {
         
         // Send content to page
         this.enqueueAppMessage("~content=" + note.getContent());
+        
+        // Create header text based on modification time
+        String headerText = "";
+        if (note.getLastModified() == 0l) { // New note
+            headerText = "New";
+        } else if (System.currentTimeMillis() - note.getLastModified() <= 60000l) { // Within the minute
+            headerText = String.valueOf((System.currentTimeMillis() - note.getLastModified())/1000l) + " sec";
+        } else if (System.currentTimeMillis() - note.getLastModified() <= 3600000l) { // Within the hour
+            headerText = String.valueOf((System.currentTimeMillis() - note.getLastModified())/60000l) + " min";
+        } else if (System.currentTimeMillis() - note.getLastModified() <= 86400000l) { // Within the day
+            headerText = new SimpleDateFormat("h:mm aa", Locale.US).format(new Date(note.getLastModified()));
+        } else if (System.currentTimeMillis() - note.getLastModified() <= 31536000000l) { // Within the year
+            headerText = new SimpleDateFormat("MM/dd h:mm aa", Locale.US).format(new Date(note.getLastModified()));
+        } else { // Very old notes
+            headerText = new SimpleDateFormat("MM/dd/yyyy h:mm aa", Locale.US).format(new Date(note.getLastModified()));
+        }
+        
+        // Send header to page
+        this.enqueueAppMessage("~header=" + headerText);
     }
     
     public void setNoteWatcher(NoteWatcher noteWatcher) {

@@ -11,26 +11,47 @@ import java.util.Properties;
 public class NoteIO {
     
     public static Note read(File noteFile) throws IOException {
+        if (noteFile == null) {
+            return null;
+        }
+        
         Note note            = new Note();
         Properties noteProps = new Properties();
         
         noteProps.load(new FileInputStream(noteFile));
         
+        if (noteProps.containsKey("content")) {
+            note.setContent(noteProps.getProperty("content"));
+        }
         if (noteProps.containsKey("title")) {
             note.setTitle(noteProps.getProperty("title"));
         }
-        if (noteProps.containsKey("content")) {
-            note.setContent(noteProps.getProperty("content"));
+        if (noteProps.containsKey("modified")) {
+            String lastModifiedStr = noteProps.getProperty("modified");
+            long   lastModified    = 0l;
+            
+            try {
+                lastModified = Long.parseLong(lastModifiedStr);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            
+            note.setLastModified(lastModified);
         }
         
         return note;
     }
     
     public static void write(Note note, File noteFile) throws IOException {
+        if (note == null || noteFile == null) {
+            return;
+        }
+        
         Properties noteProps = new Properties();
         
-        noteProps.setProperty("title", note.getTitle());
         noteProps.setProperty("content", note.getContent());
+        noteProps.setProperty("title", note.getTitle());
+        noteProps.setProperty("modified", String.valueOf(note.getLastModified()));
         
         noteProps.store(new FileOutputStream(noteFile), "\u00b5Note Note File");
     }
