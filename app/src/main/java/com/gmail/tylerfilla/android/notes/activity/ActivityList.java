@@ -8,7 +8,6 @@ import org.xml.sax.XMLReader;
 
 import android.app.ActivityManager;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -21,13 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,10 +35,6 @@ public class ActivityList extends ListActivity {
     private ArrayList<Note> noteList;
     private NoteListAdapter noteListAdapter;
     
-    private boolean searchMode;
-    private String searchQuery;
-    private TextWatcher searchBubbleTextChangedListener;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +42,20 @@ public class ActivityList extends ListActivity {
         this.noteList = new ArrayList<Note>();
         this.noteListAdapter = new NoteListAdapter();
         
-        this.searchMode = false;
-        this.searchQuery = "";
-        this.searchBubbleTextChangedListener = null;
-        
         this.getActionBar().setCustomView(R.layout.activity_list_actionbar_list);
         this.setContentView(R.layout.activity_list);
         
         ListView listView = this.getListView();
-        listView.addFooterView(
-                this.getLayoutInflater().inflate(R.layout.activity_list_list_footer, null), null,
-                false);
+        
+        // Add footer to display number of notes
+        listView.addFooterView(this.getLayoutInflater().inflate(R.layout.activity_list_list_footer, null), null, false);
+        
+        // Set adapter and listeners
         listView.setAdapter(this.noteListAdapter);
-        listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(
-                this.noteListAdapter));
+        listView.setMultiChoiceModeListener(new NoteListMultiChoiceModeListener(this.noteListAdapter));
         listView.setOnItemClickListener(new NoteListOnItemClickListener(this.noteListAdapter));
         
+        // Set task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
         }
@@ -74,94 +64,6 @@ public class ActivityList extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        
-        this.refresh();
-    }
-    
-    private void refresh() {
-        TextView activityNotesListFooter = (TextView) this
-                .findViewById(R.id.activityListListFooter);
-        LinearLayout activityNotesMessageListEmpty = (LinearLayout) this
-                .findViewById(R.id.activityListMessageListEmpty);
-        LinearLayout activityNotesMessageSearchOpen = (LinearLayout) this
-                .findViewById(R.id.activityListMessageSearchOpen);
-        LinearLayout activityNotesMessageSearchEmpty = (LinearLayout) this
-                .findViewById(R.id.activityListMessageSearchEmpty);
-        
-        activityNotesListFooter.setVisibility(View.GONE);
-        activityNotesMessageListEmpty.setVisibility(View.GONE);
-        activityNotesMessageSearchOpen.setVisibility(View.GONE);
-        activityNotesMessageSearchEmpty.setVisibility(View.GONE);
-        
-        this.noteList.clear();
-        
-        File[] noteFiles = new File[0];
-        
-        int numNotesAdded = 0;
-        int numNotesTotal = 0;
-        
-        if (noteFiles.length > 0) {
-            for (File noteFile : noteFiles) {
-                Note note = null;
-                /*
-                try {
-                    note = this.noteKeeper.read(noteFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                */
-                if (note != null) {
-                    if (this.searchMode) {
-                        if (this.filterSearchNote(note)) {
-                            this.noteList.add(note);
-                            numNotesAdded++;
-                        }
-                    } else {
-                        this.noteList.add(note);
-                        numNotesAdded++;
-                    }
-                    numNotesTotal++;
-                }
-            }
-        }
-        
-        if (this.searchMode) {
-            if (this.searchQuery.isEmpty()) {
-                activityNotesMessageSearchOpen.setVisibility(View.VISIBLE);
-            } else if (numNotesAdded == 0) {
-                activityNotesMessageSearchEmpty.setVisibility(View.VISIBLE);
-            } else {
-                activityNotesListFooter.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (numNotesAdded == 0) {
-                activityNotesMessageListEmpty.setVisibility(View.VISIBLE);
-            } else {
-                activityNotesListFooter.setVisibility(View.VISIBLE);
-            }
-        }
-        
-        if (numNotesAdded == numNotesTotal) {
-            activityNotesListFooter.setText(numNotesAdded + " note"
-                    + (numNotesAdded == 1 ? "" : "s"));
-        } else {
-            activityNotesListFooter.setText(numNotesAdded + " of " + numNotesTotal + " note"
-                    + (numNotesTotal == 1 ? "" : "s"));
-        }
-        
-        this.noteListAdapter.notifyDataSetChanged();
-    }
-    
-    public void onActionButtonClick(View view) {
-        if ("list_settings".equals(view.getTag())) {
-            this.openSettings();
-        } else if ("list_search".equals(view.getTag())) {
-            this.toggleSearchMode();
-        } else if ("list_new".equals(view.getTag())) {
-            this.openNote(null);
-        } else if ("search_close".equals(view.getTag())) {
-            this.toggleSearchMode();
-        }
     }
     
     private void openSettings() {
@@ -188,65 +90,12 @@ public class ActivityList extends ListActivity {
         this.startActivity(intentEdit);
     }
     
-    private void toggleSearchMode() {
-        EditText searchBubble = (EditText) this.findViewById(R.id.activityListSearchBubble);
-        
-        if (this.searchMode) {
-            this.searchMode = false;
-            this.searchQuery = "";
-            
-            this.getActionBar().setCustomView(R.layout.activity_list_actionbar_list);
-            
-            searchBubble.setVisibility(View.GONE);
-            searchBubble.removeTextChangedListener(this.searchBubbleTextChangedListener);
-            this.getListView().requestFocus();
-            ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE))
-                    .hideSoftInputFromWindow(searchBubble.getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
-        } else {
-            this.searchMode = true;
-            
-            this.getActionBar().setCustomView(R.layout.activity_list_actionbar_search);
-            
-            this.searchBubbleTextChangedListener = new TextWatcher() {
-                
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-                
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    ActivityList.this.searchQuery = s.toString();
-                    ActivityList.this.refresh();
-                }
-                
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-                
-            };
-            
-            searchBubble.setVisibility(View.VISIBLE);
-            searchBubble.setText("");
-            searchBubble.addTextChangedListener(this.searchBubbleTextChangedListener);
-            searchBubble.requestFocus();
-            ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE))
-                    .showSoftInput(searchBubble, InputMethodManager.SHOW_IMPLICIT);
+    public void onActionButtonClick(View view) {
+        if ("list_settings".equals(view.getTag())) {
+            this.openSettings();
+        } else if ("list_new".equals(view.getTag())) {
+            this.openNote(null);
         }
-        
-        this.refresh();
-    }
-    
-    private boolean filterSearchNote(Note note) {
-        String noteContentText = Html.fromHtml(note.getContent()).toString().toLowerCase();
-        
-        boolean result = !this.searchQuery.isEmpty();
-        
-        for (String queryWord : this.searchQuery.toLowerCase().split(" ")) {
-            result = result && noteContentText.contains(queryWord);
-        }
-        
-        return result;
     }
     
     private class NoteListAdapter extends BaseAdapter {
@@ -254,7 +103,7 @@ public class ActivityList extends ListActivity {
         private final HashSet<Integer> selection;
         
         public NoteListAdapter() {
-            this.selection = new HashSet<Integer>();
+            this.selection = new HashSet<>();
         }
         
         @Override
@@ -274,50 +123,56 @@ public class ActivityList extends ListActivity {
         
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView != null ? convertView : ActivityList.this.getLayoutInflater()
-                    .inflate(R.layout.activity_list_list_item, parent, false);
+            // The list item view to generate
+            View view = convertView != null ? convertView : ActivityList.this.getLayoutInflater().inflate(R.layout.activity_list_list_item, parent, false);
+            
+            // Get reference to note
             Note note = ActivityList.this.noteList.get(position);
             
-            TextView title = (TextView) view.findViewById(R.id.activityListListItemTitle);
-            TextView contentPreview = (TextView) view
-                    .findViewById(R.id.activityListListItemContentPreview);
+            // Store note data
+            String title   = note.getTitle();
+            String content = note.getContent();
             
-            if (note != null) {
-                if (note.getTitle() != null && !note.getTitle().isEmpty()) {
-                    title.setText(note.getTitle());
-                } else {
-                    title.setText("No Title");
-                }
-                
-                if (note.getContent() == null) {
-                    contentPreview.setText("No content");
-                } else {
-                    String content = Html.fromHtml(note.getContent(), null, new Html.TagHandler() {
-                        
-                        @Override
-                        public void handleTag(boolean opening, String tag, Editable output,
-                                XMLReader xmlReader) {
-                            if (tag.equalsIgnoreCase("li") && opening) {
-                                output.append(' ');
-                            }
-                        }
-                        
-                    }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim();
+            // Title and preview subviews
+            TextView textViewTitle   = (TextView) view.findViewById(R.id.activityListListItemTitle);
+            TextView textViewPreview = (TextView) view.findViewById(R.id.activityListListItemContentPreview);
+            
+            // Set title
+            if (title == null || title.isEmpty()) {
+                textViewTitle.setText("No Title");
+            } else {
+                textViewTitle.setText(title);
+            }
+            
+            // Set content
+            if (content == null || content.isEmpty()) {
+                textViewPreview.setText("No content");
+            } else {
+                // Remove all HTML tags and shorten the content
+                String htmlStrippedContentPreview = Html.fromHtml(content, null, new Html.TagHandler() {
                     
-                    if (content.isEmpty()) {
-                        contentPreview.setText("No content");
-                    } else {
-                        contentPreview.setText(content);
+                    @Override
+                    public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
+                        if (tag.equalsIgnoreCase("li") && opening) {
+                            output.append(' ');
+                        }
                     }
+                    
+                }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim().substring(0, 50);
+                
+                // Perhaps the note's content was strictly HTML tags (odd, but possible)
+                if (htmlStrippedContentPreview.isEmpty()) {
+                    textViewPreview.setText("No content");
+                } else {
+                    textViewPreview.setText(htmlStrippedContentPreview);
                 }
             }
             
+            // Set background based on selection state
             if (this.getSelected(position)) {
-                view.setBackgroundColor(ActivityList.this.getResources().getColor(
-                        R.color.background_activity_list_list_item_selected));
+                view.setBackgroundColor(ActivityList.this.getResources().getColor(R.color.background_activity_list_list_item_selected));
             } else {
-                view.setBackgroundColor(ActivityList.this.getResources().getColor(
-                        R.color.background_activity_list_list_item));
+                view.setBackgroundColor(ActivityList.this.getResources().getColor(R.color.background_activity_list_list_item));
             }
             
             return view;
@@ -358,12 +213,7 @@ public class ActivityList extends ListActivity {
         
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Note note = (Note) this.noteListAdapter.getItem(position);
-            /*
-            if (note.getFile() != null) {
-                ActivityList.this.openNote(note.getFile());
-            }
-            */
+            // TODO: Handle list item click
         }
         
     }
@@ -378,7 +228,9 @@ public class ActivityList extends ListActivity {
         
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate CAB
             mode.getMenuInflater().inflate(R.menu.activity_list_list_select_cab, menu);
+            
             return true;
         }
         
@@ -389,51 +241,22 @@ public class ActivityList extends ListActivity {
         
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-            case R.id.activityNotesNoteListSelectCABDelete:
-                HashSet<Note> deletedNotes = new HashSet<Note>();
-                
-                for (int i = 0; i < this.noteListAdapter.getCount(); i++) {
-                    if (this.noteListAdapter.getSelected(i)) {
-                        Note note = (Note) this.noteListAdapter.getItem(i);
-                        
-                        /*
-                        try {
-                            ActivityList.this.noteKeeper.deleteNote(note);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        */
-                        
-                        deletedNotes.add(note);
-                    }
-                }
-                
-                for (Note note : deletedNotes) {
-                    ActivityList.this.noteList.remove(note);
-                }
-                
-                this.noteListAdapter.notifyDataSetChanged();
-                mode.finish();
-                
-                ActivityList.this.refresh();
-                
-                break;
-            }
             return true;
         }
         
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            // Clear selection
             this.noteListAdapter.clearSelection();
         }
         
         @Override
-        public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
-                boolean checked) {
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            // Add to selection
             this.noteListAdapter.setSelected(position, checked);
-            mode.setTitle(this.noteListAdapter.getSelectionCount() + " note"
-                    + (this.noteListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
+            
+            // Display number of selected notes
+            mode.setTitle(this.noteListAdapter.getSelectionCount() + " note" + (this.noteListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
         }
         
     }
