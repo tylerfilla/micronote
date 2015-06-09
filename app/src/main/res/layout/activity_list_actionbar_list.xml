@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Notes.Widget.ActionBar">
+    style="@style/uNote.Widget.ActionBar">
     
     <ImageButton
-        style="@style/Notes.Widget.ActionBar.Button"
+        style="@style/uNote.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|left"
         android:contentDescription="@string/activity_list_actionbar_list_button_settings_content_description"
         android:src="@drawable/ic_action_settings"
         android:tag="list_settings" />
     
     <TextView
-        android:id="@+id/activityNotesActionbarListTitle"
-        style="@style/Notes.Widget.ActionBar.Title"
+        android:id="@+id/activityListActionbarListTitle"
+        style="@style/uNote.Widget.ActionBar.Title"
         android:text="@string/activity_list_actionbar_list_title" />
     
     <ImageButton
-        android:id="@+id/activityNotesActionbarListButtonSearch"
-        style="@style/Notes.Widget.ActionBar.Button"
+        android:id="@+id/activityListActionbarListButtonSearch"
+        style="@style/uNote.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|right"
         android:layout_marginRight="48dp"
         android:contentDescription="@string/activity_list_actionbar_list_button_search_content_description"
@@ -24,7 +24,7 @@
         android:tag="list_search" />
     
     <ImageButton
-        style="@style/Notes.Widget.ActionBar.Button"
+        style="@style/uNote.Widget.ActionBar.Button"
         android:layout_gravity="center_vertical|right"
         android:contentDescription="@string/activity_list_actionbar_list_button_new_content_description"
         android:src="@drawable/ic_action_note_new"

@@ -42,10 +42,13 @@ public class ActivityEdit extends Activity {
         // Attempt to read note described by intent
         Uri noteFileUri = this.getIntent().getData();
         if (noteFileUri == null) {
+            // Create a new file for the note
             this.noteFile = this.createNewNoteFile();
             
+            // Create a new note
             note = new Note();
         } else {
+            // Get the note file
             this.noteFile = new File(noteFileUri.getPath());
             
             // Try to read note from file
@@ -57,17 +60,17 @@ public class ActivityEdit extends Activity {
         }
         
         /* Handle layout and appearance */
-    
+        
         this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
         this.setContentView(R.layout.activity_edit);
         
         String noteTitle = note.getTitle();
         
         // Initialize actionbar title
-        TextView activityNoteEditActionbarTitle = (TextView) this.findViewById(R.id.activityNoteEditActionbarTitle);
-        activityNoteEditActionbarTitle.setText(noteTitle);
-        activityNoteEditActionbarTitle.setSelected(true);
-        activityNoteEditActionbarTitle.setOnClickListener(new OnClickListener() {
+        TextView activityEditActionbarTitle = (TextView) this.findViewById(R.id.activityEditActionbarTitle);
+        activityEditActionbarTitle.setText(noteTitle);
+        activityEditActionbarTitle.setSelected(true);
+        activityEditActionbarTitle.setOnClickListener(new OnClickListener() {
     
             @Override
             public void onClick(View v) {
@@ -75,7 +78,7 @@ public class ActivityEdit extends Activity {
             }
     
         });
-    
+        
         // Set task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle, null, this.getResources().getColor(R.color.task_primary)));
@@ -84,8 +87,8 @@ public class ActivityEdit extends Activity {
         /* Initialize editor */
         
         // Get editor reference
-        this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
-    
+        this.noteEditor = (NoteEditor) this.findViewById(R.id.activityEditEditor);
+        
         // Set transparent background
         this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
         
@@ -164,7 +167,7 @@ public class ActivityEdit extends Activity {
         this.noteEditor.getNote().setTitle(title);
         
         // Set actionbar title
-        ((TextView) ActivityEdit.this.findViewById(R.id.activityNoteEditActionbarTitle)).setText(title);
+        ((TextView) ActivityEdit.this.findViewById(R.id.activityEditActionbarTitle)).setText(title);
         
         // Update task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -200,8 +203,7 @@ public class ActivityEdit extends Activity {
     }
     
     private void handleMenu() {
-        PopupMenu popupMenu = new PopupMenu(this,
-                this.findViewById(R.id.activityNoteEditActionbarButtonMenu));
+        PopupMenu popupMenu = new PopupMenu(this, this.findViewById(R.id.activityEditActionbarButtonMenu));
         popupMenu.getMenuInflater().inflate(R.menu.activity_edit_menu, popupMenu.getMenu());
         
         // Gettin' a bit hacky up in here...
@@ -210,6 +212,7 @@ public class ActivityEdit extends Activity {
             mPopup.setAccessible(true);
             mPopup.get(popupMenu).getClass().getMethod("setForceShowIcon", boolean.class).invoke(mPopup.get(popupMenu), true);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         
         popupMenu.show();

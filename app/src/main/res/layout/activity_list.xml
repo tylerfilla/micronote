@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Notes.Activity.Notes.Root">
+    style="@style/uNote.ActivityList.Root">
     
     <ListView
         android:id="@android:id/list"
-        style="@style/Notes.Activity.Notes.List.Root" />
+        style="@style/uNote.ActivityList.List.Root" />
     
     <LinearLayout
-        android:id="@+id/activityNotesMessageListEmpty"
-        style="@style/Notes.Activity.Notes.Message.Root">
+        android:id="@+id/activityListMessageListEmpty"
+        style="@style/uNote.ActivityList.Message.Root">
         
         <TextView
-            android:id="@+id/activityNotesMessageListEmptyTitle"
-            style="@style/Notes.Activity.Notes.Message.Title"
+            android:id="@+id/activityListMessageListEmptyTitle"
+            style="@style/uNote.ActivityList.Message.Title"
             android:text="@string/activity_list_list_empty_title" />
         
         <TextView
-            android:id="@+id/activityNotesMessageListEmptyBody"
-            style="@style/Notes.Activity.Notes.Message.Body"
+            android:id="@+id/activityListMessageListEmptyBody"
+            style="@style/uNote.ActivityList.Message.Body"
             android:text="@string/activity_list_list_empty_body" />
         
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/activityNotesMessageSearchOpen"
-        style="@style/Notes.Activity.Notes.Message.Root">
+        android:id="@+id/activityListMessageSearchOpen"
+        style="@style/uNote.ActivityList.Message.Root">
         
         <TextView
-            android:id="@+id/activityNotesMessageSearchOpenTitle"
-            style="@style/Notes.Activity.Notes.Message.Title"
+            android:id="@+id/activityListMessageSearchOpenTitle"
+            style="@style/uNote.ActivityList.Message.Title"
             android:text="@string/activity_list_search_open_title" />
         
         <TextView
-            android:id="@+id/activityNotesMessageSearchOpenBody"
-            style="@style/Notes.Activity.Notes.Message.Body"
+            android:id="@+id/activityListMessageSearchOpenBody"
+            style="@style/uNote.ActivityList.Message.Body"
             android:text="@string/activity_list_search_open_body" />
         
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/activityNotesMessageSearchEmpty"
-        style="@style/Notes.Activity.Notes.Message.Root">
+        android:id="@+id/activityListMessageSearchEmpty"
+        style="@style/uNote.ActivityList.Message.Root">
         
         <TextView
-            android:id="@+id/activityNotesMessageSearchEmptyTitle"
-            style="@style/Notes.Activity.Notes.Message.Title"
+            android:id="@+id/activityListMessageSearchEmptyTitle"
+            style="@style/uNote.ActivityList.Message.Title"
             android:text="@string/activity_list_search_empty_title" />
         
         <TextView
-            android:id="@+id/activityNotesMessageSearchEmptyBody"
-            style="@style/Notes.Activity.Notes.Message.Body"
+            android:id="@+id/activityListMessageSearchEmptyBody"
+            style="@style/uNote.ActivityList.Message.Body"
             android:text="@string/activity_list_search_empty_body" />
         
     </LinearLayout>
     
     <EditText
-        android:id="@+id/activityNotesSearchBubble"
-        style="@style/Notes.Activity.Notes.SearchBubble" >
+        android:id="@+id/activityListSearchBubble"
+        style="@style/uNote.ActivityList.SearchBubble" >
     </EditText>
     
 </RelativeLayout>

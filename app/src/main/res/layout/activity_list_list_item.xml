@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Notes.Activity.Notes.List.Item.Root">
+    style="@style/uNote.ActivityList.List.Item.Root">
     
     <TextView
-        android:id="@+id/activityNotesListItemTitle"
-        style="@style/Notes.Activity.Notes.List.Item.Title" />
+        android:id="@+id/activityListListItemTitle"
+        style="@style/uNote.ActivityList.List.Item.Title" />
     
     <TextView
-        android:id="@+id/activityNotesListItemContentPreview"
-        style="@style/Notes.Activity.Notes.List.Item.ContentPreview" />
+        android:id="@+id/activityListListItemContentPreview"
+        style="@style/uNote.ActivityList.List.Item.ContentPreview" />
     
 </LinearLayout>

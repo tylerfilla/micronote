@@ -1,7 +1,6 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -81,13 +80,13 @@ public class ActivityList extends ListActivity {
     
     private void refresh() {
         TextView activityNotesListFooter = (TextView) this
-                .findViewById(R.id.activityNotesListFooter);
+                .findViewById(R.id.activityListListFooter);
         LinearLayout activityNotesMessageListEmpty = (LinearLayout) this
-                .findViewById(R.id.activityNotesMessageListEmpty);
+                .findViewById(R.id.activityListMessageListEmpty);
         LinearLayout activityNotesMessageSearchOpen = (LinearLayout) this
-                .findViewById(R.id.activityNotesMessageSearchOpen);
+                .findViewById(R.id.activityListMessageSearchOpen);
         LinearLayout activityNotesMessageSearchEmpty = (LinearLayout) this
-                .findViewById(R.id.activityNotesMessageSearchEmpty);
+                .findViewById(R.id.activityListMessageSearchEmpty);
         
         activityNotesListFooter.setVisibility(View.GONE);
         activityNotesMessageListEmpty.setVisibility(View.GONE);
@@ -190,7 +189,7 @@ public class ActivityList extends ListActivity {
     }
     
     private void toggleSearchMode() {
-        EditText searchBubble = (EditText) this.findViewById(R.id.activityNotesSearchBubble);
+        EditText searchBubble = (EditText) this.findViewById(R.id.activityListSearchBubble);
         
         if (this.searchMode) {
             this.searchMode = false;
@@ -279,9 +278,9 @@ public class ActivityList extends ListActivity {
                     .inflate(R.layout.activity_list_list_item, parent, false);
             Note note = ActivityList.this.noteList.get(position);
             
-            TextView title = (TextView) view.findViewById(R.id.activityNotesListItemTitle);
+            TextView title = (TextView) view.findViewById(R.id.activityListListItemTitle);
             TextView contentPreview = (TextView) view
-                    .findViewById(R.id.activityNotesListItemContentPreview);
+                    .findViewById(R.id.activityListListItemContentPreview);
             
             if (note != null) {
                 if (note.getTitle() != null && !note.getTitle().isEmpty()) {
