@@ -9,9 +9,11 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -36,18 +38,20 @@ public class ActivityEdit extends Activity {
         /* Handle intent */
         
         // Note to be edited
-        Note note = new Note();
+        Note note = null;
         
         // Attempt to read note described by intent
-        String noteFilePath = this.getIntent().getDataString();
-        if (noteFilePath == null) {
-            this.noteFile = null; // TODO: Create file for note
+        Uri noteFileUri = this.getIntent().getData();
+        if (noteFileUri == null) {
+            this.noteFile = null; // TODO: Create file
+            
+            note = new Note();
         } else {
-            this.noteFile = new File(noteFilePath);
+            this.noteFile = new File(noteFileUri.getPath());
             
             // Try to read note from file
             try {
-                NoteIO.readNote(note, this.noteFile);
+                note = NoteIO.read(this.noteFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -82,12 +86,12 @@ public class ActivityEdit extends Activity {
         
         // Get editor reference
         this.noteEditor = (NoteEditor) this.findViewById(R.id.activityNoteEditEditor);
+    
+        // Set transparent background
+        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
         
         // Pass note to editor
         this.noteEditor.setNote(note);
-        
-        // Set transparent background
-        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
         
         // Set up a NoteWatcher to track note changes
         this.noteEditor.setNoteWatcher(new NoteEditor.NoteWatcher() {
@@ -161,7 +165,7 @@ public class ActivityEdit extends Activity {
     private void handleNoteContentUpdate(String content) {
         // Try to write note to file
         try {
-            NoteIO.writeNote(this.noteEditor.getNote(), this.noteFile);
+            NoteIO.write(this.noteEditor.getNote(), this.noteFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

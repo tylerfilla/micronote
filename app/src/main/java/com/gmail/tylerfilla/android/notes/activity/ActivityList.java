@@ -106,7 +106,7 @@ public class ActivityList extends ListActivity {
                 Note note = null;
                 /*
                 try {
-                    note = this.noteKeeper.readNote(noteFile);
+                    note = this.noteKeeper.read(noteFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

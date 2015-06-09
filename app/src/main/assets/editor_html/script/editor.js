@@ -55,6 +55,9 @@ function onReceiveAppMessage(message) {
         // Content updates
         if (message.substring(0, 7) == "content") {
             text.innerHTML = message.substring(8);
+            
+            // Create notepad lines in background
+            createNotepadLines();
         }
         
         // Header updates

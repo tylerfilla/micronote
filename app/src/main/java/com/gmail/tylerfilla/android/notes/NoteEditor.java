@@ -6,7 +6,6 @@ import java.util.ArrayDeque;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -30,7 +29,7 @@ public class NoteEditor extends WebView {
         
         this.editorLoaded = false;
         
-        this.queueAppMessage = new ArrayDeque<String>();
+        this.queueAppMessage = new ArrayDeque<>();
         
         this.noteWatcher = null;
         
@@ -102,22 +101,23 @@ public class NoteEditor extends WebView {
     }
     
     private void handleContentUpdate(String content) {
+        // Set note content
         this.note.setContent(content);
         
+        // Notify registered NoteWatcher
         if (this.noteWatcher != null) {
             this.noteWatcher.onNoteContentUpdate(content);
         }
     }
     
-    private void handleUpdate() {
+    private void handlePageUpdate() {
+        // Send app messages stored in queue
         while (!this.queueAppMessage.isEmpty()) {
             this.sendAppMessage(this.queueAppMessage.remove());
         }
     }
     
     public void onReceivePageMessage(String message) {
-        Log.d("onReceivePageMessage", message);
-        
         if (message.startsWith("~")) {
             message = message.substring(1);
             
@@ -128,9 +128,9 @@ public class NoteEditor extends WebView {
         } else if (message.startsWith("!")) {
             message = message.substring(1);
             
-            // Updates
+            // Page updates
             if ("update".equals(message.substring(0, 6))) {
-                this.handleUpdate();
+                this.handlePageUpdate();
             }
         }
     }

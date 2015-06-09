@@ -27,6 +27,8 @@ body {
     font-size:   1.2em;
     line-height: 40px;
     text-align:  right;
+    
+    -webkit-user-select: none;
 }
 
 #content {
