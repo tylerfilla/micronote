@@ -5,7 +5,6 @@
     <color name="background_actionbar_button">#00000000</color>
     <color name="background_actionbar_button_selected">#33FFFFFF</color>
     <color name="background_actionbar_top">#FF5B382F</color>
-    <color name="background_activity_edit_indent_control">#FF222222</color>
     <color name="background_activity_list_list_item">#00000000</color>
     <color name="background_activity_list_list_item_selected">#FFC1C09B</color>
     <color name="background_pad">#FFFCF9B0</color>
