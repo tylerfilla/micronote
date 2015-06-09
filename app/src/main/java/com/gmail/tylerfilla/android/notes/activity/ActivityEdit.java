@@ -59,7 +59,7 @@ public class ActivityEdit extends Activity {
             }
         }
         
-        /* Handle layout and appearance */
+        /* Layout and appearance */
         
         this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
         this.setContentView(R.layout.activity_edit);
