@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -43,7 +42,7 @@ public class ActivityEdit extends Activity {
         // Attempt to read note described by intent
         Uri noteFileUri = this.getIntent().getData();
         if (noteFileUri == null) {
-            this.noteFile = null; // TODO: Create file
+            this.noteFile = this.createNewNoteFile();
             
             note = new Note();
         } else {
@@ -154,6 +153,10 @@ public class ActivityEdit extends Activity {
         });
         
         titlePrompt.show();
+    }
+    
+    private File createNewNoteFile() {
+        return new File(this.getFilesDir(), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
     }
     
     private void handleNoteTitleUpdate(String title) {
