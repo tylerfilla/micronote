@@ -51,7 +51,7 @@ public class ActivityList extends ListActivity {
         
         /* Layout and appearance */
         
-        this.getActionBar().setCustomView(R.layout.activity_list_actionbar_list);
+        this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
         this.setContentView(R.layout.activity_list);
         
         ListView listView = this.getListView();
@@ -75,10 +75,10 @@ public class ActivityList extends ListActivity {
         super.onResume();
         
         // Update list
-        this.updateList();
+        this.update();
     }
     
-    private void updateList() {
+    private void update() {
         // TODO: Populate noteFileList and update list
     }
     
@@ -160,7 +160,7 @@ public class ActivityList extends ListActivity {
     
                 // Title and preview subviews
                 TextView textViewTitle = (TextView) view.findViewById(R.id.activityListListItemTitle);
-                TextView textViewPreview = (TextView) view.findViewById(R.id.activityListListItemContentPreview);
+                TextView textViewPreview = (TextView) view.findViewById(R.id.activityListListItemPreview);
     
                 // Set title
                 if (title == null || title.isEmpty()) {

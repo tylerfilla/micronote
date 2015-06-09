@@ -12,13 +12,13 @@
         
         <TextView
             android:id="@+id/activityListMessageListEmptyTitle"
-            style="@style/uNote.ActivityList.Message.Title"
-            android:text="@string/activity_list_list_empty_title" />
+            android:text="@string/activity_list_list_empty_title"
+            style="@style/uNote.ActivityList.Message.Title" />
         
         <TextView
             android:id="@+id/activityListMessageListEmptyBody"
-            style="@style/uNote.ActivityList.Message.Body"
-            android:text="@string/activity_list_list_empty_body" />
+            android:text="@string/activity_list_list_empty_body"
+            style="@style/uNote.ActivityList.Message.Body" />
         
     </LinearLayout>
     
@@ -28,13 +28,13 @@
         
         <TextView
             android:id="@+id/activityListMessageSearchOpenTitle"
-            style="@style/uNote.ActivityList.Message.Title"
-            android:text="@string/activity_list_search_open_title" />
+            android:text="@string/activity_list_search_open_title"
+            style="@style/uNote.ActivityList.Message.Title" />
         
         <TextView
             android:id="@+id/activityListMessageSearchOpenBody"
-            style="@style/uNote.ActivityList.Message.Body"
-            android:text="@string/activity_list_search_open_body" />
+            android:text="@string/activity_list_search_open_body"
+            style="@style/uNote.ActivityList.Message.Body" />
         
     </LinearLayout>
     
@@ -44,13 +44,13 @@
         
         <TextView
             android:id="@+id/activityListMessageSearchEmptyTitle"
-            style="@style/uNote.ActivityList.Message.Title"
-            android:text="@string/activity_list_search_empty_title" />
+            android:text="@string/activity_list_search_empty_title"
+            style="@style/uNote.ActivityList.Message.Title" />
         
         <TextView
             android:id="@+id/activityListMessageSearchEmptyBody"
-            style="@style/uNote.ActivityList.Message.Body"
-            android:text="@string/activity_list_search_empty_body" />
+            android:text="@string/activity_list_search_empty_body"
+            style="@style/uNote.ActivityList.Message.Body" />
         
     </LinearLayout>
     

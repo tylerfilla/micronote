@@ -7,7 +7,7 @@
         style="@style/uNote.ActivityList.List.Item.Title" />
     
     <TextView
-        android:id="@+id/activityListListItemContentPreview"
-        style="@style/uNote.ActivityList.List.Item.ContentPreview" />
+        android:id="@+id/activityListListItemPreview"
+        style="@style/uNote.ActivityList.List.Item.Preview" />
     
 </LinearLayout>
