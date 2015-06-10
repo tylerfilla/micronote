@@ -9,7 +9,9 @@ import java.util.Set;
 import org.xml.sax.XMLReader;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -157,8 +159,32 @@ public class ActivityList extends ListActivity {
         this.startActivity(intentEdit);
     }
     
-    private void deleteNoteFile(File noteFile) {
-        noteFile.delete();
+    private void deleteNoteFilesWithPrompt(final Set<File> noteFileSet) {
+        AlertDialog.Builder promptConfirmDeleteBuilder = new AlertDialog.Builder(this);
+        
+        promptConfirmDeleteBuilder.setTitle("Confirm Delete");
+        
+        if (noteFileSet.size() == 1) {
+            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete this note?");
+        } else if (noteFileSet.size() > 1) {
+            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete these " + noteFileSet.size() + " notes?");
+        }
+        
+        promptConfirmDeleteBuilder.setPositiveButton("Cancel", null);
+        promptConfirmDeleteBuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                for (File noteFile : noteFileSet) {
+                    noteFile.delete();
+                }
+                
+                ActivityList.this.update();
+            }
+            
+        });
+        
+        AlertDialog promptConfirmDelete = promptConfirmDeleteBuilder.show();
     }
     
     public void onActionButtonClick(View view) {
@@ -321,13 +347,11 @@ public class ActivityList extends ListActivity {
                 
                 for (int i = 0; i < ActivityList.this.noteFileListAdapter.getCount(); i++) {
                     if (ActivityList.this.noteFileListAdapter.getSelected(i)) {
-                        File noteFile = (File) ActivityList.this.noteFileListAdapter.getItem(i);
-                        ActivityList.this.deleteNoteFile(noteFile);
-                        deletionSet.add(noteFile);
+                        deletionSet.add((File) ActivityList.this.noteFileListAdapter.getItem(i));
                     }
                 }
-                
-                ActivityList.this.update();
+    
+                ActivityList.this.deleteNoteFilesWithPrompt(deletionSet);
                 mode.finish();
                 
                 break;
