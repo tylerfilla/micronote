@@ -10,6 +10,7 @@ import org.xml.sax.XMLReader;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,8 @@ import android.widget.TextView;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class ActivityList extends ListActivity {
     
@@ -80,6 +83,12 @@ public class ActivityList extends ListActivity {
         // Set task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
+        }
+        
+        // Check if a Google Play Services update is necessary
+        Dialog updateDialog = GooglePlayServicesUtil.getErrorDialog(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), this, 0);
+        if (updateDialog != null) {
+            updateDialog.show();
         }
     }
     
