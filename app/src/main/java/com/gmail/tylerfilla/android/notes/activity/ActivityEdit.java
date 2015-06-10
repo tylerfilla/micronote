@@ -49,6 +49,9 @@ public class ActivityEdit extends Activity {
             
             // Create a new note
             note = new Note();
+            
+            // Write data into intent for orientation changes
+            this.getIntent().setData(Uri.fromFile(this.noteFile));
         } else {
             // Get the note file
             this.noteFile = new File(noteFileUri.getPath());
