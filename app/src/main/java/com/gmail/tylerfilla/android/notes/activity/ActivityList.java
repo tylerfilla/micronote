@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,25 +41,34 @@ public class ActivityList extends ListActivity {
     private NoteFileListOnItemClickListener     noteFileListOnItemClickListener;
     private NoteFileListMultiChoiceModeListener noteFileListMultiChoiceModeListener;
     
+    private LinearLayout activityListMessageListEmpty;
+    private LinearLayout activityListMessageSearchEmpty;
+    private LinearLayout activityListMessageSearchOpen;
+    
+    private TextView activityListListFooter;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    
+        this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
+        this.setContentView(R.layout.activity_list);
         
         this.noteFileList = new ArrayList<>();
         
         this.noteFileListAdapter                 = new NoteFileListAdapter();
         this.noteFileListOnItemClickListener     = new NoteFileListOnItemClickListener();
         this.noteFileListMultiChoiceModeListener = new NoteFileListMultiChoiceModeListener();
-        
-        /* Layout and appearance */
-        
-        this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
-        this.setContentView(R.layout.activity_list);
+    
+        this.activityListMessageListEmpty   = (LinearLayout) this.findViewById(R.id.activityListMessageListEmpty);
+        this.activityListMessageSearchEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageSearchEmpty);
+        this.activityListMessageSearchOpen  = (LinearLayout) this.findViewById(R.id.activityListMessageSearchOpen);
         
         ListView listView = this.getListView();
         
         // Add footer to display number of notes
-        listView.addFooterView(this.getLayoutInflater().inflate(R.layout.activity_list_list_footer, null), null, false);
+        this.activityListListFooter = (TextView) this.getLayoutInflater().inflate(R.layout.activity_list_list_footer, null);
+        listView.addFooterView(this.activityListListFooter, null, false);
         
         // Set adapter and listeners
         listView.setAdapter(this.noteFileListAdapter);
@@ -79,7 +90,45 @@ public class ActivityList extends ListActivity {
     }
     
     private void update() {
-        // TODO: Populate noteFileList and update list
+        // Clear note file list
+        this.noteFileList.clear();
+        
+        // Iterate over files within notes directory and populate noteFileList
+        File[] files = new File(this.getFilesDir(), "notes").listFiles();
+        if (files != null) {
+            for (File file : files) {
+                // Check if the file has the *.note extension
+                if (file.getName().toLowerCase().endsWith(".note")) {
+                    // Check the file content
+                    boolean contentCheck = false;
+                    try {
+                        contentCheck = NoteIO.check(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+    
+                    // If the file is truly a note file
+                    if (contentCheck) {
+                        this.noteFileList.add(file);
+                    }
+                }
+            }
+        }
+        
+        // Show empty list message if no files are found
+        if (this.noteFileList.isEmpty()) {
+            this.activityListMessageListEmpty.setVisibility(View.VISIBLE);
+        } else {
+            this.activityListMessageListEmpty.setVisibility(View.GONE);
+        }
+        
+        // Set footer text to a note counter
+        if (!this.noteFileList.isEmpty()) {
+            this.activityListListFooter.setText(String.valueOf(this.noteFileList.size()) + " note" + (this.noteFileList.size() > 1 ? "s" : ""));
+        }
+        
+        // Notify adapter of data change
+        this.noteFileListAdapter.notifyDataSetChanged();
     }
     
     private void openSettings() {
@@ -157,34 +206,37 @@ public class ActivityList extends ListActivity {
                 // Store note data
                 String title = note.getTitle();
                 String content = note.getContent();
-    
+                
                 // Title and preview subviews
                 TextView textViewTitle = (TextView) view.findViewById(R.id.activityListListItemTitle);
                 TextView textViewPreview = (TextView) view.findViewById(R.id.activityListListItemPreview);
-    
+                
                 // Set title
                 if (title == null || title.isEmpty()) {
                     textViewTitle.setText("No Title");
                 } else {
                     textViewTitle.setText(title);
                 }
-    
+                
                 // Set content
                 if (content == null || content.isEmpty()) {
                     textViewPreview.setText("No content");
                 } else {
-                    // Remove all HTML tags and shorten the content
+                    // Remove all HTML tags
                     String htmlStrippedContentPreview = Html.fromHtml(content, null, new Html.TagHandler() {
-    
+                        
                         @Override
                         public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
                             if (tag.equalsIgnoreCase("li") && opening) {
                                 output.append(' ');
                             }
                         }
-    
-                    }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim().substring(0, 50);
-    
+                        
+                    }).toString().replace('\n', ' ').replaceAll("\\s+", " ").trim();
+                    
+                    // Shorten the preview content before applying it to the UI
+                    htmlStrippedContentPreview = htmlStrippedContentPreview.substring(0, Math.min(50, htmlStrippedContentPreview.length()));
+                    
                     // Perhaps the note's content was strictly HTML tags (odd, but possible)
                     if (htmlStrippedContentPreview.isEmpty()) {
                         textViewPreview.setText("No content");
@@ -192,14 +244,14 @@ public class ActivityList extends ListActivity {
                         textViewPreview.setText(htmlStrippedContentPreview);
                     }
                 }
-    
+                
                 // Set background based on selection state
                 if (this.getSelected(position)) {
                     view.setBackgroundColor(ActivityList.this.getResources().getColor(R.color.background_activity_list_list_item_selected));
                 } else {
                     view.setBackgroundColor(ActivityList.this.getResources().getColor(R.color.background_activity_list_list_item));
                 }
-    
+                
                 return view;
             } else {
                 return null;

@@ -43,7 +43,9 @@ public class ActivityEdit extends Activity {
         Uri noteFileUri = this.getIntent().getData();
         if (noteFileUri == null) {
             // Create a new file for the note
-            this.noteFile = this.createNewNoteFile();
+            File notesDir = new File(this.getFilesDir(), "notes");
+            notesDir.mkdirs();
+            this.noteFile = new File(notesDir, "_" + String.valueOf(System.currentTimeMillis()) + ".note");
             
             // Create a new note
             note = new Note();
@@ -156,10 +158,6 @@ public class ActivityEdit extends Activity {
         });
         
         titlePrompt.show();
-    }
-    
-    private File createNewNoteFile() {
-        return new File(this.getFilesDir(), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
     }
     
     private void handleNoteTitleUpdate(String title) {

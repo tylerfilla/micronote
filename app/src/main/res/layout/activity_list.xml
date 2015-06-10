@@ -23,22 +23,6 @@
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/activityListMessageSearchOpen"
-        style="@style/uNote.ActivityList.Message.Root">
-        
-        <TextView
-            android:id="@+id/activityListMessageSearchOpenTitle"
-            android:text="@string/activity_list_search_open_title"
-            style="@style/uNote.ActivityList.Message.Title" />
-        
-        <TextView
-            android:id="@+id/activityListMessageSearchOpenBody"
-            android:text="@string/activity_list_search_open_body"
-            style="@style/uNote.ActivityList.Message.Body" />
-        
-    </LinearLayout>
-    
-    <LinearLayout
         android:id="@+id/activityListMessageSearchEmpty"
         style="@style/uNote.ActivityList.Message.Root">
         
@@ -50,6 +34,22 @@
         <TextView
             android:id="@+id/activityListMessageSearchEmptyBody"
             android:text="@string/activity_list_search_empty_body"
+            style="@style/uNote.ActivityList.Message.Body" />
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/activityListMessageSearchOpen"
+        style="@style/uNote.ActivityList.Message.Root">
+        
+        <TextView
+            android:id="@+id/activityListMessageSearchOpenTitle"
+            android:text="@string/activity_list_search_open_title"
+            style="@style/uNote.ActivityList.Message.Title" />
+        
+        <TextView
+            android:id="@+id/activityListMessageSearchOpenBody"
+            android:text="@string/activity_list_search_open_body"
             style="@style/uNote.ActivityList.Message.Body" />
         
     </LinearLayout>
