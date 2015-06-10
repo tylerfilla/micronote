@@ -3,7 +3,7 @@
     style="@style/uNote.Widget.ActionBar">
     
     <TextView
-        style="@style/uNote.Widget.ActionBar.Title"
-        android:text="@string/activity_settings_actionbar_title" />
+        android:text="@string/activity_settings_actionbar_title"
+        style="@style/uNote.Widget.ActionBar.Title" />
     
 </FrameLayout>
