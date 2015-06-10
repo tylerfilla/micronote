@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
     <item
-        android:id="@+id/activityNoteEditMenuUL"
+        android:id="@+id/activityEditMenuUL"
         android:icon="@drawable/ic_activity_edit_menu_ul"
         android:title="@string/activity_edit_menu_item_list_unordered" />
     <item
-        android:id="@+id/activityNoteEditMenuOL"
+        android:id="@+id/activityEditMenuOL"
         android:icon="@drawable/ic_activity_edit_menu_ol"
         android:title="@string/activity_edit_menu_item_list_ordered" />
     <item
-        android:id="@+id/activityNoteEditMenuChecklist"
+        android:id="@+id/activityEditMenuChecklist"
         android:icon="@drawable/ic_activity_edit_menu_checklist"
         android:title="@string/activity_edit_menu_item_checklist" />
     <item
-        android:id="@+id/activityNoteEditMenuClip"
+        android:id="@+id/activityEditMenuClip"
         android:icon="@drawable/ic_activity_edit_menu_clip"
         android:title="@string/activity_edit_menu_item_clip" />
     

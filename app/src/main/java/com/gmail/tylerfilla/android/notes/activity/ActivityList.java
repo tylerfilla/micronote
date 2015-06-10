@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.xml.sax.XMLReader;
 
@@ -121,8 +122,10 @@ public class ActivityList extends ListActivity {
             this.activityListMessageListEmpty.setVisibility(View.GONE);
         }
         
-        // Set footer text to a note counter
-        if (!this.noteFileList.isEmpty()) {
+        // Set footer text to count notes
+        if (this.noteFileList.isEmpty()) {
+            this.activityListListFooter.setText("");
+        } else {
             this.activityListListFooter.setText(String.valueOf(this.noteFileList.size()) + " note" + (this.noteFileList.size() > 1 ? "s" : ""));
         }
         
@@ -152,6 +155,10 @@ public class ActivityList extends ListActivity {
         }
         
         this.startActivity(intentEdit);
+    }
+    
+    private void deleteNoteFile(File noteFile) {
+        noteFile.delete();
     }
     
     public void onActionButtonClick(View view) {
@@ -308,6 +315,24 @@ public class ActivityList extends ListActivity {
         
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+            case R.id.activityListListSelectCABDelete:
+                Set<File> deletionSet = new HashSet<>();
+                
+                for (int i = 0; i < ActivityList.this.noteFileListAdapter.getCount(); i++) {
+                    if (ActivityList.this.noteFileListAdapter.getSelected(i)) {
+                        File noteFile = (File) ActivityList.this.noteFileListAdapter.getItem(i);
+                        ActivityList.this.deleteNoteFile(noteFile);
+                        deletionSet.add(noteFile);
+                    }
+                }
+                
+                ActivityList.this.update();
+                mode.finish();
+                
+                break;
+            }
+            
             return true;
         }
         
