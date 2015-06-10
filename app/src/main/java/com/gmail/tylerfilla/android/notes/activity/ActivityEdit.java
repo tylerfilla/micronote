@@ -203,6 +203,8 @@ public class ActivityEdit extends Activity {
         this.finish();
     }
     
+    /*
+    
     private void handleMenu() {
         PopupMenu popupMenu = new PopupMenu(this, this.findViewById(R.id.activityEditActionbarButtonMenu));
         popupMenu.getMenuInflater().inflate(R.menu.activity_edit_menu, popupMenu.getMenu());
@@ -219,6 +221,8 @@ public class ActivityEdit extends Activity {
         popupMenu.show();
     }
     
+    */
+    
     public void onActionButtonClick(View view) {
         // Why would the tag ever be null here? Who really cares....
         if (view.getTag() == null) {
@@ -229,7 +233,7 @@ public class ActivityEdit extends Activity {
         if (view.getTag().equals("close")) {
             this.handleClose();
         } else if (view.getTag().equals("menu")) {
-            this.handleMenu();
+            //this.handleMenu();
         }
     }
     

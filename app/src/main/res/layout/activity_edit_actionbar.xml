@@ -21,6 +21,8 @@
         android:textColor="@drawable/text_activity_note_edit_actionbar_title"
         style="@style/uNote.Widget.ActionBar.Title" />
     
+    <!--
+    
     <ImageButton
         android:id="@+id/activityEditActionbarButtonMenu"
         android:layout_gravity="center_vertical|right"
@@ -28,5 +30,7 @@
         android:src="@drawable/ic_activity_edit_actionbar_button_menu"
         android:tag="menu"
         style="@style/uNote.Widget.ActionBar.Button" />
+    
+    -->
     
 </FrameLayout>
