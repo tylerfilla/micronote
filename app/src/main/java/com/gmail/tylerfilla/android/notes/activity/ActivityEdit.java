@@ -43,7 +43,14 @@ public class ActivityEdit extends Activity {
         if (noteFileUri == null) {
             // Create a new file for the note
             this.noteFile = new File(new File(this.getFilesDir(), "notes"), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
+            
+            // Ensure all parent directories exist
             this.noteFile.getParentFile().mkdirs();
+            
+            // Ensure the name is unique
+            while (this.noteFile.exists()) {
+                this.noteFile = new File(this.noteFile.getParentFile(), "_" + this.noteFile.getName());
+            }
             
             // Create a new note
             note = new Note();
@@ -140,8 +147,19 @@ public class ActivityEdit extends Activity {
         }
     }
     
-    private void importNoteFile() {
-        // TODO: Import note
+    private void importNoteFile() throws IOException {
+        File newNoteFile = new File(new File(this.getFilesDir(), "notes"), "_import_" + this.noteFile.getName());
+        
+        // Ensure the name is unique
+        while (newNoteFile.exists()) {
+            newNoteFile = new File(newNoteFile.getParentFile(), "_" + newNoteFile.getName());
+        }
+        
+        // Copy note data to new file
+        NoteIO.write(NoteIO.read(this.noteFile), newNoteFile);
+        
+        // Redirect all modifications to new file
+        this.noteFile = newNoteFile;
     }
     
     private void handlePromptImportNoteFile(boolean doImport, boolean stop) {
@@ -156,7 +174,11 @@ public class ActivityEdit extends Activity {
         }
         
         if (doImport) {
-            this.importNoteFile();
+            try {
+                this.importNoteFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
