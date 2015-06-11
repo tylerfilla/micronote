@@ -140,22 +140,49 @@ public class ActivityEdit extends Activity {
         }
     }
     
+    private void importNoteFile() {
+        // TODO: Import note
+    }
+    
+    private void handlePromptImportNoteFile(boolean doImport, boolean stop) {
+        if (stop) {
+            // TODO: Save preference to stop import
+            
+            new AlertDialog.Builder(ActivityEdit.this)
+                    .setTitle("Import Disabled")
+                    .setMessage("You can re-enable this feature in the settings menu.")
+                    .setPositiveButton("Okay", null)
+                    .show();
+        }
+        
+        if (doImport) {
+            this.importNoteFile();
+        }
+    }
+    
     private void promptImportNoteFile() {
         AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
         prompt.setTitle("Import Note File");
-        prompt.setMessage("This note file is not in a managed location. Would you like to import it?");
+        prompt.setMessage("This note file is not managed. Would you like to import a copy?");
         
         final CheckBox promptStopCheckBox = new CheckBox(this);
         promptStopCheckBox.setText("Stop asking to import note files");
         prompt.setView(promptStopCheckBox);
         
-        prompt.setNegativeButton("No", null);
+        prompt.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                ActivityEdit.this.handlePromptImportNoteFile(false, promptStopCheckBox.isChecked());
+            }
+            
+        });
         prompt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
-                // TODO: Import the note file
+                ActivityEdit.this.handlePromptImportNoteFile(true, promptStopCheckBox.isChecked());
             }
             
         });
