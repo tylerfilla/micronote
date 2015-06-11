@@ -19,8 +19,7 @@ public class Note {
     }
     
     public Note() {
-        this.title   = Note.TITLE_NOTE_BLANK;
-        this.content = "";
+        this(Note.TITLE_NOTE_BLANK, "");
     }
     
     public String getTitle() {
@@ -32,10 +31,6 @@ public class Note {
             this.changed = this.changed || !this.title.equals(title);
         } else if (title != null) {
             this.changed = true;
-        }
-    
-        if (this.changed) {
-            this.lastModified = System.currentTimeMillis();
         }
         
         this.title = title;
@@ -50,10 +45,6 @@ public class Note {
             this.changed = this.changed || !this.content.equals(content);
         } else if (content != null) {
             this.changed = true;
-        }
-        
-        if (this.changed) {
-            this.lastModified = System.currentTimeMillis();
         }
         
         this.content = content;
@@ -73,10 +64,6 @@ public class Note {
     
     public void setChanged(boolean changed) {
         this.changed = changed;
-    
-        if (this.changed) {
-            this.lastModified = System.currentTimeMillis();
-        }
     }
     
 }

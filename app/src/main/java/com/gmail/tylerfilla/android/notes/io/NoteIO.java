@@ -36,7 +36,7 @@ public class NoteIO {
             return null;
         }
         
-        Note note            = new Note();
+        Note       note      = new Note();
         Properties noteProps = new Properties();
         
         noteProps.load(new FileInputStream(noteFile));
@@ -47,18 +47,9 @@ public class NoteIO {
         if (noteProps.containsKey("title")) {
             note.setTitle(noteProps.getProperty("title"));
         }
-        if (noteProps.containsKey("modified")) {
-            String lastModifiedStr = noteProps.getProperty("modified");
-            long   lastModified    = 0l;
-            
-            try {
-                lastModified = Long.parseLong(lastModifiedStr);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-            
-            note.setLastModified(lastModified);
-        }
+        note.setLastModified(noteFile.lastModified());
+        
+        note.setChanged(false);
         
         return note;
     }
@@ -72,7 +63,6 @@ public class NoteIO {
         
         noteProps.setProperty("content", note.getContent());
         noteProps.setProperty("title", note.getTitle());
-        noteProps.setProperty("modified", String.valueOf(note.getLastModified()));
         
         noteProps.store(new FileOutputStream(noteFile), NoteIO.fileIdentificationComment);
     }

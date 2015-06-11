@@ -41,6 +41,10 @@ function detectContentChange() {
     }
 }
 
+function updateHeader(newHeader) {
+    header.innerText = newHeader;
+}
+
 /* Styling */
 
 function createNotepadLines() {
@@ -66,17 +70,46 @@ function onReceiveAppMessage(message) {
     if (message.charAt(0) == '~') {
         message = message.substring(1);
         
-        // Content updates
+        // Content
         if (message.substring(0, 7) == "content") {
-            text.innerHTML = message.substring(8);
+            // Force content change without detection
+            var newContent  = message.substring(8);
+            text.innerHTML  = newContent;
+            contentPrevious = newContent;
             
             // Create notepad lines in background
             createNotepadLines();
         }
         
-        // Header updates
-        if (message.substring(0, 6) == "header") {
-            header.innerText = message.substring(7);
+        // Last modified time
+        if (message.substring(0, 12) == "lastModified") {
+            var timeLastModified = Number(message.substring(13));
+            var timeNow          = Date.now();
+            
+            if (timeLastModified == 0) {
+                updateHeader("New");
+            } else {
+                var timeSinceModification = timeNow - timeLastModified;
+                if (timeSinceModification < 60*1000) {
+                    // Within the minute
+                    var seconds = Math.floor(timeSinceModification/1000 + 0.5);
+                    updateHeader(seconds + " sec");
+                } else if (timeSinceModification < 60*60*1000) {
+                    // Within the hour
+                    var minutes = Math.floor(timeSinceModification/(60*1000) + 0.5);
+                    updateHeader(minutes + " min");
+                } else if (timeSinceModification < 24*60*60*1000) {
+                    // Within the year
+                    var dateLastModified = new Date(timeLastModified);
+                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate());
+                } else {
+                    // This is a very old note (and a very old application to go with it!)
+                    var dateLastModified = new Date(timeLastModified);
+                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate() + ", " + dateLastModified.getFullYear());
+                }
+            }
         }
     }
 }

@@ -97,36 +97,33 @@ public class ActivityEdit extends Activity {
         
         // Pass note to editor
         this.noteEditor.setNote(note);
-        
-        // Set up a NoteWatcher to track note changes
-        this.noteEditor.setNoteWatcher(new NoteEditor.NoteWatcher() {
-            
-            @Override
-            public void onNoteContentUpdate(String content) {
-                ActivityEdit.this.handleNoteContentUpdate(content);
-            }
-            
-        });
     }
     
     @Override
-    public void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         
-        // Pause editor
-        this.noteEditor.onPause();
-        
-        // Write note
-        try {
-            NoteIO.write(this.noteEditor.getNote(), this.noteFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Write note if it changed
+        if (this.noteEditor.getNote().getChanged()) {
+            try {
+                NoteIO.write(this.noteEditor.getNote(), this.noteFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
     @Override
-    public void onResume() {
+    protected void onPause() {
         super.onPause();
+        
+        // Pause editor
+        this.noteEditor.onPause();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
         
         // Resume editor
         this.noteEditor.onResume();
@@ -171,22 +168,6 @@ public class ActivityEdit extends Activity {
         // Update task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.setTaskDescription(new ActivityManager.TaskDescription(title, null, this.getResources().getColor(R.color.task_primary)));
-        }
-        
-        // Write note
-        try {
-            NoteIO.write(this.noteEditor.getNote(), this.noteFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void handleNoteContentUpdate(String content) {
-        // Write note
-        try {
-            NoteIO.write(this.noteEditor.getNote(), this.noteFile);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
     
