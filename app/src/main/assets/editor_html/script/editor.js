@@ -37,7 +37,7 @@ function detectContentChange() {
         createNotepadLines();
         
         // Trigger auto upload
-        autoUploadCounter = 10;
+        autoUploadCounter = 5;
     }
 }
 
@@ -128,7 +128,7 @@ function initialize() {
     text.contentEditable = true;
     
     // Set auto upload interval
-    setInterval(handleAutoUpload, 100);
+    setInterval(handleAutoUpload, 50);
 }
 
 /* Event handling */

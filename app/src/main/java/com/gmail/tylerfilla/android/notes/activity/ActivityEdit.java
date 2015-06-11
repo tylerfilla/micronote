@@ -41,9 +41,8 @@ public class ActivityEdit extends Activity {
         Uri noteFileUri = this.getIntent().getData();
         if (noteFileUri == null) {
             // Create a new file for the note
-            File notesDir = new File(this.getFilesDir(), "notes");
-            notesDir.mkdirs();
-            this.noteFile = new File(notesDir, "_" + String.valueOf(System.currentTimeMillis()) + ".note");
+            this.noteFile = new File(new File(this.getFilesDir(), "notes"), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
+            this.noteFile.getParentFile().mkdirs();
             
             // Create a new note
             note = new Note();
@@ -55,10 +54,14 @@ public class ActivityEdit extends Activity {
             this.noteFile = new File(noteFileUri.getPath());
             
             // Try to read note from file
-            try {
-                note = NoteIO.read(this.noteFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (this.noteFile.exists()) {
+                try {
+                    note = NoteIO.read(this.noteFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                note = new Note();
             }
         }
         
@@ -100,17 +103,11 @@ public class ActivityEdit extends Activity {
     }
     
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
         
-        // Write note if it changed
-        if (this.noteEditor.getNote().getChanged()) {
-            try {
-                NoteIO.write(this.noteEditor.getNote(), this.noteFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        // Resume editor
+        this.noteEditor.onResume();
     }
     
     @Override
@@ -119,14 +116,15 @@ public class ActivityEdit extends Activity {
         
         // Pause editor
         this.noteEditor.onPause();
-    }
     
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        // Resume editor
-        this.noteEditor.onResume();
+        // Write note if changed
+        if (this.noteEditor.getNote().getChanged()) {
+            try {
+                NoteIO.write(this.noteEditor.getNote(), this.noteFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     private void promptNewTitle() {

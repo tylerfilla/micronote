@@ -157,7 +157,7 @@ public class ActivityList extends ListActivity {
         if (files != null) {
             for (File file : files) {
                 // Check if the file has the *.note extension
-                if (file.getName().toLowerCase().endsWith(".note")) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".note")) {
                     // Check the file content
                     boolean contentCheck = false;
                     try {
