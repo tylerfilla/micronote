@@ -12,6 +12,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,15 +20,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,6 +41,7 @@ import android.widget.TextView;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
+import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -43,8 +49,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 public class ActivityList extends ListActivity {
     
     private ArrayList<File> noteFileList;
-    
-    private boolean searchMode;
+    private boolean         noteFileSearchMode;
+    private NoteSearcher    noteSearcher;
     
     private NoteFileListAdapter                 noteFileListAdapter;
     private NoteFileListOnItemClickListener     noteFileListOnItemClickListener;
@@ -56,6 +62,8 @@ public class ActivityList extends ListActivity {
     private LinearLayout activityListMessageSearchEmpty;
     private LinearLayout activityListMessageSearchOpen;
     
+    private EditText activityListSearchBubble;
+    
     private TextView activityListListFooter;
     
     @Override
@@ -65,9 +73,9 @@ public class ActivityList extends ListActivity {
         this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
         this.setContentView(R.layout.activity_list);
         
-        this.noteFileList = new ArrayList<>();
-        
-        this.searchMode = false;
+        this.noteFileList       = new ArrayList<>();
+        this.noteFileSearchMode = false;
+        this.noteSearcher       = new NoteSearcher();
         
         this.noteFileListAdapter                 = new NoteFileListAdapter();
         this.noteFileListOnItemClickListener     = new NoteFileListOnItemClickListener();
@@ -78,6 +86,8 @@ public class ActivityList extends ListActivity {
         this.activityListMessageListEmpty   = (LinearLayout) this.findViewById(R.id.activityListMessageListEmpty);
         this.activityListMessageSearchEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageSearchEmpty);
         this.activityListMessageSearchOpen  = (LinearLayout) this.findViewById(R.id.activityListMessageSearchOpen);
+        
+        this.activityListSearchBubble = (EditText) this.findViewById(R.id.activityListSearchBubble);
         
         ListView listView = this.getListView();
         
@@ -147,11 +157,67 @@ public class ActivityList extends ListActivity {
             }
         }
         
-        // Show empty list message if no files are found
-        if (this.noteFileList.isEmpty()) {
-            this.activityListMessageListEmpty.setVisibility(View.VISIBLE);
-        } else {
+        // Handle note file searching
+        if (this.noteFileSearchMode) {
             this.activityListMessageListEmpty.setVisibility(View.GONE);
+            
+            String query = this.activityListSearchBubble.getText().toString();
+            
+            if (query.isEmpty()) {
+                // Set message configuration
+                this.activityListMessageSearchEmpty.setVisibility(View.GONE);
+                this.activityListMessageSearchOpen.setVisibility(View.VISIBLE);
+                
+                // Don't list anything with an empty query
+                this.noteFileList.clear();
+            } else {
+                // Set message configuration
+                this.activityListMessageSearchOpen.setVisibility(View.GONE);
+                
+                // Run note searcher
+                this.noteSearcher.setFileList(this.noteFileList);
+                this.noteSearcher.setNoteSearchHandler(new NoteSearcher.NoteSearchHandler() {
+                    
+                    @Override
+                    public Note request(File noteFile) {
+                        Note note = null;
+                        
+                        try {
+                            note = NoteIO.read(noteFile); // Yes, this is horrendously inefficient. Deal with it.
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        
+                        return note;
+                    }
+                    
+                    @Override
+                    public void result(File noteFile, boolean match) {
+                        if (!match) {
+                            ActivityList.this.noteFileList.remove(noteFile);
+                        }
+                    }
+                    
+                });
+                this.noteSearcher.search(query);
+    
+                // Show empty search message if no files are found
+                if (this.noteFileList.isEmpty()) {
+                    this.activityListMessageSearchEmpty.setVisibility(View.VISIBLE);
+                } else {
+                    this.activityListMessageSearchEmpty.setVisibility(View.GONE);
+                }
+            }
+        } else {
+            this.activityListMessageSearchEmpty.setVisibility(View.GONE);
+            this.activityListMessageSearchOpen.setVisibility(View.GONE);
+            
+            // Show empty list message if no files are found
+            if (this.noteFileList.isEmpty()) {
+                this.activityListMessageListEmpty.setVisibility(View.VISIBLE);
+            } else {
+                this.activityListMessageListEmpty.setVisibility(View.GONE);
+            }
         }
         
         // Set footer text to count notes
@@ -168,7 +234,7 @@ public class ActivityList extends ListActivity {
     private void deleteNoteFilesWithPrompt(final Set<File> noteFileSet) {
         AlertDialog.Builder promptConfirmDeleteBuilder = new AlertDialog.Builder(this);
         
-        promptConfirmDeleteBuilder.setTitle("Confirm Delete");
+        promptConfirmDeleteBuilder.setTitle("Confirm Deletion");
         
         if (noteFileSet.size() == 1) {
             promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete this note?");
@@ -217,9 +283,9 @@ public class ActivityList extends ListActivity {
         this.startActivity(new Intent(this, ActivitySettings.class));
     }
     
-    private void searchBegin() {
+    private void noteFileSearchBegin() {
         // Set search mode flag
-        this.searchMode = true;
+        this.noteFileSearchMode = true;
         
         // Set appropriate visibilities in actionbar
         for (int i = 0; i < this.activityListActionbar.getChildCount(); i++) {
@@ -229,21 +295,40 @@ public class ActivityList extends ListActivity {
             if (tag != null) {
                 String tagString = tag.toString();
                 
-                if (tagString.startsWith("search_")) {
+                if (tagString.startsWith("search:")) {
                     child.setVisibility(View.VISIBLE);
-                } else if (tagString.startsWith("list_")) {
+                } else if (tagString.startsWith("list:")) {
                     child.setVisibility(View.GONE);
                 }
             }
         }
         
+        // Show search bubble and listen for changes
+        this.activityListSearchBubble.setVisibility(View.VISIBLE);
+        this.activityListSearchBubble.addTextChangedListener(new TextWatcher() {
+            
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+            
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ActivityList.this.update();
+            }
+            
+        });
+        
         // Update list
         this.update();
     }
     
-    private void searchEnd() {
+    private void noteFileSearchEnd() {
         // Reset search mode flag
-        this.searchMode = false;
+        this.noteFileSearchMode = false;
         
         // Set appropriate visibilities in actionbar
         for (int i = 0; i < this.activityListActionbar.getChildCount(); i++) {
@@ -253,27 +338,34 @@ public class ActivityList extends ListActivity {
             if (tag != null) {
                 String tagString = tag.toString();
             
-                if (tagString.startsWith("search_")) {
+                if (tagString.startsWith("search:")) {
                     child.setVisibility(View.GONE);
-                } else if (tagString.startsWith("list_")) {
+                } else if (tagString.startsWith("list:")) {
                     child.setVisibility(View.VISIBLE);
                 }
             }
         }
+        
+        // Clear and hide search bubble
+        this.activityListSearchBubble.setText("");
+        this.activityListSearchBubble.setVisibility(View.GONE);
+        
+        // Close soft keyboard in case it is still open (Android FTW!)
+        ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.activityListSearchBubble.getWindowToken(), 0);
         
         // Update list
         this.update();
     }
     
     public void onActionButtonClick(View view) {
-        if ("list_new".equals(view.getTag())) {
+        if ("list:new".equals(view.getTag())) {
             this.openNoteFile(null);
-        } else if ("list_search".equals(view.getTag())) {
-            this.searchBegin();
-        } else if ("list_settings".equals(view.getTag())) {
+        } else if ("list:search".equals(view.getTag())) {
+            this.noteFileSearchBegin();
+        } else if ("list:settings".equals(view.getTag())) {
             this.openSettings();
-        } else if ("search_close".equals(view.getTag())) {
-            this.searchEnd();
+        } else if ("search:close".equals(view.getTag())) {
+            this.noteFileSearchEnd();
         }
     }
     

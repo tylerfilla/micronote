@@ -85,7 +85,7 @@
         <item name="android:background">@android:drawable/toast_frame</item>
         <item name="android:hint">@string/activity_list_search_bubble_hint</item>
         <item name="android:inputType">text</item>
-        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_above">@id/activityListAdView</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginLeft">14dp</item>
@@ -97,10 +97,10 @@
     </style>
     
     <style name="uNote.ActivityList.AdView">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
     
     <style name="uNote.ActivityEdit" />

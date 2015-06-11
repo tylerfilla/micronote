@@ -24,12 +24,15 @@ public class NoteSearcher {
     }
     
     public void search(String query) {
-        // Sanity check
+        // Some sanity checks
         if (this.fileList == null) {
             throw new IllegalStateException("No file list set");
         }
         if (this.noteSearchHandler == null) {
             throw new IllegalStateException("No request handler set");
+        }
+        if (query.isEmpty()) {
+            return;
         }
         
         // Loop through files
