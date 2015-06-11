@@ -243,7 +243,7 @@ public class ActivityList extends ListActivity {
         }
         
         promptConfirmDeleteBuilder.setPositiveButton("Cancel", null);
-        promptConfirmDeleteBuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+        promptConfirmDeleteBuilder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
     
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
