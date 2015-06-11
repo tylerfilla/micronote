@@ -135,8 +135,13 @@ public class ActivityList extends ListActivity {
         super.onRestoreInstanceState(state);
         
         // Restore search mode
-        if (state.getBoolean("noteFileSearchMode")) {
+        if (state.getBoolean("field_noteFileSearchMode")) {
             this.noteFileSearchBegin();
+        }
+        
+        // Restore selected notes
+        for (int selectedNoteFilePosition : state.getIntegerArrayList("selected_note_file_positions")) {
+            this.noteFileListAdapter.setSelected(selectedNoteFilePosition, true);
         }
     }
     
@@ -145,7 +150,16 @@ public class ActivityList extends ListActivity {
         super.onSaveInstanceState(outState);
         
         // Save search mode
-        outState.putBoolean("noteFileSearchMode", this.noteFileSearchMode);
+        outState.putBoolean("field_noteFileSearchMode", this.noteFileSearchMode);
+        
+        // Save selected notes
+        ArrayList<Integer> selectedNoteFilePositionList = new ArrayList<>();
+        for (int i = 0; i < this.noteFileListAdapter.getCount(); i++) {
+            if (this.noteFileListAdapter.getSelected(i)) {
+                selectedNoteFilePositionList.add(i);
+            }
+        }
+        outState.putIntegerArrayList("selected_note_file_positions", selectedNoteFilePositionList);
     }
     
     private void update() {
