@@ -100,9 +100,12 @@ function onReceiveAppMessage(message) {
                     updateHeader(minutes + " min");
                 } else {
                     var dateLastModified = new Date(timeLastModified);
-                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    var months           = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     
                     if (timeSinceModification < 24*60*60*1000) {
+                        // Within the day
+                        updateHeader((dateLastModified.getHours() % 12) + ":" + (dateLastModified.getMinutes() < 10 ? "0" : "") + dateLastModified.getMinutes() + (dateLastModified.getHours() > 12 ? " PM" : " AM"));
+                    } else if (timeSinceModification < 365*24*60*60*1000) {
                         // Within the year
                         updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate());
                     } else {
