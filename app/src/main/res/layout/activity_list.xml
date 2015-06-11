@@ -63,7 +63,7 @@
     
     <com.google.android.gms.ads.AdView
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        ads:adUnitId="@string/admob_unit_id_activity_list_ad_view"
         android:id="@+id/activityListAdView"
         style="@style/uNote.ActivityList.AdView">
     </com.google.android.gms.ads.AdView>

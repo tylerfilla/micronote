@@ -33,4 +33,6 @@
     
     <string name="activity_settings_actionbar_title">Settings</string>
     
+    <string name="admob_unit_id_activity_list_ad_view">ca-app-pub-1168572156310866/6463250837</string>
+    
 </resources>
