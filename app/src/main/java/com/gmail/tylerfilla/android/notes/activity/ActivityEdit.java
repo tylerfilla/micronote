@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -62,7 +63,7 @@ public class ActivityEdit extends Activity {
                 }
             }
             if (!isDescendant) {
-                // TODO: Prompt to import note file
+                this.promptImportNoteFile();
             }
             
             // Try to read note from file
@@ -139,33 +140,56 @@ public class ActivityEdit extends Activity {
         }
     }
     
-    private void promptNewTitle() {
-        AlertDialog.Builder titlePrompt = new AlertDialog.Builder(this);
+    private void promptImportNoteFile() {
+        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
-        titlePrompt.setTitle("Edit Title");
-        titlePrompt.setMessage("Please enter a new title below.");
+        prompt.setTitle("Import Note File");
+        prompt.setMessage("This note file is not in a managed location. Would you like to import it?");
         
-        final EditText titlePromptInput = new EditText(this);
-        titlePromptInput.setMaxLines(1);
-        titlePromptInput.setHint(this.noteEditor.getNote().getTitle());
-        titlePromptInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        titlePrompt.setView(titlePromptInput);
+        final CheckBox promptStopCheckBox = new CheckBox(this);
+        promptStopCheckBox.setText("Stop asking to import note files");
+        prompt.setView(promptStopCheckBox);
         
-        titlePrompt.setNegativeButton("Cancel", null);
-        titlePrompt.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-    
+        prompt.setNegativeButton("No", null);
+        prompt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
-                String title = titlePromptInput.getText().toString();
+                // TODO: Import the note file
+            }
+            
+        });
+        
+        prompt.show();
+    }
+    
+    private void promptNewTitle() {
+        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
+        
+        prompt.setTitle("Edit Title");
+        prompt.setMessage("Please enter a new title below.");
+        
+        final EditText promptInputEditText = new EditText(this);
+        promptInputEditText.setMaxLines(1);
+        promptInputEditText.setHint(this.noteEditor.getNote().getTitle());
+        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        prompt.setView(promptInputEditText);
+        
+        prompt.setNegativeButton("Cancel", null);
+        prompt.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String title = promptInputEditText.getText().toString();
         
                 if (!title.isEmpty()) {
                     ActivityEdit.this.handleNoteTitleUpdate(title);
                 }
             }
-    
+            
         });
         
-        titlePrompt.show();
+        prompt.show();
     }
     
     private void handleNoteTitleUpdate(String title) {

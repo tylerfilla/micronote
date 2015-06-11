@@ -273,8 +273,8 @@ public class ActivityList extends ListActivity {
             promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete these " + noteFileSet.size() + " notes?");
         }
         
-        promptConfirmDeleteBuilder.setPositiveButton("Cancel", null);
-        promptConfirmDeleteBuilder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+        promptConfirmDeleteBuilder.setNegativeButton("Cancel", null);
+        promptConfirmDeleteBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
     
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
