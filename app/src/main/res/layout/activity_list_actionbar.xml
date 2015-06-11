@@ -24,8 +24,6 @@
         android:text="@string/activity_list_actionbar_list_title"
         style="@style/uNote.Widget.ActionBar.Title" />
     
-    <!--
-    
     <ImageButton
         android:id="@+id/activityListActionbarButtonSearch"
         android:layout_gravity="center_vertical|right"
@@ -34,8 +32,6 @@
         android:src="@drawable/ic_activity_list_actionbar_button_search"
         android:tag="list_search"
         style="@style/uNote.Widget.ActionBar.Button" />
-    
-    -->
     
     <ImageButton
         android:id="@+id/activityListActionbarButtonNoteNew"
