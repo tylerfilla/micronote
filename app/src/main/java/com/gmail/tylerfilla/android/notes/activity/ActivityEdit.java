@@ -224,15 +224,9 @@ public class ActivityEdit extends Activity {
     */
     
     public void onActionButtonClick(View view) {
-        // Why would the tag ever be null here? Who really cares....
-        if (view.getTag() == null) {
-            return; // Die, NullPointException! DIE!
-        }
-        
-        // Delegate to appropriate handler
-        if (view.getTag().equals("close")) {
+        if ("close".equals(view.getTag())) {
             this.handleClose();
-        } else if (view.getTag().equals("menu")) {
+        } else if ("menu".equals(view.getTag())) {
             //this.handleMenu();
         }
     }

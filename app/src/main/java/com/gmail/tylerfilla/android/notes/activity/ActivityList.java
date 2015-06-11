@@ -28,6 +28,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,9 +44,13 @@ public class ActivityList extends ListActivity {
     
     private ArrayList<File> noteFileList;
     
+    private boolean searchMode;
+    
     private NoteFileListAdapter                 noteFileListAdapter;
     private NoteFileListOnItemClickListener     noteFileListOnItemClickListener;
     private NoteFileListMultiChoiceModeListener noteFileListMultiChoiceModeListener;
+    
+    private FrameLayout activityListActionbar;
     
     private LinearLayout activityListMessageListEmpty;
     private LinearLayout activityListMessageSearchEmpty;
@@ -62,9 +67,13 @@ public class ActivityList extends ListActivity {
         
         this.noteFileList = new ArrayList<>();
         
+        this.searchMode = false;
+        
         this.noteFileListAdapter                 = new NoteFileListAdapter();
         this.noteFileListOnItemClickListener     = new NoteFileListOnItemClickListener();
         this.noteFileListMultiChoiceModeListener = new NoteFileListMultiChoiceModeListener();
+        
+        this.activityListActionbar = (FrameLayout) this.getActionBar().getCustomView();
     
         this.activityListMessageListEmpty   = (LinearLayout) this.findViewById(R.id.activityListMessageListEmpty);
         this.activityListMessageSearchEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageSearchEmpty);
@@ -87,23 +96,21 @@ public class ActivityList extends ListActivity {
         }
         
         /* Advertisement */
-    
-        // Check if a Google Play Services update is necessary
+        
+        // Check if Google Play Services is up-to-date
         Dialog updateDialog = GooglePlayServicesUtil.getErrorDialog(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), this, 0);
         if (updateDialog != null) {
             updateDialog.show();
         }
         
-        // Get references
-        AdView            adView           = (AdView) this.findViewById(R.id.activityListAdView);
+        // Build ad request
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        
-        // Add test devices
         adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61");
         adRequestBuilder.addTestDevice("4C96B0950E99BA13180869369BEBC53B");
+        AdRequest adRequest = adRequestBuilder.build();
         
         // Load ad
-        adView.loadAd(adRequestBuilder.build());
+        ((AdView) this.findViewById(R.id.activityListAdView)).loadAd(adRequest);
     }
     
     @Override
@@ -158,8 +165,32 @@ public class ActivityList extends ListActivity {
         this.noteFileListAdapter.notifyDataSetChanged();
     }
     
-    private void openSettings() {
-        this.startActivity(new Intent(this, ActivitySettings.class));
+    private void deleteNoteFilesWithPrompt(final Set<File> noteFileSet) {
+        AlertDialog.Builder promptConfirmDeleteBuilder = new AlertDialog.Builder(this);
+        
+        promptConfirmDeleteBuilder.setTitle("Confirm Delete");
+        
+        if (noteFileSet.size() == 1) {
+            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete this note?");
+        } else if (noteFileSet.size() > 1) {
+            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete these " + noteFileSet.size() + " notes?");
+        }
+        
+        promptConfirmDeleteBuilder.setPositiveButton("Cancel", null);
+        promptConfirmDeleteBuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+    
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                for (File noteFile : noteFileSet) {
+                    noteFile.delete();
+                }
+        
+                ActivityList.this.update();
+            }
+    
+        });
+        
+        AlertDialog promptConfirmDelete = promptConfirmDeleteBuilder.show();
     }
     
     private void openNoteFile(File noteFile) {
@@ -182,39 +213,67 @@ public class ActivityList extends ListActivity {
         this.startActivity(intentEdit);
     }
     
-    private void deleteNoteFilesWithPrompt(final Set<File> noteFileSet) {
-        AlertDialog.Builder promptConfirmDeleteBuilder = new AlertDialog.Builder(this);
+    private void openSettings() {
+        this.startActivity(new Intent(this, ActivitySettings.class));
+    }
+    
+    private void searchBegin() {
+        // Set search mode flag
+        this.searchMode = true;
         
-        promptConfirmDeleteBuilder.setTitle("Confirm Delete");
-        
-        if (noteFileSet.size() == 1) {
-            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete this note?");
-        } else if (noteFileSet.size() > 1) {
-            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete these " + noteFileSet.size() + " notes?");
+        // Set appropriate visibilities in actionbar
+        for (int i = 0; i < this.activityListActionbar.getChildCount(); i++) {
+            View child = this.activityListActionbar.getChildAt(i);
+            Object tag = child.getTag();
+            
+            if (tag != null) {
+                String tagString = tag.toString();
+                
+                if (tagString.startsWith("search_")) {
+                    child.setVisibility(View.VISIBLE);
+                } else if (tagString.startsWith("list_")) {
+                    child.setVisibility(View.GONE);
+                }
+            }
         }
         
-        promptConfirmDeleteBuilder.setPositiveButton("Cancel", null);
-        promptConfirmDeleteBuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int whichButton) {
-                for (File noteFile : noteFileSet) {
-                    noteFile.delete();
-                }
-                
-                ActivityList.this.update();
-            }
-            
-        });
+        // Update list
+        this.update();
+    }
+    
+    private void searchEnd() {
+        // Reset search mode flag
+        this.searchMode = false;
         
-        AlertDialog promptConfirmDelete = promptConfirmDeleteBuilder.show();
+        // Set appropriate visibilities in actionbar
+        for (int i = 0; i < this.activityListActionbar.getChildCount(); i++) {
+            View child = this.activityListActionbar.getChildAt(i);
+            Object tag = child.getTag();
+        
+            if (tag != null) {
+                String tagString = tag.toString();
+            
+                if (tagString.startsWith("search_")) {
+                    child.setVisibility(View.GONE);
+                } else if (tagString.startsWith("list_")) {
+                    child.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+        
+        // Update list
+        this.update();
     }
     
     public void onActionButtonClick(View view) {
-        if ("list_settings".equals(view.getTag())) {
-            this.openSettings();
-        } else if ("list_new".equals(view.getTag())) {
+        if ("list_new".equals(view.getTag())) {
             this.openNoteFile(null);
+        } else if ("list_search".equals(view.getTag())) {
+            this.searchBegin();
+        } else if ("list_settings".equals(view.getTag())) {
+            this.openSettings();
+        } else if ("search_close".equals(view.getTag())) {
+            this.searchEnd();
         }
     }
     
