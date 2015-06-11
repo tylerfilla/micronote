@@ -53,6 +53,18 @@ public class ActivityEdit extends Activity {
             // Get the note file
             this.noteFile = new File(noteFileUri.getPath());
             
+            // Check location of note file for import purposes
+            boolean isDescendant = false;
+            File parentFile = this.noteFile;
+            while ((parentFile = parentFile.getParentFile()) != null) {
+                if (this.getFilesDir().equals(parentFile)) {
+                    isDescendant = true;
+                }
+            }
+            if (!isDescendant) {
+                // TODO: Prompt to import note file
+            }
+            
             // Try to read note from file
             if (this.noteFile.exists()) {
                 try {
