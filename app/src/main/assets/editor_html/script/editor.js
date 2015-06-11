@@ -98,16 +98,17 @@ function onReceiveAppMessage(message) {
                     // Within the hour
                     var minutes = Math.floor(timeSinceModification/(60*1000) + 0.5);
                     updateHeader(minutes + " min");
-                } else if (timeSinceModification < 24*60*60*1000) {
-                    // Within the year
-                    var dateLastModified = new Date(timeLastModified);
-                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate());
                 } else {
-                    // This is a very old note (and a very old application to go with it!)
                     var dateLastModified = new Date(timeLastModified);
                     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate() + ", " + dateLastModified.getFullYear());
+                    
+                    if (timeSinceModification < 24*60*60*1000) {
+                        // Within the year
+                        updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate());
+                    } else {
+                        // This is a very old note (and a very old application to go with it!)
+                        updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate() + ", " + dateLastModified.getFullYear());
+                    }
                 }
             }
         }
