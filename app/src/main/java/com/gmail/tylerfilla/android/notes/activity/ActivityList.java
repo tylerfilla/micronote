@@ -68,11 +68,11 @@ public class ActivityList extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    
+        
         this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
         this.setContentView(R.layout.activity_list);
         
-        this.noteFileList       = new ArrayList<>();
+        this.noteFileList       = new ArrayList<File>();
         this.noteFileSearchMode = false;
         this.noteSearcher       = new NoteSearcher();
         
@@ -128,6 +128,24 @@ public class ActivityList extends ListActivity {
         
         // Update list
         this.update();
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        
+        // Restore search mode
+        if (state.getBoolean("noteFileSearchMode")) {
+            this.noteFileSearchBegin();
+        }
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        // Save search mode
+        outState.putBoolean("noteFileSearchMode", this.noteFileSearchMode);
     }
     
     private void update() {
@@ -370,7 +388,7 @@ public class ActivityList extends ListActivity {
     
     private class NoteFileListAdapter extends BaseAdapter {
         
-        private final HashSet<Integer> selection;
+        private final Set<Integer> selection;
         
         public NoteFileListAdapter() {
             this.selection = new HashSet<>();
@@ -500,35 +518,33 @@ public class ActivityList extends ListActivity {
     private class NoteFileListMultiChoiceModeListener implements AbsListView.MultiChoiceModeListener {
         
         @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate CAB
-            mode.getMenuInflater().inflate(R.menu.activity_list_list_select_cab, menu);
-            
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.activityListListSelectCABDelete:
+                    Set<File> deletionSet = new HashSet<>();
+                
+                    for (int i = 0; i < ActivityList.this.noteFileListAdapter.getCount(); i++) {
+                        if (ActivityList.this.noteFileListAdapter.getSelected(i)) {
+                            deletionSet.add((File) ActivityList.this.noteFileListAdapter.getItem(i));
+                        }
+                    }
+                
+                    ActivityList.this.deleteNoteFilesWithPrompt(deletionSet);
+                    mode.finish();
+                
+                    break;
+                case R.id.activityListListSelectCABExport:
+                    // TODO: Export selected notes
+                    break;
+            }
+        
             return true;
         }
         
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-        
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-            case R.id.activityListListSelectCABDelete:
-                Set<File> deletionSet = new HashSet<>();
-                
-                for (int i = 0; i < ActivityList.this.noteFileListAdapter.getCount(); i++) {
-                    if (ActivityList.this.noteFileListAdapter.getSelected(i)) {
-                        deletionSet.add((File) ActivityList.this.noteFileListAdapter.getItem(i));
-                    }
-                }
-    
-                ActivityList.this.deleteNoteFilesWithPrompt(deletionSet);
-                mode.finish();
-                
-                break;
-            }
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate CAB
+            mode.getMenuInflater().inflate(R.menu.activity_list_list_select_cab, menu);
             
             return true;
         }
@@ -543,9 +559,14 @@ public class ActivityList extends ListActivity {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             // Add to selection
             ActivityList.this.noteFileListAdapter.setSelected(position, checked);
-            
+        
             // Display number of selected notes
             mode.setTitle(ActivityList.this.noteFileListAdapter.getSelectionCount() + " note" + (ActivityList.this.noteFileListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
+        }
+        
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
         }
         
     }
