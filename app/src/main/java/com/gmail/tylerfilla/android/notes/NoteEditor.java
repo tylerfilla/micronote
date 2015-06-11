@@ -46,12 +46,12 @@ public class NoteEditor extends WebView {
         
         // Add a WebView client
         this.setWebViewClient(new WebViewClient() {
-    
+            
             @Override
             public void onPageFinished(WebView view, String url) {
                 NoteEditor.this.editorLoaded = true;
             }
-    
+            
         });
         
         // Add a Chrome client
