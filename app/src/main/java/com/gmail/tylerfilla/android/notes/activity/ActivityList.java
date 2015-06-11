@@ -35,7 +35,8 @@ import android.widget.TextView;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
-import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class ActivityList extends ListActivity {
@@ -85,11 +86,24 @@ public class ActivityList extends ListActivity {
             this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
         }
         
+        /* Advertisement */
+    
         // Check if a Google Play Services update is necessary
         Dialog updateDialog = GooglePlayServicesUtil.getErrorDialog(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), this, 0);
         if (updateDialog != null) {
             updateDialog.show();
         }
+        
+        // Get references
+        AdView            adView           = (AdView) this.findViewById(R.id.activityListAdView);
+        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        
+        // Add test devices
+        adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61");
+        adRequestBuilder.addTestDevice("4C96B0950E99BA13180869369BEBC53B");
+        
+        // Load ad
+        adView.loadAd(adRequestBuilder.build());
     }
     
     @Override

@@ -96,6 +96,13 @@
         <item name="android:visibility">gone</item>
     </style>
     
+    <style name="uNote.ActivityList.AdView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+    
     <style name="uNote.ActivityEdit" />
     
     <style name="uNote.ActivityEdit.Root">
