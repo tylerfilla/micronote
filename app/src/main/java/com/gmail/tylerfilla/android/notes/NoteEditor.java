@@ -1,12 +1,5 @@
 package com.gmail.tylerfilla.android.notes;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,6 +8,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
+import java.util.Date;
+import java.util.Locale;
 
 public class NoteEditor extends WebView {
     
@@ -48,12 +46,12 @@ public class NoteEditor extends WebView {
         
         // Add a WebView client
         this.setWebViewClient(new WebViewClient() {
-            
+    
             @Override
             public void onPageFinished(WebView view, String url) {
                 NoteEditor.this.editorLoaded = true;
             }
-            
+    
         });
         
         // Add a Chrome client

@@ -1,9 +1,5 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -16,13 +12,15 @@ import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.NoteEditor;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ActivityEdit extends Activity {
     

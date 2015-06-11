@@ -1,13 +1,5 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.xml.sax.XMLReader;
-
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,7 +14,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.view.ActionMode;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +36,14 @@ import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+
+import org.xml.sax.XMLReader;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ActivityList extends ListActivity {
     
