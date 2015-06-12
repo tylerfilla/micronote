@@ -547,9 +547,6 @@ public class ActivityList extends ListActivity {
                     mode.finish();
                 
                     break;
-                case R.id.activityListListSelectCABExport:
-                    // TODO: Export selected notes
-                    break;
             }
         
             return true;
