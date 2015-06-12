@@ -3,7 +3,9 @@ package com.gmail.tylerfilla.android.notes.util;
 import com.gmail.tylerfilla.android.notes.Note;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NoteSearcher {
     
@@ -35,6 +37,8 @@ public class NoteSearcher {
             return;
         }
         
+        Map<File, Boolean> resultMap = new HashMap<>();
+        
         // Loop through files
         for (File noteFile : this.fileList) {
             boolean match = false;
@@ -50,8 +54,13 @@ public class NoteSearcher {
                 match = true;
             }
             
-            // Report result
-            this.noteSearchHandler.result(noteFile, match);
+            // Save result
+            resultMap.put(noteFile, match);
+        }
+        
+        // Report results
+        for (File noteFile : resultMap.keySet()) {
+            this.noteSearchHandler.result(noteFile, resultMap.get(noteFile));
         }
     }
     
