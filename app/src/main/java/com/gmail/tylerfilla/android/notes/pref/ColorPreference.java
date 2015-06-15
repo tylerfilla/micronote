@@ -1,7 +1,6 @@
 package com.gmail.tylerfilla.android.notes.pref;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -11,7 +10,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -35,7 +38,7 @@ public class ColorPreference extends DialogPreference {
     private int currentColor;
     private float[] currentHSV;
     
-    private boolean hexModified;
+    private volatile boolean hexModified;
     
     public ColorPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -44,9 +47,17 @@ public class ColorPreference extends DialogPreference {
         this.currentHSV = new float[3];
         
         this.hexModified = false;
-        
+    
+        this.setPersistent(false);
         this.setPositiveButtonText("Okay");
         this.setNegativeButtonText("Cancel");
+    }
+    
+    @Override
+    protected void onBindDialogView(View view) {
+        super.onBindDialogView(view);
+        
+        this.updateDialogView();
     }
     
     @Override
@@ -120,6 +131,48 @@ public class ColorPreference extends DialogPreference {
         
         this.viewDialogColorSwatch = new View(this.getContext());
         this.editTextDialogInputHex = new EditText(this.getContext());
+    
+        this.editTextDialogInputHex.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(6),
+                new InputFilter() {
+                
+                    private boolean isHexChar(char c) {
+                        return "0123456789abcdef".contains(String.valueOf(c).toLowerCase());
+                    }
+                
+                    @Override
+                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                        boolean keepOriginal = true;
+                    
+                        StringBuilder stringBuilder = new StringBuilder(end - start);
+                    
+                        for (int ci = start; ci < end; ci++) {
+                            char c = source.charAt(ci);
+                        
+                            if (this.isHexChar(c)) {
+                                stringBuilder.append(c);
+                            } else {
+                                keepOriginal = false;
+                            }
+                        }
+                    
+                        if (keepOriginal) {
+                            return null;
+                        } else {
+                            if (source instanceof Spanned) {
+                                SpannableString spannableString = new SpannableString(stringBuilder);
+                                TextUtils.copySpansFrom((Spanned) source, start, stringBuilder.length(), null, spannableString, 0);
+                            
+                                return spannableString;
+                            } else {
+                                return stringBuilder;
+                            }
+                        }
+                    }
+                
+                },
+        });
+        this.editTextDialogInputHex.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         
         this.viewDialogColorFieldH.setOnTouchListener(new View.OnTouchListener() {
             
@@ -127,13 +180,8 @@ public class ColorPreference extends DialogPreference {
             public boolean onTouch(View v, MotionEvent event) {
                 ColorPreference.this.currentHSV[0] = 360.0f*Math.max(0.0f, Math.min(359.0f/360.0f, (event.getY() - v.getY())/v.getHeight()));
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
-                
-                ColorPreference.this.viewDialogColorFieldSV.invalidate();
-                ColorPreference.this.viewDialogColorFieldH.invalidate();
-                ColorPreference.this.editTextDialogInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
-                ColorPreference.this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
-                
-                ColorPreference.this.hexModified = true;
+    
+                ColorPreference.this.updateDialogView();
                 
                 return true;
             }
@@ -147,12 +195,8 @@ public class ColorPreference extends DialogPreference {
                 ColorPreference.this.currentHSV[1] = Math.max(0.0f, Math.min(1.0f, (event.getX() - v.getLeft())/v.getWidth()));
                 ColorPreference.this.currentHSV[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (event.getY() - v.getTop())/v.getHeight()));
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
-                
-                ColorPreference.this.viewDialogColorFieldSV.invalidate();
-                ColorPreference.this.editTextDialogInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
-                ColorPreference.this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
-                
-                ColorPreference.this.hexModified = true;
+    
+                ColorPreference.this.updateDialogView();
                 
                 return true;
             }
@@ -176,10 +220,8 @@ public class ColorPreference extends DialogPreference {
                     
                     ColorPreference.this.currentColor = newColor;
                     Color.colorToHSV(newColor, ColorPreference.this.currentHSV);
-                    
-                    ColorPreference.this.viewDialogColorFieldSV.invalidate();
-                    ColorPreference.this.viewDialogColorFieldH.invalidate();
-                    ColorPreference.this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
+    
+                    ColorPreference.this.updateDialogView();
                 }
                 
                 ColorPreference.this.hexModified = false;
@@ -190,11 +232,6 @@ public class ColorPreference extends DialogPreference {
             }
             
         });
-        
-        this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
-        
-        this.editTextDialogInputHex.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-        this.editTextDialogInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
         
         this.viewDialogColorFieldH.setId(1);
         this.viewDialogColorFieldSV.setId(2);
@@ -236,15 +273,11 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     protected void onDialogClosed(boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
+        
         if (positiveResult) {
-            this.callChangeListener(this.currentColor);
             this.persistInt(this.currentColor);
         }
-    }
-    
-    @Override
-    protected Object onGetDefaultValue(TypedArray a, int index) {
-        return a.getInteger(index, ColorPreference.DEFAULT_DEFAULT_COLOR);
     }
     
     @Override
@@ -259,35 +292,37 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        Parcelable upwardState = null;
-        
         if (state == null || !(state instanceof ColorPreference.SavedState)) {
-            upwardState = state;
-            
-            super.onRestoreInstanceState(upwardState);
+            super.onRestoreInstanceState(state);
             return;
         }
         
         ColorPreference.SavedState savedState = (ColorPreference.SavedState) state;
-        upwardState = savedState.getSuperState();
-        
-        super.onRestoreInstanceState(upwardState);
-        
         this.currentColor = savedState.getSavedColor();
+        super.onRestoreInstanceState(savedState.getSuperState());
+        
     }
     
     @Override
     protected Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        
-        if (this.isPersistent()) {
-            return superState;
-        }
-        
-        SavedState savedState = new SavedState(superState);
+        SavedState savedState = new SavedState(super.onSaveInstanceState());
         savedState.setSavedColor(this.currentColor);
         
         return savedState;
+    }
+    
+    private void updateDialogView() {
+        if (this.viewDialog != null) {
+            this.hexModified = true;
+            
+            this.viewDialogColorFieldH.invalidate();
+            this.viewDialogColorFieldSV.invalidate();
+            this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
+            
+            int sel = this.editTextDialogInputHex.getSelectionStart();
+            this.editTextDialogInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2).toUpperCase());
+            this.editTextDialogInputHex.setSelection(Math.min(sel, this.editTextDialogInputHex.length()));
+        }
     }
     
     private int dpToPx(int dp) {
