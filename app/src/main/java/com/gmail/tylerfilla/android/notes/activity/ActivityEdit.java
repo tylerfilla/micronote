@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +33,8 @@ public class ActivityEdit extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         
         /* Handle intent */
         
@@ -97,12 +100,12 @@ public class ActivityEdit extends Activity {
         activityEditActionbarTitle.setText(noteTitle);
         activityEditActionbarTitle.setSelected(true);
         activityEditActionbarTitle.setOnClickListener(new OnClickListener() {
-    
+            
             @Override
             public void onClick(View v) {
                 ActivityEdit.this.promptNewTitle();
             }
-    
+            
         });
         
         // Set task description
@@ -136,7 +139,7 @@ public class ActivityEdit extends Activity {
         
         // Pause editor
         this.noteEditor.onPause();
-    
+        
         // Write note if changed
         if (this.noteEditor.getNote().getChanged()) {
             try {
@@ -221,7 +224,7 @@ public class ActivityEdit extends Activity {
         final EditText promptInputEditText = new EditText(this);
         promptInputEditText.setMaxLines(1);
         promptInputEditText.setHint(this.noteEditor.getNote().getTitle());
-        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         prompt.setView(promptInputEditText);
         
         prompt.setNegativeButton("Cancel", null);
@@ -230,7 +233,7 @@ public class ActivityEdit extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 String title = promptInputEditText.getText().toString();
-        
+                
                 if (!title.isEmpty()) {
                     ActivityEdit.this.handleNoteTitleUpdate(title);
                 }

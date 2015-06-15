@@ -111,7 +111,7 @@
     </style>
     
     <style name="uNote.ActivityEdit.Editor">
-        <item name="android:background">@color/background_pad</item>
+        <item name="android:background">@color/notepad_color_background</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
@@ -132,7 +132,7 @@
     
     <style name="uNote.Theme" parent="uNote.ThemeBase">
         <item name="android:actionBarStyle">@style/uNote.Widget.ActionBar</item>
-        <item name="android:windowBackground">@color/background_pad</item>
+        <item name="android:windowBackground">@color/notepad_color_background</item>
     </style>
     
     <style name="uNote.Theme.TextAppearance" parent="@android:style/TextAppearance" />

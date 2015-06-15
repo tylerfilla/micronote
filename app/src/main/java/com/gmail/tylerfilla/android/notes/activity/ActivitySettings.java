@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.gmail.tylerfilla.android.notes.R;
@@ -17,6 +18,8 @@ public class ActivitySettings extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    
+        PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         
         this.getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
         

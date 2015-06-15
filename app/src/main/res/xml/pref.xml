@@ -9,16 +9,18 @@
         android:title="Notepad Style">
         
         <com.gmail.tylerfilla.android.notes.pref.ColorPreference
+            android:defaultValue="@color/notepad_color_background"
             android:key="pref_style_notepad_color_background"
             android:persistent="true"
             android:summary="%s"
-            android:title="Background Color"/>
+            android:title="Background Color" />
     
         <com.gmail.tylerfilla.android.notes.pref.ColorPreference
+            android:defaultValue="@color/notepad_color_text"
             android:key="pref_style_notepad_color_text"
             android:persistent="true"
             android:summary="%s"
-            android:title="Text Color"/>
+            android:title="Text Color" />
     
         <SwitchPreference
             android:defaultValue="true"
@@ -27,15 +29,16 @@
             android:persistent="true"
             android:summaryOff="Notepad lines will not be shown"
             android:summaryOn="Notepad lines will be shown"
-            android:title="Show Notepad Lines"/>
+            android:title="Show Notepad Lines" />
         
         <com.gmail.tylerfilla.android.notes.pref.ColorPreference
+            android:defaultValue="@color/notepad_color_lines"
             android:dependency="pref_style_notepad_show_lines"
             android:key="pref_style_notepad_color_lines"
             android:persistent="true"
             android:summary="%s"
-            android:title="Line Color"/>
-        
+            android:title="Line Color" />
+
     </PreferenceCategory>
     
     <PreferenceCategory
@@ -50,7 +53,7 @@
             android:key="pref_timedate_format_date"
             android:persistent="true"
             android:summary="%s"
-            android:title="Date Format"/>
+            android:title="Date Format" />
         
         <ListPreference
             android:defaultValue="12"
@@ -59,7 +62,7 @@
             android:key="pref_timedate_format_time"
             android:persistent="true"
             android:summary="%s"
-            android:title="Time Format"/>
+            android:title="Time Format" />
         
         <ListPreference
             android:defaultValue="1"
@@ -68,8 +71,8 @@
             android:key="pref_timedate_scheme_note_timestamp"
             android:persistent="true"
             android:summary="%s"
-            android:title="Note Timestamp Scheme"/>
-        
+            android:title="Note Timestamp Scheme" />
+
     </PreferenceCategory>
     
     <PreferenceCategory
@@ -81,8 +84,8 @@
             android:key="pref_about_content"
             android:persistent="false"
             android:summary="@string/pref_about_content_summary"
-            android:title="@string/pref_about_content_title"/>
-        
+            android:title="@string/pref_about_content_title" />
+
     </PreferenceCategory>
-    
+
 </PreferenceScreen>

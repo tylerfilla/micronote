@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -48,11 +49,11 @@ import java.util.Set;
 public class ActivityList extends ListActivity {
     
     private ArrayList<File> noteFileList;
-    private boolean         noteFileSearchMode;
-    private NoteSearcher    noteSearcher;
+    private boolean noteFileSearchMode;
+    private NoteSearcher noteSearcher;
     
-    private NoteFileListAdapter                 noteFileListAdapter;
-    private NoteFileListOnItemClickListener     noteFileListOnItemClickListener;
+    private NoteFileListAdapter noteFileListAdapter;
+    private NoteFileListOnItemClickListener noteFileListOnItemClickListener;
     private NoteFileListMultiChoiceModeListener noteFileListMultiChoiceModeListener;
     
     private FrameLayout activityListActionbar;
@@ -71,20 +72,22 @@ public class ActivityList extends ListActivity {
         
         this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
         this.setContentView(R.layout.activity_list);
-        
-        this.noteFileList       = new ArrayList<File>();
+    
+        PreferenceManager.setDefaultValues(this, R.xml.pref, false);
+    
+        this.noteFileList = new ArrayList<File>();
         this.noteFileSearchMode = false;
-        this.noteSearcher       = new NoteSearcher();
-        
-        this.noteFileListAdapter                 = new NoteFileListAdapter();
-        this.noteFileListOnItemClickListener     = new NoteFileListOnItemClickListener();
+        this.noteSearcher = new NoteSearcher();
+    
+        this.noteFileListAdapter = new NoteFileListAdapter();
+        this.noteFileListOnItemClickListener = new NoteFileListOnItemClickListener();
         this.noteFileListMultiChoiceModeListener = new NoteFileListMultiChoiceModeListener();
         
         this.activityListActionbar = (FrameLayout) this.getActionBar().getCustomView();
     
-        this.activityListMessageListEmpty   = (LinearLayout) this.findViewById(R.id.activityListMessageListEmpty);
+        this.activityListMessageListEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageListEmpty);
         this.activityListMessageSearchEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageSearchEmpty);
-        this.activityListMessageSearchOpen  = (LinearLayout) this.findViewById(R.id.activityListMessageSearchOpen);
+        this.activityListMessageSearchOpen = (LinearLayout) this.findViewById(R.id.activityListMessageSearchOpen);
         
         this.activityListSearchBubble = (EditText) this.findViewById(R.id.activityListSearchBubble);
         
@@ -281,7 +284,7 @@ public class ActivityList extends ListActivity {
                 for (File noteFile : noteFileSet) {
                     noteFile.delete();
                 }
-        
+    
                 ActivityList.this.update();
             }
             
@@ -296,7 +299,7 @@ public class ActivityList extends ListActivity {
         int intentFlags = Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intentFlags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
+            intentFlags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT|Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
         }
         
         intentEdit.setFlags(intentFlags);
@@ -365,10 +368,10 @@ public class ActivityList extends ListActivity {
         for (int i = 0; i < this.activityListActionbar.getChildCount(); i++) {
             View child = this.activityListActionbar.getChildAt(i);
             Object tag = child.getTag();
-        
+    
             if (tag != null) {
                 String tagString = tag.toString();
-            
+        
                 if (tagString.startsWith("search:")) {
                     child.setVisibility(View.GONE);
                 } else if (tagString.startsWith("list:")) {
@@ -536,19 +539,19 @@ public class ActivityList extends ListActivity {
             switch (item.getItemId()) {
                 case R.id.activityListListSelectCABDelete:
                     Set<File> deletionSet = new HashSet<>();
-                
+    
                     for (int i = 0; i < ActivityList.this.noteFileListAdapter.getCount(); i++) {
                         if (ActivityList.this.noteFileListAdapter.getSelected(i)) {
                             deletionSet.add((File) ActivityList.this.noteFileListAdapter.getItem(i));
                         }
                     }
-                
+    
                     ActivityList.this.deleteNoteFilesWithPrompt(deletionSet);
                     mode.finish();
-                
+    
                     break;
             }
-        
+    
             return true;
         }
         
@@ -570,7 +573,7 @@ public class ActivityList extends ListActivity {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             // Add to selection
             ActivityList.this.noteFileListAdapter.setSelected(position, checked);
-        
+    
             // Display number of selected notes
             mode.setTitle(ActivityList.this.noteFileListAdapter.getSelectionCount() + " note" + (ActivityList.this.noteFileListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
         }
