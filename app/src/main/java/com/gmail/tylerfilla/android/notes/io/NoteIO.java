@@ -35,7 +35,7 @@ public class NoteIO {
         if (noteFile == null) {
             return null;
         }
-    
+        
         Note note = new Note();
         Properties noteProps = new Properties();
         
