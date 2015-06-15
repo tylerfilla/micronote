@@ -118,8 +118,8 @@ public class ColorPreference extends DialogPreference {
             
         };
         
-        this.editTextDialogInputHex = new EditText(this.getContext());
         this.viewDialogColorSwatch = new View(this.getContext());
+        this.editTextDialogInputHex = new EditText(this.getContext());
         
         this.viewDialogColorFieldH.setOnTouchListener(new View.OnTouchListener() {
             
@@ -191,45 +191,45 @@ public class ColorPreference extends DialogPreference {
             
         });
         
+        this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
+        
         this.editTextDialogInputHex.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         this.editTextDialogInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
         
-        this.viewDialogColorSwatch.setBackgroundColor(ColorPreference.this.currentColor);
+        this.viewDialogColorFieldH.setId(1);
+        this.viewDialogColorFieldSV.setId(2);
+        this.viewDialogColorSwatch.setId(3);
+        this.editTextDialogInputHex.setId(4);
         
-        this.viewDialogColorFieldSV.setId(1);
-        this.viewDialogColorFieldH.setId(2);
-        this.editTextDialogInputHex.setId(3);
-        this.viewDialogColorSwatch.setId(4);
+        RelativeLayout.LayoutParams layoutParamsViewDialogColorFieldH = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(220));
+        RelativeLayout.LayoutParams layoutParamsViewDialogColorFieldSV = new RelativeLayout.LayoutParams(this.dpToPx(220), this.dpToPx(220));
+        RelativeLayout.LayoutParams layoutParamsViewDialogColorSwatch = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(48));
+        RelativeLayout.LayoutParams layoutParamsEditTextDialogInputHex = new RelativeLayout.LayoutParams(this.dpToPx(120), this.dpToPx(48));
         
-        RelativeLayout.LayoutParams layoutParamsViewColorFieldSV = new RelativeLayout.LayoutParams(this.dpToPx(220), this.dpToPx(220));
-        RelativeLayout.LayoutParams layoutParamsViewColorFieldH = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(220));
-        RelativeLayout.LayoutParams layoutParamsEditTextInputHex = new RelativeLayout.LayoutParams(this.dpToPx(120), this.dpToPx(48));
-        RelativeLayout.LayoutParams layoutParamsViewSwatch = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(48));
+        layoutParamsViewDialogColorFieldH.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewDialogColorFieldH.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         
-        layoutParamsViewColorFieldSV.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        layoutParamsViewColorFieldSV.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        layoutParamsViewDialogColorFieldSV.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewDialogColorFieldSV.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         
-        layoutParamsViewColorFieldH.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        layoutParamsViewColorFieldH.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParamsViewDialogColorSwatch.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewDialogColorSwatch.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParamsViewDialogColorSwatch.addRule(RelativeLayout.BELOW, this.viewDialogColorFieldSV.getId());
+        layoutParamsViewDialogColorSwatch.addRule(RelativeLayout.RIGHT_OF, this.editTextDialogInputHex.getId());
         
-        layoutParamsEditTextInputHex.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        layoutParamsEditTextInputHex.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        layoutParamsEditTextInputHex.addRule(RelativeLayout.BELOW, this.viewDialogColorFieldSV.getId());
+        layoutParamsEditTextDialogInputHex.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsEditTextDialogInputHex.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        layoutParamsEditTextDialogInputHex.addRule(RelativeLayout.BELOW, this.viewDialogColorFieldSV.getId());
         
-        layoutParamsViewSwatch.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        layoutParamsViewSwatch.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        layoutParamsViewSwatch.addRule(RelativeLayout.BELOW, this.viewDialogColorFieldSV.getId());
-        layoutParamsViewSwatch.addRule(RelativeLayout.RIGHT_OF, this.editTextDialogInputHex.getId());
+        this.viewDialogColorFieldH.setLayoutParams(layoutParamsViewDialogColorFieldH);
+        this.viewDialogColorFieldSV.setLayoutParams(layoutParamsViewDialogColorFieldSV);
+        this.viewDialogColorSwatch.setLayoutParams(layoutParamsViewDialogColorSwatch);
+        this.editTextDialogInputHex.setLayoutParams(layoutParamsEditTextDialogInputHex);
         
-        this.viewDialogColorFieldSV.setLayoutParams(layoutParamsViewColorFieldSV);
-        this.viewDialogColorFieldH.setLayoutParams(layoutParamsViewColorFieldH);
-        this.editTextDialogInputHex.setLayoutParams(layoutParamsEditTextInputHex);
-        this.viewDialogColorSwatch.setLayoutParams(layoutParamsViewSwatch);
-        
-        this.viewDialog.addView(this.viewDialogColorFieldSV);
         this.viewDialog.addView(this.viewDialogColorFieldH);
-        this.viewDialog.addView(this.editTextDialogInputHex);
+        this.viewDialog.addView(this.viewDialogColorFieldSV);
         this.viewDialog.addView(this.viewDialogColorSwatch);
+        this.viewDialog.addView(this.editTextDialogInputHex);
         
         return this.viewDialog;
     }
