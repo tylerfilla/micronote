@@ -11,6 +11,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -25,7 +26,7 @@ public class ColorPreference extends DialogPreference {
     
     private static final int DEFAULT_DEFAULT_COLOR = 0;
     
-    private int     currentColor;
+    private int currentColor;
     private float[] currentHSV;
     
     private boolean hexModified;
@@ -34,7 +35,7 @@ public class ColorPreference extends DialogPreference {
         super(context, attrs);
         
         this.currentColor = 0xFF000000;
-        this.currentHSV   = new float[3];
+        this.currentHSV = new float[3];
         
         this.hexModified = false;
         
@@ -44,24 +45,24 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     protected View onCreateDialogView() {
-        RelativeLayout dialogView = new RelativeLayout(this.getContext());
+        RelativeLayout viewDialog = new RelativeLayout(this.getContext());
         
-        final View colorFieldSV = new View(this.getContext()) {
+        final View viewColorFieldSV = new View(this.getContext()) {
             
             @Override
             public void draw(Canvas canvas) {
                 float height = (float) this.getHeight();
-                float width  = (float) this.getWidth();
+                float width = (float) this.getWidth();
                 
                 float lensX = ColorPreference.this.currentHSV[1]*width;
                 float lensY = (1.0f - ColorPreference.this.currentHSV[2])*height;
                 
-                Paint paintHue        = new Paint();
+                Paint paintHue = new Paint();
                 Paint paintSaturation = new Paint();
-                Paint paintValue      = new Paint();
+                Paint paintValue = new Paint();
                 
                 Paint paintLens = new Paint();
-    
+                
                 paintHue.setStyle(Paint.Style.FILL);
                 paintSaturation.setStyle(Paint.Style.FILL);
                 paintValue.setStyle(Paint.Style.FILL);
@@ -85,16 +86,16 @@ public class ColorPreference extends DialogPreference {
             
         };
         
-        final View colorFieldH = new View(this.getContext()) {
+        final View viewColorFieldH = new View(this.getContext()) {
             
             @Override
             public void draw(Canvas canvas) {
                 float height = (float) this.getHeight();
-                float width  = (float) this.getWidth();
+                float width = (float) this.getWidth();
                 
                 float lensY = (ColorPreference.this.currentHSV[0]/360.0f)*height;
                 
-                Paint paintHue  = new Paint();
+                Paint paintHue = new Paint();
                 Paint paintLens = new Paint();
                 
                 paintHue.setStyle(Paint.Style.FILL);
@@ -109,57 +110,53 @@ public class ColorPreference extends DialogPreference {
                 ((WindowManager) this.getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
                 
                 canvas.drawRect(0.1f*width, 0.0f, width - 0.1f*width, height, paintHue);
-                canvas.drawRect(0.0f, lensY - 0.02f * height, width, lensY + 0.02f * height, paintLens);
+                canvas.drawRect(0.0f, lensY - 0.02f*height, width, lensY + 0.02f*height, paintLens);
             }
             
         };
-    
-        final EditText hexInput = new EditText(this.getContext());
-        final View     swatch   = new View(this.getContext());
         
-        colorFieldSV.setOnTouchListener(new View.OnTouchListener() {
+        final EditText editTextInputHex = new EditText(this.getContext());
+        final View viewSwatch = new View(this.getContext());
+        
+        viewColorFieldSV.setOnTouchListener(new View.OnTouchListener() {
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 ColorPreference.this.currentHSV[1] = Math.max(0.0f, Math.min(1.0f, (event.getX() - v.getLeft())/v.getWidth()));
                 ColorPreference.this.currentHSV[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (event.getY() - v.getTop())/v.getHeight()));
-                
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
                 
-                colorFieldSV.invalidate();
+                viewColorFieldSV.invalidate();
+                editTextInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
+                viewSwatch.setBackgroundColor(ColorPreference.this.currentColor);
                 
-                hexInput.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
                 ColorPreference.this.hexModified = true;
-                
-                swatch.setBackgroundColor(ColorPreference.this.currentColor);
                 
                 return true;
             }
             
         });
         
-        colorFieldH.setOnTouchListener(new View.OnTouchListener() {
+        viewColorFieldH.setOnTouchListener(new View.OnTouchListener() {
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 ColorPreference.this.currentHSV[0] = 360.0f*Math.max(0.0f, Math.min(359.0f/360.0f, (event.getY() - v.getY())/v.getHeight()));
-                
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
                 
-                colorFieldSV.invalidate();
-                colorFieldH.invalidate();
+                viewColorFieldSV.invalidate();
+                viewColorFieldH.invalidate();
+                editTextInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
+                viewSwatch.setBackgroundColor(ColorPreference.this.currentColor);
                 
-                hexInput.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
                 ColorPreference.this.hexModified = true;
-                
-                swatch.setBackgroundColor(ColorPreference.this.currentColor);
                 
                 return true;
             }
             
         });
         
-        hexInput.addTextChangedListener(new TextWatcher() {
+        editTextInputHex.addTextChangedListener(new TextWatcher() {
             
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -168,16 +165,18 @@ public class ColorPreference extends DialogPreference {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!ColorPreference.this.hexModified) {
+                    int newColor = ColorPreference.this.currentColor;
                     try {
-                        ColorPreference.this.currentColor = (int) Long.parseLong("ff" + s.toString(), 16);
-                        Color.colorToHSV(ColorPreference.this.currentColor, ColorPreference.this.currentHSV);
+                        newColor = (int) Long.parseLong("FF" + s.toString(), 16);
                     } catch (NumberFormatException e) {
                     }
                     
-                    colorFieldSV.invalidate();
-                    colorFieldH.invalidate();
+                    ColorPreference.this.currentColor = newColor;
+                    Color.colorToHSV(newColor, ColorPreference.this.currentHSV);
                     
-                    swatch.setBackgroundColor(ColorPreference.this.currentColor);
+                    viewColorFieldSV.invalidate();
+                    viewColorFieldH.invalidate();
+                    viewSwatch.setBackgroundColor(ColorPreference.this.currentColor);
                 }
                 
                 ColorPreference.this.hexModified = false;
@@ -189,45 +188,47 @@ public class ColorPreference extends DialogPreference {
             
         });
         
-        hexInput.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
-        swatch.setBackgroundColor(ColorPreference.this.currentColor);
+        editTextInputHex.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        editTextInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2));
         
-        colorFieldSV.setId(1);
-        colorFieldH.setId(2);
-        hexInput.setId(3);
-        swatch.setId(4);
+        viewSwatch.setBackgroundColor(ColorPreference.this.currentColor);
         
-        RelativeLayout.LayoutParams colorFieldSVLayoutParams = new RelativeLayout.LayoutParams(this.dpToPx(220), this.dpToPx(220));
-        RelativeLayout.LayoutParams colorFieldHLayoutParams  = new RelativeLayout.LayoutParams(this.dpToPx(48),  this.dpToPx(220));
-        RelativeLayout.LayoutParams hexInputLayoutParams     = new RelativeLayout.LayoutParams(this.dpToPx(120), this.dpToPx(48));
-        RelativeLayout.LayoutParams swatchLayoutParams       = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(48));
+        viewColorFieldSV.setId(1);
+        viewColorFieldH.setId(2);
+        editTextInputHex.setId(3);
+        viewSwatch.setId(4);
         
-        colorFieldSVLayoutParams.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        colorFieldSVLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        RelativeLayout.LayoutParams layoutParamsViewColorFieldSV = new RelativeLayout.LayoutParams(this.dpToPx(220), this.dpToPx(220));
+        RelativeLayout.LayoutParams layoutParamsViewColorFieldH = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(220));
+        RelativeLayout.LayoutParams layoutParamsEditTextInputHex = new RelativeLayout.LayoutParams(this.dpToPx(120), this.dpToPx(48));
+        RelativeLayout.LayoutParams layoutParamsViewSwatch = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(48));
         
-        colorFieldHLayoutParams.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        colorFieldHLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParamsViewColorFieldSV.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewColorFieldSV.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         
-        hexInputLayoutParams.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        hexInputLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        hexInputLayoutParams.addRule(RelativeLayout.BELOW, colorFieldSV.getId());
+        layoutParamsViewColorFieldH.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewColorFieldH.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         
-        swatchLayoutParams.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
-        swatchLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        swatchLayoutParams.addRule(RelativeLayout.BELOW, colorFieldSV.getId());
-        swatchLayoutParams.addRule(RelativeLayout.RIGHT_OF, hexInput.getId());
+        layoutParamsEditTextInputHex.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsEditTextInputHex.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        layoutParamsEditTextInputHex.addRule(RelativeLayout.BELOW, viewColorFieldSV.getId());
         
-        colorFieldSV.setLayoutParams(colorFieldSVLayoutParams);
-        colorFieldH.setLayoutParams(colorFieldHLayoutParams);
-        hexInput.setLayoutParams(hexInputLayoutParams);
-        swatch.setLayoutParams(swatchLayoutParams);
+        layoutParamsViewSwatch.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewSwatch.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParamsViewSwatch.addRule(RelativeLayout.BELOW, viewColorFieldSV.getId());
+        layoutParamsViewSwatch.addRule(RelativeLayout.RIGHT_OF, editTextInputHex.getId());
         
-        dialogView.addView(colorFieldSV);
-        dialogView.addView(colorFieldH);
-        dialogView.addView(hexInput);
-        dialogView.addView(swatch);
+        viewColorFieldSV.setLayoutParams(layoutParamsViewColorFieldSV);
+        viewColorFieldH.setLayoutParams(layoutParamsViewColorFieldH);
+        editTextInputHex.setLayoutParams(layoutParamsEditTextInputHex);
+        viewSwatch.setLayoutParams(layoutParamsViewSwatch);
         
-        return dialogView;
+        viewDialog.addView(viewColorFieldSV);
+        viewDialog.addView(viewColorFieldH);
+        viewDialog.addView(editTextInputHex);
+        viewDialog.addView(viewSwatch);
+        
+        return viewDialog;
     }
     
     @Override
@@ -266,7 +267,7 @@ public class ColorPreference extends DialogPreference {
         
         ColorPreference.SavedState savedState = (ColorPreference.SavedState) state;
         upwardState = savedState.getSuperState();
-    
+        
         super.onRestoreInstanceState(upwardState);
         
         this.currentColor = savedState.getSavedColor();
