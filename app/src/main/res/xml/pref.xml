@@ -76,6 +76,21 @@
     </PreferenceCategory>
     
     <PreferenceCategory
+        android:key="pref_other"
+        android:persistent="false"
+        android:title="Other">
+        
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_import_enable"
+            android:persistent="true"
+            android:summaryOff="You will not be prompted to import external note files"
+            android:summaryOn="You will be prompted to import external note files"
+            android:title="Prompt External Import" />
+    
+    </PreferenceCategory>
+    
+    <PreferenceCategory
         android:key="pref_about"
         android:persistent="false"
         android:title="About">

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -72,7 +73,7 @@ public class ActivityEdit extends Activity {
                     isDescendant = true;
                 }
             }
-            if (!isDescendant) {
+            if (!isDescendant && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_import_enable", true)) {
                 this.promptImportNoteFile();
             }
             
@@ -157,6 +158,10 @@ public class ActivityEdit extends Activity {
         while (newNoteFile.exists()) {
             newNoteFile = new File(newNoteFile.getParentFile(), "_" + newNoteFile.getName());
         }
+    
+        // Create blank file
+        newNoteFile.getParentFile().mkdirs();
+        newNoteFile.createNewFile();
         
         // Copy note data to new file
         NoteIO.write(NoteIO.read(this.noteFile), newNoteFile);
@@ -167,7 +172,9 @@ public class ActivityEdit extends Activity {
     
     private void handlePromptImportNoteFile(boolean doImport, boolean stop) {
         if (stop) {
-            // TODO: Save preference to stop import
+            SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+            sharedPreferencesEditor.putBoolean("pref_import_enable", false);
+            sharedPreferencesEditor.apply();
             
             new AlertDialog.Builder(ActivityEdit.this)
                     .setTitle("Import Disabled")
