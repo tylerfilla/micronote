@@ -4,8 +4,8 @@
     <string name="app_name">μNote</string>
     <string name="app_version">DEV-git</string>
     
-    <string name="pref_about_title">μNote {version}</string>
-    <string name="pref_about_summary">&#169; 2015 Tyler Filla</string>
+    <string name="pref_about_content_title">μNote {version}</string>
+    <string name="pref_about_content_summary">&#169; 2015 Tyler Filla</string>
     
     <string name="activity_list_actionbar_list_button_new_content_description">New note</string>
     <string name="activity_list_actionbar_list_button_search_content_description">Search</string>
@@ -22,15 +22,14 @@
     <string name="activity_list_search_open_title">Search Notes</string>
     <string name="activity_list_search_open_body">Enter a query in the bubble below to begin searching through your notes.</string>
     
-    <string name="activity_edit_actionbar_button_back_content_description">Close</string>
+    <string name="activity_edit_actionbar_button_close_content_description">Close</string>
     <string name="activity_edit_actionbar_button_menu_content_description">Menu</string>
-    <string name="activity_edit_indent_control_button_decrease_content_description">Decrease indent</string>
-    <string name="activity_edit_indent_control_button_increase_content_description">Increase indent</string>
     <string name="activity_edit_menu_item_checklist">Checklist</string>
     <string name="activity_edit_menu_item_clip">Clip</string>
     <string name="activity_edit_menu_item_list_unordered">Bullets</string>
     <string name="activity_edit_menu_item_list_ordered">Numbering</string>
     
+    <string name="activity_settings_actionbar_button_close_content_description">Close</string>
     <string name="activity_settings_actionbar_title">Settings</string>
     
     <string name="admob_unit_id_activity_list_ad_view">ca-app-pub-1168572156310866/6463250837</string>

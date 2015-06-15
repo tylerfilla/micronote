@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="array_pref_list_entries_timedate_format_date">
+        <item>Month D, YYYY (e.g. January 1, 1970)</item>
+        <item>Month D, YY (e.g. January 1, 70)</item>
+        <item>M/DD/YYYY (e.g. 1/01/1970)</item>
+        <item>M-DD-YYYY (e.g. 1-01-1970)</item>
+        <item>M/DD/YY (e.g. 1/01/70)</item>
+        <item>M-DD-YY (e.g. 1-01-70)</item>
+        <item>DD/M/YYYY (e.g. 01/1/1970)</item>
+        <item>DD-M-YYYY (e.g. 01-1-1970)</item>
+        <item>DD/M/YY (e.g. 01/1/70)</item>
+        <item>DD-M-YY (e.g. 01-1-70)</item>
+    </string-array>
+    
+    <string-array name="array_pref_list_values_timedate_format_date">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    
+    <string-array name="array_pref_list_entries_timedate_format_time">
+        <item>12 hour (e.g. 1:00 PM)</item>
+        <item>24 hour (e.g. 13:00)</item>
+    </string-array>
+    
+    <string-array name="array_pref_list_values_timedate_format_time">
+        <item>12</item>
+        <item>24</item>
+    </string-array>
+    
+    <string-array name="array_pref_list_entries_timedate_scheme_note_timestamp">
+        <item>Seconds old, minutes old, time, date (w/o year), then date (w/ year)</item>
+        <item>Minutes old, time, date (w/o year), then date (w/ year)</item>
+        <item>Time, date (w/o year), then date (w/ year)</item>
+        <item>Date (w/o year) then date (w/ year)</item>
+        <item>Date (w/ year)</item>
+        <item>Full time and date</item>
+        <item>UNIX timestamp (seconds)</item>
+        <item>UNIX timestamp (milliseconds)</item>
+    </string-array>
+    
+    <string-array name="array_pref_list_values_timedate_scheme_note_timestamp">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    
+</resources>

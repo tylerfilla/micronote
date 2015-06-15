@@ -128,7 +128,9 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="uNote.Theme" parent="@android:style/Theme.Holo.Light">
+    <style name="uNote.ThemeBase" parent="@android:style/Theme.Holo.Light" />
+    
+    <style name="uNote.Theme" parent="uNote.ThemeBase">
         <item name="android:actionBarStyle">@style/uNote.Widget.ActionBar</item>
         <item name="android:windowBackground">@color/background_pad</item>
     </style>

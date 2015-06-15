@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.view.View;
 
 import com.gmail.tylerfilla.android.notes.R;
 
@@ -32,6 +33,12 @@ public class ActivitySettings extends PreferenceActivity {
         return true;
     }
     
+    public void onActionButtonClick(View view) {
+        if ("close".equals(view.getTag())) {
+            this.finish();
+        }
+    }
+    
     public static class SettingsFragment extends PreferenceFragment {
         
         @Override
@@ -50,7 +57,7 @@ public class ActivitySettings extends PreferenceActivity {
             
             // Set version name in pref_about
             if (versionName != null) {
-                Preference prefAbout = this.findPreference("pref_about");
+                Preference prefAbout = this.findPreference("pref_about_content");
                 prefAbout.setTitle(prefAbout.getTitle().toString().replace("{version}", versionName));
             }
         }

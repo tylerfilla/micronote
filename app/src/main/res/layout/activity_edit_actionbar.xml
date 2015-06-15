@@ -6,7 +6,7 @@
     <ImageButton
         android:id="@+id/activityEditActionbarButtonClose"
         android:layout_gravity="center_vertical|left"
-        android:contentDescription="@string/activity_edit_actionbar_button_back_content_description"
+        android:contentDescription="@string/activity_edit_actionbar_button_close_content_description"
         android:src="@drawable/ic_activity_edit_actionbar_button_close"
         android:tag="close"
         style="@style/uNote.Widget.ActionBar.Button" />

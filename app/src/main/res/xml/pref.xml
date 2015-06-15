@@ -1,9 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <Preference
+    <!-- TODO: Externalize strings -->
+    
+    <PreferenceCategory
+        android:key="pref_style_notepad"
+        android:persistent="false"
+        android:title="Notepad Style">
+        
+        <com.gmail.tylerfilla.android.notes.pref.ColorPreference
+            android:defaultValue="1"
+            android:key="pref_style_notepad_color_background"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="Background Color" />
+        
+        <SwitchPreference
+            android:defaultValue="true"
+            android:disableDependentsState="false"
+            android:key="pref_style_notepad_show_lines"
+            android:persistent="true"
+            android:summaryOff="Notepad lines will not be shown"
+            android:summaryOn="Notepad lines will be shown"
+            android:title="Show Notepad Lines" />
+        
+        <com.gmail.tylerfilla.android.notes.pref.ColorPreference
+            android:defaultValue="1"
+            android:dependency="pref_style_notepad_show_lines"
+            android:key="pref_style_notepad_color_lines"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="Line Color" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="pref_timedate"
+        android:persistent="false"
+        android:title="Date/Time">
+        
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/array_pref_list_entries_timedate_format_date"
+            android:entryValues="@array/array_pref_list_values_timedate_format_date"
+            android:key="pref_timedate_format_date"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="Date Format" />
+        
+        <ListPreference
+            android:defaultValue="12"
+            android:entries="@array/array_pref_list_entries_timedate_format_time"
+            android:entryValues="@array/array_pref_list_values_timedate_format_time"
+            android:key="pref_timedate_format_time"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="Time Format" />
+        
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/array_pref_list_entries_timedate_scheme_note_timestamp"
+            android:entryValues="@array/array_pref_list_values_timedate_scheme_note_timestamp"
+            android:key="pref_timedate_scheme_note_timestamp"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="Note Timestamp Scheme" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory
         android:key="pref_about"
-        android:summary="@string/pref_about_summary"
-        android:title="@string/pref_about_title" />
+        android:persistent="false"
+        android:title="About">
+        
+        <Preference
+            android:key="pref_about_content"
+            android:persistent="false"
+            android:summary="@string/pref_about_content_summary"
+            android:title="@string/pref_about_content_title" />
+        
+    </PreferenceCategory>
     
 </PreferenceScreen>
