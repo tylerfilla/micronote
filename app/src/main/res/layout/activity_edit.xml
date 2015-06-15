@@ -6,5 +6,5 @@
     <com.gmail.tylerfilla.android.notes.NoteEditor
         android:id="@+id/activityEditEditor"
         style="@style/uNote.ActivityEdit.Editor" />
-    
+
 </RelativeLayout>

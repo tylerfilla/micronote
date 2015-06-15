@@ -10,5 +10,5 @@
     <TextView
         android:id="@+id/activityListListItemPreview"
         style="@style/uNote.ActivityList.List.Item.Preview" />
-    
+
 </LinearLayout>

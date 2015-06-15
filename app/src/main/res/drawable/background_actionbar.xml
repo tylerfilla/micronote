@@ -8,5 +8,5 @@
         android:endColor="@color/background_actionbar_bottom"
         android:startColor="@color/background_actionbar_top"
         android:type="linear" />
-    
+
 </shape>

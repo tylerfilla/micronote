@@ -183,5 +183,5 @@
         <item name="android:singleLine">true</item>
         <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.ActionbarTitle</item>
     </style>
-    
+
 </resources>

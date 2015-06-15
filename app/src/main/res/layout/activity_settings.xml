@@ -6,5 +6,5 @@
     <ListView
         android:id="@android:id/list"
         style="@style/uNote.ActivitySettings.List" />
-    
+
 </RelativeLayout>

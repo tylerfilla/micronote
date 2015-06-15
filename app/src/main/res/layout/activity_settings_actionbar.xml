@@ -14,5 +14,5 @@
     <TextView
         android:text="@string/activity_settings_actionbar_title"
         style="@style/uNote.Widget.ActionBar.Title" />
-    
+
 </FrameLayout>

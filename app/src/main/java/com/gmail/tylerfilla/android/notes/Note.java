@@ -6,13 +6,13 @@ public class Note {
     
     private String title;
     private String content;
-    private long   lastModified;
+    private long lastModified;
     
     private boolean changed;
     
     public Note(String title, String content) {
-        this.title        = title;
-        this.content      = content;
+        this.title = title;
+        this.content = content;
         this.lastModified = 0l;
         
         this.changed = false;

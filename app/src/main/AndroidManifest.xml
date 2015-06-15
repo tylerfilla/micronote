@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gmail.tylerfilla.android.notes"
-    android:versionCode="0"
-    android:versionName="@string/app_version">
+          package="com.gmail.tylerfilla.android.notes"
+          android:versionCode="0"
+          android:versionName="@string/app_version">
     
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,9 +24,9 @@
                 
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                
+
             </intent-filter>
-            
+
         </activity>
         
         <activity android:name=".activity.ActivityEdit">
@@ -39,9 +39,9 @@
                 <data android:scheme="file" />
                 <data android:host="*" />
                 <data android:pathPattern=".*\\.note" />
-                
+
             </intent-filter>
-            
+
         </activity>
         
         <activity
@@ -52,7 +52,7 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-        
+
     </application>
-    
+
 </manifest>

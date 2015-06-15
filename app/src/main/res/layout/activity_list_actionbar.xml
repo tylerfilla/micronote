@@ -41,5 +41,5 @@
         android:src="@drawable/ic_activity_list_actionbar_button_note_new"
         android:tag="list:new"
         style="@style/uNote.Widget.ActionBar.Button" />
-    
+
 </FrameLayout>

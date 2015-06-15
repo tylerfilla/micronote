@@ -17,5 +17,5 @@
         android:id="@+id/activityEditMenuClip"
         android:icon="@drawable/ic_activity_edit_menu_clip"
         android:title="@string/activity_edit_menu_item_clip" />
-    
+
 </menu>
