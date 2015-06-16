@@ -176,7 +176,7 @@ public class ColorPreference extends DialogPreference {
     
                 },
         });
-        this.editTextDialogInputHex.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        this.editTextDialogInputHex.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         
         this.viewDialogColorFieldH.setOnTouchListener(new View.OnTouchListener() {
             
@@ -333,7 +333,7 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     public CharSequence getSummary() {
-        return String.format(super.getSummary().toString(), "#" + ((this.currentColor&0x00FFFFFF) == 0 ? "000000" : Integer.toHexString(this.currentColor&0x00FFFFFF)).toUpperCase());
+        return String.format(super.getSummary().toString(), "#" + ((this.currentColor & 0x00FFFFFF) == 0 ? "000000" : Integer.toHexString(this.currentColor & 0x00FFFFFF)).toUpperCase());
     }
     
     private void updateDialogView() {
