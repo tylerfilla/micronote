@@ -12,6 +12,10 @@ var content;
 var text;
 var lines;
 
+// Preferences
+var prefColorLines;
+var prefShowLines;
+
 /* Function */
 
 function uploadContent() {
@@ -34,7 +38,7 @@ function detectContentChange() {
         contentPrevious = text.innerHTML;
         
         // Create notepad lines in background
-        createNotepadLines();
+        createNotepadLines(false);
         
         // Trigger auto upload
         autoUploadCounter = 5;
@@ -47,7 +51,17 @@ function updateHeader(newHeader) {
 
 /* Styling */
 
-function createNotepadLines() {
+function createNotepadLines(recreate) {
+    if (recreate) {
+        while (lines.firstChild) {
+            lines.removeChild(lines.firstChild);
+        }
+    }
+    
+    if (!prefShowLines) {
+        return;
+    }
+    
     var targetNumLines  = Math.floor(Math.max(content.clientHeight, text.clientHeight)/28);
     var currentNumLines = lines.childNodes.length;
     
@@ -56,6 +70,10 @@ function createNotepadLines() {
             var line = document.createElement("div");
             line.classList.add("line");
             lines.appendChild(line);
+            
+            if (prefColorLines) {
+                line.style.borderBottomColor = prefColorLines;
+            }
         }
     } else {
         for (var i = currentNumLines - targetNumLines; i > 0; i--) {
@@ -78,7 +96,7 @@ function onReceiveAppMessage(message) {
             contentPrevious = newContent;
             
             // Create notepad lines in background
-            createNotepadLines();
+            createNotepadLines(false);
         }
         
         // Last modified time
@@ -115,6 +133,18 @@ function onReceiveAppMessage(message) {
                 }
             }
         }
+        
+        // Line color preference
+        if (message.substring(0, 14) == "prefColorLines") {
+            prefColorLines = message.substring(15);
+            createNotepadLines(true);
+        }
+        
+        // Line display preference
+        if (message.substring(0, 13) == "prefShowLines") {
+            prefShowLines = message.substring(14) == "true";
+            createNotepadLines(true);
+        }
     }
 }
 
@@ -126,7 +156,7 @@ function sendPageMessage(message) {
 
 function initialize() {
     // Give us a notepad feel...
-    createNotepadLines();
+    createNotepadLines(false);
     
     // Make content area editable
     text.contentEditable = true;
@@ -188,7 +218,7 @@ function windowOnResize() {
     content.style.height = (window.innerHeight - 60) + "px";
     
     // Create notepad lines in background
-    createNotepadLines();
+    createNotepadLines(false);
 }
 
 window.onload   = windowOnLoad;

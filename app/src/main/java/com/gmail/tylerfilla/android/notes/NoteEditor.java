@@ -2,6 +2,8 @@ package com.gmail.tylerfilla.android.notes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
@@ -70,6 +72,16 @@ public class NoteEditor extends WebView {
         
         // Load editor document
         this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
+        
+        /* Preferences */
+    
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+    
+        // Line toggle
+        this.enqueueAppMessage("~prefShowLines=" + String.valueOf(sharedPreferences.getBoolean("pref_style_notepad_show_lines", true)));
+    
+        // Line color
+        this.enqueueAppMessage("~prefColorLines=#" + Integer.toHexString(sharedPreferences.getInt("pref_style_notepad_color_lines", 0xFF000000)&0x00FFFFFF));
     }
     
     public boolean getEditorLoaded() {

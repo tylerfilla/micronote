@@ -53,7 +53,6 @@ public class ColorPreference extends DialogPreference {
         
         this.hexModified = false;
     
-        this.setPersistent(true);
         this.setPositiveButtonText("Okay");
         this.setNegativeButtonText("Cancel");
     }
