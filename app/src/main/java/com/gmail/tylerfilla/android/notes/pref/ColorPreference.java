@@ -286,8 +286,10 @@ public class ColorPreference extends DialogPreference {
             Color.colorToHSV(this.currentColor, this.currentHSV);
         }
     
-        this.callChangeListener(this.persistentColor);
         this.persistInt(this.persistentColor);
+        
+        this.callChangeListener(this.persistentColor);
+        this.notifyChanged();
     }
     
     @Override
@@ -327,6 +329,11 @@ public class ColorPreference extends DialogPreference {
         savedState.setSavedColor(this.currentColor);
         
         return savedState;
+    }
+    
+    @Override
+    public CharSequence getSummary() {
+        return String.format(super.getSummary().toString(), "#" + ((this.currentColor&0x00FFFFFF) == 0 ? "000000" : Integer.toHexString(this.currentColor&0x00FFFFFF)).toUpperCase());
     }
     
     private void updateDialogView() {
