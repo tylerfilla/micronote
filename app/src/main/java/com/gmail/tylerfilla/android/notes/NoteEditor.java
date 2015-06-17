@@ -98,6 +98,7 @@ public class NoteEditor extends WebView {
     }
     
     public void unload() {
+        // Call the unload event handler in JavaScript
         this.loadUrl("javascript:window.onunload();");
     }
     
