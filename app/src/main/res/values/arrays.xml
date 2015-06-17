@@ -45,7 +45,6 @@
         <item>Date (w/ year)</item>
         <item>Full time and date</item>
         <item>UNIX timestamp (seconds)</item>
-        <item>UNIX timestamp (milliseconds)</item>
     </string-array>
     
     <string-array name="array_pref_list_values_timedate_scheme_note_timestamp">
@@ -56,7 +55,6 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-        <item>8</item>
     </string-array>
 
 </resources>
