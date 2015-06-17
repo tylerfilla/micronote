@@ -135,7 +135,13 @@ function onReceiveAppMessage(message) {
         }
         
         if (message.substring(0, 5) == "pref=") {
-            pref = JSON.parse(message.substring(5));
+            var prefJSON = message.substring(5);
+            
+            if (window.JSON) {
+                pref = JSON.parse(prefJSON);
+            } else {
+                pref = eval(prefJSON);
+            }
         }
     }
 }
@@ -147,7 +153,7 @@ function sendPageMessage(message) {
 /* Utilities */
 
 function utilARGBIntToRGBHexStr(argbInt) {
-    // Convert color from a 32-bit ARGB integer to a 24-bit RGB hex string
+    // Convert color from a 32-bit ARGB integer to an RGB hex string
     return "#" + (argbInt & 0x00FFFFFF).toString(16);
 }
 
@@ -201,9 +207,9 @@ function windowOnLoad() {
     content.onclick = contentOnClick;
     text.onclick    = textOnClick;
     
-    // Update message interval
+    // Request message interval
     setInterval(function() {
-        sendPageMessage("!update");
+        sendPageMessage("!request");
     }, 50);
     
     // Content change detection interval

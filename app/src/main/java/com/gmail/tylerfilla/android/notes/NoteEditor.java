@@ -2,12 +2,10 @@ package com.gmail.tylerfilla.android.notes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -58,6 +56,7 @@ public class NoteEditor extends WebView {
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 result.confirm();
                 NoteEditor.this.onReceivePageMessage(message);
+    
                 return true;
             }
             
@@ -65,10 +64,8 @@ public class NoteEditor extends WebView {
         
         /* Settings */
         
-        WebSettings settings = this.getSettings();
-        
         // Enable JavaScript
-        settings.setJavaScriptEnabled(true);
+        this.getSettings().setJavaScriptEnabled(true);
         
         /* Action */
         
@@ -77,15 +74,8 @@ public class NoteEditor extends WebView {
         
         /* Preferences */
     
+        // Serialize all app preferences to JSON and send it
         this.enqueueAppMessage("~pref=" + new JSONObject(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getAll()));
-        
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-    
-        // Line toggle
-        this.enqueueAppMessage("~prefShowLines=" + String.valueOf(sharedPreferences.getBoolean("pref_style_notepad_show_lines", true)));
-    
-        // Line color
-        this.enqueueAppMessage("~prefColorLines=#" + Integer.toHexString(sharedPreferences.getInt("pref_style_notepad_color_lines", 0xFF000000) & 0x00FFFFFF));
     }
     
     public boolean getEditorLoaded() {
@@ -111,7 +101,7 @@ public class NoteEditor extends WebView {
         this.note.setContent(content);
     }
     
-    private void handlePageUpdate() {
+    private void handleUpdateRequest() {
         // Send app messages stored in queue
         while (!this.queueAppMessage.isEmpty()) {
             this.sendAppMessage(this.queueAppMessage.remove());
@@ -119,19 +109,18 @@ public class NoteEditor extends WebView {
     }
     
     public void onReceivePageMessage(String message) {
-        if (message.startsWith("~")) {
-            message = message.substring(1);
-            
+        char actionChar = message.charAt(0);
+        message = message.substring(1);
+    
+        if (actionChar == '~') {
             // Content updates
-            if ("content".equals(message.substring(0, 7))) {
+            if ("content=".equals(message.substring(0, 8))) {
                 this.handleContentUpdate(message.substring(8));
             }
-        } else if (message.startsWith("!")) {
-            message = message.substring(1);
-            
-            // Page updates
-            if ("update".equals(message.substring(0, 6))) {
-                this.handlePageUpdate();
+        } else if (actionChar == '!') {
+            // Update requests
+            if ("request".equals(message.substring(0, 7))) {
+                this.handleUpdateRequest();
             }
         }
     }
