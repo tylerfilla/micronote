@@ -1,12 +1,46 @@
 
 // Written by Tyler Filla
 
+/* Preference enums */
+
+// Date formats
+var PREF_TIMEDATE_FORMAT_DATE = {
+    "MONTH_D_YYYY": "1",
+    "MONTH_D_YY": "2",
+    "M_DD_YYYY_SLASH": "3",
+    "M_DD_YYYY_DASH": "4",
+    "M_DD_YY_SLASH": "5",
+    "M_DD_YY_DASH": "6",
+    "DD_M_YYYY_SLASH": "7",
+    "DD_M_YYYY_DASH": "8",
+    "DD_M_YY_SLASH": "9",
+    "DD_M_YY_DASH": "10",
+}
+
+// Time formats
+var PREF_TIMEDATE_FORMAT_TIME = {
+    "_12_HOUR": "12",
+    "_24_HOUR": '24',
+}
+
+// Timestamp schemes
+var PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP = {
+    "CASCADE_5_SEC": "1",
+    "CASCADE_4_MIN": "2",
+    "CASCADE_3_TIME": "3",
+    "CASCADE_2_DATE_NOYEAR": "4",
+    "CASCADE_1_DATE_YEAR": "5",
+    "FULL": "6",
+    "UNIX": "7",
+}
+
 /* Globals */
 
+// Auto upload state
 var autoUploadCounter = 0;
 var contentPrevious = "";
 
-// App preferences
+// Editor preferences
 var pref = {};
 
 // Localized document elements
@@ -15,7 +49,36 @@ var content;
 var text;
 var lines;
 
-/* Function */
+/* Aesthetics */
+
+function createNotepadLines(recreate) {
+    if (recreate) {
+        while (lines.firstChild) {
+            lines.removeChild(lines.firstChild);
+        }
+    }
+    
+    if (!pref.pref_style_notepad_show_lines) {
+        return;
+    }
+    
+    var targetNumLines  = Math.floor(Math.max(content.clientHeight, text.clientHeight)/28);
+    var currentNumLines = lines.childNodes.length;
+    
+    if (currentNumLines < targetNumLines) {
+        for (var i = 0; i < targetNumLines - currentNumLines; i++) {
+            var line = document.createElement("div");
+            line.classList.add("line");
+            lines.appendChild(line);
+        }
+    } else {
+        for (var i = currentNumLines - targetNumLines; i > 0; i--) {
+            lines.removeChild(lines.lastChild);
+        }
+    }
+}
+
+/* Auto upload function */
 
 function uploadContent() {
     sendPageMessage("~content=" + text.innerHTML);
@@ -37,126 +100,238 @@ function detectContentChange() {
         contentPrevious = text.innerHTML;
         
         // Create notepad lines in background
-        createNotepadLines(false);
+        createNotepadLines();
         
         // Trigger auto upload
         autoUploadCounter = 5;
     }
 }
 
-function updateHeader(newHeader) {
-    header.innerText = newHeader;
+/* Incoming communication handling */
+
+function handleIncomingAssignment(key, value) {
+    // Debug log
+    console.log("appmessage: assign '" + key + "' as '" + value + "'");
+    
+    // Default handler function
+    var handler = function(value) {
+        console.log("appmessage: handler error: no handler method for key '" + key + "'");
+    };
+    
+    // Select appropriate handler function for key
+    switch (key) {
+    case "content":
+        handler = handleIncomingAssignmentContent;
+        break;
+    case "lastModified":
+        handler = handleIncomingAssignmentLastModified;
+        break;
+    case "pref":
+        handler = handleIncomingAssignmentPref;
+        break;
+    }
+    
+    // Call selected handler
+    handler(value);
 }
 
-function handlePreferenceUpdate() {
+function handleIncomingCommand(command) {
+    // Debug log
+    console.log("appmessage: command '" + message + "'");
+    
+    /* NOP */
+}
+
+function handleIncomingAssignmentContent(value) {
+    // Set new content
+    text.innerHTML = value;
+    
+    // Sneak past auto upload detection
+    contentPrevious = value;
+}
+
+function handleIncomingAssignmentLastModified(value) {
+    // Convert to calculable date and time
+    var lastModifiedDate = new Date(Number(value));
+    var lastModifiedTime = Number(value);
+    
+    // Time since modification (in ms)
+    var timeSince = Date.now() - lastModifiedTime;
+    
+    // Check for just-created signature
+    if (lastModifiedTime == 0) {
+        header.innerText = "New";
+        return;
+    }
+    
+    /* Generate preformatted date strings */
+    
+    var date      = lastModifiedDate.getDate();
+    var date2     = (date < 10 ? "0" : "") + date; // Always two digits
+    var month     = lastModifiedDate.getMonth();
+    var monthAbbr = utilGetMonthAbbr(month);
+    var year      = lastModifiedDate.getFullYear();
+    var yearShort = String(year).substring(2);
+    
+    var strDateNoYear = "[date w/o year]";
+    var strDateYear   = "[date]";
+    
+    switch (pref.pref_timedate_format_date) {
+    case PREF_TIMEDATE_FORMAT_DATE.MONTH_D_YYYY:
+        strDateNoYear = monthAbbr + " " + date;
+        strDateYear   = strDateNoYear + ", " + year;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.MONTH_D_YY:
+        strDateNoYear = monthAbbr + " " + date;
+        strDateYear   = strDateNoYear + ", " + yearShort;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YYYY_SLASH:
+        strDateNoYear = month + "/" + date2;
+        strDateYear   = strDateNoYear + "/" + year;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YYYY_DASH:
+        strDateNoYear = month + "-" + date2;
+        strDateYear   = strDateNoYear + "-" + year;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YY_SLASH:
+        strDateNoYear = month + "/" + date2;
+        strDateYear   = strDateNoYear + "/" + yearShort;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YY_DASH:
+        strDateNoYear = month + "-" + date2;
+        strDateYear   = strDateNoYear + "-" + yearShort;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YYYY_SLASH:
+        strDateNoYear = date2 + "/" + month;
+        strDateYear   = strDateNoYear + "/" + year;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YYYY_DASH:
+        strDateNoYear = date2 + "-" + month;
+        strDateYear   = strDateNoYear + "-" + year;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YY_SLASH:
+        strDateNoYear = date2 + "/" + month;
+        strDateYear   = strDateNoYear + "/" + yearShort;
+        break;
+    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YY_DASH:
+        strDateNoYear = date2 + "-" + month;
+        strDateYear   = strDateNoYear + "-" + yearShort;
+        break;
+    }
+    
+    /* Generate preformatted time string */
+    
+    var strTime = "[time]";
+    
+    switch (pref.pref_timedate_format_time) {
+    case PREF_TIMEDATE_FORMAT_TIME._12_HOUR:
+        strTime = (lastModifiedDate.getHours()%12) + ":" + (lastModifiedDate.getMinutes() < 10 ? "0" : "") + lastModifiedDate.getMinutes() + " " + (lastModifiedDate.getHours() > 12 ? "PM" : "AM");
+        break;
+    case PREF_TIMEDATE_FORMAT_TIME._24_HOUR:
+        strTime = lastModifiedDate.getHours() + ":" + (lastModifiedDate.getMinutes() < 10 ? "0" : "") + lastModifiedDate.getMinutes();
+        break;
+    }
+    
+    // Switch against preferred scheme
+    switch (pref.pref_timedate_scheme_note_timestamp) {
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_5_SEC:
+        if (timeSince < 60*1000) {
+            header.innerText = Math.floor(timeSince/1000 + 0.5) + " sec";
+        } else if (timeSince < 60*60*1000) {
+            header.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
+        } else if (timeSince < 24*60*60*1000) {
+            header.innerText = strTime;
+        } else if (timeSince < 365*24*60*60*1000) {
+            header.innerText = strDateNoYear;
+        } else {
+            header.innerText = strDateYear;
+        }
+        break;
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_4_MIN:
+        if (timeSince < 60*60*1000) {
+            header.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
+        } else if (timeSince < 24*60*60*1000) {
+            header.innerText = strTime;
+        } else if (timeSince < 365*24*60*60*1000) {
+            header.innerText = strDateNoYear;
+        } else {
+            header.innerText = strDateYear;
+        }
+        break;
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_3_TIME:
+        if (timeSince < 24*60*60*1000) {
+            header.innerText = strTime;
+        } else if (timeSince < 365*24*60*60*1000) {
+            header.innerText = strDateNoYear;
+        } else {
+            header.innerText = strDateYear;
+        }
+        break;
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_2_DATE_NOYEAR:
+        if (timeSince < 365*24*60*60*1000) {
+            header.innerText = strDateNoYear;
+        } else {
+            header.innerText = strDateYear;
+        }
+        break;
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_1_DATE_YEAR:
+        header.innerText = strDateYear;
+        break;
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.FULL:
+        header.innerText = strTime + " - " + strDateYear;
+        break;
+    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.UNIX:
+        header.innerText = Math.floor(lastModifiedTime/1000 + 0.5);
+        break;
+    }
+}
+
+function handleIncomingAssignmentPref(value) {
+    // Parse JSON object and store to global preferences 
+    if (window.JSON) {
+        pref = JSON.parse(value);
+    } else {
+        pref = eval(value);
+    }
+    
+    /* Apply new preferences */
+    
     text.style.color = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_text);
     
     createNotepadLines(true);
 }
 
-/* Styling */
-
-function createNotepadLines(recreate) {
-    if (recreate) {
-        while (lines.firstChild) {
-            lines.removeChild(lines.firstChild);
-        }
-    }
-    
-    if (!pref.pref_style_notepad_show_lines) {
-        return;
-    }
-    
-    var targetNumLines  = Math.floor(Math.max(content.clientHeight, text.clientHeight)/28);
-    var currentNumLines = lines.childNodes.length;
-    
-    if (currentNumLines < targetNumLines) {
-        for (var i = 0; i < targetNumLines - currentNumLines; i++) {
-            var line = document.createElement("div");
-            line.classList.add("line");
-            lines.appendChild(line);
-            
-            // Apply preferred color
-            if (pref.pref_style_notepad_color_lines) {
-                line.style.borderBottomColor = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_lines);
-            }
-        }
-    } else {
-        for (var i = currentNumLines - targetNumLines; i > 0; i--) {
-            lines.removeChild(lines.lastChild);
-        }
-    }
-}
-
 /* Communication */
 
 function onReceiveAppMessage(message) {
-    if (message.charAt(0) == '~') {
-        message = message.substring(1);
-        
-        // Content
-        if (message.substring(0, 8) == "content=") {
-            // Force content change without detection
-            var newContent  = message.substring(8);
-            text.innerHTML  = newContent;
-            contentPrevious = newContent;
+    // Validate message
+    if (!message || message.length <= 1) {
+        console.log("appmessage: protocol error: invalid message");
+        return;
+    }
+    
+    // Remove and save action character
+    var action = message.charAt(0);
+    message = message.substring(1);
+    
+    // Check action character
+    if (action == '~') {
+        if (message.indexOf("=") > 0) {
+            var key   = message.substring(0, message.indexOf("="));
+            var value = message.substring(message.indexOf("=") + 1);
             
-            // Create notepad lines in background
-            createNotepadLines(false);
+            handleIncomingAssignment(key, value);
+        } else {
+            console.log("appmessage: protocol error: no assignment operator");
         }
         
         // Last modified time
         if (message.substring(0, 13) == "lastModified=") {
-            var timeLastModified = Number(message.substring(13));
-            var timeNow          = Date.now();
-            
-            var dateLastModified = new Date(timeLastModified);
-            var months           = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            
-            if (timeLastModified == 0) {
-                updateHeader("New");
-            } else {
-                if (pref.pref_timedate_scheme_note_timestamp == 6) {
-                    updateHeader((dateLastModified.getHours() % 12) + ":" + (dateLastModified.getMinutes() < 10 ? "0" : "") + dateLastModified.getMinutes() + (dateLastModified.getHours() > 12 ? " PM" : " AM") + " " + months[dateLastModified.getMonth()] + " " + dateLastModified.getDate() + ", " + dateLastModified.getFullYear());
-                } else if (pref.pref_timedate_scheme_note_timestamp == 7) {
-                    updateHeader(Math.floor(timeLastModified/1000 + 0.5));
-                } else {
-                    var timeSinceModification = timeNow - timeLastModified;
-                    if (timeSinceModification < 60*1000 && pref.pref_timedate_scheme_note_timestamp == 1) {
-                        // Within the minute
-                        var seconds = Math.floor(timeSinceModification/1000 + 0.5);
-                        updateHeader(seconds + " sec");
-                    } else if (timeSinceModification < 60*60*1000 && pref.pref_timedate_scheme_note_timestamp <= 2) {
-                        // Within the hour
-                        var minutes = Math.floor(timeSinceModification/(60*1000) + 0.5);
-                        updateHeader(minutes + " min");
-                    } else {
-                        if (timeSinceModification < 24*60*60*1000 && pref.pref_timedate_scheme_note_timestamp <= 3) {
-                            // Within the day
-                            updateHeader((dateLastModified.getHours() % 12) + ":" + (dateLastModified.getMinutes() < 10 ? "0" : "") + dateLastModified.getMinutes() + (dateLastModified.getHours() > 12 ? " PM" : " AM"));
-                        } else if (timeSinceModification < 365*24*60*60*1000 && pref.pref_timedate_scheme_note_timestamp <= 4) {
-                            // Within the year
-                            updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate());
-                        } else if (pref.pref_timedate_scheme_note_timestamp <= 5) {
-                            // This is a very old note (and a very old application to go with it!)
-                            updateHeader(months[dateLastModified.getMonth()] + " " + dateLastModified.getDate() + ", " + dateLastModified.getFullYear());
-                        }
-                    }
-                }
-            }
         }
-        
-        if (message.substring(0, 5) == "pref=") {
-            var prefJSON = message.substring(5);
-            
-            if (window.JSON) {
-                pref = JSON.parse(prefJSON);
-            } else {
-                pref = eval(prefJSON);
-            }
-            
-            handlePreferenceUpdate();
-        }
+    } else if (action == '!') {
+        handleIncomingCommand(message);
+    } else {
+        console.log("appmessage: protocol error: invalid action character '" + action + "'");
     }
 }
 
@@ -171,11 +346,15 @@ function utilARGBIntToRGBHexStr(argbInt) {
     return "#" + (argbInt & 0x00FFFFFF).toString(16);
 }
 
+function utilGetMonthAbbr(month) {
+    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month];
+}
+
 /* Initialization */
 
 function initialize() {
     // Give us a notepad feel...
-    createNotepadLines(false);
+    createNotepadLines();
     
     // Make content area editable
     text.contentEditable = true;
@@ -237,7 +416,7 @@ function windowOnResize() {
     content.style.height = (window.innerHeight - 60) + "px";
     
     // Create notepad lines in background
-    createNotepadLines(false);
+    createNotepadLines();
 }
 
 window.onload   = windowOnLoad;
