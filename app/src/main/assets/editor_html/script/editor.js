@@ -48,6 +48,12 @@ function updateHeader(newHeader) {
     header.innerText = newHeader;
 }
 
+function handlePreferenceUpdate() {
+    text.style.color = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_text);
+    
+    createNotepadLines(true);
+}
+
 /* Styling */
 
 function createNotepadLines(recreate) {
@@ -142,6 +148,8 @@ function onReceiveAppMessage(message) {
             } else {
                 pref = eval(prefJSON);
             }
+            
+            handlePreferenceUpdate();
         }
     }
 }
