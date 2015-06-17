@@ -137,6 +137,11 @@ public class ActivityEdit extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+    
+        // Unload editor if finishing
+        if (this.isFinishing()) {
+            this.noteEditor.unload();
+        }
         
         // Pause editor
         this.noteEditor.onPause();

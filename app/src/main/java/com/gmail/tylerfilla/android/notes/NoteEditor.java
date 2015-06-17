@@ -75,6 +75,7 @@ public class NoteEditor extends WebView {
         /* Preferences */
     
         // Serialize all app preferences to JSON and send it
+        // FIXME: NoteEditor should be implementation agnostic; add a proxy of some sort
         this.enqueueAppMessage("~pref=" + new JSONObject(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getAll()));
     }
     
@@ -96,44 +97,85 @@ public class NoteEditor extends WebView {
         this.enqueueAppMessage("~lastModified=" + note.getLastModified());
     }
     
-    private void handleContentUpdate(String content) {
-        // Set note content
-        this.note.setContent(content);
+    public void unload() {
+        this.loadUrl("javascript:window.onunload();");
     }
     
-    private void handleUpdateRequest() {
-        // Send app messages stored in queue
+    private void handleIncomingAssignment(String key, String value) {
+        // Debug log
+        System.out.println("pagemessage: assign '" + key + "' as '" + value + "'");
+        
+        // Execute appropriate handler function for key
+        if ("content".equals(key)) {
+            this.handleIncomingAssignmentContent(value);
+        }
+    }
+    
+    private void handleIncomingAssignmentContent(String value) {
+        // Set note content
+        this.note.setContent(value);
+    }
+    
+    private void handleIncomingCommand(String command) {
+        // Debug log
+        System.out.println("pagemessage: command '" + command + "'");
+        
+        if ("request".equals(command)) {
+            this.handleIncomingCommandRequest();
+        }
+    }
+    
+    private void handleIncomingCommandRequest() {
+        // Send all app messages waiting in queue
         while (!this.queueAppMessage.isEmpty()) {
             this.sendAppMessage(this.queueAppMessage.remove());
         }
     }
     
-    public void onReceivePageMessage(String message) {
-        char actionChar = message.charAt(0);
+    private void onReceivePageMessage(String message) {
+        // Validate message
+        if (message == null || message.length() <= 1) {
+            System.err.println("pagemessage: protocol error: invalid message");
+            return;
+        }
+        
+        // Remove and save action character
+        char action = message.charAt(0);
         message = message.substring(1);
-    
-        if (actionChar == '~') {
-            // Content updates
-            if ("content=".equals(message.substring(0, 8))) {
-                this.handleContentUpdate(message.substring(8));
+        
+        // Check action character and act accordingly
+        if (action == '~') {
+            if (message.contains("=")) {
+                String key = message.substring(0, message.indexOf('='));
+                String value = message.substring(message.indexOf('=') + 1);
+                
+                this.handleIncomingAssignment(key, value);
+            } else {
+                System.err.println("pagemessage: protocol error: no assignment operator");
             }
-        } else if (actionChar == '!') {
-            // Update requests
-            if ("request".equals(message.substring(0, 7))) {
-                this.handleUpdateRequest();
-            }
+        } else if (action == '!') {
+            this.handleIncomingCommand(message);
+        } else {
+            System.err.println("pagemessage: protocol error: invalid action character '" + action + "'");
         }
     }
     
-    public void sendAppMessage(String message) {
+    private void sendAppMessage(String message) {
+        // Debug log
+        System.out.println("appmessage: sending outgoing message '" + message + "'");
+        
         // Do a ridiculous-looking quotation mark escape operation (must escape for Java String, then Java regex)
         message = message.replaceAll("\\\"", "\\\\\\\"");
-    
+        
         // Send message to JavaScript receiver function
         this.loadUrl("javascript:onReceiveAppMessage(\"" + message + "\");");
     }
     
-    public void enqueueAppMessage(String message) {
+    private void enqueueAppMessage(String message) {
+        // Debug log
+        System.out.println("appmessage: enqueuing outgoing message '" + message + "'");
+        
+        // Add message to queue
         this.queueAppMessage.add(message);
     }
     

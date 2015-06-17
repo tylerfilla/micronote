@@ -37,11 +37,15 @@ var PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP = {
 /* Globals */
 
 // Auto upload state
-var autoUploadCounter = 0;
-var contentPrevious = "";
+var autoUploadCounter         = 0;
+var autoUploadPreviousContent = "";
 
 // Editor preferences
 var pref = {};
+
+// Intervals and timeouts
+var listIntervals = new Array();
+var listTimeouts  = new Array();
 
 // Localized document elements
 var header;
@@ -51,8 +55,18 @@ var lines;
 
 /* Aesthetics */
 
+function aestheticsRebuild() {
+    // Recreate notepad background lines
+    createNotepadLines(true);
+}
+
+function aestheticsUpdate() {
+    // Update notepad background lines
+    createNotepadLines(false);
+}
+
 function createNotepadLines(recreate) {
-    if (recreate) {
+    if (recreate || !pref.pref_style_notepad_show_lines) {
         while (lines.firstChild) {
             lines.removeChild(lines.firstChild);
         }
@@ -78,32 +92,29 @@ function createNotepadLines(recreate) {
     }
 }
 
-/* Auto upload function */
+/* Auto upload */
 
-function uploadContent() {
+function autoUploadAction() {
     sendPageMessage("~content=" + text.innerHTML);
 }
 
-function handleAutoUpload() {
-    autoUploadCounter--;
-    
-    if (autoUploadCounter == 0) {
-        uploadContent();
-    } else if (autoUploadCounter < 0) {
-        autoUploadCounter = -1;
+function autoUploadDetect() {
+    if (text.innerHTML != autoUploadPreviousContent) {
+        // Save copy of content for future comparison
+        autoUploadPreviousContent = text.innerHTML;
+        
+        // Schedule auto upload in 5 iterations
+        autoUploadCounter = 5;
     }
 }
 
-function detectContentChange() {
-    if (text.innerHTML != contentPrevious) {
-        // Save copy of content for future comparison
-        contentPrevious = text.innerHTML;
-        
-        // Create notepad lines in background
-        createNotepadLines();
-        
-        // Trigger auto upload
-        autoUploadCounter = 5;
+function autoUploadIterate() {
+    autoUploadCounter--;
+    
+    if (autoUploadCounter == 0) {
+        autoUploadAction();
+    } else if (autoUploadCounter < 0) {
+        autoUploadCounter = -1;
     }
 }
 
@@ -135,19 +146,12 @@ function handleIncomingAssignment(key, value) {
     handler(value);
 }
 
-function handleIncomingCommand(command) {
-    // Debug log
-    console.log("appmessage: command '" + message + "'");
-    
-    /* NOP */
-}
-
 function handleIncomingAssignmentContent(value) {
     // Set new content
     text.innerHTML = value;
     
     // Sneak past auto upload detection
-    contentPrevious = value;
+    autoUploadPreviousContent = value;
 }
 
 function handleIncomingAssignmentLastModified(value) {
@@ -298,7 +302,15 @@ function handleIncomingAssignmentPref(value) {
     
     text.style.color = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_text);
     
-    createNotepadLines(true);
+    // Rebuild aesthetics
+    aestheticsRebuild();
+}
+
+function handleIncomingCommand(command) {
+    // Debug log
+    console.log("appmessage: command '" + message + "'");
+    
+    /* NOP */
 }
 
 /* Communication */
@@ -314,7 +326,7 @@ function onReceiveAppMessage(message) {
     var action = message.charAt(0);
     message = message.substring(1);
     
-    // Check action character
+    // Check action character and act accordingly
     if (action == '~') {
         if (message.indexOf("=") > 0) {
             var key   = message.substring(0, message.indexOf("="));
@@ -353,14 +365,14 @@ function utilGetMonthAbbr(month) {
 /* Initialization */
 
 function initialize() {
-    // Give us a notepad feel...
-    createNotepadLines();
+    // Build aesthetics
+    aestheticsRebuild();
     
     // Make content area editable
     text.contentEditable = true;
     
     // Set auto upload interval
-    setInterval(handleAutoUpload, 50);
+    listIntervals.push(setInterval(autoUploadIterate, 50));
 }
 
 /* Event handling */
@@ -400,24 +412,37 @@ function windowOnLoad() {
     content.onclick = contentOnClick;
     text.onclick    = textOnClick;
     
-    // Request message interval
-    setInterval(function() {
-        sendPageMessage("!request");
-    }, 50);
-    
     // Content change detection interval
-    setInterval(function() {
-        detectContentChange();
-    }, 50);
+    listIntervals.push(setInterval(function() {
+        autoUploadDetect();
+    }, 50));
+    
+    // Request message interval
+    listIntervals.push(setInterval(function() {
+        sendPageMessage("!request");
+    }, 500));
+}
+
+function windowOnUnload() {
+    // Clear intervals
+    for (var i = 0; i < listIntervals.length; i++) {
+        clearInterval(listIntervals[i]);
+    }
+    
+    // Clear timeouts
+    for (var i = 0; i < listTimeouts.length; i++) {
+        clearTimeout(listTimeouts[i]);
+    }
 }
 
 function windowOnResize() {
     // Resize content height
     content.style.height = (window.innerHeight - 60) + "px";
     
-    // Create notepad lines in background
-    createNotepadLines();
+    // Update aesthetics
+    aestheticsUpdate();
 }
 
 window.onload   = windowOnLoad;
+window.onunload = windowOnUnload;
 window.onresize = windowOnResize;
