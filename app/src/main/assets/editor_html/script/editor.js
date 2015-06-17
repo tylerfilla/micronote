@@ -6,15 +6,14 @@
 var autoUploadCounter = 0;
 var contentPrevious = "";
 
+// App preferences
+var pref = {};
+
 // Localized document elements
 var header;
 var content;
 var text;
 var lines;
-
-// Preferences
-var prefColorLines;
-var prefShowLines;
 
 /* Function */
 
@@ -58,7 +57,7 @@ function createNotepadLines(recreate) {
         }
     }
     
-    if (!prefShowLines) {
+    if (!pref.pref_style_notepad_show_lines) {
         return;
     }
     
@@ -71,8 +70,9 @@ function createNotepadLines(recreate) {
             line.classList.add("line");
             lines.appendChild(line);
             
-            if (prefColorLines) {
-                line.style.borderBottomColor = prefColorLines;
+            // Apply preferred color
+            if (pref.pref_style_notepad_color_lines) {
+                line.style.borderBottomColor = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_lines);
             }
         }
     } else {
@@ -134,22 +134,21 @@ function onReceiveAppMessage(message) {
             }
         }
         
-        // Line color preference
-        if (message.substring(0, 14) == "prefColorLines") {
-            prefColorLines = message.substring(15);
-            createNotepadLines(true);
-        }
-        
-        // Line display preference
-        if (message.substring(0, 13) == "prefShowLines") {
-            prefShowLines = message.substring(14) == "true";
-            createNotepadLines(true);
+        if (message.substring(0, 5) == "pref=") {
+            pref = JSON.parse(message.substring(5));
         }
     }
 }
 
 function sendPageMessage(message) {
     alert(message);
+}
+
+/* Utilities */
+
+function utilARGBIntToRGBHexStr(argbInt) {
+    // Convert color from a 32-bit ARGB integer to a 24-bit RGB hex string
+    return "#" + (argbInt & 0x00FFFFFF).toString(16);
 }
 
 /* Initialization */

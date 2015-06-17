@@ -11,6 +11,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.json.JSONObject;
+
 import java.util.ArrayDeque;
 
 public class NoteEditor extends WebView {
@@ -75,13 +77,15 @@ public class NoteEditor extends WebView {
         
         /* Preferences */
     
+        this.enqueueAppMessage("~pref=" + new JSONObject(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getAll()));
+        
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
     
         // Line toggle
         this.enqueueAppMessage("~prefShowLines=" + String.valueOf(sharedPreferences.getBoolean("pref_style_notepad_show_lines", true)));
     
         // Line color
-        this.enqueueAppMessage("~prefColorLines=#" + Integer.toHexString(sharedPreferences.getInt("pref_style_notepad_color_lines", 0xFF000000)&0x00FFFFFF));
+        this.enqueueAppMessage("~prefColorLines=#" + Integer.toHexString(sharedPreferences.getInt("pref_style_notepad_color_lines", 0xFF000000) & 0x00FFFFFF));
     }
     
     public boolean getEditorLoaded() {
@@ -133,6 +137,10 @@ public class NoteEditor extends WebView {
     }
     
     public void sendAppMessage(String message) {
+        // Do a ridiculous-looking quotation mark escape operation (must escape for Java String, then Java regex)
+        message = message.replaceAll("\\\"", "\\\\\\\"");
+    
+        // Send message to JavaScript receiver function
         this.loadUrl("javascript:onReceiveAppMessage(\"" + message + "\");");
     }
     

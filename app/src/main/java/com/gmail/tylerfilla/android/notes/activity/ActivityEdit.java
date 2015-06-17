@@ -231,7 +231,7 @@ public class ActivityEdit extends Activity {
         final EditText promptInputEditText = new EditText(this);
         promptInputEditText.setMaxLines(1);
         promptInputEditText.setHint(this.noteEditor.getNote().getTitle());
-        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         prompt.setView(promptInputEditText);
         
         prompt.setNegativeButton("Cancel", null);

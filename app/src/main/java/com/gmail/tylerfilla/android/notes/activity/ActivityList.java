@@ -299,7 +299,7 @@ public class ActivityList extends ListActivity {
         int intentFlags = Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intentFlags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT|Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
+            intentFlags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
         }
         
         intentEdit.setFlags(intentFlags);
