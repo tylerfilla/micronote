@@ -95,7 +95,7 @@ function onReceiveAppMessage(message) {
         message = message.substring(1);
         
         // Content
-        if (message.substring(0, 7) == "content") {
+        if (message.substring(0, 8) == "content=") {
             // Force content change without detection
             var newContent  = message.substring(8);
             text.innerHTML  = newContent;
@@ -106,7 +106,7 @@ function onReceiveAppMessage(message) {
         }
         
         // Last modified time
-        if (message.substring(0, 12) == "lastModified") {
+        if (message.substring(0, 13) == "lastModified=") {
             var timeLastModified = Number(message.substring(13));
             var timeNow          = Date.now();
             
