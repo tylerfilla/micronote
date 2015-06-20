@@ -103,19 +103,6 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
     
-    <style name="uNote.ActivityEdit" />
-    
-    <style name="uNote.ActivityEdit.Root">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-    
-    <style name="uNote.ActivityEdit.Editor">
-        <item name="android:background">@color/background_common</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-    
     <style name="uNote.ActivitySettings" />
     
     <style name="uNote.ActivitySettings.Root">

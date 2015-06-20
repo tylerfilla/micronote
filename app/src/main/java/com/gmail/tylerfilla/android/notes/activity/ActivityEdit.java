@@ -5,7 +5,6 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -119,7 +118,7 @@ public class ActivityEdit extends Activity {
         // Pause editor
         this.noteEditor.onPause();
         
-        // Write note if changed
+        // Write note if changes occurred
         if (this.noteEditor.getNote().getChanged()) {
             try {
                 NoteIO.write(this.noteEditor.getNote(), this.noteFile);
@@ -143,11 +142,6 @@ public class ActivityEdit extends Activity {
         
         // Save editor state
         this.noteEditor.saveState(outState);
-    }
-    
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
     
     private void initializeUI() {

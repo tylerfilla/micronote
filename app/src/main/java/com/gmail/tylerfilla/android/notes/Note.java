@@ -4,36 +4,26 @@ public class Note {
     
     private static final String TITLE_NOTE_BLANK = "Untitled Note";
     
-    private String title;
     private String content;
+    private String title;
     private long lastModified;
     
     private boolean changed;
+    private String previousContent;
+    private String previousTitle;
     
-    public Note(String title, String content) {
-        this.title = title;
+    public Note(String content, String title) {
         this.content = content;
+        this.title = title;
         this.lastModified = 0l;
         
         this.changed = false;
+        this.previousContent = content;
+        this.previousTitle = title;
     }
     
     public Note() {
-        this(Note.TITLE_NOTE_BLANK, "");
-    }
-    
-    public String getTitle() {
-        return this.title;
-    }
-    
-    public void setTitle(String title) {
-        if (this.title != null) {
-            this.changed = this.changed || !this.title.equals(title);
-        } else if (title != null) {
-            this.changed = true;
-        }
-        
-        this.title = title;
+        this("", Note.TITLE_NOTE_BLANK);
     }
     
     public String getContent() {
@@ -47,7 +37,29 @@ public class Note {
             this.changed = true;
         }
         
+        if (this.previousContent != null && this.previousContent.equals(content)) {
+            this.changed = false;
+        }
+        
         this.content = content;
+    }
+    
+    public String getTitle() {
+        return this.title;
+    }
+    
+    public void setTitle(String title) {
+        if (this.title != null) {
+            this.changed = this.changed || !this.title.equals(title);
+        } else if (title != null) {
+            this.changed = true;
+        }
+        
+        if (this.previousTitle != null && this.previousTitle.equals(title)) {
+            this.changed = false;
+        }
+        
+        this.title = title;
     }
     
     public long getLastModified() {
@@ -63,6 +75,11 @@ public class Note {
     }
     
     public void setChanged(boolean changed) {
+        if (!changed) {
+            this.previousContent = this.content;
+            this.previousTitle = this.title;
+        }
+        
         this.changed = changed;
     }
     
