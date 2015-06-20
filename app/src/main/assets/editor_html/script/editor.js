@@ -49,9 +49,10 @@ var listTimeouts  = new Array();
 
 // Localized document elements
 var header;
+var headerText;
 var content;
-var text;
-var lines;
+var contentText;
+var contentLines;
 
 /* Aesthetics */
 
@@ -67,8 +68,8 @@ function aestheticsUpdate() {
 
 function createNotepadLines(recreate) {
     if (recreate || !pref.pref_style_notepad_show_lines) {
-        while (lines.firstChild) {
-            lines.removeChild(lines.firstChild);
+        while (contentLines.firstChild) {
+            contentLines.removeChild(lines.firstChild);
         }
     }
     
@@ -76,18 +77,18 @@ function createNotepadLines(recreate) {
         return;
     }
     
-    var targetNumLines  = Math.floor(Math.max(content.clientHeight, text.clientHeight)/28);
-    var currentNumLines = lines.childNodes.length;
+    var targetNumLines  = Math.floor(Math.max(content.clientHeight, contentText.clientHeight)/28);
+    var currentNumLines = contentLines.childNodes.length;
     
     if (currentNumLines < targetNumLines) {
         for (var i = 0; i < targetNumLines - currentNumLines; i++) {
             var line = document.createElement("div");
             line.classList.add("line");
-            lines.appendChild(line);
+            contentLines.appendChild(line);
         }
     } else {
         for (var i = currentNumLines - targetNumLines; i > 0; i--) {
-            lines.removeChild(lines.lastChild);
+            contentLines.removeChild(contentLines.lastChild);
         }
     }
 }
@@ -95,13 +96,13 @@ function createNotepadLines(recreate) {
 /* Auto upload */
 
 function autoUploadAction() {
-    sendPageMessage("~content=" + text.innerHTML);
+    sendPageMessage("~content=" + contentText.innerHTML);
 }
 
 function autoUploadDetect() {
-    if (text.innerHTML != autoUploadPreviousContent) {
+    if (contentText.innerHTML != autoUploadPreviousContent) {
         // Save copy of content for future comparison
-        autoUploadPreviousContent = text.innerHTML;
+        autoUploadPreviousContent = contentText.innerHTML;
         
         // Schedule auto upload in 5 iterations
         autoUploadCounter = 5;
@@ -148,10 +149,13 @@ function handleIncomingAssignment(key, value) {
 
 function handleIncomingAssignmentContent(value) {
     // Set new content
-    text.innerHTML = value;
+    contentText.innerHTML = value;
     
     // Sneak past auto upload detection
     autoUploadPreviousContent = value;
+    
+    // Simulate onKeyup event
+    contentText.onkeyup();
 }
 
 function handleIncomingAssignmentLastModified(value) {
@@ -164,7 +168,7 @@ function handleIncomingAssignmentLastModified(value) {
     
     // Check for just-created signature
     if (lastModifiedTime == 0) {
-        header.innerText = "New";
+        headerText.innerText = "New";
         return;
     }
     
@@ -240,52 +244,52 @@ function handleIncomingAssignmentLastModified(value) {
     switch (pref.pref_timedate_scheme_note_timestamp) {
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_5_SEC:
         if (timeSince < 60*1000) {
-            header.innerText = Math.floor(timeSince/1000 + 0.5) + " sec";
+            headerText.innerText = Math.floor(timeSince/1000 + 0.5) + " sec";
         } else if (timeSince < 60*60*1000) {
-            header.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
+            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
         } else if (timeSince < 24*60*60*1000) {
-            header.innerText = strTime;
+            headerText.innerText = strTime;
         } else if (timeSince < 365*24*60*60*1000) {
-            header.innerText = strDateNoYear;
+            headerText.innerText = strDateNoYear;
         } else {
-            header.innerText = strDateYear;
+            headerText.innerText = strDateYear;
         }
         break;
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_4_MIN:
         if (timeSince < 60*60*1000) {
-            header.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
+            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
         } else if (timeSince < 24*60*60*1000) {
-            header.innerText = strTime;
+            headerText.innerText = strTime;
         } else if (timeSince < 365*24*60*60*1000) {
-            header.innerText = strDateNoYear;
+            headerText.innerText = strDateNoYear;
         } else {
-            header.innerText = strDateYear;
+            headerText.innerText = strDateYear;
         }
         break;
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_3_TIME:
         if (timeSince < 24*60*60*1000) {
-            header.innerText = strTime;
+            headerText.innerText = strTime;
         } else if (timeSince < 365*24*60*60*1000) {
-            header.innerText = strDateNoYear;
+            headerText.innerText = strDateNoYear;
         } else {
-            header.innerText = strDateYear;
+            headerText.innerText = strDateYear;
         }
         break;
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_2_DATE_NOYEAR:
         if (timeSince < 365*24*60*60*1000) {
-            header.innerText = strDateNoYear;
+            headerText.innerText = strDateNoYear;
         } else {
-            header.innerText = strDateYear;
+            headerText.innerText = strDateYear;
         }
         break;
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_1_DATE_YEAR:
-        header.innerText = strDateYear;
+        headerText.innerText = strDateYear;
         break;
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.FULL:
-        header.innerText = strTime + " - " + strDateYear;
+        headerText.innerText = strTime + " - " + strDateYear;
         break;
     case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.UNIX:
-        header.innerText = Math.floor(lastModifiedTime/1000 + 0.5);
+        headerText.innerText = Math.floor(lastModifiedTime/1000 + 0.5);
         break;
     }
 }
@@ -300,7 +304,7 @@ function handleIncomingAssignmentPref(value) {
     
     /* Apply new preferences */
     
-    text.style.color = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_text);
+    contentText.style.color = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_text);
     
     // Rebuild aesthetics
     aestheticsRebuild();
@@ -336,10 +340,6 @@ function onReceiveAppMessage(message) {
         } else {
             console.log("appmessage: protocol error: no assignment operator");
         }
-        
-        // Last modified time
-        if (message.substring(0, 13) == "lastModified=") {
-        }
     } else if (action == '!') {
         handleIncomingCommand(message);
     } else {
@@ -369,7 +369,7 @@ function initialize() {
     aestheticsRebuild();
     
     // Make content area editable
-    text.contentEditable = true;
+    contentText.contentEditable = true;
     
     // Set auto upload interval
     listIntervals.push(setInterval(autoUploadIterate, 50));
@@ -377,30 +377,36 @@ function initialize() {
 
 /* Event handling */
 
-function contentOnClick() {
+function contentOnClick(event) {
     // Redirect focus to text area
-    text.focus();
+    contentText.focus();
     
     // Move caret to end
     var range = document.createRange();
-    range.selectNodeContents(text);
+    range.selectNodeContents(contentText);
     range.collapse(false);
     var selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
 }
 
-function textOnClick(event) {
+function contentTextOnClick(event) {
     // Don't propagate event
     event.cancelBubble = true;
 }
 
-function windowOnLoad() {
+function contentTextOnKeyup(event) {
+    // Update aesthetics
+    aestheticsUpdate();
+}
+
+function windowOnLoad(event) {
     // Localize document elements
-    header  = document.getElementById("header");
-    content = document.getElementById("content"); 
-    text    = document.getElementById("text");
-    lines   = document.getElementById("lines");
+    header       = document.getElementById("header");
+    headerText   = document.getElementById("headerText");
+    content      = document.getElementById("content");
+    contentText  = document.getElementById("contentText");
+    contentLines = document.getElementById("contentLines");
     
     // Initialize
     initialize();
@@ -409,8 +415,9 @@ function windowOnLoad() {
     windowOnResize();
     
     // Register events that rely on window having loaded
-    content.onclick = contentOnClick;
-    text.onclick    = textOnClick;
+    content.onclick     = contentOnClick;
+    contentText.onclick = contentTextOnClick;
+    contentText.onkeyup = contentTextOnKeyup;
     
     // Content change detection interval
     listIntervals.push(setInterval(function() {
@@ -423,7 +430,7 @@ function windowOnLoad() {
     }, 500));
 }
 
-function windowOnUnload() {
+function windowOnUnload(event) {
     // Clear intervals
     for (var i = 0; i < listIntervals.length; i++) {
         clearInterval(listIntervals[i]);
@@ -435,7 +442,7 @@ function windowOnUnload() {
     }
 }
 
-function windowOnResize() {
+function windowOnResize(event) {
     // Resize content height
     content.style.height = (window.innerHeight - 60) + "px";
     

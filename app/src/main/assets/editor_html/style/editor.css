@@ -18,10 +18,21 @@ body {
     top:   0;
     right: 0;
     
+    text-align:  right;
+    
     height: 40px;
     
-    padding-right: 16px;
-    padding-top:   16px;
+    padding: 16px;
+}
+
+#headerTools {
+    display: none;
+    
+    /* Basic formatting menu */
+}
+
+#headerText {
+    display: inline;
     
     color:       #C00000;
     font-size:   1.2em;
@@ -42,19 +53,7 @@ body {
     margin-right: 8px;
 }
 
-#content #text {
-    position: absolute;
-    left:   0;
-    right:  0;
-    top:    0;
-    
-    width:  100%;
-    
-    font-size:   22px;
-    line-height: 28px;
-}
-
-#content #lines {
+#contentLines {
     position: absolute;
     bottom: 0;
     left:   0;
@@ -67,11 +66,23 @@ body {
     pointer-events: none;
 }
 
-#content #lines .line {
+#contentLines .line {
     height: 26px;
     width:  100%;
     
     margin-bottom: 1px;
     
     border-bottom: 1px solid #E5E3B9;
+}
+
+#contentText {
+    position: absolute;
+    left:   0;
+    right:  0;
+    top:    0;
+    
+    width:  100%;
+    
+    font-size:   22px;
+    line-height: 28px;
 }
