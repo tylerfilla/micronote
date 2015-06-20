@@ -105,7 +105,7 @@ public class ActivityList extends ListActivity {
         
         // Set task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
+            this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString()));
         }
         
         /* Advertisement */

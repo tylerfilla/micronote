@@ -27,7 +27,7 @@ public class ActivitySettings extends PreferenceActivity {
         this.setContentView(R.layout.activity_settings);
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString(), null, this.getResources().getColor(R.color.task_primary)));
+            this.setTaskDescription(new ActivityManager.TaskDescription(this.getTitle().toString()));
         }
     }
     

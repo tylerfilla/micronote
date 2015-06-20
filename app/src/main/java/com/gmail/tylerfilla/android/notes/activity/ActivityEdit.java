@@ -114,7 +114,7 @@ public class ActivityEdit extends Activity {
         
         // Set task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle, null, this.getResources().getColor(R.color.task_primary)));
+            this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle));
         }
         
         /* Editor */
@@ -290,7 +290,7 @@ public class ActivityEdit extends Activity {
         
         // Update task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(title, null, this.getResources().getColor(R.color.task_primary)));
+            this.setTaskDescription(new ActivityManager.TaskDescription(title));
         }
     }
     
