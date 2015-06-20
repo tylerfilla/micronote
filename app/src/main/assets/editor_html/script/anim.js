@@ -2,7 +2,7 @@
 // Written by Tyler Filla
 
 // anim.js
-// A flexible, general-purpose JavaScript animation framework 
+// A flexible, general-purpose JavaScript animation framework-thingy
 
 var anim = {
     interpolator: {
