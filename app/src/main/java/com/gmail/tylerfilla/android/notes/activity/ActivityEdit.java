@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -148,14 +147,7 @@ public class ActivityEdit extends Activity {
     
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        // Swap editor with dummy placeholder
-        this.setContentView(new View(this));
-        
-        // Call super
         super.onConfigurationChanged(newConfig);
-        
-        // Reinitialize user interface
-        this.initializeUI();
     }
     
     private void initializeUI() {
@@ -185,17 +177,20 @@ public class ActivityEdit extends Activity {
         
         /* Editor */
         
-        // Get or create note editor
-        this.noteEditor = this.noteEditor != null ? this.noteEditor : new NoteEditor(this, null, R.style.uNote_ActivityEdit_Editor);
+        // If note editor needs to be created
+        if (this.noteEditor == null) {
+            // Create note editor
+            this.noteEditor = new NoteEditor(this);
+            
+            // Set transparent background
+            this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
+            
+            // Pass note to editor
+            this.noteEditor.setNote(this.note);
+        }
         
         // Add editor to content view
         this.setContentView(this.noteEditor);
-        
-        // Set transparent background
-        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
-        
-        // Pass note to editor
-        this.noteEditor.setNote(this.note);
     }
     
     private void importNoteFile() throws IOException {

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -19,26 +21,13 @@ public class NoteEditor extends WebView {
     private ArrayDeque<String> queueAppMessage;
     private Note note;
     
-    public NoteEditor(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public NoteEditor(Context context) {
+        super(context);
         
         this.queueAppMessage = new ArrayDeque<>();
         this.note = null;
         
         this.initializeWebView();
-    }
-    
-    public NoteEditor(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-    
-    public NoteEditor(Context context) {
-        this(context, null);
-    }
-    
-    @Override
-    public boolean onCheckIsTextEditor() {
-        return true;
     }
     
     @SuppressLint("SetJavaScriptEnabled")

@@ -378,9 +378,6 @@ function utilGetMonthAbbr(month) {
 /* Initialization */
 
 function initialize() {
-    // Make content area editable (kinda the most important part here)
-    contentText.contentEditable = true;
-    
     // Build aesthetics
     aestheticsRebuild();
     
