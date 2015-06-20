@@ -73,10 +73,6 @@ function createNotepadLines(recreate) {
         }
     }
     
-    if (!pref.pref_style_notepad_show_lines) {
-        return;
-    }
-    
     var targetNumLines  = Math.floor(Math.max(content.clientHeight, contentText.clientHeight)/28);
     var currentNumLines = contentLines.childNodes.length;
     
@@ -396,13 +392,22 @@ function initialize() {
         sendPageMessage("!request");
     }, 500));
     
-    // Fade-in animation
+    // Delayed sliding fade-in animation
     setTimeout(function() {
-        anim.run(anim.interpolator.fullsin, 0, 1, 350, 15, function(val) {
+        // Slide upward via top body margin
+        anim.run(anim.interpolator.fullsin, 40, 0, 300, 10, function(val, begin, end) {
+            content.style.height = (window.innerHeight - 60 - val) + "px";
+            document.body.style.marginTop = val + "px";
+            aestheticsUpdate();
+            return true;
+        });
+        
+        // Fade in
+        anim.run(anim.interpolator.fullsin, 0, 1, 300, 10, function(val, begin, end) {
             document.body.style.opacity = val + "";
             return true;
         });
-    }, 800);
+    }, 700);
 }
 
 /* Event handling */
@@ -440,9 +445,6 @@ function windowOnLoad(event) {
     
     // Initialize
     initialize();
-    
-    // Simulate a window resize
-    windowOnResize();
     
     // Register events that rely on window having loaded
     content.onclick     = contentOnClick;

@@ -46,7 +46,7 @@ body {
 
 #content {
     position: absolute;
-    bottom: 0;
+    bottom: 40px;
     left:   0;
     right:  0;
     top:    50px;
@@ -56,14 +56,10 @@ body {
 }
 
 #contentLines {
-    position: absolute;
-    bottom: 0;
-    left:   0;
-    right:  0;
-    top:    0;
-    
     height: 100%;
     width:  100%;
+    
+    z-index: 0;
     
     pointer-events: none;
 }
@@ -78,13 +74,13 @@ body {
 }
 
 #contentText {
-    position: absolute;
-    left:   0;
-    right:  0;
-    top:    0;
+    position: relative;
+    top: -100%;
     
-    width:  100%;
+    width: 100%;
     
     font-size:   22px;
     line-height: 28px;
+    
+    z-index: 9001;
 }
