@@ -69,7 +69,7 @@ function aestheticsUpdate() {
 function createNotepadLines(recreate) {
     if (recreate || !pref.pref_style_notepad_show_lines) {
         while (contentLines.firstChild) {
-            contentLines.removeChild(lines.firstChild);
+            contentLines.removeChild(contentLines.firstChild);
         }
     }
     
