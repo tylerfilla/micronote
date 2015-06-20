@@ -93,58 +93,6 @@ public class ActivityEdit extends Activity {
             }
         }
         
-        /* User interface */
-        
-        this.initializeUI();
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        // Resume editor
-        this.noteEditor.onResume();
-    }
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        // Unload editor if finishing
-        if (this.isFinishing()) {
-            this.noteEditor.unload();
-        }
-        
-        // Pause editor
-        this.noteEditor.onPause();
-        
-        // Write note if changes occurred
-        if (this.noteEditor.getNote().getChanged()) {
-            try {
-                NoteIO.write(this.noteEditor.getNote(), this.noteFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        
-        // Restore editor state
-        this.noteEditor.restoreState(savedInstanceState);
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        
-        // Save editor state
-        this.noteEditor.saveState(outState);
-    }
-    
-    private void initializeUI() {
         /* Actionbar */
         
         this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
@@ -185,6 +133,52 @@ public class ActivityEdit extends Activity {
         
         // Add editor to content view
         this.setContentView(this.noteEditor);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        // Resume editor
+        this.noteEditor.onResume();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        // Unload editor and save note if finishing
+        if (this.isFinishing()) {
+            this.noteEditor.unload();
+            
+            // Write note if changes occurred
+            if (this.noteEditor.getNote().getChanged()) {
+                try {
+                    NoteIO.write(this.noteEditor.getNote(), this.noteFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        // Pause editor
+        this.noteEditor.onPause();
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        
+        // Restore editor state
+        this.noteEditor.restoreState(savedInstanceState);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        // Save editor state
+        this.noteEditor.saveState(outState);
     }
     
     private void importNoteFile() throws IOException {
