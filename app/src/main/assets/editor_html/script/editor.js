@@ -437,7 +437,7 @@ function windowOnLoad(event) {
             document.body.style.opacity = val + "";
             return true;
         });
-    }, 500);
+    }, 800);
 }
 
 function windowOnUnload(event) {
