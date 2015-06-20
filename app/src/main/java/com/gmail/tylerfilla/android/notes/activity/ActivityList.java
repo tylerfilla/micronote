@@ -72,19 +72,19 @@ public class ActivityList extends ListActivity {
         
         this.getActionBar().setCustomView(R.layout.activity_list_actionbar);
         this.setContentView(R.layout.activity_list);
-    
+        
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
-    
+        
         this.noteFileList = new ArrayList<File>();
         this.noteFileSearchMode = false;
         this.noteSearcher = new NoteSearcher();
-    
+        
         this.noteFileListAdapter = new NoteFileListAdapter();
         this.noteFileListOnItemClickListener = new NoteFileListOnItemClickListener();
         this.noteFileListMultiChoiceModeListener = new NoteFileListMultiChoiceModeListener();
         
         this.activityListActionbar = (FrameLayout) this.getActionBar().getCustomView();
-    
+        
         this.activityListMessageListEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageListEmpty);
         this.activityListMessageSearchEmpty = (LinearLayout) this.findViewById(R.id.activityListMessageSearchEmpty);
         this.activityListMessageSearchOpen = (LinearLayout) this.findViewById(R.id.activityListMessageSearchOpen);
@@ -182,7 +182,7 @@ public class ActivityList extends ListActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-    
+                    
                     // If the file is truly a note file
                     if (contentCheck) {
                         this.noteFileList.add(file);
@@ -234,7 +234,7 @@ public class ActivityList extends ListActivity {
                     
                 });
                 this.noteSearcher.search(query);
-    
+                
                 // Show empty search message if no files are found
                 if (this.noteFileList.isEmpty()) {
                     this.activityListMessageSearchEmpty.setVisibility(View.VISIBLE);
@@ -284,7 +284,7 @@ public class ActivityList extends ListActivity {
                 for (File noteFile : noteFileSet) {
                     noteFile.delete();
                 }
-    
+                
                 ActivityList.this.update();
             }
             
@@ -368,10 +368,10 @@ public class ActivityList extends ListActivity {
         for (int i = 0; i < this.activityListActionbar.getChildCount(); i++) {
             View child = this.activityListActionbar.getChildAt(i);
             Object tag = child.getTag();
-    
+            
             if (tag != null) {
                 String tagString = tag.toString();
-        
+                
                 if (tagString.startsWith("search:")) {
                     child.setVisibility(View.GONE);
                 } else if (tagString.startsWith("list:")) {
@@ -539,19 +539,19 @@ public class ActivityList extends ListActivity {
             switch (item.getItemId()) {
                 case R.id.activityListListSelectCABDelete:
                     Set<File> deletionSet = new HashSet<>();
-    
+                    
                     for (int i = 0; i < ActivityList.this.noteFileListAdapter.getCount(); i++) {
                         if (ActivityList.this.noteFileListAdapter.getSelected(i)) {
                             deletionSet.add((File) ActivityList.this.noteFileListAdapter.getItem(i));
                         }
                     }
-    
+                    
                     ActivityList.this.deleteNoteFilesWithPrompt(deletionSet);
                     mode.finish();
-    
+                    
                     break;
             }
-    
+            
             return true;
         }
         
@@ -573,7 +573,7 @@ public class ActivityList extends ListActivity {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             // Add to selection
             ActivityList.this.noteFileListAdapter.setSelected(position, checked);
-    
+            
             // Display number of selected notes
             mode.setTitle(ActivityList.this.noteFileListAdapter.getSelectionCount() + " note" + (ActivityList.this.noteFileListAdapter.getSelectionCount() == 1 ? "" : "s") + " selected");
         }

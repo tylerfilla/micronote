@@ -56,7 +56,7 @@ public class NoteEditor extends WebView {
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 result.confirm();
                 NoteEditor.this.onReceivePageMessage(message);
-    
+                
                 return true;
             }
             
@@ -73,7 +73,7 @@ public class NoteEditor extends WebView {
         this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
         
         /* Preferences */
-    
+        
         // Serialize all app preferences to JSON and send it
         // FIXME: NoteEditor should be implementation agnostic; add a proxy of some sort
         this.enqueueAppMessage("~pref=" + new JSONObject(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getAll()));

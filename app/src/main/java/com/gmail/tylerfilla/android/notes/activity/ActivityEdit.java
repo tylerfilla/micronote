@@ -137,7 +137,7 @@ public class ActivityEdit extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-    
+        
         // Unload editor if finishing
         if (this.isFinishing()) {
             this.noteEditor.unload();
@@ -163,7 +163,7 @@ public class ActivityEdit extends Activity {
         while (newNoteFile.exists()) {
             newNoteFile = new File(newNoteFile.getParentFile(), "_" + newNoteFile.getName());
         }
-    
+        
         // Create blank file
         newNoteFile.getParentFile().mkdirs();
         newNoteFile.createNewFile();

@@ -45,7 +45,7 @@ public class NoteSearcher {
             
             // Request the note
             Note note = this.noteSearchHandler.request(noteFile);
-    
+            
             // Search for query in title and content
             if (note.getTitle().toLowerCase().contains(query.toLowerCase())) {
                 match = true;

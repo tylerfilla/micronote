@@ -18,7 +18,7 @@ public class ActivitySettings extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    
+        
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         
         this.getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
