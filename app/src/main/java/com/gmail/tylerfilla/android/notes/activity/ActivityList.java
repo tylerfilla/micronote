@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
@@ -286,6 +287,8 @@ public class ActivityList extends ListActivity {
                 }
                 
                 ActivityList.this.update();
+                
+                Toast.makeText(ActivityList.this, "Deleted " + noteFileSet.size() + " note" + (noteFileSet.size() == 1 ? "" : "s"), Toast.LENGTH_SHORT).show();
             }
             
         });
