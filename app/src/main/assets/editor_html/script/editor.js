@@ -365,14 +365,26 @@ function utilGetMonthAbbr(month) {
 /* Initialization */
 
 function initialize() {
+    // Make content area editable (kinda the most important part here)
+    contentText.contentEditable = true;
+    
     // Build aesthetics
     aestheticsRebuild();
     
-    // Make content area editable
-    contentText.contentEditable = true;
+    // Auto upload interval
+    listIntervals.push(setInterval(function () {
+        autoUploadIterate();
+    }, 50));
     
-    // Set auto upload interval
-    listIntervals.push(setInterval(autoUploadIterate, 50));
+    // Content change detection interval
+    listIntervals.push(setInterval(function() {
+        autoUploadDetect();
+    }, 50));
+    
+    // Request message interval
+    listIntervals.push(setInterval(function() {
+        sendPageMessage("!request");
+    }, 500));
 }
 
 /* Event handling */
@@ -419,15 +431,13 @@ function windowOnLoad(event) {
     contentText.onclick = contentTextOnClick;
     contentText.onkeyup = contentTextOnKeyup;
     
-    // Content change detection interval
-    listIntervals.push(setInterval(function() {
-        autoUploadDetect();
-    }, 50));
-    
-    // Request message interval
-    listIntervals.push(setInterval(function() {
-        sendPageMessage("!request");
-    }, 500));
+    // Fade everything into view
+    setTimeout(function() {
+        anim.run(anim.interpolator.fullsin, 0, 1, 200, 20, function(val) {
+            document.body.style.opacity = val + "";
+            return true;
+        });
+    }, 500);
 }
 
 function windowOnUnload(event) {
