@@ -24,12 +24,14 @@
                 
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
+            
             </intent-filter>
-
+        
         </activity>
         
-        <activity android:name=".activity.ActivityEdit">
+        <activity
+            android:name=".activity.ActivityEdit"
+            android:configChanges="orientation|screenSize">
             
             <intent-filter>
                 
@@ -39,9 +41,9 @@
                 <data android:scheme="file" />
                 <data android:host="*" />
                 <data android:pathPattern=".*\\.note" />
-
+            
             </intent-filter>
-
+        
         </activity>
         
         <activity
@@ -52,7 +54,7 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-
+    
     </application>
 
 </manifest>

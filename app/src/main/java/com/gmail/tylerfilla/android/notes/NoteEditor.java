@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import org.json.JSONObject;
 
@@ -17,37 +16,34 @@ public class NoteEditor extends WebView {
     
     private static final String ASSET_PATH_EDITOR_HTML_INDEX = "file:///android_asset/editor_html/editor.html";
     
-    private volatile boolean editorLoaded;
-    
     private ArrayDeque<String> queueAppMessage;
-    
     private Note note;
     
-    public NoteEditor(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        
-        this.editorLoaded = false;
+    public NoteEditor(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         
         this.queueAppMessage = new ArrayDeque<>();
-        
         this.note = null;
         
-        this.loadEditor();
+        this.initializeWebView();
+    }
+    
+    public NoteEditor(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+    
+    public NoteEditor(Context context) {
+        this(context, null);
+    }
+    
+    @Override
+    public boolean onCheckIsTextEditor() {
+        return true;
     }
     
     @SuppressLint("SetJavaScriptEnabled")
-    private void loadEditor() {
+    private void initializeWebView() {
         /* Event listening */
-        
-        // Add a WebView client
-        this.setWebViewClient(new WebViewClient() {
-            
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                NoteEditor.this.editorLoaded = true;
-            }
-            
-        });
         
         // Add a Chrome client
         this.setWebChromeClient(new WebChromeClient() {
@@ -79,10 +75,6 @@ public class NoteEditor extends WebView {
         this.enqueueAppMessage("~pref=" + new JSONObject(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getAll()));
     }
     
-    public boolean getEditorLoaded() {
-        return this.editorLoaded;
-    }
-    
     public Note getNote() {
         return this.note;
     }
@@ -99,7 +91,7 @@ public class NoteEditor extends WebView {
     
     public void unload() {
         // Call the unload event handler in JavaScript
-        this.loadUrl("javascript:window.onunload();");
+        this.loadUrl("javascript:window.onunload(null);");
     }
     
     private void handleIncomingAssignment(String key, String value) {

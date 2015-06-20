@@ -1,10 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/uNote.ActivityEdit.Root">
-    
-    <com.gmail.tylerfilla.android.notes.NoteEditor
-        android:id="@+id/activityEditEditor"
-        style="@style/uNote.ActivityEdit.Editor" />
-
-</RelativeLayout>
+<RelativeLayout style="@style/uNote.ActivityEdit.Root" />

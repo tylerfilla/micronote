@@ -51,8 +51,8 @@ var listTimeouts  = new Array();
 var header;
 var headerText;
 var content;
-var contentText;
 var contentLines;
+var contentText;
 
 /* Aesthetics */
 
@@ -314,7 +314,20 @@ function handleIncomingCommand(command) {
     // Debug log
     console.log("appmessage: command '" + message + "'");
     
-    /* NOP */
+    // Default handler function
+    var handler = function() {
+        console.log("appmessage: handler error: no handler method for command '" + command + "'");
+    };
+    
+    // Select appropriate handler function for command
+    switch (command) {
+    default:
+        // NOP
+        break;
+    }
+    
+    // Call selected handler
+    handler();
 }
 
 /* Communication */
@@ -385,6 +398,14 @@ function initialize() {
     listIntervals.push(setInterval(function() {
         sendPageMessage("!request");
     }, 500));
+    
+    // Fade-in animation
+    setTimeout(function() {
+        anim.run(anim.interpolator.fullsin, 0, 1, 350, 15, function(val) {
+            document.body.style.opacity = val + "";
+            return true;
+        });
+    }, 800);
 }
 
 /* Event handling */
@@ -417,8 +438,8 @@ function windowOnLoad(event) {
     header       = document.getElementById("header");
     headerText   = document.getElementById("headerText");
     content      = document.getElementById("content");
-    contentText  = document.getElementById("contentText");
     contentLines = document.getElementById("contentLines");
+    contentText  = document.getElementById("contentText");
     
     // Initialize
     initialize();
@@ -430,14 +451,6 @@ function windowOnLoad(event) {
     content.onclick     = contentOnClick;
     contentText.onclick = contentTextOnClick;
     contentText.onkeyup = contentTextOnKeyup;
-    
-    // Fade everything into view
-    setTimeout(function() {
-        anim.run(anim.interpolator.fullsin, 0, 1, 200, 20, function(val) {
-            document.body.style.opacity = val + "";
-            return true;
-        });
-    }, 800);
 }
 
 function windowOnUnload(event) {

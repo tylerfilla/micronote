@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,7 +29,10 @@ import java.io.IOException;
 
 public class ActivityEdit extends Activity {
     
+    private SharedPreferences preferences;
+    
     private File noteFile;
+    private Note note;
     
     private NoteEditor noteEditor;
     
@@ -35,12 +40,13 @@ public class ActivityEdit extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        // Initialize preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
         
-        /* Handle intent */
+        /* Intent handling */
         
-        // Note to be edited
-        Note note = null;
+        this.note = null;
         
         // Attempt to read note described by intent
         Uri noteFileUri = this.getIntent().getData();
@@ -57,7 +63,7 @@ public class ActivityEdit extends Activity {
             }
             
             // Create a new note
-            note = new Note();
+            this.note = new Note();
             
             // Write data into intent for orientation changes
             this.getIntent().setData(Uri.fromFile(this.noteFile));
@@ -73,57 +79,25 @@ public class ActivityEdit extends Activity {
                     isDescendant = true;
                 }
             }
-            if (!isDescendant && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_import_enable", true)) {
+            if (!isDescendant && this.preferences.getBoolean("pref_import_enable", true)) {
                 this.promptImportNoteFile();
             }
             
             // Try to read note from file
             if (this.noteFile.exists()) {
                 try {
-                    note = NoteIO.read(this.noteFile);
+                    this.note = NoteIO.read(this.noteFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                note = new Note();
+                this.note = new Note();
             }
         }
         
-        /* Layout and appearance */
+        /* User interface */
         
-        this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
-        this.setContentView(R.layout.activity_edit);
-        
-        String noteTitle = note.getTitle();
-        
-        // Initialize actionbar title
-        TextView activityEditActionbarTitle = (TextView) this.findViewById(R.id.activityEditActionbarTitle);
-        activityEditActionbarTitle.setText(noteTitle);
-        activityEditActionbarTitle.setSelected(true);
-        activityEditActionbarTitle.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                ActivityEdit.this.promptNewTitle();
-            }
-            
-        });
-        
-        // Set task description
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle, null, this.getResources().getColor(R.color.task_primary)));
-        }
-        
-        /* Initialize editor */
-        
-        // Get editor reference
-        this.noteEditor = (NoteEditor) this.findViewById(R.id.activityEditEditor);
-        
-        // Set transparent background
-        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
-        
-        // Pass note to editor
-        this.noteEditor.setNote(note);
+        this.initializeUI();
     }
     
     @Override
@@ -156,6 +130,74 @@ public class ActivityEdit extends Activity {
         }
     }
     
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        
+        // Restore editor state
+        this.noteEditor.restoreState(savedInstanceState);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        // Save editor state
+        this.noteEditor.saveState(outState);
+    }
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // Swap editor with dummy placeholder
+        this.setContentView(new View(this));
+        
+        // Call super
+        super.onConfigurationChanged(newConfig);
+        
+        // Reinitialize user interface
+        this.initializeUI();
+    }
+    
+    private void initializeUI() {
+        /* Actionbar */
+        
+        this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
+        
+        String noteTitle = this.note.getTitle();
+        
+        // Initialize actionbar title
+        TextView activityEditActionbarTitle = (TextView) this.findViewById(R.id.activityEditActionbarTitle);
+        activityEditActionbarTitle.setText(noteTitle);
+        activityEditActionbarTitle.setSelected(true);
+        activityEditActionbarTitle.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                ActivityEdit.this.promptNewTitle();
+            }
+            
+        });
+        
+        // Set task description
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle, null, this.getResources().getColor(R.color.task_primary)));
+        }
+        
+        /* Editor */
+        
+        // Get or create note editor
+        this.noteEditor = this.noteEditor != null ? this.noteEditor : new NoteEditor(this, null, R.style.uNote_ActivityEdit_Editor);
+        
+        // Add editor to content view
+        this.setContentView(this.noteEditor);
+        
+        // Set transparent background
+        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
+        
+        // Pass note to editor
+        this.noteEditor.setNote(this.note);
+    }
+    
     private void importNoteFile() throws IOException {
         File newNoteFile = new File(new File(this.getFilesDir(), "notes"), "_import_" + this.noteFile.getName());
         
@@ -171,16 +213,16 @@ public class ActivityEdit extends Activity {
         // Copy note data to new file
         NoteIO.write(NoteIO.read(this.noteFile), newNoteFile);
         
-        // Redirect all modifications to new file
+        // Redirect all modifications to this new file
         this.noteFile = newNoteFile;
     }
     
     private void handlePromptImportNoteFile(boolean doImport, boolean stop) {
         if (stop) {
-            SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-            sharedPreferencesEditor.putBoolean("pref_import_enable", false);
-            sharedPreferencesEditor.apply();
+            // Save preference
+            this.preferences.edit().putBoolean("pref_import_enable", false).apply();
             
+            // Show prompt
             new AlertDialog.Builder(ActivityEdit.this)
                     .setTitle("Import Disabled")
                     .setMessage("You can re-enable this feature in the settings menu.")
