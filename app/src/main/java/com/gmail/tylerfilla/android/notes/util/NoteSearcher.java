@@ -10,7 +10,7 @@ import java.util.Map;
 public class NoteSearcher {
     
     private List<File> fileList;
-    private NoteSearchHandler noteSearchHandler;
+    private NoteSearcher.NoteSearchHandler noteSearchHandler;
     
     public NoteSearcher() {
         this.fileList = null;
@@ -21,7 +21,7 @@ public class NoteSearcher {
         this.fileList = fileList;
     }
     
-    public void setNoteSearchHandler(NoteSearchHandler noteSearchHandler) {
+    public void setNoteSearchHandler(NoteSearcher.NoteSearchHandler noteSearchHandler) {
         this.noteSearchHandler = noteSearchHandler;
     }
     
@@ -32,9 +32,6 @@ public class NoteSearcher {
         }
         if (this.noteSearchHandler == null) {
             throw new IllegalStateException("No request handler set");
-        }
-        if (query.isEmpty()) {
-            return;
         }
         
         Map<File, Boolean> resultMap = new HashMap<>();
@@ -53,6 +50,9 @@ public class NoteSearcher {
             if (note.getContent().toLowerCase().contains(query.toLowerCase())) {
                 match = true;
             }
+            
+            // Match all with empty queries
+            match = match || query.isEmpty();
             
             // Save result
             resultMap.put(noteFile, match);

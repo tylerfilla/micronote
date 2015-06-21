@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MicroNote.Activity.ActivityList.List.Item">
+    
+    <TextView
+        android:id="@+id/activityListListItemTitle"
+        style="@style/MicroNote.Activity.ActivityList.List.Item.Title" />
+    
+    <TextView
+        android:id="@+id/activityListListItemContentPreview"
+        style="@style/MicroNote.Activity.ActivityList.List.Item.ContentPreview" />
+
+</LinearLayout>

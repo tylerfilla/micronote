@@ -20,8 +20,12 @@
     <color name="text_subtitle">#ff888888</color>
     
     <color name="theme_accent">#ff7f5634</color>
-    <color name="theme_primary">#ff462f21</color>
-    <color name="theme_primary_dark">#ff38211a</color>
-    <color name="theme_window_background">#fffcf9b0</color>
+    <color name="theme_primary">#ff3e2f21</color>
+    <color name="theme_primary_dark">#ff322519</color>
+    <color name="theme_text_primary">#fff0f0f0</color>
+    <color name="theme_window_background">#fffaf6bb</color>
+    
+    <color name="activity_list_list_item_title">#ffa50000</color>
+    <color name="activity_list_list_item_content_preview">#ff646464</color>
 
 </resources>

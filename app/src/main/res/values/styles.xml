@@ -3,40 +3,60 @@
     
     <style name="MicroNote" />
     
-    <style name="MicroNote.ThemeBase" parent="@style/Theme.AppCompat">
+    <style name="MicroNote.ThemeBase" parent="@style/Theme.AppCompat.Light">
         <item name="colorAccent">@color/theme_accent</item>
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
     </style>
     
     <style name="MicroNote.Theme" parent="MicroNote.ThemeBase">
+        <item name="android:textColorPrimary">@color/theme_text_primary</item>
         <item name="android:windowBackground">@color/theme_window_background</item>
     </style>
     
-    <style name="MicroNote.Activity" />
+    <style name="MicroNote.Activity" parent="" />
     
-    <style name="MicroNote.Activity.ActivityList">
+    <style name="MicroNote.Activity.ActivityList" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivityList.List">
+    <style name="MicroNote.Activity.ActivityList.List" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:scrollbars">vertical</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivityList.List.Item">
+    <style name="MicroNote.Activity.ActivityList.List.Item" parent="">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">10dp</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivityList.List.Item.Title" parent="">
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/activity_list_list_item_title</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivityList.List.Item.ContentPreview" parent="">
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/activity_list_list_item_content_preview</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivitySettings" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivitySettings">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-    
-    <style name="MicroNote.Activity.ActivitySettings.List">
+    <style name="MicroNote.Activity.ActivitySettings.List" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
