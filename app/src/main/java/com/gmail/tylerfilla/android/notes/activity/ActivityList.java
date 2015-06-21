@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ActivityList extends Activity {
     
@@ -157,12 +158,18 @@ public class ActivityList extends Activity {
         
         private Context context;
         
+        private boolean selecting;
+        
         private List<NotePreview> notePreviewList;
+        private Set<Integer> noteSelectionSet;
         
         public ListAdapter(Context context) {
             this.context = context;
             
+            this.selecting = false;
+            
             this.notePreviewList = new ArrayList<>();
+            this.noteSelectionSet = new HashSet<>();
         }
         
         @Override
@@ -175,7 +182,7 @@ public class ActivityList extends Activity {
             // Get note preview info
             NotePreview notePreview = this.notePreviewList.get(i);
             
-            // Set note preview text
+            // Set note preview info text
             viewHolder.getTextViewTitle().setText(notePreview.getTitle());
             viewHolder.getTextViewContentPreview().setText(notePreview.getContent());
             
@@ -184,7 +191,26 @@ public class ActivityList extends Activity {
                 
                 @Override
                 public void onClick(View v) {
-                    Log.d("", "clicked item " + i);
+                    // If selecting
+                    if (ListAdapter.this.selecting) {
+                        // Toggle selection
+                        if (ListAdapter.this.noteSelectionSet.contains(i)) {
+                            // Remove from selection
+                            ListAdapter.this.noteSelectionSet.remove(i);
+                            
+                            // If selection empty
+                            if (ListAdapter.this.noteSelectionSet.isEmpty()) {
+                                // Stop selecting
+                                ListAdapter.this.selecting = false;
+                            }
+                        } else {
+                            ListAdapter.this.noteSelectionSet.add(i);
+                        }
+                        
+                        return;
+                    }
+                    
+                    // TODO: Open note
                 }
                 
             });
@@ -194,9 +220,18 @@ public class ActivityList extends Activity {
                 
                 @Override
                 public boolean onLongClick(View v) {
-                    Log.d("", "long clicked item " + i);
+                    // If not selecting
+                    if (!ListAdapter.this.selecting) {
+                        // Begin selecting
+                        ListAdapter.this.selecting = true;
+                        
+                        // Add to selection
+                        ListAdapter.this.noteSelectionSet.add(i);
+                        
+                        return true;
+                    }
                     
-                    return true;
+                    return false;
                 }
                 
             });
