@@ -23,7 +23,6 @@ public class ActivitySettings extends PreferenceActivity {
         
         this.getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
         
-        this.getActionBar().setCustomView(R.layout.activity_settings_actionbar);
         this.setContentView(R.layout.activity_settings);
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

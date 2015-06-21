@@ -1,71 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
-    style="@style/uNote.ActivityList.Root">
+    style="@style/MicroNote.Activity.ActivityList">
     
-    <ListView
-        android:id="@android:id/list"
-        style="@style/uNote.ActivityList.List.Root" />
-    
-    <LinearLayout
-        android:id="@+id/activityListMessageListEmpty"
-        style="@style/uNote.ActivityList.Message.Root">
-        
-        <TextView
-            android:id="@+id/activityListMessageListEmptyTitle"
-            android:text="@string/activity_list_list_empty_title"
-            style="@style/uNote.ActivityList.Message.Title" />
-        
-        <TextView
-            android:id="@+id/activityListMessageListEmptyBody"
-            android:text="@string/activity_list_list_empty_body"
-            style="@style/uNote.ActivityList.Message.Body" />
-
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/activityListMessageSearchEmpty"
-        style="@style/uNote.ActivityList.Message.Root">
-        
-        <TextView
-            android:id="@+id/activityListMessageSearchEmptyTitle"
-            android:text="@string/activity_list_search_empty_title"
-            style="@style/uNote.ActivityList.Message.Title" />
-        
-        <TextView
-            android:id="@+id/activityListMessageSearchEmptyBody"
-            android:text="@string/activity_list_search_empty_body"
-            style="@style/uNote.ActivityList.Message.Body" />
-    
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/activityListMessageSearchOpen"
-        style="@style/uNote.ActivityList.Message.Root">
-        
-        <TextView
-            android:id="@+id/activityListMessageSearchOpenTitle"
-            android:text="@string/activity_list_search_open_title"
-            style="@style/uNote.ActivityList.Message.Title" />
-        
-        <TextView
-            android:id="@+id/activityListMessageSearchOpenBody"
-            android:text="@string/activity_list_search_open_body"
-            style="@style/uNote.ActivityList.Message.Body" />
-
-    </LinearLayout>
-    
-    <EditText
-        android:id="@+id/activityListSearchBubble"
-        style="@style/uNote.ActivityList.SearchBubble">
-    </EditText>
-    
-    <com.google.android.gms.ads.AdView
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/admob_unit_id_activity_list_ad_view"
-        android:id="@+id/activityListAdView"
-        style="@style/uNote.ActivityList.AdView">
-    </com.google.android.gms.ads.AdView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activityListList"
+        style="@style/MicroNote.Activity.ActivityList.List" />
 
 </RelativeLayout>

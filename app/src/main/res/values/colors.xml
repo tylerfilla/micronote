@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <color name="background_actionbar_bottom">#FF30231B</color>
+    <color name="background_actionbar_bottom">#ff30231b</color>
     <color name="background_actionbar_button">#00000000</color>
-    <color name="background_actionbar_button_selected">#33FFFFFF</color>
-    <color name="background_actionbar_top">#FF5B382F</color>
+    <color name="background_actionbar_button_selected">#33ffffff</color>
+    <color name="background_actionbar_top">#ff5b382f</color>
     <color name="background_activity_list_list_item">#00000000</color>
-    <color name="background_activity_list_list_item_selected">#FFC1C09B</color>
-    <color name="background_common">#FFFCF9B0</color>
+    <color name="background_activity_list_list_item_selected">#ffc1c09b</color>
+    <color name="background_common">#fffcf9b0</color>
     
-    <color name="notepad_color_lines">#FFE5E3B9</color>
-    <color name="notepad_color_text">#FF000000</color>
+    <color name="notepad_color_lines">#ffe5e3b9</color>
+    <color name="notepad_color_text">#ff000000</color>
     
-    <color name="text_actionbar_title">#FFF0F0F0</color>
-    <color name="text_activity_list_search_bubble">#FFDDDDDD</color>
-    <color name="text_activity_list_search_bubble_hint">#FFBBBBBB</color>
-    <color name="text_footer">#FF666666</color>
-    <color name="text_title">#FFC00000</color>
-    <color name="text_subtitle">#FF888888</color>
+    <color name="text_actionbar_title">#fff0f0f0</color>
+    <color name="text_activity_list_search_bubble">#ffdddddd</color>
+    <color name="text_activity_list_search_bubble_hint">#ffbbbbbb</color>
+    <color name="text_footer">#ff666666</color>
+    <color name="text_title">#ffc00000</color>
+    <color name="text_subtitle">#ff888888</color>
     
-    <color name="material_accent">#ff7f5634</color>
-    <color name="material_primary">#ff462f21</color>
-    <color name="material_primary_dark">#ff38211a</color>
+    <color name="theme_accent">#ff7f5634</color>
+    <color name="theme_primary">#ff462f21</color>
+    <color name="theme_primary_dark">#ff38211a</color>
+    <color name="theme_window_background">#fffcf9b0</color>
 
 </resources>

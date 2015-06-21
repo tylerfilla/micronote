@@ -1,171 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <style name="uNote" />
+    <style name="MicroNote" />
     
-    <style name="uNote.Activity" />
+    <style name="MicroNote.ThemeBase" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">@color/theme_accent</item>
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+    </style>
     
-    <style name="uNote.ActivityList" />
+    <style name="MicroNote.Theme" parent="MicroNote.ThemeBase">
+        <item name="android:windowBackground">@color/theme_window_background</item>
+    </style>
     
-    <style name="uNote.ActivityList.Root">
+    <style name="MicroNote.Activity" />
+    
+    <style name="MicroNote.Activity.ActivityList">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="uNote.ActivityList.Message" />
-    
-    <style name="uNote.ActivityList.Message.Root">
-        <item name="android:gravity">center_vertical</item>
+    <style name="MicroNote.Activity.ActivityList.List">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:visibility">gone</item>
+        <item name="android:scrollbars">vertical</item>
     </style>
     
-    <style name="uNote.ActivityList.Message.Title">
-        <item name="android:gravity">center_horizontal|center_vertical</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.Title</item>
-    </style>
-    
-    <style name="uNote.ActivityList.Message.Body">
-        <item name="android:gravity">center_horizontal|center_vertical</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.Subtitle</item>
-    </style>
-    
-    <style name="uNote.ActivityList.List" />
-    
-    <style name="uNote.ActivityList.List.Root">
-        <item name="android:choiceMode">multipleChoiceModal</item>
-        <item name="android:dividerHeight">1dp</item>
-        <item name="android:footerDividersEnabled">false</item>
-        <item name="android:layout_above">@id/activityListSearchBubble</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:overScrollMode">never</item>
-    </style>
-    
-    <style name="uNote.ActivityList.List.Footer">
-        <item name="android:gravity">center_horizontal|center_vertical</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:padding">12dp</item>
-        <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.Footer</item>
-    </style>
-    
-    <style name="uNote.ActivityList.List.Item" />
-    
-    <style name="uNote.ActivityList.List.Item.Root">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:padding">10dp</item>
-    </style>
-    
-    <style name="uNote.ActivityList.List.Item.Preview">
-        <item name="android:ellipsize">end</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.Subtitle</item>
-    </style>
-    
-    <style name="uNote.ActivityList.List.Item.Title">
-        <item name="android:ellipsize">end</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.Title</item>
-    </style>
-    
-    <style name="uNote.ActivityList.SearchBubble">
-        <item name="android:background">@android:drawable/toast_frame</item>
-        <item name="android:hint">@string/activity_list_search_bubble_hint</item>
-        <item name="android:inputType">text</item>
-        <item name="android:layout_above">@id/activityListAdView</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_marginLeft">14dp</item>
-        <item name="android:layout_marginRight">14dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">@color/text_activity_list_search_bubble</item>
-        <item name="android:textColorHint">@color/text_activity_list_search_bubble_hint</item>
-        <item name="android:visibility">gone</item>
-    </style>
-    
-    <style name="uNote.ActivityList.AdView">
-        <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-    </style>
-    
-    <style name="uNote.ActivitySettings" />
-    
-    <style name="uNote.ActivitySettings.Root">
+    <style name="MicroNote.Activity.ActivityList.List.Item">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="uNote.ActivitySettings.List">
+    <style name="MicroNote.Activity.ActivitySettings">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="uNote.Theme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/uNote.Widget.ActionBar</item>
-        <item name="android:windowBackground">@color/background_common</item>
-    </style>
-    
-    <style name="uNote.Theme.TextAppearance" parent="@android:style/TextAppearance" />
-    
-    <style name="uNote.Theme.TextAppearance.ActionbarTitle">
-        <item name="android:textColor">@color/text_actionbar_title</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-    
-    <style name="uNote.Theme.TextAppearance.Footer">
-        <item name="android:textColor">@color/text_footer</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-    
-    <style name="uNote.Theme.TextAppearance.Subtitle">
-        <item name="android:textColor">@color/text_subtitle</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">italic</item>
-    </style>
-    
-    <style name="uNote.Theme.TextAppearance.Title">
-        <item name="android:textColor">@color/text_title</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-    
-    <style name="uNote.Widget" />
-    
-    <style name="uNote.Widget.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:displayOptions">showCustom</item>
+    <style name="MicroNote.Activity.ActivitySettings.List">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:titleTextStyle">@style/uNote.Widget.ActionBar.Title</item>
-    </style>
-    
-    <style name="uNote.Widget.ActionBar.Button" parent="@android:style/Widget.Holo.Light.Button">
-        <item name="android:background">@drawable/background_actionbar_button</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:layout_width">48dp</item>
-        <item name="android:onClick">onActionButtonClick</item>
-    </style>
-    
-    <style name="uNote.Widget.ActionBar.Title">
-        <item name="android:layout_gravity">center_horizontal|center_vertical</item>
-        <item name="android:gravity">center_horizontal|center_vertical</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textAppearance">@style/uNote.Theme.TextAppearance.ActionbarTitle</item>
     </style>
 
 </resources>

@@ -94,7 +94,7 @@ public class ActivityEdit extends Activity {
         }
         
         /* Actionbar */
-        
+        /*
         this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
         
         String noteTitle = this.note.getTitle();
@@ -116,7 +116,7 @@ public class ActivityEdit extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle));
         }
-        
+        */
         /* Editor */
         
         // If note editor needs to be created
@@ -286,7 +286,7 @@ public class ActivityEdit extends Activity {
         this.noteEditor.getNote().setTitle(title);
         
         // Set actionbar title
-        ((TextView) ActivityEdit.this.findViewById(R.id.activityEditActionbarTitle)).setText(title);
+        //((TextView) ActivityEdit.this.findViewById(R.id.activityEditActionbarTitle)).setText(title);
         
         // Update task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
