@@ -173,7 +173,7 @@ public class ActivityList extends Activity {
                         }
                     }
                     
-                    // If there exists a note preview to remove
+                    // If there exists a note preview to remove, remove it
                     if (killMe != null) {
                         notePreviewList.remove(killMe);
                     }
