@@ -3,9 +3,11 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.animation.AnimatorInflater;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,6 +71,17 @@ public class ActivityList extends Activity {
         // Note searcher
         this.noteSearcher = new NoteSearcher();
         this.noteSearcherQuery = "";
+        
+        // Note preview click listener
+        this.listAdapter.setNotePreviewClickListener(new ListAdapter.NotePreviewClickListener() {
+            
+            @Override
+            public void onNotePreviewClick(ListAdapter.NotePreview notePreview) {
+                // Open note file
+                ActivityList.this.openNoteFile(notePreview.getFile());
+            }
+            
+        });
     }
     
     @Override
@@ -176,6 +189,24 @@ public class ActivityList extends Activity {
         this.listAdapter.notifyDataSetChanged();
     }
     
+    private void openNoteFile(File noteFile) {
+        // Intent to edit activity
+        Intent intentEdit = new Intent(this, ActivityEdit.class);
+        
+        // Set intent flags
+        int intentFlags = Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intentFlags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
+        }
+        intentEdit.setFlags(intentFlags);
+        
+        // Set URI from file
+        intentEdit.setData(Uri.fromFile(noteFile));
+        
+        // Start activity
+        this.startActivity(intentEdit);
+    }
+    
     public static class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         
         private static final String STATE_KEY_SELECTING = "list_adapter_selecting";
@@ -188,6 +219,8 @@ public class ActivityList extends Activity {
         private List<NotePreview> notePreviewList;
         private Set<Integer> noteSelectionSet;
         
+        private NotePreviewClickListener notePreviewClickListener;
+        
         public ListAdapter(Context context) {
             this.context = context;
             
@@ -195,6 +228,8 @@ public class ActivityList extends Activity {
             
             this.notePreviewList = new ArrayList<>();
             this.noteSelectionSet = new HashSet<>();
+            
+            this.notePreviewClickListener = null;
         }
         
         @Override
@@ -212,7 +247,7 @@ public class ActivityList extends Activity {
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
             // Get note preview info
-            NotePreview notePreview = this.notePreviewList.get(i);
+            final NotePreview notePreview = this.notePreviewList.get(i);
             
             // Set note preview info text
             viewHolder.getTextViewTitle().setText(notePreview.getTitle());
@@ -247,7 +282,8 @@ public class ActivityList extends Activity {
                         return;
                     }
                     
-                    // TODO: Open note
+                    // Invoke click listener
+                    ListAdapter.this.notePreviewClickListener.onNotePreviewClick(notePreview);
                 }
                 
             });
@@ -305,6 +341,10 @@ public class ActivityList extends Activity {
             if (noteSelectionList != null) {
                 this.noteSelectionSet = new HashSet<>(noteSelectionList);
             }
+        }
+        
+        public void setNotePreviewClickListener(NotePreviewClickListener notePreviewClickListener) {
+            this.notePreviewClickListener = notePreviewClickListener;
         }
         
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -395,6 +435,12 @@ public class ActivityList extends Activity {
             public String getContent() {
                 return this.content;
             }
+            
+        }
+        
+        public static interface NotePreviewClickListener {
+            
+            public void onNotePreviewClick(NotePreview notePreview);
             
         }
         
