@@ -1,8 +1,7 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
 import android.animation.AnimatorInflater;
-import android.app.Activity;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -10,14 +9,21 @@ import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.StateSet;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
@@ -28,11 +34,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ActivityList extends Activity {
+public class ActivityList extends AppCompatActivity {
+    
+    private static final String STATE_KEY_SELECTION_ACTION_MODE_SHOWN = "action_mode_select_shown";
     
     private static final int NOTE_PREVIEW_TITLE_MAX = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX = 50;
@@ -45,6 +54,8 @@ public class ActivityList extends Activity {
     
     private NoteSearcher noteSearcher;
     private String noteSearcherQuery;
+    
+    private ActionMode actionModeSelect;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,11 +104,16 @@ public class ActivityList extends Activity {
     }
     
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         
         // Restore list adapter state
         this.listAdapter.restoreState(savedInstanceState);
+        
+        // Restore selection action mode state
+        if (savedInstanceState.getBoolean(STATE_KEY_SELECTION_ACTION_MODE_SHOWN)) {
+            this.actionModeSelect = this.startSupportActionMode(new SelectionActionModeCallback(this));
+        }
     }
     
     @Override
@@ -106,6 +122,9 @@ public class ActivityList extends Activity {
         
         // Save list adapter state
         this.listAdapter.saveState(outState);
+        
+        // Save selection action mode state
+        outState.putBoolean(STATE_KEY_SELECTION_ACTION_MODE_SHOWN, this.actionModeSelect != null);
     }
     
     private void refreshList() {
@@ -201,10 +220,112 @@ public class ActivityList extends Activity {
         intentEdit.setFlags(intentFlags);
         
         // Set URI from file
-        intentEdit.setData(Uri.fromFile(noteFile));
+        intentEdit.setData(noteFile == null ? null : Uri.fromFile(noteFile));
         
         // Start activity
         this.startActivity(intentEdit);
+    }
+    
+    private void promptDeleteNoteFiles(final Collection<File> noteFiles) {
+        AlertDialog.Builder promptConfirmDeleteBuilder = new AlertDialog.Builder(this);
+        
+        // Title
+        promptConfirmDeleteBuilder.setTitle("Confirm Deletion");
+        
+        // Message
+        if (noteFiles.size() == 1) {
+            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete this note?");
+        } else if (noteFiles.size() > 1) {
+            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete these " + noteFiles.size() + " notes?");
+        }
+        
+        // Buttons and positive handler
+        promptConfirmDeleteBuilder.setNegativeButton("No", null);
+        promptConfirmDeleteBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // End selection action mode
+                if (ActivityList.this.actionModeSelect != null) {
+                    ActivityList.this.actionModeSelect.finish();
+                }
+                
+                // Iterate over and delete files
+                for (File noteFile : noteFiles) {
+                    noteFile.delete();
+                }
+                
+                // Show a toast
+                Toast.makeText(ActivityList.this, "Deleted " + noteFiles.size() + " note" + (noteFiles.size() == 1 ? "" : "s"), Toast.LENGTH_SHORT).show();
+                
+                // Refresh note list
+                ActivityList.this.refreshList();
+            }
+            
+        });
+        
+        // Show the dialog
+        promptConfirmDeleteBuilder.show();
+    }
+    
+    public static class SelectionActionModeCallback implements ActionMode.Callback {
+        
+        private ActivityList activityList;
+        
+        public SelectionActionModeCallback(ActivityList activityList) {
+            this.activityList = activityList;
+        }
+        
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate selection action mode menu
+            mode.getMenuInflater().inflate(R.menu.activity_list_list_select_action_mode, menu);
+            
+            // Update
+            this.update(mode, menu);
+            
+            return true;
+        }
+        
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            this.update(mode, menu);
+            
+            return true;
+        }
+        
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            // Switch against menu item ID
+            switch (item.getItemId()) {
+            case R.id.activityListListSelectionActionModeDelete:
+                Set<File> noteFiles = new HashSet<>();
+                for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
+                    noteFiles.add(this.activityList.listAdapter.getNotePreviewList().get(selectionIndex).getFile());
+                }
+                this.activityList.promptDeleteNoteFiles(noteFiles);
+                break;
+            }
+            
+            return true;
+        }
+        
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            // Clear selection and update adapter
+            this.activityList.listAdapter.selecting = false;
+            this.activityList.listAdapter.getNoteSelectionSet().clear();
+            this.activityList.listAdapter.notifyDataSetChanged();
+            
+            // Suicide by garbage collector
+            this.activityList.actionModeSelect = null;
+        }
+        
+        private void update(ActionMode mode, Menu menu) {
+            // Update title
+            mode.setTitle(this.activityList.listAdapter.getNoteSelectionSet().size() + " note" + (this.activityList.listAdapter.getNoteSelectionSet().size() == 1 ? "" : "s"));
+        }
+        
     }
     
     public static class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
@@ -212,7 +333,7 @@ public class ActivityList extends Activity {
         private static final String STATE_KEY_SELECTING = "list_adapter_selecting";
         private static final String STATE_KEY_NOTE_SELECTION_SET = "list_adapter_note_selection_set";
         
-        private Context context;
+        private ActivityList activityList;
         
         private boolean selecting;
         
@@ -221,8 +342,8 @@ public class ActivityList extends Activity {
         
         private NotePreviewClickListener notePreviewClickListener;
         
-        public ListAdapter(Context context) {
-            this.context = context;
+        public ListAdapter(ActivityList activityList) {
+            this.activityList = activityList;
             
             this.selecting = false;
             
@@ -234,11 +355,11 @@ public class ActivityList extends Activity {
         
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.activity_list_list_item, viewGroup, false);
+            View view = LayoutInflater.from(this.activityList).inflate(R.layout.activity_list_list_item, viewGroup, false);
             
             // Use state animations if supported
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                view.setStateListAnimator(AnimatorInflater.loadStateListAnimator(this.context, R.anim.activity_list_list_item_select));
+                view.setStateListAnimator(AnimatorInflater.loadStateListAnimator(this.activityList, R.anim.activity_list_list_item_select));
             }
             
             return new ListAdapter.ViewHolder(view);
@@ -267,15 +388,21 @@ public class ActivityList extends Activity {
                         if (ListAdapter.this.noteSelectionSet.contains(i)) {
                             // Remove from selection
                             ListAdapter.this.noteSelectionSet.remove(i);
+                            ListAdapter.this.activityList.actionModeSelect.invalidate();
                             viewHolder.setSelected(false);
                             
                             // If selection empty
                             if (ListAdapter.this.noteSelectionSet.isEmpty()) {
                                 // Stop selecting
                                 ListAdapter.this.selecting = false;
+                                
+                                // Finish select action mode
+                                ListAdapter.this.activityList.actionModeSelect.finish();
                             }
                         } else {
+                            // Add to selection
                             ListAdapter.this.noteSelectionSet.add(i);
+                            ListAdapter.this.activityList.actionModeSelect.invalidate();
                             viewHolder.setSelected(true);
                         }
                         
@@ -298,8 +425,12 @@ public class ActivityList extends Activity {
                         // Begin selecting
                         ListAdapter.this.selecting = true;
                         
+                        // Start select action mode
+                        ListAdapter.this.activityList.actionModeSelect = ListAdapter.this.activityList.startSupportActionMode(new SelectionActionModeCallback(ListAdapter.this.activityList));
+                        
                         // Add to selection
                         ListAdapter.this.noteSelectionSet.add(i);
+                        ListAdapter.this.activityList.actionModeSelect.invalidate();
                         viewHolder.setSelected(true);
                         
                         return true;
@@ -404,6 +535,7 @@ public class ActivityList extends Activity {
                 
                 // Set background
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+                    // noinspection deprecation
                     this.view.setBackgroundDrawable(backgroundDrawable);
                 } else {
                     this.view.setBackground(backgroundDrawable);
@@ -438,9 +570,9 @@ public class ActivityList extends Activity {
             
         }
         
-        public static interface NotePreviewClickListener {
+        public interface NotePreviewClickListener {
             
-            public void onNotePreviewClick(NotePreview notePreview);
+            void onNotePreviewClick(NotePreview notePreview);
             
         }
         
