@@ -1,11 +1,17 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
+import android.animation.AnimatorInflater;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.StateSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +77,22 @@ public class ActivityList extends Activity {
         
         // Refresh list
         this.refreshList();
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        
+        // Restore list adapter state
+        this.listAdapter.restoreState(savedInstanceState);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        // Save list adapter state
+        this.listAdapter.saveState(outState);
     }
     
     private void refreshList() {
@@ -156,6 +178,9 @@ public class ActivityList extends Activity {
     
     public static class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         
+        private static final String STATE_KEY_SELECTING = "list_adapter_selecting";
+        private static final String STATE_KEY_NOTE_SELECTION_SET = "list_adapter_note_selection_set";
+        
         private Context context;
         
         private boolean selecting;
@@ -174,17 +199,27 @@ public class ActivityList extends Activity {
         
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new ListAdapter.ViewHolder(LayoutInflater.from(this.context).inflate(R.layout.activity_list_list_item, viewGroup, false));
+            View view = LayoutInflater.from(this.context).inflate(R.layout.activity_list_list_item, viewGroup, false);
+            
+            // Use state animations if supported
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                view.setStateListAnimator(AnimatorInflater.loadStateListAnimator(this.context, R.anim.activity_list_list_item_select));
+            }
+            
+            return new ListAdapter.ViewHolder(view);
         }
         
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, final int i) {
+        public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
             // Get note preview info
             NotePreview notePreview = this.notePreviewList.get(i);
             
             // Set note preview info text
             viewHolder.getTextViewTitle().setText(notePreview.getTitle());
             viewHolder.getTextViewContentPreview().setText(notePreview.getContent());
+            
+            // Set selection
+            viewHolder.setSelected(this.noteSelectionSet.contains(i));
             
             // Handle clicks
             viewHolder.getView().setOnClickListener(new View.OnClickListener() {
@@ -197,6 +232,7 @@ public class ActivityList extends Activity {
                         if (ListAdapter.this.noteSelectionSet.contains(i)) {
                             // Remove from selection
                             ListAdapter.this.noteSelectionSet.remove(i);
+                            viewHolder.setSelected(false);
                             
                             // If selection empty
                             if (ListAdapter.this.noteSelectionSet.isEmpty()) {
@@ -205,6 +241,7 @@ public class ActivityList extends Activity {
                             }
                         } else {
                             ListAdapter.this.noteSelectionSet.add(i);
+                            viewHolder.setSelected(true);
                         }
                         
                         return;
@@ -227,6 +264,7 @@ public class ActivityList extends Activity {
                         
                         // Add to selection
                         ListAdapter.this.noteSelectionSet.add(i);
+                        viewHolder.setSelected(true);
                         
                         return true;
                     }
@@ -246,11 +284,38 @@ public class ActivityList extends Activity {
             return this.notePreviewList;
         }
         
+        public Set<Integer> getNoteSelectionSet() {
+            return this.noteSelectionSet;
+        }
+        
+        public void saveState(Bundle outState) {
+            // Save selecting state
+            outState.putBoolean(STATE_KEY_SELECTING, this.selecting);
+            
+            // Save note selection set
+            outState.putIntegerArrayList(STATE_KEY_NOTE_SELECTION_SET, new ArrayList<>(this.noteSelectionSet));
+        }
+        
+        public void restoreState(Bundle inState) {
+            // Restore selecting state
+            this.selecting = inState.getBoolean(STATE_KEY_SELECTING);
+            
+            // Restore note selection set
+            List<Integer> noteSelectionList = inState.getIntegerArrayList(STATE_KEY_NOTE_SELECTION_SET);
+            if (noteSelectionList != null) {
+                this.noteSelectionSet = new HashSet<>(noteSelectionList);
+            }
+        }
+        
         public static class ViewHolder extends RecyclerView.ViewHolder {
             
             private View view;
             private TextView textViewTitle;
             private TextView textViewContentPreview;
+            
+            private boolean selected;
+            
+            private Drawable backgroundDrawableDefault;
             
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -258,6 +323,10 @@ public class ActivityList extends Activity {
                 this.view = itemView;
                 this.textViewTitle = (TextView) itemView.findViewById(R.id.activityListListItemTitle);
                 this.textViewContentPreview = (TextView) itemView.findViewById(R.id.activityListListItemContentPreview);
+                
+                this.selected = false;
+                
+                this.backgroundDrawableDefault = itemView.getBackground();
             }
             
             public View getView() {
@@ -270,6 +339,35 @@ public class ActivityList extends Activity {
             
             public TextView getTextViewContentPreview() {
                 return this.textViewContentPreview;
+            }
+            
+            public boolean getSelected() {
+                return this.selected;
+            }
+            
+            public void setSelected(boolean selected) {
+                this.selected = selected;
+                
+                // Set selected
+                this.view.setSelected(selected);
+                
+                // Choose appropriate background
+                Drawable backgroundDrawable;
+                if (selected) {
+                    StateListDrawable stateListDrawable = new StateListDrawable();
+                    stateListDrawable.addState(new int[] { android.R.attr.state_selected, }, new ColorDrawable(this.view.getContext().getResources().getColor(R.color.activity_list_list_item_selected)));
+                    stateListDrawable.addState(StateSet.WILD_CARD, null);
+                    backgroundDrawable = stateListDrawable;
+                } else {
+                    backgroundDrawable = this.backgroundDrawableDefault;
+                }
+                
+                // Set background
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+                    this.view.setBackgroundDrawable(backgroundDrawable);
+                } else {
+                    this.view.setBackground(backgroundDrawable);
+                }
             }
             
         }
