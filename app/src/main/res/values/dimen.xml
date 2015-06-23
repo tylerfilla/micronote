@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <dimen name="activity_list_new_button_elevation_default">4dp</dimen>
-    <dimen name="activity_list_new_button_elevation_lift">12dp</dimen>
     <dimen name="activity_list_new_button_layout_height">56dp</dimen>
     <dimen name="activity_list_new_button_layout_width">56dp</dimen>
     <dimen name="activity_list_new_button_layout_margin_bottom">16dp</dimen>
     <dimen name="activity_list_new_button_layout_margin_right">16dp</dimen>
+    
+    <dimen name="widget_floating_action_button_elevation_default">4dp</dimen>
+    <dimen name="widget_floating_action_button_elevation_lift">10dp</dimen>
     
 </resources>

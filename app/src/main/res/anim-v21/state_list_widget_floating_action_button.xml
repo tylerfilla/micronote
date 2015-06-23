@@ -7,7 +7,7 @@
             <objectAnimator
                 android:propertyName="translationZ"
                 android:duration="@android:integer/config_shortAnimTime"
-                android:valueTo="@dimen/activity_list_new_button_elevation_lift"
+                android:valueTo="@dimen/widget_floating_action_button_elevation_lift"
                 android:valueType="floatType" />
         
         </set>
@@ -19,7 +19,7 @@
             <objectAnimator
                 android:propertyName="translationZ"
                 android:duration="@android:integer/config_shortAnimTime"
-                android:valueTo="@dimen/activity_list_new_button_elevation_default"
+                android:valueTo="@dimen/widget_floating_action_button_elevation_default"
                 android:valueType="floatType" />
         
         </set>

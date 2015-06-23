@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <style name="MicroNote.Activity.ActivityList.NewButtonBase" parent="">
-        <item name="android:elevation">@dimen/activity_list_new_button_elevation_default</item>
-        <item name="android:stateListAnimator">@anim/state_list_activity_list_new_button</item>
+    <style name="MicroNote.Widget.FloatingActionButton" parent="">
+        <item name="android:elevation">@dimen/widget_floating_action_button_elevation_default</item>
+        <item name="android:stateListAnimator">@anim/state_list_widget_floating_action_button</item>
     </style>
 
 </resources>
