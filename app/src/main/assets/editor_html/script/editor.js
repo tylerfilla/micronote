@@ -1,47 +1,17 @@
 
 // Written by Tyler Filla
 
-/* Preference enums */
-
-// Date formats
-var PREF_TIMEDATE_FORMAT_DATE = {
-    "MONTH_D_YYYY": "1",
-    "MONTH_D_YY": "2",
-    "M_DD_YYYY_SLASH": "3",
-    "M_DD_YYYY_DASH": "4",
-    "M_DD_YY_SLASH": "5",
-    "M_DD_YY_DASH": "6",
-    "DD_M_YYYY_SLASH": "7",
-    "DD_M_YYYY_DASH": "8",
-    "DD_M_YY_SLASH": "9",
-    "DD_M_YY_DASH": "10",
-}
-
-// Time formats
-var PREF_TIMEDATE_FORMAT_TIME = {
-    "_12_HOUR": "12",
-    "_24_HOUR": '24',
-}
-
-// Timestamp schemes
-var PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP = {
-    "CASCADE_5_SEC": "1",
-    "CASCADE_4_MIN": "2",
-    "CASCADE_3_TIME": "3",
-    "CASCADE_2_DATE_NOYEAR": "4",
-    "CASCADE_1_DATE_YEAR": "5",
-    "FULL": "6",
-    "UNIX": "7",
-}
-
 /* Globals */
 
 // Auto upload state
 var autoUploadCounter         = 0;
 var autoUploadPreviousContent = "";
 
-// Editor preferences
-var pref = {};
+// Editor configuration
+var config = {};
+
+// Current note info
+var note = {};
 
 // Intervals and timeouts
 var listIntervals = new Array();
@@ -89,6 +59,144 @@ function createNotepadLines(recreate) {
     }
 }
 
+/* Header */
+
+function updateHeader() {
+    // Convert to calculable date and time
+    var lastModifiedDate = new Date(Number(note.lastModified));
+    var lastModifiedTime = Number(note.lastModified);
+    
+    // Time since modification (in ms)
+    var timeSince = Date.now() - lastModifiedTime;
+    
+    // Check for just-created signature
+    if (lastModifiedTime == 0) {
+        headerText.innerText = "New";
+        return;
+    }
+    
+    /* Generate preformatted date strings */
+    
+    var date      = lastModifiedDate.getDate();
+    var date2     = (date < 10 ? "0" : "") + date; // Always two digits
+    var month     = lastModifiedDate.getMonth();
+    var monthAbbr = utilGetMonthAbbr(month);
+    var year      = lastModifiedDate.getFullYear();
+    var yearShort = String(year).substring(2);
+    
+    var strDateNoYear = "[date w/o year]";
+    var strDateYear   = "[date]";
+    
+    switch (config.formatDate) {
+    case "MONTH_D_YYYY":
+        strDateNoYear = monthAbbr + " " + date;
+        strDateYear   = strDateNoYear + ", " + year;
+        break;
+    case "MONTH_D_YY":
+        strDateNoYear = monthAbbr + " " + date;
+        strDateYear   = strDateNoYear + ", " + yearShort;
+        break;
+    case "M_DD_YYYY_SLASH":
+        strDateNoYear = month + "/" + date2;
+        strDateYear   = strDateNoYear + "/" + year;
+        break;
+    case "M_DD_YYYY_DASH":
+        strDateNoYear = month + "-" + date2;
+        strDateYear   = strDateNoYear + "-" + year;
+        break;
+    case "M_DD_YY_SLASH":
+        strDateNoYear = month + "/" + date2;
+        strDateYear   = strDateNoYear + "/" + yearShort;
+        break;
+    case "M_DD_YY_DASH":
+        strDateNoYear = month + "-" + date2;
+        strDateYear   = strDateNoYear + "-" + yearShort;
+        break;
+    case "DD_M_YYYY_SLASH":
+        strDateNoYear = date2 + "/" + month;
+        strDateYear   = strDateNoYear + "/" + year;
+        break;
+    case "DD_M_YYYY_DASH":
+        strDateNoYear = date2 + "-" + month;
+        strDateYear   = strDateNoYear + "-" + year;
+        break;
+    case "DD_M_YY_SLASH":
+        strDateNoYear = date2 + "/" + month;
+        strDateYear   = strDateNoYear + "/" + yearShort;
+        break;
+    case "DD_M_YY_DASH":
+        strDateNoYear = date2 + "-" + month;
+        strDateYear   = strDateNoYear + "-" + yearShort;
+        break;
+    }
+    
+    /* Generate preformatted time string */
+    
+    var strTime = "[time]";
+    
+    switch (config.formatTime) {
+    case "_12_HOUR":
+        strTime = (lastModifiedDate.getHours()%12) + ":" + (lastModifiedDate.getMinutes() < 10 ? "0" : "") + lastModifiedDate.getMinutes() + " " + (lastModifiedDate.getHours() > 12 ? "PM" : "AM");
+        break;
+    case "_24_HOUR":
+        strTime = lastModifiedDate.getHours() + ":" + (lastModifiedDate.getMinutes() < 10 ? "0" : "") + lastModifiedDate.getMinutes();
+        break;
+    }
+    
+    // Switch against preferred scheme
+    switch (config.timestampScheme) {
+    case "CASCADE_5_SEC":
+        if (timeSince < 60*1000) {
+            headerText.innerText = Math.floor(timeSince/1000 + 0.5) + " sec";
+        } else if (timeSince < 60*60*1000) {
+            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
+        } else if (timeSince < 24*60*60*1000) {
+            headerText.innerText = strTime;
+        } else if (timeSince < 365*24*60*60*1000) {
+            headerText.innerText = strDateNoYear;
+        } else {
+            headerText.innerText = strDateYear;
+        }
+        break;
+    case "CASCADE_4_MIN":
+        if (timeSince < 60*60*1000) {
+            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
+        } else if (timeSince < 24*60*60*1000) {
+            headerText.innerText = strTime;
+        } else if (timeSince < 365*24*60*60*1000) {
+            headerText.innerText = strDateNoYear;
+        } else {
+            headerText.innerText = strDateYear;
+        }
+        break;
+    case "CASCADE_3_TIME":
+        if (timeSince < 24*60*60*1000) {
+            headerText.innerText = strTime;
+        } else if (timeSince < 365*24*60*60*1000) {
+            headerText.innerText = strDateNoYear;
+        } else {
+            headerText.innerText = strDateYear;
+        }
+        break;
+    case "CASCADE_2_DATE_NOYEAR":
+        if (timeSince < 365*24*60*60*1000) {
+            headerText.innerText = strDateNoYear;
+        } else {
+            headerText.innerText = strDateYear;
+        }
+        break;
+    case "CASCADE_1_DATE_YEAR":
+        headerText.innerText = strDateYear;
+        break;
+    case "FULL":
+        headerText.innerText = strTime + " - " + strDateYear;
+        break;
+    case "UNIX":
+        headerText.innerText = Math.floor(lastModifiedTime/1000 + 0.5);
+        break;
+    }
+}
+
 /* Auto upload */
 
 function autoUploadAction() {
@@ -128,14 +236,11 @@ function handleIncomingAssignment(key, value) {
     
     // Select appropriate handler function for key
     switch (key) {
-    case "content":
-        handler = handleIncomingAssignmentContent;
+    case "config":
+        handler = handleIncomingAssignmentConfig;
         break;
-    case "lastModified":
-        handler = handleIncomingAssignmentLastModified;
-        break;
-    case "pref":
-        handler = handleIncomingAssignmentPref;
+    case "note":
+        handler = handleIncomingAssignmentNote;
         break;
     }
     
@@ -143,164 +248,40 @@ function handleIncomingAssignment(key, value) {
     handler(value);
 }
 
-function handleIncomingAssignmentContent(value) {
-    // Set new content
-    contentText.innerHTML = value;
+function handleIncomingAssignmentConfig(value) {
+    // Parse JSON object and store to global 'config'
+    if (window.JSON) {
+        config = JSON.parse(value);
+    } else {
+        config = eval(value);
+    }
+    
+    // Update header
+    updateHeader();
+    
+    // Rebuild aesthetics
+    aestheticsRebuild();
+}
+
+function handleIncomingAssignmentNote(value) {
+    // Parse JSON object and store to global 'note'
+    if (window.JSON) {
+        note = JSON.parse(value);
+    } else {
+        note = eval(value);
+    }
+    
+    // Set content text
+    contentText.innerHTML = note.content;
     
     // Sneak past auto upload detection
-    autoUploadPreviousContent = value;
+    autoUploadPreviousContent = note.content;
     
     // Simulate onKeyup event
     contentText.onkeyup();
-}
-
-function handleIncomingAssignmentLastModified(value) {
-    // Convert to calculable date and time
-    var lastModifiedDate = new Date(Number(value));
-    var lastModifiedTime = Number(value);
     
-    // Time since modification (in ms)
-    var timeSince = Date.now() - lastModifiedTime;
-    
-    // Check for just-created signature
-    if (lastModifiedTime == 0) {
-        headerText.innerText = "New";
-        return;
-    }
-    
-    /* Generate preformatted date strings */
-    
-    var date      = lastModifiedDate.getDate();
-    var date2     = (date < 10 ? "0" : "") + date; // Always two digits
-    var month     = lastModifiedDate.getMonth();
-    var monthAbbr = utilGetMonthAbbr(month);
-    var year      = lastModifiedDate.getFullYear();
-    var yearShort = String(year).substring(2);
-    
-    var strDateNoYear = "[date w/o year]";
-    var strDateYear   = "[date]";
-    
-    switch (pref.pref_timedate_format_date) {
-    case PREF_TIMEDATE_FORMAT_DATE.MONTH_D_YYYY:
-        strDateNoYear = monthAbbr + " " + date;
-        strDateYear   = strDateNoYear + ", " + year;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.MONTH_D_YY:
-        strDateNoYear = monthAbbr + " " + date;
-        strDateYear   = strDateNoYear + ", " + yearShort;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YYYY_SLASH:
-        strDateNoYear = month + "/" + date2;
-        strDateYear   = strDateNoYear + "/" + year;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YYYY_DASH:
-        strDateNoYear = month + "-" + date2;
-        strDateYear   = strDateNoYear + "-" + year;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YY_SLASH:
-        strDateNoYear = month + "/" + date2;
-        strDateYear   = strDateNoYear + "/" + yearShort;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.M_DD_YY_DASH:
-        strDateNoYear = month + "-" + date2;
-        strDateYear   = strDateNoYear + "-" + yearShort;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YYYY_SLASH:
-        strDateNoYear = date2 + "/" + month;
-        strDateYear   = strDateNoYear + "/" + year;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YYYY_DASH:
-        strDateNoYear = date2 + "-" + month;
-        strDateYear   = strDateNoYear + "-" + year;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YY_SLASH:
-        strDateNoYear = date2 + "/" + month;
-        strDateYear   = strDateNoYear + "/" + yearShort;
-        break;
-    case PREF_TIMEDATE_FORMAT_DATE.DD_M_YY_DASH:
-        strDateNoYear = date2 + "-" + month;
-        strDateYear   = strDateNoYear + "-" + yearShort;
-        break;
-    }
-    
-    /* Generate preformatted time string */
-    
-    var strTime = "[time]";
-    
-    switch (pref.pref_timedate_format_time) {
-    case PREF_TIMEDATE_FORMAT_TIME._12_HOUR:
-        strTime = (lastModifiedDate.getHours()%12) + ":" + (lastModifiedDate.getMinutes() < 10 ? "0" : "") + lastModifiedDate.getMinutes() + " " + (lastModifiedDate.getHours() > 12 ? "PM" : "AM");
-        break;
-    case PREF_TIMEDATE_FORMAT_TIME._24_HOUR:
-        strTime = lastModifiedDate.getHours() + ":" + (lastModifiedDate.getMinutes() < 10 ? "0" : "") + lastModifiedDate.getMinutes();
-        break;
-    }
-    
-    // Switch against preferred scheme
-    switch (pref.pref_timedate_scheme_note_timestamp) {
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_5_SEC:
-        if (timeSince < 60*1000) {
-            headerText.innerText = Math.floor(timeSince/1000 + 0.5) + " sec";
-        } else if (timeSince < 60*60*1000) {
-            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
-        } else if (timeSince < 24*60*60*1000) {
-            headerText.innerText = strTime;
-        } else if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_4_MIN:
-        if (timeSince < 60*60*1000) {
-            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
-        } else if (timeSince < 24*60*60*1000) {
-            headerText.innerText = strTime;
-        } else if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_3_TIME:
-        if (timeSince < 24*60*60*1000) {
-            headerText.innerText = strTime;
-        } else if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_2_DATE_NOYEAR:
-        if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.CASCADE_1_DATE_YEAR:
-        headerText.innerText = strDateYear;
-        break;
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.FULL:
-        headerText.innerText = strTime + " - " + strDateYear;
-        break;
-    case PREF_TIMEDATE_SCHEME_NOTE_TIMESTAMP.UNIX:
-        headerText.innerText = Math.floor(lastModifiedTime/1000 + 0.5);
-        break;
-    }
-}
-
-function handleIncomingAssignmentPref(value) {
-    // Parse JSON object and store to global preferences 
-    if (window.JSON) {
-        pref = JSON.parse(value);
-    } else {
-        pref = eval(value);
-    }
-    
-    /* Apply new preferences */
-    
-    contentText.style.color = utilARGBIntToRGBHexStr(pref.pref_style_notepad_color_text);
+    // Update header
+    updateHeader();
     
     // Rebuild aesthetics
     aestheticsRebuild();
@@ -394,6 +375,11 @@ function initialize() {
     
     // Delayed sliding fade-in animation
     setTimeout(function() {
+        
+        /*
+        
+        Sliding temporarily disabled.
+        
         // Slide upward via top body margin
         anim.run(anim.interpolator.fullsin, 40, 0, 300, 10, function(val, begin, end) {
             content.style.height = (window.innerHeight - 60 - val) + "px";
@@ -401,6 +387,7 @@ function initialize() {
             aestheticsUpdate();
             return true;
         });
+        */
         
         // Fade in
         anim.run(anim.interpolator.fullsin, 0, 1, 300, 10, function(val, begin, end) {
@@ -450,6 +437,9 @@ function windowOnLoad(event) {
     content.onclick     = contentOnClick;
     contentText.onclick = contentTextOnClick;
     contentText.onkeyup = contentTextOnKeyup;
+    
+    // Simulate window resize
+    window.onresize();
 }
 
 function windowOnUnload(event) {

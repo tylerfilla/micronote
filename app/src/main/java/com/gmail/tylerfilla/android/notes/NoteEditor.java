@@ -88,11 +88,20 @@ public class NoteEditor extends WebView {
             return;
         }
         
-        // Send content to page
-        this.enqueueAppMessage("~content=" + this.note.getContent());
+        // Map for note data
+        Map<String, Object> map = new HashMap<>();
         
-        // Send last modified time to page
-        this.enqueueAppMessage("~lastModified=" + this.note.getLastModified());
+        // Put note data
+        map.put("content", this.note.getContent());
+        map.put("title", this.note.getTitle());
+        map.put("lastModified", this.note.getLastModified());
+        
+        // Send serialized copy of configuration
+        try {
+            this.enqueueAppMessage("~note=" + JSONUtil.convertMapToJSONObject(map));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     
     private void loadConfiguration() {
@@ -101,9 +110,17 @@ public class NoteEditor extends WebView {
             return;
         }
         
+        // Map for configuration data
+        Map<String, Object> map = new HashMap<>();
+        
+        // Put configuration data
+        map.put("formatDate", this.configuration.formatDate.name());
+        map.put("formatTime", this.configuration.formatTime.name());
+        map.put("timestampScheme", this.configuration.timestampScheme.name());
+        
         // Send serialized copy of configuration
         try {
-            this.enqueueAppMessage("~pref=" + JSONUtil.convertMapToJSONObject(this.configuration.toStringMap()));
+            this.enqueueAppMessage("~config=" + JSONUtil.convertMapToJSONObject(map));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -132,6 +149,9 @@ public class NoteEditor extends WebView {
         
         // Load editor document
         this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
+        
+        // Load default configuration
+        this.loadConfiguration();
     }
     
     private void handleIncomingAssignment(String key, String value) {
@@ -227,16 +247,6 @@ public class NoteEditor extends WebView {
             this.formatDate = DEFAULT_FORMAT_DATE;
             this.formatTime = DEFAULT_FORMAT_TIME;
             this.timestampScheme = DEFAULT_TIMESTAMP_SCHEME;
-        }
-        
-        public Map<String, String> toStringMap() {
-            Map<String, String> map = new HashMap<>();
-            
-            map.put("formatDate", this.formatDate.name());
-            map.put("formatTime", this.formatTime.name());
-            map.put("timestampScheme", this.timestampScheme.name());
-            
-            return map;
         }
         
         public enum EnumFormatDate {

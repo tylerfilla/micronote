@@ -107,9 +107,6 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Add editor to content view
         this.setContentView(this.noteEditor);
-        
-        NoteEditor.Configuration c = this.noteEditor.getConfiguration();
-        this.noteEditor.setConfiguration(c);
     }
     
     @Override
@@ -206,7 +203,7 @@ public class ActivityEdit extends AppCompatActivity {
         prompt.setMessage("This note file is not managed. Would you like to import a copy?");
         
         final CheckBox promptStopCheckBox = new CheckBox(this);
-        promptStopCheckBox.setText("Stop asking to import note files");
+        promptStopCheckBox.setText("Stop asking to import unmanaged note files");
         prompt.setView(promptStopCheckBox);
         
         prompt.setNegativeButton("No", new DialogInterface.OnClickListener() {
