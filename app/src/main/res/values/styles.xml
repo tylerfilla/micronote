@@ -3,15 +3,6 @@
     
     <style name="MicroNote" />
     
-    <style name="MicroNote.Theme" parent="@style/Theme.AppCompat.Light">
-        <item name="colorAccent">@color/theme_accent</item>
-        <item name="colorPrimary">@color/theme_primary</item>
-        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
-        <item name="actionModeBackground">@color/theme_primary</item>
-        <item name="android:textColorPrimary">@color/theme_text_primary</item>
-        <item name="android:windowBackground">@color/theme_window_background</item>
-    </style>
-    
     <style name="MicroNote.Activity" parent="" />
     
     <style name="MicroNote.Activity.ActivityList" parent="">
@@ -73,16 +64,13 @@
         <item name="android:textSize">18sp</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivityList.NewButtonBase" parent="" />
-    
-    <style name="MicroNote.Activity.ActivityList.NewButton" parent="MicroNote.Activity.ActivityList.NewButtonBase">
+    <style name="MicroNote.Activity.ActivityList.NewButton" parent="MicroNote.Widget.FloatingActionButton">
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_height">@dimen/activity_list_new_button_layout_height</item>
         <item name="android:layout_width">@dimen/activity_list_new_button_layout_width</item>
         <item name="android:layout_marginBottom">@dimen/activity_list_new_button_layout_margin_bottom</item>
         <item name="android:layout_marginRight">@dimen/activity_list_new_button_layout_margin_right</item>
-        <item name="android:background">@drawable/activity_list_new_button_background</item>
         <item name="android:src">@drawable/ic_mode_edit</item>
     </style>
     
@@ -94,6 +82,21 @@
     <style name="MicroNote.Activity.ActivitySettings.List" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+    </style>
+    
+    <style name="MicroNote.Theme" parent="@style/Theme.AppCompat.Light">
+        <item name="colorAccent">@color/theme_accent</item>
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="actionModeBackground">@color/theme_primary</item>
+        <item name="android:textColorPrimary">@color/theme_text_primary</item>
+        <item name="android:windowBackground">@color/theme_window_background</item>
+    </style>
+    
+    <style name="MicroNote.Widget" parent="" />
+    
+    <style name="MicroNote.Widget.FloatingActionButton" parent="">
+        <item name="android:background">@drawable/background_widget_floating_action_button</item>
     </style>
 
 </resources>
