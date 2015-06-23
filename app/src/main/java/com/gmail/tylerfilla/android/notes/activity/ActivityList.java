@@ -291,7 +291,7 @@ public class ActivityList extends AppCompatActivity {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate selection action mode menu
-            mode.getMenuInflater().inflate(R.menu.action_mode_select_activity_list_list, menu);
+            mode.getMenuInflater().inflate(R.menu.action_mode_select_activity_list, menu);
             
             // Update
             this.update(mode, menu);

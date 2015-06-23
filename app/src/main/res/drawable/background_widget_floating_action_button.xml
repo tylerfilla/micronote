@@ -4,18 +4,26 @@
     
     <item android:state_pressed="false">
         <shape android:shape="oval">
-            
             <solid android:color="@color/theme_accent" />
-        
         </shape>
     </item>
     
     <item android:state_pressed="true">
-        <shape android:shape="oval">
+        <layer-list>
             
-            <solid android:color="@color/theme_primary" />
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@color/theme_accent" />
+                </shape>
+            </item>
+            
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@color/widget_floating_action_button_nonripple_highlight" />
+                </shape>
+            </item>
         
-        </shape>
+        </layer-list>
     </item>
 
 </selector>
