@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class NoteIO {
     
-    private static String fileIdentificationComment = "MICRONOTE_DOCUMENT_FILE";
+    private static String FILE_IDENTIFICATION_COMMENT = "MICRONOTE_DOCUMENT_FILE";
     
     public static boolean check(File file) throws IOException {
         if (file == null) {
@@ -24,7 +24,7 @@ public class NoteIO {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line = reader.readLine();
         if (line != null) {
-            isNoteFile = line.endsWith(NoteIO.fileIdentificationComment);
+            isNoteFile = line.endsWith(FILE_IDENTIFICATION_COMMENT);
         }
         reader.close();
         
@@ -64,7 +64,7 @@ public class NoteIO {
         noteProps.setProperty("content", note.getContent());
         noteProps.setProperty("title", note.getTitle());
         
-        noteProps.store(new FileOutputStream(noteFile), NoteIO.fileIdentificationComment);
+        noteProps.store(new FileOutputStream(noteFile), FILE_IDENTIFICATION_COMMENT);
     }
     
 }

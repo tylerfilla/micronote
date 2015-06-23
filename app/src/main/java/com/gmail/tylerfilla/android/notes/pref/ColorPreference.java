@@ -182,7 +182,7 @@ public class ColorPreference extends DialogPreference {
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                ColorPreference.this.currentHSV[0] = 360.0f*Math.max(0.0f, Math.min(359.0f/360.0f, (event.getY() - v.getY())/v.getHeight()));
+                ColorPreference.this.currentHSV[0] = 360.0f*Math.max(0.0f, Math.min(359.0f/360.0f, (event.getY() - v.getTop())/v.getHeight()));
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
                 
                 ColorPreference.this.updateDialogView();
