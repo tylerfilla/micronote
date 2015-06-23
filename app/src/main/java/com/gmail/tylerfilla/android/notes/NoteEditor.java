@@ -2,6 +2,7 @@ package com.gmail.tylerfilla.android.notes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -28,6 +29,22 @@ public class NoteEditor extends WebView {
         this.note = null;
         
         this.initializeWebView();
+    }
+    
+    @Override
+    public void onResume() {
+        // Call through if at least Honeycomb
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            super.onPause();
+        }
+    }
+    
+    @Override
+    public void onPause() {
+        // Call through if at least Honeycomb
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            super.onPause();
+        }
     }
     
     @SuppressLint("SetJavaScriptEnabled")

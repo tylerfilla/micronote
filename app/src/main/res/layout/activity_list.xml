@@ -25,6 +25,7 @@
     
     <ImageButton
         android:id="@+id/activityListNewButton"
+        android:onClick="onButtonClick"
         style="@style/MicroNote.Activity.ActivityList.NewButton" />
 
 </RelativeLayout>

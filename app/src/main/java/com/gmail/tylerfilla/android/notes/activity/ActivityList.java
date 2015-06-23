@@ -131,6 +131,16 @@ public class ActivityList extends AppCompatActivity {
         outState.putBoolean(STATE_KEY_SELECTION_ACTION_MODE_SHOWN, this.actionModeSelect != null);
     }
     
+    public void onButtonClick(View view) {
+        // Switch against button ID
+        switch (view.getId()) {
+        case R.id.activityListNewButton:
+            // Open editor with no note file
+            this.openNoteFile(null);
+            break;
+        }
+    }
+    
     private void refreshList() {
         // Get final reference to note preview list
         final List<ListAdapter.NotePreview> notePreviewList = this.listAdapter.getNotePreviewList();
