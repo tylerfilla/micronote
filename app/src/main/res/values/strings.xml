@@ -2,9 +2,9 @@
 <resources>
     
     <string name="app_name">μNote</string>
-    <string name="app_version">DEV-git</string>
+    <string name="app_version">Alpha v0.0</string>
     
-    <string name="pref_about_content_title">μNote {version}</string>
+    <string name="pref_about_content_title">μNote Alpha v0.0</string>
     <string name="pref_about_content_summary">&#169; 2015 Tyler Filla</string>
     
     <string name="activity_list_cab_menu_item_delete">Delete</string>

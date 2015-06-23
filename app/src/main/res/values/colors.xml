@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <color name="notepad_color_lines">#ffe5e3b9</color>
-    <color name="notepad_color_text">#ff000000</color>
-    
-    <color name="theme_accent">#ff7f5634</color>
-    <color name="theme_primary">#ff3e2f21</color>
-    <color name="theme_primary_dark">#ff322519</color>
-    <color name="theme_text_primary">#fff0f0f0</color>
-    <color name="theme_window_background">#fffaf6bb</color>
-    
     <color name="activity_list_list_item_title">#ffa50000</color>
     <color name="activity_list_list_item_content_preview">#ff646464</color>
     <color name="activity_list_list_item_selected">#ffd7d3a1</color>
     
     <color name="activity_list_message_title">#ffa50000</color>
     <color name="activity_list_message_body">#ff646464</color>
+    
+    <color name="pref_default_style_notepad_color_text">#ff000000</color>
+    
+    <color name="theme_accent">#ff7f5634</color>
+    <color name="theme_primary">#ff3e2f21</color>
+    <color name="theme_primary_dark">#ff322519</color>
+    <color name="theme_text_primary">#fff0f0f0</color>
+    <color name="theme_window_background">#fffaf6bb</color>
     
     <color name="widget_floating_action_button_nonripple_highlight">#22000000</color>
 

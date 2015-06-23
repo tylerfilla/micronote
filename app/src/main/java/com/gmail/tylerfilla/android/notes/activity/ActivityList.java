@@ -309,7 +309,7 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListListSelectionActionModeDelete:
+            case R.id.activityListActionModeSelectionDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
                     noteFiles.add(this.activityList.listAdapter.getNotePreviewList().get(selectionIndex).getFile());

@@ -9,7 +9,7 @@
         android:title="Notepad Style">
         
         <com.gmail.tylerfilla.android.notes.pref.ColorPreference
-            android:defaultValue="@color/notepad_color_text"
+            android:defaultValue="@color/pref_default_style_notepad_color_text"
             android:key="pref_style_notepad_color_text"
             android:persistent="true"
             android:summary="%s"

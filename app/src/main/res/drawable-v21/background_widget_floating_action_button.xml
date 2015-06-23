@@ -5,9 +5,7 @@
     
     <item>
         <shape android:shape="oval">
-            
             <solid android:color="?attr/colorAccent" />
-        
         </shape>
     </item>
 
