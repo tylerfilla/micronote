@@ -2,7 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     
     <item android:state_selected="true">
-        
         <set>
             
             <objectAnimator
@@ -12,11 +11,9 @@
                 android:valueType="floatType" />
         
         </set>
-    
     </item>
     
     <item android:state_selected="false">
-        
         <set>
             
             <objectAnimator
@@ -26,7 +23,6 @@
                 android:valueType="floatType" />
         
         </set>
-    
     </item>
 
 </selector>

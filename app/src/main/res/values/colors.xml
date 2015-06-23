@@ -31,5 +31,7 @@
     
     <color name="activity_list_message_title">#ffa50000</color>
     <color name="activity_list_message_body">#ff646464</color>
+    
+    <color name="widget_floating_action_button_nonripple_highlight">#77000000</color>
 
 </resources>

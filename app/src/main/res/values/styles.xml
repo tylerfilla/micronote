@@ -71,7 +71,7 @@
         <item name="android:layout_width">@dimen/activity_list_new_button_layout_width</item>
         <item name="android:layout_marginBottom">@dimen/activity_list_new_button_layout_margin_bottom</item>
         <item name="android:layout_marginRight">@dimen/activity_list_new_button_layout_margin_right</item>
-        <item name="android:src">@drawable/ic_mode_edit</item>
+        <item name="android:src">@drawable/ic_mode_edit_white_24dp</item>
     </style>
     
     <style name="MicroNote.Activity.ActivitySettings" parent="">
