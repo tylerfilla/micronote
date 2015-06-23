@@ -1,6 +1,5 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,12 +9,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.NoteEditor;
@@ -25,7 +23,7 @@ import com.gmail.tylerfilla.android.notes.io.NoteIO;
 import java.io.File;
 import java.io.IOException;
 
-public class ActivityEdit extends Activity {
+public class ActivityEdit extends AppCompatActivity {
     
     private SharedPreferences preferences;
     
@@ -93,30 +91,6 @@ public class ActivityEdit extends Activity {
             }
         }
         
-        /* Actionbar */
-        /*
-        this.getActionBar().setCustomView(R.layout.activity_edit_actionbar);
-        
-        String noteTitle = this.note.getTitle();
-        
-        // Initialize actionbar title
-        TextView activityEditActionbarTitle = (TextView) this.findViewById(R.id.activityEditActionbarTitle);
-        activityEditActionbarTitle.setText(noteTitle);
-        activityEditActionbarTitle.setSelected(true);
-        activityEditActionbarTitle.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                ActivityEdit.this.promptNewTitle();
-            }
-            
-        });
-        
-        // Set task description
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(noteTitle));
-        }
-        */
         /* Editor */
         
         // If note editor needs to be created
@@ -133,6 +107,9 @@ public class ActivityEdit extends Activity {
         
         // Add editor to content view
         this.setContentView(this.noteEditor);
+        
+        NoteEditor.Configuration c = this.noteEditor.getConfiguration();
+        this.noteEditor.setConfiguration(c);
     }
     
     @Override

@@ -3,31 +3,39 @@ package com.gmail.tylerfilla.android.notes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-import org.json.JSONObject;
+import com.gmail.tylerfilla.android.notes.util.JSONUtil;
+
+import org.json.JSONException;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NoteEditor extends WebView {
     
     private static final String ASSET_PATH_EDITOR_HTML_INDEX = "file:///android_asset/editor_html/editor.html";
     
-    private ArrayDeque<String> queueAppMessage;
     private Note note;
+    private Configuration configuration;
+    private ArrayDeque<String> queueAppMessage;
     
     public NoteEditor(Context context) {
         super(context);
         
-        this.queueAppMessage = new ArrayDeque<>();
+        // Note being edited
         this.note = null;
         
+        // Configuration
+        this.configuration = new Configuration();
+        
+        // App message queue
+        this.queueAppMessage = new ArrayDeque<>();
+        
+        // Initialize backing WebView
         this.initializeWebView();
     }
     
@@ -35,7 +43,7 @@ public class NoteEditor extends WebView {
     public void onResume() {
         // Call through if at least Honeycomb
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            super.onPause();
+            super.onResume();
         }
     }
     
@@ -47,40 +55,6 @@ public class NoteEditor extends WebView {
         }
     }
     
-    @SuppressLint("SetJavaScriptEnabled")
-    private void initializeWebView() {
-        /* Event listening */
-        
-        // Add a Chrome client
-        this.setWebChromeClient(new WebChromeClient() {
-            
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                result.confirm();
-                NoteEditor.this.onReceivePageMessage(message);
-                
-                return true;
-            }
-            
-        });
-        
-        /* Settings */
-        
-        // Enable JavaScript
-        this.getSettings().setJavaScriptEnabled(true);
-        
-        /* Action */
-        
-        // Load editor document
-        this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
-        
-        /* Preferences */
-        
-        // Serialize all app preferences to JSON and send it
-        // FIXME: NoteEditor should be implementation agnostic; add a proxy of some sort
-        this.enqueueAppMessage("~pref=" + new JSONObject(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getAll()));
-    }
-    
     public Note getNote() {
         return this.note;
     }
@@ -88,16 +62,76 @@ public class NoteEditor extends WebView {
     public void setNote(Note note) {
         this.note = note;
         
-        // Send content to page
-        this.enqueueAppMessage("~content=" + note.getContent());
+        // Load new note
+        this.loadNote();
+    }
+    
+    public Configuration getConfiguration() {
+        return this.configuration;
+    }
+    
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
         
-        // Send last modified time to page
-        this.enqueueAppMessage("~lastModified=" + note.getLastModified());
+        // Load new configuration
+        this.loadConfiguration();
     }
     
     public void unload() {
         // Call the unload event handler in JavaScript
         this.loadUrl("javascript:window.onunload(null);");
+    }
+    
+    private void loadNote() {
+        // Sanity check
+        if (this.note == null) {
+            return;
+        }
+        
+        // Send content to page
+        this.enqueueAppMessage("~content=" + this.note.getContent());
+        
+        // Send last modified time to page
+        this.enqueueAppMessage("~lastModified=" + this.note.getLastModified());
+    }
+    
+    private void loadConfiguration() {
+        // Sanity check
+        if (this.configuration == null) {
+            return;
+        }
+        
+        // Send serialized copy of configuration
+        try {
+            this.enqueueAppMessage("~pref=" + JSONUtil.convertMapToJSONObject(this.configuration.toStringMap()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initializeWebView() {
+        // Add a Chrome client to intercept "alert dialogs"
+        this.setWebChromeClient(new WebChromeClient() {
+            
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                // Acknowledge alert to resume execution
+                result.confirm();
+                
+                // Send alert message to receiver method
+                NoteEditor.this.onReceivePageMessage(message);
+                
+                return true;
+            }
+            
+        });
+        
+        // Enable JavaScript
+        this.getSettings().setJavaScriptEnabled(true);
+        
+        // Load editor document
+        this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
     }
     
     private void handleIncomingAssignment(String key, String value) {
@@ -176,6 +210,69 @@ public class NoteEditor extends WebView {
         
         // Add message to queue
         this.queueAppMessage.add(message);
+    }
+    
+    public static class Configuration {
+        
+        private static final EnumFormatDate DEFAULT_FORMAT_DATE = EnumFormatDate.values()[0];
+        private static final EnumFormatTime DEFAULT_FORMAT_TIME = EnumFormatTime.values()[0];
+        private static final EnumTimestampScheme DEFAULT_TIMESTAMP_SCHEME = EnumTimestampScheme.values()[0];
+        
+        public EnumFormatDate formatDate;
+        public EnumFormatTime formatTime;
+        public EnumTimestampScheme timestampScheme;
+        
+        private Configuration() {
+            // Defaults
+            this.formatDate = DEFAULT_FORMAT_DATE;
+            this.formatTime = DEFAULT_FORMAT_TIME;
+            this.timestampScheme = DEFAULT_TIMESTAMP_SCHEME;
+        }
+        
+        public Map<String, String> toStringMap() {
+            Map<String, String> map = new HashMap<>();
+            
+            map.put("formatDate", this.formatDate.name());
+            map.put("formatTime", this.formatTime.name());
+            map.put("timestampScheme", this.timestampScheme.name());
+            
+            return map;
+        }
+        
+        public enum EnumFormatDate {
+            
+            MONTH_D_YYYY,
+            MONTH_D_YY,
+            M_DD_YYYY_SLASH,
+            M_DD_YYYY_DASH,
+            M_DD_YY_SLASH,
+            M_DD_YY_DASH,
+            DD_M_YYYY_SLASH,
+            DD_M_YYYY_DASH,
+            DD_M_YY_SLASH,
+            DD_M_YY_DASH,
+            
+        }
+        
+        public enum EnumFormatTime {
+            
+            _12_HOUR,
+            _24_HOUR,
+            
+        }
+        
+        public enum EnumTimestampScheme {
+            
+            CASCADE_5_SEC,
+            CASCADE_4_MIN,
+            CASCADE_3_TIME,
+            CASCADE_2_DATE_NOYEAR,
+            CASCADE_1_DATE_YEAR,
+            FULL,
+            UNIX,
+            
+        }
+        
     }
     
 }

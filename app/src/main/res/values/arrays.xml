@@ -15,16 +15,16 @@
     </string-array>
     
     <string-array name="array_pref_list_values_timedate_format_date">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
+        <item>MONTH_D_YYYY</item>
+        <item>MONTH_D_YY</item>
+        <item>M_DD_YYYY_SLASH</item>
+        <item>M_DD_YYYY_DASH</item>
+        <item>M_DD_YY_SLASH</item>
+        <item>M_DD_YY_DASH</item>
+        <item>DD_M_YYYY_SLASH</item>
+        <item>DD_M_YYYY_DASH</item>
+        <item>DD_M_YY_SLASH</item>
+        <item>DD_M_YY_DASH</item>
     </string-array>
     
     <string-array name="array_pref_list_entries_timedate_format_time">
@@ -48,13 +48,13 @@
     </string-array>
     
     <string-array name="array_pref_list_values_timedate_scheme_note_timestamp">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
+        <item>CASCADE_5_SEC</item>
+        <item>CASCADE_4_MIN</item>
+        <item>CASCADE_3_TIME</item>
+        <item>CASCADE_2_DATE_NOYEAR</item>
+        <item>CASCADE_1_DATE_YEAR</item>
+        <item>FULL</item>
+        <item>UNIX</item>
     </string-array>
 
 </resources>
