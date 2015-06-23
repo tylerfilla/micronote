@@ -93,17 +93,14 @@ public class ActivityEdit extends AppCompatActivity {
         
         /* Editor */
         
-        // If note editor needs to be created
-        if (this.noteEditor == null) {
-            // Create note editor
-            this.noteEditor = new NoteEditor(this);
-            
-            // Set transparent background
-            this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
-            
-            // Pass note to editor
-            this.noteEditor.setNote(this.note);
-        }
+        // Create note editor
+        this.noteEditor = new NoteEditor(this);
+        
+        // Set transparent background
+        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
+        
+        // Pass note to editor
+        this.noteEditor.setNote(this.note);
         
         // Add editor to content view
         this.setContentView(this.noteEditor);
@@ -137,22 +134,6 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Pause editor
         this.noteEditor.onPause();
-    }
-    
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        
-        // Restore editor state
-        this.noteEditor.restoreState(savedInstanceState);
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        
-        // Save editor state
-        this.noteEditor.saveState(outState);
     }
     
     private void importNoteFile() throws IOException {
