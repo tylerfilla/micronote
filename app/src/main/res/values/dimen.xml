@@ -8,5 +8,5 @@
     
     <dimen name="widget_floating_action_button_elevation_default">4dp</dimen>
     <dimen name="widget_floating_action_button_elevation_lift">10dp</dimen>
-    
+
 </resources>

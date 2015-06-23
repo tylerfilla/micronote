@@ -14,7 +14,7 @@
             android:persistent="true"
             android:summary="%s"
             android:title="Text Color" />
-    
+        
         <SwitchPreference
             android:defaultValue="true"
             android:disableDependentsState="false"
@@ -23,7 +23,7 @@
             android:summaryOff="Notepad lines will not be shown"
             android:summaryOn="Notepad lines will be shown"
             android:title="Show Notepad Lines" />
-
+    
     </PreferenceCategory>
     
     <PreferenceCategory
@@ -57,7 +57,7 @@
             android:persistent="true"
             android:summary="%s"
             android:title="Note Timestamp Scheme" />
-
+    
     </PreferenceCategory>
     
     <PreferenceCategory
@@ -85,7 +85,7 @@
             android:persistent="false"
             android:summary="@string/pref_about_content_summary"
             android:title="@string/pref_about_content_title" />
-
+    
     </PreferenceCategory>
 
 </PreferenceScreen>
