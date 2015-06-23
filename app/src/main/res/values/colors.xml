@@ -28,5 +28,8 @@
     <color name="activity_list_list_item_title">#ffa50000</color>
     <color name="activity_list_list_item_content_preview">#ff646464</color>
     <color name="activity_list_list_item_selected">#ffd7d3a1</color>
+    
+    <color name="activity_list_message_title">#ffa50000</color>
+    <color name="activity_list_message_body">#ff646464</color>
 
 </resources>

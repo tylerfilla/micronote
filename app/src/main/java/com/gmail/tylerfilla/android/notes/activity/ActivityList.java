@@ -55,6 +55,8 @@ public class ActivityList extends AppCompatActivity {
     private NoteSearcher noteSearcher;
     private String noteSearcherQuery;
     
+    private View messageListEmpty;
+    
     private ActionMode actionModeSelect;
     
     @Override
@@ -82,6 +84,9 @@ public class ActivityList extends AppCompatActivity {
         // Note searcher
         this.noteSearcher = new NoteSearcher();
         this.noteSearcherQuery = "";
+        
+        // Messages
+        this.messageListEmpty = this.findViewById(R.id.activityListMessageListEmpty);
         
         // Note preview click listener
         this.listAdapter.setNotePreviewClickListener(new ListAdapter.NotePreviewClickListener() {
@@ -203,6 +208,13 @@ public class ActivityList extends AppCompatActivity {
         
         // Execute search
         this.noteSearcher.search(this.noteSearcherQuery);
+        
+        // Show empty message if no note previews are visible
+        if (notePreviewList.isEmpty()) {
+            this.messageListEmpty.setVisibility(View.VISIBLE);
+        } else {
+            this.messageListEmpty.setVisibility(View.GONE);
+        }
         
         // Notify adapter of change
         this.listAdapter.notifyDataSetChanged();
@@ -359,7 +371,7 @@ public class ActivityList extends AppCompatActivity {
             
             // Use state animations if supported
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                view.setStateListAnimator(AnimatorInflater.loadStateListAnimator(this.activityList, R.anim.activity_list_list_item_select));
+                view.setStateListAnimator(AnimatorInflater.loadStateListAnimator(this.activityList, R.anim.state_list_activity_list_list_item));
             }
             
             return new ListAdapter.ViewHolder(view);

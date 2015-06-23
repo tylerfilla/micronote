@@ -49,6 +49,43 @@
         <item name="android:textSize">18sp</item>
     </style>
     
+    <style name="MicroNote.Activity.ActivityList.Message" parent="">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivityList.Message.Title" parent="">
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/activity_list_message_title</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivityList.Message.Body" parent="">
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/activity_list_message_body</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivityList.NewButtonBase" parent="" />
+    
+    <style name="MicroNote.Activity.ActivityList.NewButton" parent="MicroNote.Activity.ActivityList.NewButtonBase">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_height">@dimen/activity_list_new_button_layout_height</item>
+        <item name="android:layout_width">@dimen/activity_list_new_button_layout_width</item>
+        <item name="android:layout_marginBottom">@dimen/activity_list_new_button_layout_margin_bottom</item>
+        <item name="android:layout_marginRight">@dimen/activity_list_new_button_layout_margin_right</item>
+        <item name="android:background">@drawable/activity_list_new_button_background</item>
+        <item name="android:src">@drawable/ic_mode_edit</item>
+    </style>
+    
     <style name="MicroNote.Activity.ActivitySettings" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
