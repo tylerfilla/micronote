@@ -4,14 +4,16 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -27,10 +29,8 @@ public class ActivityEdit extends AppCompatActivity {
     
     private SharedPreferences preferences;
     
-    private File noteFile;
     private Note note;
-    
-    private NoteEditor noteEditor;
+    private File noteFile;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,29 +40,19 @@ public class ActivityEdit extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
         
-        /* Intent handling */
-        
-        this.note = null;
-        
         // Attempt to read note described by intent
         Uri noteFileUri = this.getIntent().getData();
         if (noteFileUri == null) {
-            // Create a new file for the note
-            this.noteFile = new File(new File(this.getFilesDir(), "notes"), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
+            // Create a new note object
+            this.note = new Note();
             
-            // Ensure all parent directories exist
-            this.noteFile.getParentFile().mkdirs();
+            // Create a new note file
+            this.noteFile = new File(NoteIO.getNoteStoreDirectory(this), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
             
-            // Ensure the name is unique
+            // Ensure the filename is unique
             while (this.noteFile.exists()) {
                 this.noteFile = new File(this.noteFile.getParentFile(), "_" + this.noteFile.getName());
             }
-            
-            // Create a new note
-            this.note = new Note();
-            
-            // Write data into intent for orientation changes
-            this.getIntent().setData(Uri.fromFile(this.noteFile));
         } else {
             // Get the note file
             this.noteFile = new File(noteFileUri.getPath());
@@ -76,172 +66,79 @@ public class ActivityEdit extends AppCompatActivity {
                 }
             }
             if (!isDescendant && this.preferences.getBoolean("pref_import_enable", true)) {
-                this.promptImportNoteFile();
+                this.promptImport();
             }
             
-            // Try to read note from file
+            // If note file exists
             if (this.noteFile.exists()) {
+                // Try to read note file
                 try {
                     this.note = NoteIO.read(this.noteFile);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-            } else {
-                this.note = new Note();
-            }
-        }
-        
-        /* Editor */
-        
-        // Create note editor
-        this.noteEditor = new NoteEditor(this);
-        
-        // Set transparent background
-        this.noteEditor.setBackgroundColor(Color.TRANSPARENT);
-        
-        // Pass note to editor
-        this.noteEditor.setNote(this.note);
-        
-        // Add editor to content view
-        this.setContentView(this.noteEditor);
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        // Resume editor
-        this.noteEditor.onResume();
-    }
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        // Unload editor and save note if finishing
-        if (this.isFinishing()) {
-            this.noteEditor.unload();
-            
-            // Write note if changes occurred
-            if (this.noteEditor.getNote().getChanged()) {
-                try {
-                    NoteIO.write(this.noteEditor.getNote(), this.noteFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    
+                    // Notification dialog
+                    AlertDialog.Builder prompt = new AlertDialog.Builder(this);
+                    
+                    // Dialog title and message
+                    prompt.setTitle("Read Failed");
+                    prompt.setMessage("Unable to read note file at " + this.noteFile.getAbsolutePath() + " due to the following exception: " + e.getMessage());
+                    
+                    // Dialog buttons
+                    prompt.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        
+                        @Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            ActivityEdit.this.finish();
+                        }
+                        
+                    });
+                    
+                    // Show dialog
+                    prompt.show();
                 }
             }
         }
         
-        // Pause editor
-        this.noteEditor.onPause();
+        // If first time creating activity
+        if (savedInstanceState == null) {
+            // Add new editor fragment
+            this.getSupportFragmentManager().beginTransaction().add(android.R.id.content, new EditorFragment()).commit();
+        }
     }
     
-    private void importNoteFile() throws IOException {
-        File newNoteFile = new File(new File(this.getFilesDir(), "notes"), "_import_" + this.noteFile.getName());
+    @Override
+    public void finish() {
+        // Choose and call through to appropriate finish method
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            super.finishAndRemoveTask();
+        } else {
+            super.finish();
+        }
+    }
+    
+    private void importNote() {
+        File newNoteFile = new File(NoteIO.getNoteStoreDirectory(this), "_import_" + this.noteFile.getName());
         
         // Ensure the name is unique
         while (newNoteFile.exists()) {
             newNoteFile = new File(newNoteFile.getParentFile(), "_" + newNoteFile.getName());
         }
         
-        // Create blank file
-        newNoteFile.getParentFile().mkdirs();
-        newNoteFile.createNewFile();
-        
         // Copy note data to new file
-        NoteIO.write(NoteIO.read(this.noteFile), newNoteFile);
+        try {
+            NoteIO.write(NoteIO.read(this.noteFile), newNoteFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         // Redirect all modifications to this new file
         this.noteFile = newNoteFile;
     }
     
-    private void handlePromptImportNoteFile(boolean doImport, boolean stop) {
-        if (stop) {
-            // Save preference
-            this.preferences.edit().putBoolean("pref_import_enable", false).apply();
-            
-            // Show prompt
-            new AlertDialog.Builder(ActivityEdit.this)
-                    .setTitle("Import Disabled")
-                    .setMessage("You can re-enable this feature in the settings menu.")
-                    .setPositiveButton("Okay", null)
-                    .show();
-        }
-        
-        if (doImport) {
-            try {
-                this.importNoteFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    private void promptImportNoteFile() {
-        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
-        
-        prompt.setTitle("Import Note File");
-        prompt.setMessage("This note file is not managed. Would you like to import a copy?");
-        
-        final CheckBox promptStopCheckBox = new CheckBox(this);
-        promptStopCheckBox.setText("Stop asking to import unmanaged note files");
-        prompt.setView(promptStopCheckBox);
-        
-        prompt.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int whichButton) {
-                ActivityEdit.this.handlePromptImportNoteFile(false, promptStopCheckBox.isChecked());
-            }
-            
-        });
-        prompt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int whichButton) {
-                ActivityEdit.this.handlePromptImportNoteFile(true, promptStopCheckBox.isChecked());
-            }
-            
-        });
-        
-        prompt.show();
-    }
-    
-    private void promptNewTitle() {
-        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
-        
-        prompt.setTitle("Edit Title");
-        prompt.setMessage("Please enter a new title below.");
-        
-        final EditText promptInputEditText = new EditText(this);
-        promptInputEditText.setMaxLines(1);
-        promptInputEditText.setHint(this.noteEditor.getNote().getTitle());
-        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        prompt.setView(promptInputEditText);
-        
-        prompt.setNegativeButton("Cancel", null);
-        prompt.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String title = promptInputEditText.getText().toString();
-                
-                if (!title.isEmpty()) {
-                    ActivityEdit.this.handleNoteTitleUpdate(title);
-                }
-            }
-            
-        });
-        
-        prompt.show();
-    }
-    
-    private void handleNoteTitleUpdate(String title) {
+    private void renameNote(String title) {
         // Set note title
-        this.noteEditor.getNote().setTitle(title);
-        
-        // Set actionbar title
-        //((TextView) ActivityEdit.this.findViewById(R.id.activityEditActionbarTitle)).setText(title);
+        this.note.setTitle(title);
         
         // Update task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -249,43 +146,170 @@ public class ActivityEdit extends AppCompatActivity {
         }
     }
     
-    private void handleClose() {
-        // Lollipop gets special treatment here...
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.finishAndRemoveTask();
-            return;
+    private void handlePromptImport(boolean doImport, boolean stop) {
+        if (stop) {
+            // Save preference
+            this.preferences.edit().putBoolean("pref_import_enable", false).apply();
+            
+            // Notification dialog
+            AlertDialog.Builder prompt = new AlertDialog.Builder(this);
+            
+            // Dialog title and message
+            prompt.setTitle("Import Disabled");
+            prompt.setMessage("You can re-enable this feature in the settings menu.");
+            
+            // Dialog buttons
+            prompt.setPositiveButton(android.R.string.ok, null);
+            
+            // Show dialog
+            prompt.show();
         }
         
-        // Everyone else finishes normally
-        this.finish();
+        // If prompt result was positive
+        if (doImport) {
+            this.importNote();
+        }
     }
     
-    /*
-    
-    private void handleMenu() {
-        PopupMenu popupMenu = new PopupMenu(this, this.findViewById(R.id.activityEditActionbarButtonMenu));
-        popupMenu.getMenuInflater().inflate(R.menu.activity_edit_menu, popupMenu.getMenu());
-        
-        // Gettin' a bit hacky up in here...
-        try {
-            Field mPopup = PopupMenu.class.getDeclaredField("mPopup");
-            mPopup.setAccessible(true);
-            mPopup.get(popupMenu).getClass().getMethod("setForceShowIcon", boolean.class).invoke(mPopup.get(popupMenu), true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        popupMenu.show();
+    private void handlePromptRename(String title) {
+        // Rename note
+        this.renameNote(title);
     }
     
-    */
+    private void promptImport() {
+        // Import prompt dialog
+        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
+        
+        // Dialog title and message
+        prompt.setTitle("Import Note");
+        prompt.setMessage("Would you like to import a copy of this note?");
+        
+        // Stop checkbox
+        final CheckBox promptStopCheckBox = new CheckBox(this);
+        promptStopCheckBox.setText("Stop asking to import notes");
+        prompt.setView(promptStopCheckBox);
+        
+        // Dialog buttons
+        prompt.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                ActivityEdit.this.handlePromptImport(false, promptStopCheckBox.isChecked());
+            }
+            
+        });
+        prompt.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                ActivityEdit.this.handlePromptImport(true, promptStopCheckBox.isChecked());
+            }
+            
+        });
+        
+        // Show dialog
+        prompt.show();
+    }
     
-    public void onActionButtonClick(View view) {
-        if ("close".equals(view.getTag())) {
-            this.handleClose();
-        } else if ("menu".equals(view.getTag())) {
-            //this.handleMenu();
+    private void promptRename() {
+        // Rename prompt dialog
+        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
+        
+        // Dialog title and message
+        prompt.setTitle("Rename");
+        prompt.setMessage("Please enter a new title below.");
+        
+        // Title textbox
+        final EditText promptInputEditText = new EditText(this);
+        promptInputEditText.setMaxLines(1);
+        promptInputEditText.setHint(this.note.getTitle());
+        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        prompt.setView(promptInputEditText);
+        
+        // Dialog buttons
+        prompt.setNegativeButton(android.R.string.cancel, null);
+        prompt.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String title = promptInputEditText.getText().toString();
+                
+                if (!title.isEmpty()) {
+                    ActivityEdit.this.handlePromptRename(title);
+                }
+            }
+            
+        });
+        
+        // Show dialog
+        prompt.show();
+    }
+    
+    public static class EditorFragment extends Fragment {
+        
+        private NoteEditor noteEditor;
+        
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            
+            // Retain instance of this fragment
+            this.setRetainInstance(true);
         }
+        
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            // If note editor not already created
+            if (this.noteEditor == null) {
+                // Create note editor
+                this.noteEditor = new NoteEditor(this.getActivity().getApplicationContext());
+                
+                // Pass note to editor
+                this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
+            }
+            
+            return this.noteEditor;
+        }
+        
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            
+            // Remove note editor from its current parent
+            ((ViewGroup) this.noteEditor.getParent()).removeView(this.noteEditor);
+        }
+        
+        @Override
+        public void onResume() {
+            super.onResume();
+            
+            // Resume note editor
+            this.noteEditor.onResume();
+        }
+        
+        @Override
+        public void onPause() {
+            super.onPause();
+            
+            // If activity is finishing
+            if (this.getActivity().isFinishing()) {
+                // Unload note editor
+                this.noteEditor.unload();
+                
+                // Write note if changes occurred
+                if (this.noteEditor.getNote().getChanged()) {
+                    try {
+                        NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+            // Pause note editor
+            this.noteEditor.onPause();
+        }
+        
     }
     
 }

@@ -46,8 +46,6 @@ public class ActivityList extends AppCompatActivity {
     private static final int NOTE_PREVIEW_TITLE_MAX = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX = 50;
     
-    private File noteFileDir;
-    
     private RecyclerView list;
     private ActivityList.ListAdapter listAdapter;
     private RecyclerView.LayoutManager listLayoutManager;
@@ -68,10 +66,6 @@ public class ActivityList extends AppCompatActivity {
         
         // Set content view
         this.setContentView(R.layout.activity_list);
-        
-        // Note file directory
-        this.noteFileDir = new File(this.getFilesDir(), "notes");
-        this.noteFileDir.mkdirs();
         
         // Get reference to list
         this.list = (RecyclerView) this.findViewById(R.id.activityListList);
@@ -153,7 +147,7 @@ public class ActivityList extends AppCompatActivity {
         notePreviewList.clear();
         
         // List note files to searcher
-        this.noteSearcher.setFileList(Arrays.asList(this.noteFileDir.listFiles()));
+        this.noteSearcher.setFileList(Arrays.asList(NoteIO.getNoteStoreDirectory(this).listFiles()));
         
         // Set handler for searcher
         this.noteSearcher.setNoteSearchHandler(new NoteSearcher.NoteSearchHandler() {

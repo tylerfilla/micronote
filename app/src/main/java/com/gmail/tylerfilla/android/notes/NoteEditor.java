@@ -3,6 +3,7 @@ package com.gmail.tylerfilla.android.notes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -25,9 +26,6 @@ public class NoteEditor extends WebView {
     
     public NoteEditor(Context context) {
         super(context);
-        
-        // Note being edited
-        this.note = null;
         
         // Configuration
         this.configuration = new Configuration();
@@ -149,6 +147,9 @@ public class NoteEditor extends WebView {
         
         // Load editor document
         this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
+        
+        // Background transparency workaround
+        this.setBackgroundColor(0);
         
         // Load default configuration
         this.loadConfiguration();
