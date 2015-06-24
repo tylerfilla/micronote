@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -105,6 +106,22 @@ public class ActivityEdit extends AppCompatActivity {
             // Add new editor fragment
             this.getSupportFragmentManager().beginTransaction().add(android.R.id.content, new EditorFragment()).commit();
         }
+        
+        // Add back button to actionbar
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Switch against item ID
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            // Call back button press handler
+            this.onBackPressed();
+            return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
     }
     
     @Override
