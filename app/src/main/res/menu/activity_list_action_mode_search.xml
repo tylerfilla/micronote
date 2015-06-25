@@ -2,11 +2,5 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
-    <item
-        android:id="@+id/activityListMenuActionModeSearchSubmit"
-        android:icon="@drawable/ic_delete_white_24dp"
-        android:title="@string/activity_list_menu_action_mode_search_submit_title"
-        app:showAsAction="always" />
 
 </menu>

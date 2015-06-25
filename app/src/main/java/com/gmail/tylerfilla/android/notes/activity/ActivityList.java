@@ -246,11 +246,19 @@ public class ActivityList extends AppCompatActivity {
         // Execute search
         this.noteSearcher.search(this.noteSearcherQuery);
         
-        // Show empty message if no note previews are visible
+        // If list is empty
         if (notePreviewList.isEmpty()) {
-            this.messageEmptyList.setVisibility(View.VISIBLE);
+            // Choose appropriate empty message
+            if (this.actionModeType == EnumActionMode.NONE || this.actionModeType == EnumActionMode.SELECT) {
+                this.messageEmptyList.setVisibility(View.VISIBLE);
+                this.messageEmptySearch.setVisibility(View.GONE);
+            } else if (this.actionModeType == EnumActionMode.SEARCH || this.actionModeType == EnumActionMode.SEARCH_SELECT) {
+                this.messageEmptyList.setVisibility(View.GONE);
+                this.messageEmptySearch.setVisibility(View.VISIBLE);
+            }
         } else {
             this.messageEmptyList.setVisibility(View.GONE);
+            this.messageEmptySearch.setVisibility(View.GONE);
         }
         
         // Notify adapter of change
@@ -258,7 +266,11 @@ public class ActivityList extends AppCompatActivity {
     }
     
     private void searchBegin() {
+        // Activate search action mode
         this.activateActionMode(EnumActionMode.SEARCH);
+        
+        // Refresh list
+        this.refreshList();
     }
     
     private void openNoteFile(File noteFile) {
