@@ -8,17 +8,33 @@
         style="@style/MicroNote.Activity.ActivityList.List" />
     
     <LinearLayout
-        android:id="@+id/activityListMessageListEmpty"
+        android:id="@+id/activityListMessageEmptyList"
         style="@style/MicroNote.Activity.ActivityList.Message">
         
         <TextView
-            android:id="@+id/activityListMessageListEmptyTitle"
-            android:text="@string/activity_list_list_empty_title"
+            android:id="@+id/activityListMessageEmptyListTitle"
+            android:text="@string/activity_list_message_empty_list_title"
             style="@style/MicroNote.Activity.ActivityList.Message.Title" />
         
         <TextView
-            android:id="@+id/activityListMessageListEmptyBody"
-            android:text="@string/activity_list_list_empty_body"
+            android:id="@+id/activityListMessageEmptyListBody"
+            android:text="@string/activity_list_message_empty_list_body"
+            style="@style/MicroNote.Activity.ActivityList.Message.Body" />
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/activityListMessageEmptySearch"
+        style="@style/MicroNote.Activity.ActivityList.Message">
+        
+        <TextView
+            android:id="@+id/activityListMessageEmptySearchTitle"
+            android:text="@string/activity_list_message_empty_search_title"
+            style="@style/MicroNote.Activity.ActivityList.Message.Title" />
+        
+        <TextView
+            android:id="@+id/activityListMessageEmptySearchBody"
+            android:text="@string/activity_list_message_empty_search_body"
             style="@style/MicroNote.Activity.ActivityList.Message.Body" />
     
     </LinearLayout>

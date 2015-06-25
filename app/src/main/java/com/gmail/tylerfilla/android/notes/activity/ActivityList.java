@@ -32,6 +32,8 @@ import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,7 +43,7 @@ import java.util.Set;
 
 public class ActivityList extends AppCompatActivity {
     
-    private static final String STATE_KEY_SELECTION_ACTION_MODE_SHOWN = "action_mode_select_shown";
+    private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
     private static final int NOTE_PREVIEW_TITLE_MAX = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX = 50;
@@ -53,9 +55,11 @@ public class ActivityList extends AppCompatActivity {
     private NoteSearcher noteSearcher;
     private String noteSearcherQuery;
     
-    private View messageListEmpty;
+    private View messageEmptyList;
+    private View messageEmptySearch;
     
-    private ActionMode actionModeSelect;
+    private ActionMode actionMode;
+    private EnumActionMode actionModeType;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,12 @@ public class ActivityList extends AppCompatActivity {
         this.noteSearcherQuery = "";
         
         // Messages
-        this.messageListEmpty = this.findViewById(R.id.activityListMessageListEmpty);
+        this.messageEmptyList = this.findViewById(R.id.activityListMessageEmptyList);
+        this.messageEmptySearch = this.findViewById(R.id.activityListMessageEmptySearch);
+        
+        // Action mode state
+        this.actionMode = null;
+        this.actionModeType = EnumActionMode.NONE;
         
         // Note preview click listener
         this.listAdapter.setNotePreviewClickListener(new ListAdapter.NotePreviewClickListener() {
@@ -112,9 +121,9 @@ public class ActivityList extends AppCompatActivity {
         // Restore list adapter state
         this.listAdapter.restoreState(savedInstanceState);
         
-        // Restore selection action mode state
-        if (savedInstanceState.getBoolean(STATE_KEY_SELECTION_ACTION_MODE_SHOWN)) {
-            this.actionModeSelect = this.startSupportActionMode(new SelectionActionModeCallback(this));
+        // Reactivate action mode by type
+        if (savedInstanceState.containsKey(STATE_KEY_ACTION_MODE_TYPE)) {
+            this.activateActionMode(EnumActionMode.fromTypeId(savedInstanceState.getInt(STATE_KEY_ACTION_MODE_TYPE)));
         }
     }
     
@@ -125,8 +134,29 @@ public class ActivityList extends AppCompatActivity {
         // Save list adapter state
         this.listAdapter.saveState(outState);
         
-        // Save selection action mode state
-        outState.putBoolean(STATE_KEY_SELECTION_ACTION_MODE_SHOWN, this.actionModeSelect != null);
+        // Save action mode type
+        outState.putInt(STATE_KEY_ACTION_MODE_TYPE, this.actionModeType.getTypeId());
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate menu for actionbar buttons
+        this.getMenuInflater().inflate(R.menu.activity_list, menu);
+        
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Switch against item ID
+        switch (item.getItemId()) {
+        case R.id.activityListMenuSearch:
+            // Begin search
+            this.searchBegin();
+            break;
+        }
+        
+        return super.onOptionsItemSelected(item);
     }
     
     public void onButtonClick(View view) {
@@ -174,7 +204,7 @@ public class ActivityList extends AppCompatActivity {
                     }
                     if (content != null) {
                         // Strip HTML tags
-                        content = Html.fromHtml(content).toString();
+                        content = Html.fromHtml(content).toString().replace('\n', ' ');
                         
                         // Cut length to maximum
                         content = content.substring(0, Math.min(ActivityList.NOTE_PREVIEW_CONTENT_MAX, content.length()));
@@ -218,13 +248,17 @@ public class ActivityList extends AppCompatActivity {
         
         // Show empty message if no note previews are visible
         if (notePreviewList.isEmpty()) {
-            this.messageListEmpty.setVisibility(View.VISIBLE);
+            this.messageEmptyList.setVisibility(View.VISIBLE);
         } else {
-            this.messageListEmpty.setVisibility(View.GONE);
+            this.messageEmptyList.setVisibility(View.GONE);
         }
         
         // Notify adapter of change
         this.listAdapter.notifyDataSetChanged();
+    }
+    
+    private void searchBegin() {
+        this.activateActionMode(EnumActionMode.SEARCH);
     }
     
     private void openNoteFile(File noteFile) {
@@ -264,9 +298,13 @@ public class ActivityList extends AppCompatActivity {
             
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
-                // End selection action mode
-                if (ActivityList.this.actionModeSelect != null) {
-                    ActivityList.this.actionModeSelect.finish();
+                // Downgrade action mode appropriately
+                if (ActivityList.this.actionModeType == EnumActionMode.SELECT) {
+                    // Finish select action mode
+                    ActivityList.this.activateActionMode(EnumActionMode.NONE);
+                } else if (ActivityList.this.actionModeType == EnumActionMode.SEARCH_SELECT) {
+                    // Drop to search action mode
+                    ActivityList.this.activateActionMode(EnumActionMode.SEARCH);
                 }
                 
                 // Iterate over and delete files
@@ -287,18 +325,80 @@ public class ActivityList extends AppCompatActivity {
         promptConfirmDeleteBuilder.show();
     }
     
-    public static class SelectionActionModeCallback implements ActionMode.Callback {
+    private void activateActionMode(EnumActionMode actionModeType) {
+        // If an action mode is already active
+        if (this.actionMode != null) {
+            // Finish action mode
+            this.actionMode.finish();
+            
+            // Nullify action mode state
+            this.actionMode = null;
+            this.actionModeType = EnumActionMode.NONE;
+        }
         
-        private ActivityList activityList;
+        // If an action mode is desired
+        if (actionModeType != EnumActionMode.NONE) {
+            // Get callback class
+            Class actionModeCallbackClass = actionModeType.getCallbackClass();
+            
+            // Action mode callback class constructor
+            Constructor actionModeCallbackClassConstructor = null;
+            
+            // Try to get constructor
+            try {
+                actionModeCallbackClassConstructor = actionModeCallbackClass.getConstructor(ActivityList.class);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            
+            // If constructor retrieved
+            if (actionModeCallbackClassConstructor != null) {
+                // Action mode callback
+                ActionMode.Callback actionModeCallback = null;
+                
+                // Try to instantiate callback class
+                try {
+                    actionModeCallback = (ActionMode.Callback) actionModeCallbackClassConstructor.newInstance(this);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                
+                // If instantiation succeeded
+                if (actionModeCallback != null) {
+                    // Start action mode
+                    this.actionMode = this.startSupportActionMode(actionModeCallback);
+                    
+                    // Save action mode type
+                    this.actionModeType = actionModeType;
+                }
+            }
+        }
+    }
+    
+    public static abstract class ActionModeCallback implements ActionMode.Callback {
         
-        public SelectionActionModeCallback(ActivityList activityList) {
+        protected ActivityList activityList;
+        
+        protected ActionModeCallback(ActivityList activityList) {
             this.activityList = activityList;
+        }
+        
+    }
+    
+    public static class ActionModeCallbackSelect extends ActionModeCallback {
+        
+        public ActionModeCallbackSelect(ActivityList activityList) {
+            super(activityList);
         }
         
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate selection action mode menu
-            mode.getMenuInflater().inflate(R.menu.action_mode_select_activity_list, menu);
+            mode.getMenuInflater().inflate(R.menu.activity_list_action_mode_select, menu);
             
             // Update
             this.update(mode, menu);
@@ -317,7 +417,7 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListActionModeSelectionDelete:
+            case R.id.activityListMenuActionModeSelectionDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
                     noteFiles.add(this.activityList.listAdapter.getNotePreviewList().get(selectionIndex).getFile());
@@ -335,14 +435,151 @@ public class ActivityList extends AppCompatActivity {
             this.activityList.listAdapter.selecting = false;
             this.activityList.listAdapter.getNoteSelectionSet().clear();
             this.activityList.listAdapter.notifyDataSetChanged();
-            
-            // Suicide by garbage collector
-            this.activityList.actionModeSelect = null;
         }
         
         private void update(ActionMode mode, Menu menu) {
             // Update title
             mode.setTitle(this.activityList.listAdapter.getNoteSelectionSet().size() + " note" + (this.activityList.listAdapter.getNoteSelectionSet().size() == 1 ? "" : "s"));
+        }
+        
+    }
+    
+    public static class ActionModeCallbackSearch extends ActionModeCallback {
+        
+        public ActionModeCallbackSearch(ActivityList activityList) {
+            super(activityList);
+        }
+        
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate search action mode menu
+            mode.getMenuInflater().inflate(R.menu.activity_list_action_mode_search, menu);
+            
+            return true;
+        }
+        
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+        
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            // Switch against menu item ID
+            switch (item.getItemId()) {
+            case R.id.activityListMenuActionModeSearchSubmit:
+                Toast.makeText(this.activityList, "Submit", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            
+            return true;
+        }
+        
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+        
+    }
+    
+    public static class ActionModeCallbackSearchSelect extends ActionModeCallback {
+        
+        public ActionModeCallbackSearchSelect(ActivityList activityList) {
+            super(activityList);
+        }
+        
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate selection action mode menu
+            mode.getMenuInflater().inflate(R.menu.activity_list_action_mode_select, menu);
+            
+            // Update
+            this.update(mode, menu);
+            
+            return true;
+        }
+        
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            this.update(mode, menu);
+            
+            return true;
+        }
+        
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            // Switch against menu item ID
+            switch (item.getItemId()) {
+            case R.id.activityListMenuActionModeSelectionDelete:
+                Set<File> noteFiles = new HashSet<>();
+                for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
+                    noteFiles.add(this.activityList.listAdapter.getNotePreviewList().get(selectionIndex).getFile());
+                }
+                this.activityList.promptDeleteNoteFiles(noteFiles);
+                break;
+            }
+            
+            return true;
+        }
+        
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            // Clear selection and update adapter
+            this.activityList.listAdapter.selecting = false;
+            this.activityList.listAdapter.getNoteSelectionSet().clear();
+            this.activityList.listAdapter.notifyDataSetChanged();
+        }
+        
+        private void update(ActionMode mode, Menu menu) {
+            // Update title
+            mode.setTitle(this.activityList.listAdapter.getNoteSelectionSet().size() + " note" + (this.activityList.listAdapter.getNoteSelectionSet().size() == 1 ? "" : "s"));
+            
+            // Update subtitle
+            mode.setSubtitle("Searching for \"" + this.activityList.noteSearcherQuery + "\"");
+        }
+        
+    }
+    
+    private enum EnumActionMode {
+        
+        NONE(0, null),
+        SELECT(1, ActionModeCallbackSelect.class),
+        SEARCH(2, ActionModeCallbackSearch.class),
+        SEARCH_SELECT(3, ActionModeCallbackSearchSelect.class);
+        
+        private int typeId;
+        private Class callbackClass;
+        
+        EnumActionMode(int typeId, Class callbackClass) {
+            this.typeId = typeId;
+            this.callbackClass = callbackClass;
+        }
+        
+        public int getTypeId() {
+            return this.typeId;
+        }
+        
+        public Class getCallbackClass() {
+            return this.callbackClass;
+        }
+        
+        public static EnumActionMode fromTypeId(int typeId) {
+            for (EnumActionMode actionModeType : values()) {
+                if (actionModeType.typeId == typeId) {
+                    return actionModeType;
+                }
+            }
+            
+            return NONE;
+        }
+        
+        public static EnumActionMode fromCallbackClass(Class callbackClass) {
+            for (EnumActionMode actionModeType : values()) {
+                if (actionModeType.callbackClass == callbackClass) {
+                    return actionModeType;
+                }
+            }
+            
+            return NONE;
         }
         
     }
@@ -407,22 +644,36 @@ public class ActivityList extends AppCompatActivity {
                         if (ListAdapter.this.noteSelectionSet.contains(i)) {
                             // Remove from selection
                             ListAdapter.this.noteSelectionSet.remove(i);
-                            ListAdapter.this.activityList.actionModeSelect.invalidate();
                             viewHolder.setSelected(false);
+                            
+                            // Invalidate action mode
+                            if (ListAdapter.this.activityList.actionMode != null) {
+                                ListAdapter.this.activityList.actionMode.invalidate();
+                            }
                             
                             // If selection empty
                             if (ListAdapter.this.noteSelectionSet.isEmpty()) {
                                 // Stop selecting
                                 ListAdapter.this.selecting = false;
                                 
-                                // Finish select action mode
-                                ListAdapter.this.activityList.actionModeSelect.finish();
+                                // Downgrade action mode appropriately
+                                if (ListAdapter.this.activityList.actionModeType == EnumActionMode.SELECT) {
+                                    // Finish select action mode
+                                    ListAdapter.this.activityList.activateActionMode(EnumActionMode.NONE);
+                                } else if (ListAdapter.this.activityList.actionModeType == EnumActionMode.SEARCH_SELECT) {
+                                    // Drop to search action mode
+                                    ListAdapter.this.activityList.activateActionMode(EnumActionMode.SEARCH);
+                                }
                             }
                         } else {
                             // Add to selection
                             ListAdapter.this.noteSelectionSet.add(i);
-                            ListAdapter.this.activityList.actionModeSelect.invalidate();
                             viewHolder.setSelected(true);
+                            
+                            // Invalidate action mode
+                            if (ListAdapter.this.activityList.actionMode != null) {
+                                ListAdapter.this.activityList.actionMode.invalidate();
+                            }
                         }
                         
                         return;
@@ -444,13 +695,23 @@ public class ActivityList extends AppCompatActivity {
                         // Begin selecting
                         ListAdapter.this.selecting = true;
                         
-                        // Start select action mode
-                        ListAdapter.this.activityList.actionModeSelect = ListAdapter.this.activityList.startSupportActionMode(new SelectionActionModeCallback(ListAdapter.this.activityList));
+                        // Upgrade action mode appropriately
+                        if (ListAdapter.this.activityList.actionModeType == EnumActionMode.NONE) {
+                            // Activate select action mode
+                            ListAdapter.this.activityList.activateActionMode(EnumActionMode.SELECT);
+                        } else if (ListAdapter.this.activityList.actionModeType == EnumActionMode.SEARCH) {
+                            // Activate search action mode
+                            ListAdapter.this.activityList.activateActionMode(EnumActionMode.SEARCH_SELECT);
+                        }
                         
                         // Add to selection
                         ListAdapter.this.noteSelectionSet.add(i);
-                        ListAdapter.this.activityList.actionModeSelect.invalidate();
                         viewHolder.setSelected(true);
+                        
+                        // Invalidate action mode
+                        if (ListAdapter.this.activityList.actionMode != null) {
+                            ListAdapter.this.activityList.actionMode.invalidate();
+                        }
                         
                         return true;
                     }
