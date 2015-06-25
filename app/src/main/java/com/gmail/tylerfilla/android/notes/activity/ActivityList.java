@@ -479,9 +479,6 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListMenuActionModeSearchSubmit:
-                Toast.makeText(this.activityList, "Submit", Toast.LENGTH_SHORT).show();
-                break;
             }
             
             return true;
