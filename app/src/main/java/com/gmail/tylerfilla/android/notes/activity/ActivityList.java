@@ -122,9 +122,7 @@ public class ActivityList extends AppCompatActivity {
         this.listAdapter.restoreState(savedInstanceState);
         
         // Reactivate action mode by type
-        if (savedInstanceState.containsKey(STATE_KEY_ACTION_MODE_TYPE)) {
-            this.activateActionMode(EnumActionMode.fromTypeId(savedInstanceState.getInt(STATE_KEY_ACTION_MODE_TYPE)));
-        }
+        this.activateActionMode(EnumActionMode.fromTypeId(savedInstanceState.getInt(STATE_KEY_ACTION_MODE_TYPE, EnumActionMode.NONE.getTypeId())));
     }
     
     @Override
@@ -266,8 +264,28 @@ public class ActivityList extends AppCompatActivity {
     }
     
     private void searchBegin() {
-        // Activate search action mode
-        this.activateActionMode(EnumActionMode.SEARCH);
+        // Upgrade action mode appropriately
+        if (this.actionModeType == EnumActionMode.NONE) {
+            // Upgrade to search action mode
+            this.activateActionMode(EnumActionMode.SEARCH);
+        } else if (this.actionModeType == EnumActionMode.SELECT) {
+            // Upgrade to search select action mode
+            this.activateActionMode(EnumActionMode.SEARCH_SELECT);
+        }
+        
+        // Refresh list
+        this.refreshList();
+    }
+    
+    private void searchEnd() {
+        // Downgrade action mode appropriately
+        if (this.actionModeType == EnumActionMode.SEARCH_SELECT) {
+            // Downgrade to select action mode
+            this.activateActionMode(EnumActionMode.SELECT);
+        } else if (this.actionModeType == EnumActionMode.SEARCH) {
+            // Downgrade to no action mode
+            this.activateActionMode(EnumActionMode.NONE);
+        }
         
         // Refresh list
         this.refreshList();
@@ -388,6 +406,10 @@ public class ActivityList extends AppCompatActivity {
                     this.actionModeType = actionModeType;
                 }
             }
+        } else {
+            // Nullify action mode state
+            this.actionMode = null;
+            this.actionModeType = EnumActionMode.NONE;
         }
     }
     
@@ -447,6 +469,10 @@ public class ActivityList extends AppCompatActivity {
             this.activityList.listAdapter.selecting = false;
             this.activityList.listAdapter.getNoteSelectionSet().clear();
             this.activityList.listAdapter.notifyDataSetChanged();
+            
+            // Nullify action mode state
+            this.activityList.actionMode = null;
+            this.activityList.actionModeType = EnumActionMode.NONE;
         }
         
         private void update(ActionMode mode, Menu menu) {
@@ -486,6 +512,12 @@ public class ActivityList extends AppCompatActivity {
         
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            // Nullify action mode state
+            this.activityList.actionMode = null;
+            this.activityList.actionModeType = EnumActionMode.NONE;
+            
+            // End search
+            this.activityList.searchEnd();
         }
         
     }
@@ -536,6 +568,13 @@ public class ActivityList extends AppCompatActivity {
             this.activityList.listAdapter.selecting = false;
             this.activityList.listAdapter.getNoteSelectionSet().clear();
             this.activityList.listAdapter.notifyDataSetChanged();
+            
+            // Nullify action mode state
+            this.activityList.actionMode = null;
+            this.activityList.actionModeType = EnumActionMode.NONE;
+            
+            // End search
+            this.activityList.searchEnd();
         }
         
         private void update(ActionMode mode, Menu menu) {
