@@ -38,24 +38,11 @@ public class NoteSearcher {
         
         // Loop through files
         for (File noteFile : this.fileList) {
-            boolean match = false;
-            
             // Request the note
             Note note = this.noteSearchHandler.request(noteFile);
             
-            // Search for query in title and content
-            if (note.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                match = true;
-            }
-            if (note.getContent().toLowerCase().contains(query.toLowerCase())) {
-                match = true;
-            }
-            
-            // Match all with empty queries
-            match = match || query.isEmpty();
-            
-            // Save result
-            resultMap.put(noteFile, match);
+            // Match query within title and content
+            resultMap.put(noteFile, this.match(note.getTitle() + " " + note.getContent(), query));
         }
         
         // Report results
@@ -64,11 +51,29 @@ public class NoteSearcher {
         }
     }
     
-    public static interface NoteSearchHandler {
+    private boolean match(String content, String query) {
+        // Match all with empty queries
+        if (query.isEmpty()) {
+            return true;
+        }
         
-        public Note request(File noteFile);
+        // Match flag
+        boolean match = true;
         
-        public void result(File noteFile, boolean match);
+        // Iterate over words in query
+        for (String queryWord : query.split("\\s")) {
+            // Test for word
+            match = match && content.toLowerCase().contains(queryWord.toLowerCase());
+        }
+        
+        return match;
+    }
+    
+    public interface NoteSearchHandler {
+        
+        Note request(File noteFile);
+        
+        void result(File noteFile, boolean match);
         
     }
     

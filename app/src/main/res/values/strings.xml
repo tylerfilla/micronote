@@ -7,14 +7,16 @@
     <string name="pref_about_content_title">μNote Alpha v0.0</string>
     <string name="pref_about_content_summary">&#169; 2015 Tyler Filla</string>
     
-    <string name="activity_list_menu_search_title">Search</string>
-    <string name="activity_list_menu_action_mode_select_delete_title">Delete</string>
-    <string name="activity_list_menu_action_mode_search_submit_title">Submit</string>
+    <string name="activity_list_menu_item_search_title">Search</string>
+    
+    <string name="activity_list_menu_action_mode_select_item_delete_title">Delete</string>
+    
+    <string name="activity_list_menu_action_mode_search_item_search_view_title">Search</string>
     
     <string name="activity_list_message_empty_list_title">No Notes Taken</string>
     <string name="activity_list_message_empty_list_body">Tap the pencil button in the lower right-hand corner to begin taking notes.</string>
     <string name="activity_list_message_empty_search_title">No Search Results</string>
-    <string name="activity_list_message_empty_search_body">Your search did not turn up any results. Try narrowing your query.</string>
+    <string name="activity_list_message_empty_search_body">Your search did not turn up any results. Try broadening your query.</string>
     
     <string name="activity_list_search_bubble_hint">Type here to search</string>
     <string name="activity_list_search_open_title">Search Notes</string>

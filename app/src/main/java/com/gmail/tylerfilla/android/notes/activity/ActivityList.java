@@ -1,8 +1,10 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
 import android.animation.AnimatorInflater;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
@@ -10,18 +12,24 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.StateSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -148,7 +156,7 @@ public class ActivityList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Switch against item ID
         switch (item.getItemId()) {
-        case R.id.activityListMenuSearch:
+        case R.id.activityListMenuItemSearch:
             // Begin search
             this.searchBegin();
             break;
@@ -451,7 +459,7 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListMenuActionModeSelectionDelete:
+            case R.id.activityListMenuActionModeSelectItemDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
                     noteFiles.add(this.activityList.listAdapter.getNotePreviewList().get(selectionIndex).getFile());
@@ -478,6 +486,9 @@ public class ActivityList extends AppCompatActivity {
         private void update(ActionMode mode, Menu menu) {
             // Update title
             mode.setTitle(this.activityList.listAdapter.getNoteSelectionSet().size() + " note" + (this.activityList.listAdapter.getNoteSelectionSet().size() == 1 ? "" : "s"));
+            
+            // Clear subtitle
+            mode.setSubtitle("");
         }
         
     }
@@ -492,6 +503,46 @@ public class ActivityList extends AppCompatActivity {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate search action mode menu
             mode.getMenuInflater().inflate(R.menu.activity_list_action_mode_search, menu);
+            
+            // Get reference to search view
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.activityListMenuActionModeSearchSearchView));
+            
+            // Get reference to search view query input
+            EditText searchViewQueryInput = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            
+            // Expand and focus search view immediately
+            searchView.setFocusable(true);
+            searchView.setIconified(false);
+            searchView.setIconifiedByDefault(false);
+            searchView.requestFocusFromTouch();
+            
+            // Set search view query input hint text color
+            searchViewQueryInput.setHintTextColor(Color.GRAY);
+            
+            // Set search view query input text
+            searchViewQueryInput.setText(this.activityList.noteSearcherQuery);
+            
+            // Add text changed listener to query input
+            searchViewQueryInput.addTextChangedListener(new TextWatcher() {
+                
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+                
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // Set query
+                    ActionModeCallbackSearch.this.activityList.noteSearcherQuery = s.toString();
+                    
+                    // Refresh note list
+                    ActionModeCallbackSearch.this.activityList.refreshList();
+                }
+                
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+                
+            });
             
             return true;
         }
@@ -518,6 +569,9 @@ public class ActivityList extends AppCompatActivity {
             
             // End search
             this.activityList.searchEnd();
+            
+            // Hide soft keyboard from search view
+            ((InputMethodManager) this.activityList.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(MenuItemCompat.getActionView(mode.getMenu().findItem(R.id.activityListMenuActionModeSearchSearchView)).getWindowToken(), 0);
         }
         
     }
@@ -550,7 +604,7 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListMenuActionModeSelectionDelete:
+            case R.id.activityListMenuActionModeSelectItemDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
                     noteFiles.add(this.activityList.listAdapter.getNotePreviewList().get(selectionIndex).getFile());
@@ -748,8 +802,14 @@ public class ActivityList extends AppCompatActivity {
                             // Activate select action mode
                             ListAdapter.this.activityList.activateActionMode(EnumActionMode.SELECT);
                         } else if (ListAdapter.this.activityList.actionModeType == EnumActionMode.SEARCH) {
-                            // Activate search action mode
-                            ListAdapter.this.activityList.activateActionMode(EnumActionMode.SEARCH_SELECT);
+                            // If search query is empty
+                            if (ListAdapter.this.activityList.noteSearcherQuery.isEmpty()) {
+                                // Activate select action mode
+                                ListAdapter.this.activityList.activateActionMode(EnumActionMode.SELECT);
+                            } else {
+                                // Activate search select action mode
+                                ListAdapter.this.activityList.activateActionMode(EnumActionMode.SEARCH_SELECT);
+                            }
                         }
                         
                         // Add to selection
