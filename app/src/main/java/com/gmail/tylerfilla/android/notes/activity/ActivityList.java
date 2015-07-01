@@ -11,6 +11,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -283,6 +284,9 @@ public class ActivityList extends AppCompatActivity {
         
         // Refresh list
         this.refreshList();
+        
+        // Hide new button
+        this.findViewById(R.id.activityListNewButton).setEnabled(false);
     }
     
     private void searchEnd() {
@@ -297,6 +301,17 @@ public class ActivityList extends AppCompatActivity {
         
         // Refresh list
         this.refreshList();
+        
+        // Delay new button appearance for effect
+        new Handler().postDelayed(new Runnable() {
+    
+            @Override
+            public void run() {
+                // Show new button
+                ActivityList.this.findViewById(R.id.activityListNewButton).setEnabled(true);
+            }
+    
+        }, 500l);
     }
     
     private void openNoteFile(File noteFile) {
