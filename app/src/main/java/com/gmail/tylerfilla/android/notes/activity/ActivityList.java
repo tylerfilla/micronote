@@ -20,6 +20,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -58,7 +59,7 @@ public class ActivityList extends AppCompatActivity {
     private static final int NOTE_PREVIEW_CONTENT_MAX = 50;
     
     private RecyclerView list;
-    private ActivityList.ListAdapter listAdapter;
+    private ListAdapter listAdapter;
     private RecyclerView.LayoutManager listLayoutManager;
     
     private NoteSearcher noteSearcher;
@@ -84,18 +85,18 @@ public class ActivityList extends AppCompatActivity {
         this.list = (RecyclerView) this.findViewById(R.id.activityListList);
         
         // Create and set adapter
-        this.listAdapter = new ActivityList.ListAdapter(this);
+        this.listAdapter = new ListAdapter(this);
         this.list.setAdapter(this.listAdapter);
         
         // Create and set layout manager
         this.listLayoutManager = new LinearLayoutManager(this);
         this.list.setLayoutManager(this.listLayoutManager);
         
-        // Note searcher
+        // Note searcher and query
         this.noteSearcher = new NoteSearcher();
         this.noteSearcherQuery = "";
         
-        // Messages
+        // Get references to empty messages
         this.messageEmptyList = this.findViewById(R.id.activityListMessageEmptyList);
         this.messageEmptySearch = this.findViewById(R.id.activityListMessageEmptySearch);
         
@@ -103,7 +104,7 @@ public class ActivityList extends AppCompatActivity {
         this.actionMode = null;
         this.actionModeType = EnumActionMode.NONE;
         
-        // Note preview click listener
+        // List adapter note preview click listener
         this.listAdapter.setNotePreviewClickListener(new ListAdapter.NotePreviewClickListener() {
             
             @Override
@@ -113,6 +114,9 @@ public class ActivityList extends AppCompatActivity {
             }
             
         });
+        
+        // Configure toolbar
+        this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityListToolbar));
     }
     
     @Override
@@ -277,9 +281,6 @@ public class ActivityList extends AppCompatActivity {
         if (this.actionModeType == EnumActionMode.NONE) {
             // Upgrade to search action mode
             this.activateActionMode(EnumActionMode.SEARCH);
-        } else if (this.actionModeType == EnumActionMode.SELECT) {
-            // Upgrade to search select action mode
-            this.activateActionMode(EnumActionMode.SEARCH_SELECT);
         }
         
         // Refresh list
@@ -304,13 +305,13 @@ public class ActivityList extends AppCompatActivity {
         
         // Delay new button appearance for effect
         new Handler().postDelayed(new Runnable() {
-    
+            
             @Override
             public void run() {
                 // Show new button
                 ActivityList.this.findViewById(R.id.activityListNewButton).setEnabled(true);
             }
-    
+            
         }, 500l);
     }
     
@@ -380,7 +381,7 @@ public class ActivityList extends AppCompatActivity {
     
     private void activateActionMode(EnumActionMode actionModeType) {
         // If an action mode is already active
-        if (this.actionMode != null) {
+        if (this.actionModeType != EnumActionMode.NONE) {
             // Finish action mode
             this.actionMode.finish();
             

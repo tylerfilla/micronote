@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MicroNote.Activity.ActivityList">
     
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activityListToolbar"
+        style="@style/MicroNote.Activity.ActivityList.Toolbar" />
+    
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activityListList"
         style="@style/MicroNote.Activity.ActivityList.List" />

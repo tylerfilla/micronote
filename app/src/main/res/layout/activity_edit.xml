@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MicroNote.Activity.ActivityEdit">
+    
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activityEditToolbar"
+        style="@style/MicroNote.Activity.ActivityEdit.Toolbar" />
+    
+    <fragment
+        android:id="@+id/activityEditEditorFragment"
+        class="com.gmail.tylerfilla.android.notes.activity.ActivityEdit$EditorFragment"
+        style="@style/MicroNote.Activity.ActivityEdit.Editor" />
+
+</RelativeLayout>

@@ -3,15 +3,16 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,6 @@ import java.io.IOException;
 
 public class ActivityEdit extends AppCompatActivity {
     
-    private SharedPreferences preferences;
-    
     private Note note;
     private File noteFile;
     
@@ -39,7 +38,6 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Initialize preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
         
         // Attempt to read note described by intent
         Uri noteFileUri = this.getIntent().getData();
@@ -66,7 +64,7 @@ public class ActivityEdit extends AppCompatActivity {
                     isDescendant = true;
                 }
             }
-            if (!isDescendant && this.preferences.getBoolean("pref_import_enable", true)) {
+            if (!isDescendant && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_import_enable", true)) {
                 this.promptImport();
             }
             
@@ -101,14 +99,26 @@ public class ActivityEdit extends AppCompatActivity {
             }
         }
         
+        // Set content view
+        this.setContentView(R.layout.activity_edit);
+        
         // If first time creating activity
         if (savedInstanceState == null) {
             // Add new editor fragment
-            this.getSupportFragmentManager().beginTransaction().add(android.R.id.content, new EditorFragment()).commit();
+            this.getSupportFragmentManager().beginTransaction().add(R.id.activityEditEditorFragment, new EditorFragment()).commit();
         }
         
-        // Add back button to actionbar
+        // Configure toolbar
+        this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityEditToolbar));
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate menu for actionbar buttons
+        this.getMenuInflater().inflate(R.menu.activity_edit, menu);
+        
+        return super.onCreateOptionsMenu(menu);
     }
     
     @Override
@@ -118,7 +128,11 @@ public class ActivityEdit extends AppCompatActivity {
         case android.R.id.home:
             // Call back button press handler
             this.onBackPressed();
-            return true;
+            break;
+        case R.id.activityEditMenuItemRename:
+            // Rename note
+            this.promptRename();
+            break;
         }
         
         return super.onOptionsItemSelected(item);
@@ -166,7 +180,7 @@ public class ActivityEdit extends AppCompatActivity {
     private void handlePromptImport(boolean doImport, boolean stop) {
         if (stop) {
             // Save preference
-            this.preferences.edit().putBoolean("pref_import_enable", false).apply();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_import_enable", false).apply();
             
             // Notification dialog
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);
