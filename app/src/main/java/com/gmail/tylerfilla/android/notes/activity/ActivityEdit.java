@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -32,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ActivityEdit extends AppCompatActivity {
+    
+    private static final int NOTE_AUTO_TITLE_MAX = 20;
     
     private Note note;
     private File noteFile;
@@ -354,6 +357,18 @@ public class ActivityEdit extends AppCompatActivity {
             if (this.getActivity().isFinishing()) {
                 // Unload note editor
                 this.noteEditor.unload();
+                
+                // Create title from first line for new notes
+                if (this.noteEditor.getNote().getLastModified() == 0l) {
+                    // Get reference to content
+                    String content = this.noteEditor.getNote().getContent();
+                    
+                    // Strip HTML tags
+                    content = Html.fromHtml(content).toString();
+                    
+                    // Cut first line from content and set as title
+                    this.noteEditor.getNote().setTitle(content.substring(0, content.contains("\n") ? Math.min(content.indexOf('\n'), NOTE_AUTO_TITLE_MAX) : NOTE_AUTO_TITLE_MAX));
+                }
                 
                 // Write note if changes occurred
                 if (this.noteEditor.getNote().getChanged()) {
