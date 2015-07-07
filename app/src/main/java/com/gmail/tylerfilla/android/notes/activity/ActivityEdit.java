@@ -368,11 +368,14 @@ public class ActivityEdit extends AppCompatActivity {
                     // Strip HTML tags
                     String contentDetagged = Html.fromHtml(content).toString();
                     
+                    // Strip whitespace
+                    String contentDetaggedDewhited = contentDetagged.replaceAll("\\s+", "").trim();
+                    
                     // One of those weird edge cases
-                    if (!contentDetagged.replaceAll("\\s+", "").isEmpty()) {
+                    if (!contentDetaggedDewhited.isEmpty()) {
                         // Create title from first line for new notes
                         if (this.noteEditor.getNote().getLastModified() == 0l) {
-                            this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
+                            this.noteEditor.getNote().setTitle(contentDetaggedDewhited.substring(0, Math.min(contentDetaggedDewhited.length(), contentDetaggedDewhited.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetaggedDewhited.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
                         }
                         
                         // Attempt to write note
