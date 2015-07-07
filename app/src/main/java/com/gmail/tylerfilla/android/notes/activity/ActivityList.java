@@ -55,8 +55,8 @@ public class ActivityList extends AppCompatActivity {
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
-    private static final int NOTE_PREVIEW_TITLE_MAX = 20;
-    private static final int NOTE_PREVIEW_CONTENT_MAX = 50;
+    private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 20;
+    private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
     
     private RecyclerView list;
     private ListAdapter listAdapter;
@@ -211,14 +211,14 @@ public class ActivityList extends AppCompatActivity {
                     
                     if (title != null) {
                         // Cut length to maximum
-                        title = title.substring(0, Math.min(ActivityList.NOTE_PREVIEW_TITLE_MAX, title.length()));
+                        title = title.substring(0, Math.min(ActivityList.NOTE_PREVIEW_TITLE_MAX_LENGTH, title.length()));
                     }
                     if (content != null) {
                         // Strip HTML tags
                         content = Html.fromHtml(content).toString().replaceAll("\n+", " ");
                         
                         // Cut length to maximum
-                        content = content.substring(0, Math.min(ActivityList.NOTE_PREVIEW_CONTENT_MAX, content.length()));
+                        content = content.substring(0, Math.min(ActivityList.NOTE_PREVIEW_CONTENT_MAX_LENGTH, content.length()));
                     }
                     
                     // Add to note preview list

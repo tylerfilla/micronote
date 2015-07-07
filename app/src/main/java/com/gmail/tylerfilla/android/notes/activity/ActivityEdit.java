@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -34,7 +35,7 @@ import java.io.IOException;
 
 public class ActivityEdit extends AppCompatActivity {
     
-    private static final int NOTE_AUTO_TITLE_MAX = 20;
+    private static final int NOTE_TITLE_MAX_LENGTH = 20;
     
     private Note note;
     private File noteFile;
@@ -260,6 +261,7 @@ public class ActivityEdit extends AppCompatActivity {
         promptInputTitle.setMaxLines(1);
         promptInputTitle.setHint(this.note.getTitle());
         promptInputTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        promptInputTitle.setFilters(new InputFilter[] { new InputFilter.LengthFilter(NOTE_TITLE_MAX_LENGTH) });
         promptInputTitleHolder.addView(promptInputTitle);
         
         // Title textbox layout parameters
@@ -364,12 +366,12 @@ public class ActivityEdit extends AppCompatActivity {
                     if (this.noteEditor.getNote().getLastModified() == 0l) {
                         // Get reference to content
                         String content = this.noteEditor.getNote().getContent();
-        
+                        
                         // Strip HTML tags
                         content = Html.fromHtml(content).toString();
-        
+                        
                         // Cut first line from content and set as title
-                        this.noteEditor.getNote().setTitle(content.substring(0, Math.min(content.length(), content.contains("\n") ? Math.min(NOTE_AUTO_TITLE_MAX, content.indexOf('\n')) : NOTE_AUTO_TITLE_MAX)));
+                        this.noteEditor.getNote().setTitle(content.substring(0, Math.min(content.length(), content.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, content.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
                     }
                     
                     // Attempt to write note
