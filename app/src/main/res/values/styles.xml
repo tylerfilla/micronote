@@ -39,6 +39,7 @@
     
     <style name="MicroNote.Activity.ActivityList.Message" parent="">
         <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_below">@id/activityListToolbar</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">@dimen/activity_list_message_layout_margin_left</item>
@@ -74,10 +75,11 @@
     </style>
     
     <style name="MicroNote.Activity.ActivityList.Toolbar" parent="">
+        <item name="android:background">?colorPrimary</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
-        <item name="popupTheme">@style/MicroNote.Theme</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
     
     <style name="MicroNote.Activity.ActivityEdit" parent="">
@@ -86,10 +88,11 @@
     </style>
     
     <style name="MicroNote.Activity.ActivityEdit.Toolbar" parent="">
+        <item name="android:background">?colorPrimary</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
-        <item name="popupTheme">@style/MicroNote.Theme</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
     
     <style name="MicroNote.Activity.ActivityEdit.Editor" parent="">
@@ -120,9 +123,9 @@
     </style>
     
     <style name="MicroNote.Theme.Toolbar" parent="">
-        <item name="android:background">@color/theme_primary</item>
         <item name="android:textColorPrimary">@color/theme_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/theme_text_primary</item>
+        <item name="colorControlNormal">@color/theme_text_primary</item>
     </style>
     
     <style name="MicroNote.Widget.FloatingActionButton" parent="">

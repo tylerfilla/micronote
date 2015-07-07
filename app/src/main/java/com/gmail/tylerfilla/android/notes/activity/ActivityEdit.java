@@ -102,12 +102,6 @@ public class ActivityEdit extends AppCompatActivity {
         // Set content view
         this.setContentView(R.layout.activity_edit);
         
-        // If first time creating activity
-        if (savedInstanceState == null) {
-            // Add new editor fragment
-            this.getSupportFragmentManager().beginTransaction().add(R.id.activityEditEditorFragment, new EditorFragment()).commit();
-        }
-        
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityEditToolbar));
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
