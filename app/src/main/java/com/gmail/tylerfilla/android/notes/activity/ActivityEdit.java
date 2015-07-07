@@ -2,6 +2,7 @@ package com.gmail.tylerfilla.android.notes.activity;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -302,6 +304,19 @@ public class ActivityEdit extends AppCompatActivity {
             
             // Remove note editor from its current parent
             ((ViewGroup) this.noteEditor.getParent()).removeView(this.noteEditor);
+        }
+        
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            
+            /* Some hacky stuff to remove focus from the editor */
+            
+            // Hide soft keyboard
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.noteEditor.getWindowToken(), 0);
+            
+            // Clear editor focus
+            this.noteEditor.loadUrl("javascript:contentText.blur();");
         }
         
         @Override

@@ -3,7 +3,6 @@ package com.gmail.tylerfilla.android.notes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
