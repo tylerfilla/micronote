@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.NoteEditor;
@@ -246,12 +248,21 @@ public class ActivityEdit extends AppCompatActivity {
         prompt.setTitle("Rename");
         prompt.setMessage("Please enter a new title below.");
         
+        // Title textbox holder
+        FrameLayout promptInputTitleHolder = new FrameLayout(this);
+        prompt.setView(promptInputTitleHolder);
+        
         // Title textbox
-        final EditText promptInputEditText = new EditText(this);
-        promptInputEditText.setMaxLines(1);
-        promptInputEditText.setHint(this.note.getTitle());
-        promptInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        prompt.setView(promptInputEditText);
+        final EditText promptInputTitle = new EditText(this);
+        promptInputTitle.setMaxLines(1);
+        promptInputTitle.setHint(this.note.getTitle());
+        promptInputTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        promptInputTitleHolder.addView(promptInputTitle);
+        
+        // Title textbox layout parameters
+        FrameLayout.LayoutParams promptInputTitleLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        promptInputTitleLayoutParams.setMargins(dpToPxInt(24), dpToPxInt(20), dpToPxInt(24), dpToPxInt(24));
+        promptInputTitle.setLayoutParams(promptInputTitleLayoutParams);
         
         // Dialog buttons
         prompt.setNegativeButton(android.R.string.cancel, null);
@@ -259,7 +270,7 @@ public class ActivityEdit extends AppCompatActivity {
             
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
-                String title = promptInputEditText.getText().toString();
+                String title = promptInputTitle.getText().toString();
                 
                 if (!title.isEmpty()) {
                     ActivityEdit.this.handlePromptRename(title);
@@ -270,6 +281,14 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Show dialog
         prompt.show();
+    }
+    
+    private float dpToPx(float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.getResources().getDisplayMetrics());
+    }
+    
+    private int dpToPxInt(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, this.getResources().getDisplayMetrics());
     }
     
     public static class EditorFragment extends Fragment {
