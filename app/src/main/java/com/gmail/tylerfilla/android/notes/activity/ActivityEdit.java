@@ -358,20 +358,21 @@ public class ActivityEdit extends AppCompatActivity {
                 // Unload note editor
                 this.noteEditor.unload();
                 
-                // Create title from first line for new notes
-                if (this.noteEditor.getNote().getLastModified() == 0l) {
-                    // Get reference to content
-                    String content = this.noteEditor.getNote().getContent();
-                    
-                    // Strip HTML tags
-                    content = Html.fromHtml(content).toString();
-                    
-                    // Cut first line from content and set as title
-                    this.noteEditor.getNote().setTitle(content.substring(0, content.contains("\n") ? Math.min(content.indexOf('\n'), NOTE_AUTO_TITLE_MAX) : NOTE_AUTO_TITLE_MAX));
-                }
-                
-                // Write note if changes occurred
+                // If changes occurred
                 if (this.noteEditor.getNote().getChanged()) {
+                    // Create title from first line for new notes
+                    if (this.noteEditor.getNote().getLastModified() == 0l) {
+                        // Get reference to content
+                        String content = this.noteEditor.getNote().getContent();
+        
+                        // Strip HTML tags
+                        content = Html.fromHtml(content).toString();
+        
+                        // Cut first line from content and set as title
+                        this.noteEditor.getNote().setTitle(content.substring(0, Math.min(content.length(), content.contains("\n") ? Math.min(NOTE_AUTO_TITLE_MAX, content.indexOf('\n')) : NOTE_AUTO_TITLE_MAX)));
+                    }
+                    
+                    // Attempt to write note
                     try {
                         NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
                     } catch (IOException e) {
