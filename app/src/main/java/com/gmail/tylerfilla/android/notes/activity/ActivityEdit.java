@@ -171,7 +171,7 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Update task description
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(title));
+            this.setTaskDescription(new ActivityManager.TaskDescription(title, null, this.getTheme().obtainStyledAttributes(R.style.MicroNote_Theme, new int[] { R.attr.colorPrimary }).getColor(0, 0)));
         }
     }
     
