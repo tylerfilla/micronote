@@ -215,7 +215,7 @@ public class ActivityList extends AppCompatActivity {
                     }
                     if (content != null) {
                         // Strip HTML tags
-                        content = Html.fromHtml(content).toString().replace('\n', ' ');
+                        content = Html.fromHtml(content).toString().replaceAll("\n+", " ");
                         
                         // Cut length to maximum
                         content = content.substring(0, Math.min(ActivityList.NOTE_PREVIEW_CONTENT_MAX, content.length()));
