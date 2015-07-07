@@ -394,7 +394,7 @@ public class ActivityEdit extends AppCompatActivity {
                     // One of those weird edge cases
                     if (!contentDetaggedDewhited.isEmpty()) {
                         // Create title from first line for new notes
-                        if (this.noteEditor.getNote().getLastModified() == 0l) {
+                        if (this.noteEditor.getNote().getLastModified() == 0l && this.noteEditor.getNote().getTitle().isEmpty()) {
                             this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
                         }
                         
