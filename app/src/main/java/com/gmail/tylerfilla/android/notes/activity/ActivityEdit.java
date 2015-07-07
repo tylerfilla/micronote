@@ -35,6 +35,7 @@ import java.io.IOException;
 
 public class ActivityEdit extends AppCompatActivity {
     
+    private static final String NOTE_TITLE_DEFAULT = "Untitled Note";
     private static final int NOTE_TITLE_MAX_LENGTH = 20;
     
     private Note note;
@@ -53,6 +54,9 @@ public class ActivityEdit extends AppCompatActivity {
             // Create a new note object
             this.note = new Note();
             
+            // Set default title
+            this.note.setTitle(NOTE_TITLE_DEFAULT);
+            
             // Create a new note file
             this.noteFile = new File(NoteIO.getNoteStoreDirectory(this), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
             
@@ -60,6 +64,9 @@ public class ActivityEdit extends AppCompatActivity {
             while (this.noteFile.exists()) {
                 this.noteFile = new File(this.noteFile.getParentFile(), "_" + this.noteFile.getName());
             }
+            
+            // This is a new note
+            this.note.setChanged(false);
         } else {
             // Get the note file
             this.noteFile = new File(noteFileUri.getPath());
