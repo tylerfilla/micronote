@@ -76,7 +76,7 @@
     
     <style name="MicroNote.Activity.ActivityList.Toolbar" parent="">
         <item name="android:background">?colorPrimary</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">?actionBarSize</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
@@ -89,7 +89,7 @@
     
     <style name="MicroNote.Activity.ActivityEdit.Toolbar" parent="">
         <item name="android:background">?colorPrimary</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">?actionBarSize</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
