@@ -362,23 +362,25 @@ public class ActivityEdit extends AppCompatActivity {
                 
                 // If changes occurred
                 if (this.noteEditor.getNote().getChanged()) {
-                    // Create title from first line for new notes
-                    if (this.noteEditor.getNote().getLastModified() == 0l) {
-                        // Get reference to content
-                        String content = this.noteEditor.getNote().getContent();
-                        
-                        // Strip HTML tags
-                        content = Html.fromHtml(content).toString();
-                        
-                        // Cut first line from content and set as title
-                        this.noteEditor.getNote().setTitle(content.substring(0, Math.min(content.length(), content.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, content.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
-                    }
+                    // Get reference to content
+                    String content = this.noteEditor.getNote().getContent();
                     
-                    // Attempt to write note
-                    try {
-                        NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    // Strip HTML tags
+                    String contentDetagged = Html.fromHtml(content).toString();
+                    
+                    // One of those weird edge cases
+                    if (!contentDetagged.replaceAll("\\s+", "").isEmpty()) {
+                        // Create title from first line for new notes
+                        if (this.noteEditor.getNote().getLastModified() == 0l) {
+                            this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
+                        }
+                        
+                        // Attempt to write note
+                        try {
+                            NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

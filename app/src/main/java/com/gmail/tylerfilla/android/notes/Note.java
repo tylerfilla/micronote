@@ -2,8 +2,6 @@ package com.gmail.tylerfilla.android.notes;
 
 public class Note {
     
-    private static final String TITLE_NOTE_BLANK = "Untitled Note";
-    
     private String content;
     private String title;
     private long lastModified;
@@ -23,7 +21,7 @@ public class Note {
     }
     
     public Note() {
-        this("", Note.TITLE_NOTE_BLANK);
+        this("", "");
     }
     
     public String getContent() {
