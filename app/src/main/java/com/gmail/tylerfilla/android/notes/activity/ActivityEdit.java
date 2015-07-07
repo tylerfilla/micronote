@@ -72,6 +72,8 @@ public class ActivityEdit extends AppCompatActivity {
                     isDescendant = true;
                 }
             }
+            
+            // If the note file is unmanaged and importing is enabled
             if (!isDescendant && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_import_enable", true)) {
                 this.promptImport();
             }
@@ -113,6 +115,14 @@ public class ActivityEdit extends AppCompatActivity {
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityEditToolbar));
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        // Update toolbar title
+        this.getSupportActionBar().setTitle(this.note.getTitle());
+        
+        // Update task description title
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.setTaskDescription(new ActivityManager.TaskDescription(this.note.getTitle(), null, this.getTheme().obtainStyledAttributes(R.style.MicroNote_Theme, new int[] { R.attr.colorPrimary }).getColor(0, 0)));
+        }
     }
     
     @Override
@@ -173,9 +183,12 @@ public class ActivityEdit extends AppCompatActivity {
         // Set note title
         this.note.setTitle(title);
         
-        // Update task description
+        // Update toolbar title
+        this.getSupportActionBar().setTitle(this.note.getTitle());
+        
+        // Update task description title
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.setTaskDescription(new ActivityManager.TaskDescription(title, null, this.getTheme().obtainStyledAttributes(R.style.MicroNote_Theme, new int[] { R.attr.colorPrimary }).getColor(0, 0)));
+            this.setTaskDescription(new ActivityManager.TaskDescription(this.note.getTitle(), null, this.getTheme().obtainStyledAttributes(R.style.MicroNote_Theme, new int[] { R.attr.colorPrimary }).getColor(0, 0)));
         }
     }
     
@@ -375,7 +388,7 @@ public class ActivityEdit extends AppCompatActivity {
                     if (!contentDetaggedDewhited.isEmpty()) {
                         // Create title from first line for new notes
                         if (this.noteEditor.getNote().getLastModified() == 0l) {
-                            this.noteEditor.getNote().setTitle(contentDetaggedDewhited.substring(0, Math.min(contentDetaggedDewhited.length(), contentDetaggedDewhited.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetaggedDewhited.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
+                            this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
                         }
                         
                         // Attempt to write note
