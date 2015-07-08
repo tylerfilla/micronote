@@ -2,7 +2,7 @@
 <resources>
     
     <string name="app_name">μNote</string>
-    <string name="app_version">Alpha v0.0</string>
+    <string name="app_version">Beta v1.0</string>
     
     <string name="activity_list_action_mode_select_title_single">1 note</string>
     <string name="activity_list_action_mode_select_title_multiple">%1$s notes</string>
@@ -39,7 +39,7 @@
     <string name="activity_settings_actionbar_button_close_content_description">Close</string>
     <string name="activity_settings_actionbar_title">Settings</string>
     
-    <string name="pref_about_content_title">μNote Alpha v0.0</string>
+    <string name="pref_about_content_title">μNote Beta v1.0</string>
     <string name="pref_about_content_summary">&#169; 2015 Tyler Filla</string>
     
     <string name="dialog_activity_list_prompt_delete_note_files_title">Confirm Deletion</string>
