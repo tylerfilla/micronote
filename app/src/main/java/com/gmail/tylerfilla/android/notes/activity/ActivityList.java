@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -346,13 +347,13 @@ public class ActivityList extends AppCompatActivity {
         AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
         // Dialog title
-        prompt.setTitle("Confirm Deletion");
+        prompt.setTitle(R.string.dialog_activity_list_prompt_delete_note_files_title);
         
         // Dialog message
         if (noteFiles.size() == 1) {
-            prompt.setMessage("Are you sure you want to delete this note?");
+            prompt.setMessage(R.string.dialog_activity_list_prompt_delete_note_files_message_single);
         } else if (noteFiles.size() > 1) {
-            prompt.setMessage("Are you sure you want to delete these " + noteFiles.size() + " notes?");
+            prompt.setMessage(String.format(this.getString(R.string.dialog_activity_list_prompt_delete_note_files_message_multiple), NumberFormat.getIntegerInstance().format(noteFiles.size())));
         }
         
         // Dialog buttons
@@ -376,7 +377,11 @@ public class ActivityList extends AppCompatActivity {
                 }
                 
                 // Show a toast
-                Toast.makeText(ActivityList.this, "Deleted " + noteFiles.size() + " note" + (noteFiles.size() == 1 ? "" : "s"), Toast.LENGTH_SHORT).show();
+                if (noteFiles.size() == 1) {
+                    Toast.makeText(ActivityList.this, R.string.toast_activity_list_confirm_delete_note_files_single, Toast.LENGTH_SHORT).show();
+                } else if (noteFiles.size() > 1) {
+                    Toast.makeText(ActivityList.this, String.format(ActivityList.this.getString(R.string.toast_activity_list_confirm_delete_note_files_multiple), NumberFormat.getIntegerInstance().format(noteFiles.size())), Toast.LENGTH_SHORT).show();
+                }
                 
                 // Refresh note list
                 ActivityList.this.refreshList();
@@ -510,7 +515,12 @@ public class ActivityList extends AppCompatActivity {
         
         private void update(ActionMode mode, Menu menu) {
             // Update title
-            mode.setTitle(this.activityList.listAdapter.getNoteSelectionSet().size() + " note" + (this.activityList.listAdapter.getNoteSelectionSet().size() == 1 ? "" : "s"));
+            int numSelected = this.activityList.listAdapter.getNoteSelectionSet().size();
+            if (numSelected == 1) {
+                mode.setTitle(R.string.activity_list_action_mode_select_title_single);
+            } else if (numSelected > 1) {
+                mode.setTitle(String.format(this.activityList.getString(R.string.activity_list_action_mode_select_title_multiple), NumberFormat.getIntegerInstance().format(numSelected)));
+            }
             
             // Clear subtitle
             mode.setSubtitle("");
@@ -657,10 +667,15 @@ public class ActivityList extends AppCompatActivity {
         
         private void update(ActionMode mode, Menu menu) {
             // Update title
-            mode.setTitle(this.activityList.listAdapter.getNoteSelectionSet().size() + " note" + (this.activityList.listAdapter.getNoteSelectionSet().size() == 1 ? "" : "s"));
+            int numSelected = this.activityList.listAdapter.getNoteSelectionSet().size();
+            if (numSelected == 1) {
+                mode.setTitle(R.string.activity_list_action_mode_search_select_title_single);
+            } else if (numSelected > 1) {
+                mode.setTitle(String.format(this.activityList.getString(R.string.activity_list_action_mode_search_select_title_multiple), NumberFormat.getIntegerInstance().format(numSelected)));
+            }
             
             // Update subtitle
-            mode.setSubtitle("Searching for \"" + this.activityList.noteSearcherQuery + "\"");
+            mode.setSubtitle(String.format(this.activityList.getString(R.string.activity_list_action_mode_search_select_subtitle), this.activityList.noteSearcherQuery));
         }
         
     }

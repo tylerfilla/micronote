@@ -35,11 +35,11 @@ import java.io.IOException;
 
 public class ActivityEdit extends AppCompatActivity {
     
-    private static final String NOTE_TITLE_DEFAULT = "Untitled Note";
     private static final int NOTE_TITLE_MAX_LENGTH = 20;
     
     private Note note;
     private File noteFile;
+    private boolean noteFileDeleted;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class ActivityEdit extends AppCompatActivity {
             this.note = new Note();
             
             // Set default title
-            this.note.setTitle(NOTE_TITLE_DEFAULT);
+            this.note.setTitle(this.getString(R.string.activity_edit_constant_default_note_title));
             
             // Create a new note file
             this.noteFile = new File(NoteIO.getNoteStoreDirectory(this), "_" + String.valueOf(System.currentTimeMillis()) + ".note");
@@ -97,8 +97,8 @@ public class ActivityEdit extends AppCompatActivity {
                     AlertDialog.Builder prompt = new AlertDialog.Builder(this);
                     
                     // Dialog title and message
-                    prompt.setTitle("Read Failed");
-                    prompt.setMessage("Unable to read note file at " + this.noteFile.getAbsolutePath() + " due to the following exception: " + e.getMessage());
+                    prompt.setTitle(R.string.dialog_activity_edit_alert_note_file_read_failed_title);
+                    prompt.setMessage(String.format(this.getString(R.string.dialog_activity_edit_alert_note_file_read_failed_message), this.noteFile.getAbsolutePath(), e.getMessage()));
                     
                     // Dialog buttons
                     prompt.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -207,6 +207,9 @@ public class ActivityEdit extends AppCompatActivity {
         // Delete note file
         this.noteFile.delete();
         
+        // Set deletion flag
+        this.noteFileDeleted = true;
+        
         // Finish normally
         this.finish();
     }
@@ -220,8 +223,8 @@ public class ActivityEdit extends AppCompatActivity {
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);
             
             // Dialog title and message
-            prompt.setTitle("Import Disabled");
-            prompt.setMessage("You can re-enable this feature in the settings menu.");
+            prompt.setTitle(R.string.dialog_activity_edit_alert_note_file_import_disabled_title);
+            prompt.setMessage(R.string.dialog_activity_edit_alert_note_file_import_disabled_message);
             
             // Dialog buttons
             prompt.setPositiveButton(android.R.string.ok, null);
@@ -252,12 +255,12 @@ public class ActivityEdit extends AppCompatActivity {
         AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
         // Dialog title and message
-        prompt.setTitle("Import Note");
-        prompt.setMessage("Would you like to import a copy of this note?");
+        prompt.setTitle(R.string.dialog_activity_edit_prompt_note_file_import_title);
+        prompt.setMessage(R.string.dialog_activity_edit_prompt_note_file_import_message);
         
         // Stop checkbox
         final CheckBox promptStopCheckBox = new CheckBox(this);
-        promptStopCheckBox.setText("Stop asking to import notes");
+        promptStopCheckBox.setText(R.string.dialog_activity_edit_prompt_note_file_import_stop_text);
         prompt.setView(promptStopCheckBox);
         
         // Dialog buttons
@@ -287,8 +290,8 @@ public class ActivityEdit extends AppCompatActivity {
         AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
         // Dialog title and message
-        prompt.setTitle("Rename");
-        prompt.setMessage("Please enter a new title below.");
+        prompt.setTitle(R.string.dialog_activity_edit_prompt_rename_title);
+        prompt.setMessage(R.string.dialog_activity_edit_prompt_rename_message);
         
         // Title textbox holder
         FrameLayout promptInputTitleHolder = new FrameLayout(this);
@@ -331,8 +334,8 @@ public class ActivityEdit extends AppCompatActivity {
         AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
         // Dialog title and message
-        prompt.setTitle("Confirm Deletion");
-        prompt.setMessage("Are you sure you want to delete this note?");
+        prompt.setTitle(R.string.dialog_activity_edit_prompt_delete_note_file_title);
+        prompt.setMessage(R.string.dialog_activity_edit_prompt_delete_note_file_message);
         
         // Dialog buttons
         prompt.setNegativeButton(android.R.string.no, null);
@@ -421,29 +424,32 @@ public class ActivityEdit extends AppCompatActivity {
                 // Unload note editor
                 this.noteEditor.unload();
                 
-                // If changes occurred
-                if (this.noteEditor.getNote().getChanged()) {
-                    // Get reference to content
-                    String content = this.noteEditor.getNote().getContent();
-                    
-                    // Strip HTML tags
-                    String contentDetagged = Html.fromHtml(content).toString();
-                    
-                    // Strip whitespace
-                    String contentDetaggedDewhited = contentDetagged.replaceAll("\\s+", "").trim();
-                    
-                    // One of those weird edge cases
-                    if (!contentDetaggedDewhited.isEmpty()) {
-                        // Create title from first line for new notes
-                        if (this.noteEditor.getNote().getLastModified() == 0l && this.noteEditor.getNote().getTitle().equals(NOTE_TITLE_DEFAULT)) {
-                            this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
-                        }
+                // If note file hasn't been deleted
+                if (!((ActivityEdit) this.getActivity()).noteFileDeleted) {
+                    // If changes occurred
+                    if (this.noteEditor.getNote().getChanged()) {
+                        // Get reference to content
+                        String content = this.noteEditor.getNote().getContent();
                         
-                        // Attempt to write note
-                        try {
-                            NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        // Strip HTML tags
+                        String contentDetagged = Html.fromHtml(content).toString();
+                        
+                        // Strip whitespace
+                        String contentDetaggedDewhited = contentDetagged.replaceAll("\\s+", "").trim();
+                        
+                        // One of those weird edge cases
+                        if (!contentDetaggedDewhited.isEmpty()) {
+                            // Create title from first line for new notes
+                            if (this.noteEditor.getNote().getLastModified() == 0l && this.noteEditor.getNote().getTitle().equals(this.getString(R.string.activity_edit_constant_default_note_title))) {
+                                this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
+                            }
+                            
+                            // Attempt to write note
+                            try {
+                                NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
