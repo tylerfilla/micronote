@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -386,15 +385,24 @@ public class ActivityEdit extends AppCompatActivity {
                 
                 // If note is new
                 if (this.noteEditor.getNote().getLastModified() == 0l) {
-                    // Show soft keyboard when editor loads
-                    this.noteEditor.setWebViewClient(new WebViewClient() {
-    
+                    // Show soft keyboard when editor loads (h4x)
+                    new Handler().postDelayed(new Runnable() {
+                        
                         @Override
-                        public void onPageFinished(WebView view, String url) {
-                            ((InputMethodManager) EditorFragment.this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                        public void run() {
+                            // Calculate simulated touch point
+                            int x = (EditorFragment.this.noteEditor.getLeft() + EditorFragment.this.noteEditor.getRight())/2;
+                            int y = (EditorFragment.this.noteEditor.getTop() + EditorFragment.this.noteEditor.getBottom())/2;
+                            
+                            // Simulate touch
+                            try {
+                                Runtime.getRuntime().exec("input tap " + x + " " + y);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-    
-                    });
+                        
+                    }, 100);
                 }
             }
             

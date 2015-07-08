@@ -271,11 +271,6 @@ function handleIncomingAssignmentNote(value) {
         note = eval(value);
     }
     
-    // If note is new
-    if (note.lastModified == 0) {
-        contentText.focus();
-    }
-    
     // Set content text
     contentText.innerHTML = note.content;
     
