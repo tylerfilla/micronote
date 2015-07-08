@@ -152,6 +152,10 @@ public class ActivityEdit extends AppCompatActivity {
             // Rename note
             this.promptRename();
             break;
+        case R.id.activityEditMenuItemDelete:
+            // Delete note
+            this.promptDelete();
+            break;
         }
         
         return super.onOptionsItemSelected(item);
@@ -199,6 +203,14 @@ public class ActivityEdit extends AppCompatActivity {
         }
     }
     
+    private void deleteNote() {
+        // Delete note file
+        this.noteFile.delete();
+        
+        // Finish normally
+        this.finish();
+    }
+    
     private void handlePromptImport(boolean doImport, boolean stop) {
         if (stop) {
             // Save preference
@@ -227,6 +239,12 @@ public class ActivityEdit extends AppCompatActivity {
     private void handlePromptRename(String title) {
         // Rename note
         this.renameNote(title);
+    }
+    
+    private void handlePromptDelete(boolean delete) {
+        if (delete) {
+            this.deleteNote();
+        }
     }
     
     private void promptImport() {
@@ -300,6 +318,29 @@ public class ActivityEdit extends AppCompatActivity {
                 if (!title.isEmpty()) {
                     ActivityEdit.this.handlePromptRename(title);
                 }
+            }
+            
+        });
+        
+        // Show dialog
+        prompt.show();
+    }
+    
+    private void promptDelete() {
+        // Deletion confirmation prompt dialog
+        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
+        
+        // Dialog title and message
+        prompt.setTitle("Confirm Deletion");
+        prompt.setMessage("Are you sure you want to delete this note?");
+        
+        // Dialog buttons
+        prompt.setNegativeButton(android.R.string.no, null);
+        prompt.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int whichButton) {
+                ActivityEdit.this.handlePromptDelete(true);
             }
             
         });

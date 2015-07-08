@@ -342,21 +342,22 @@ public class ActivityList extends AppCompatActivity {
     }
     
     private void promptDeleteNoteFiles(final Collection<File> noteFiles) {
-        AlertDialog.Builder promptConfirmDeleteBuilder = new AlertDialog.Builder(this);
+        // Deletion confirmation prompt dialog
+        AlertDialog.Builder prompt = new AlertDialog.Builder(this);
         
-        // Title
-        promptConfirmDeleteBuilder.setTitle("Confirm Deletion");
+        // Dialog title
+        prompt.setTitle("Confirm Deletion");
         
-        // Message
+        // Dialog message
         if (noteFiles.size() == 1) {
-            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete this note?");
+            prompt.setMessage("Are you sure you want to delete this note?");
         } else if (noteFiles.size() > 1) {
-            promptConfirmDeleteBuilder.setMessage("Are you sure you want to delete these " + noteFiles.size() + " notes?");
+            prompt.setMessage("Are you sure you want to delete these " + noteFiles.size() + " notes?");
         }
         
-        // Buttons and positive handler
-        promptConfirmDeleteBuilder.setNegativeButton("No", null);
-        promptConfirmDeleteBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        // Dialog buttons
+        prompt.setNegativeButton(android.R.string.no, null);
+        prompt.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             
             @Override
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -383,8 +384,8 @@ public class ActivityList extends AppCompatActivity {
             
         });
         
-        // Show the dialog
-        promptConfirmDeleteBuilder.show();
+        // Show dialog
+        prompt.show();
     }
     
     private void activateActionMode(EnumActionMode actionModeType) {

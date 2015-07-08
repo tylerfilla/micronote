@@ -7,5 +7,10 @@
         android:id="@+id/activityEditMenuItemRename"
         android:title="@string/activity_edit_menu_item_rename_title"
         app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/activityEditMenuItemDelete"
+        android:title="@string/activity_edit_menu_item_delete_title"
+        app:showAsAction="never" />
 
 </menu>

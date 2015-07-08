@@ -13,6 +13,7 @@
     <string name="activity_list_menu_action_mode_search_item_search_view_title">Search</string>
     
     <string name="activity_edit_menu_item_rename_title">Rename</string>
+    <string name="activity_edit_menu_item_delete_title">Delete</string>
     
     <string name="activity_list_message_empty_list_title">No Notes Taken</string>
     <string name="activity_list_message_empty_list_body">Tap the pencil button in the lower right-hand corner to begin taking notes.</string>
