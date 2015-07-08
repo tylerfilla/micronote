@@ -13,9 +13,9 @@
     <color name="theme_accent">#ff7f5634</color>
     <color name="theme_primary">#ff3e2f21</color>
     <color name="theme_primary_dark">#ff322519</color>
-    <color name="theme_text_primary">#fff0f0f0</color>
+    <color name="theme_toolbar_control_color_normal">#fff0f0f0</color>
     <color name="theme_window_background">#fffaf6bb</color>
     
-    <color name="widget_floating_action_button_nonripple_highlight">#22000000</color>
+    <color name="widget_floating_action_button_nonripple_highlight">#14000000</color>
 
 </resources>

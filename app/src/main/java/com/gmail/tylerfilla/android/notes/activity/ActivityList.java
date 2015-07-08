@@ -134,7 +134,7 @@ public class ActivityList extends AppCompatActivity {
         // Restore list adapter state
         this.listAdapter.restoreState(savedInstanceState);
         
-        // Reactivate action mode by type
+        // Activate action mode by type
         this.activateActionMode(EnumActionMode.fromTypeId(savedInstanceState.getInt(STATE_KEY_ACTION_MODE_TYPE, EnumActionMode.NONE.getTypeId())));
     }
     
@@ -286,8 +286,16 @@ public class ActivityList extends AppCompatActivity {
         // Refresh list
         this.refreshList();
         
-        // Hide new button
+        // Animate in new button
         this.findViewById(R.id.activityListNewButton).setEnabled(false);
+        new Handler().postDelayed(new Runnable() {
+            
+            @Override
+            public void run() {
+                ActivityList.this.findViewById(R.id.activityListNewButton).setVisibility(View.GONE);
+            }
+            
+        }, 500l);
     }
     
     private void searchEnd() {
@@ -303,12 +311,12 @@ public class ActivityList extends AppCompatActivity {
         // Refresh list
         this.refreshList();
         
-        // Delay new button appearance for effect
+        // Animate in new button
+        this.findViewById(R.id.activityListNewButton).setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
             
             @Override
             public void run() {
-                // Show new button
                 ActivityList.this.findViewById(R.id.activityListNewButton).setEnabled(true);
             }
             
@@ -889,7 +897,8 @@ public class ActivityList extends AppCompatActivity {
             
             private boolean selected;
             
-            private Drawable backgroundDrawableDefault;
+            private Drawable defaultBackground;
+            private int defaultPadding;
             
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -900,7 +909,8 @@ public class ActivityList extends AppCompatActivity {
                 
                 this.selected = false;
                 
-                this.backgroundDrawableDefault = itemView.getBackground();
+                this.defaultBackground = itemView.getBackground();
+                this.defaultPadding = itemView.getPaddingLeft();
             }
             
             public View getView() {
@@ -933,15 +943,16 @@ public class ActivityList extends AppCompatActivity {
                     stateListDrawable.addState(StateSet.WILD_CARD, null);
                     backgroundDrawable = stateListDrawable;
                 } else {
-                    backgroundDrawable = this.backgroundDrawableDefault;
+                    backgroundDrawable = this.defaultBackground;
                 }
                 
-                // Set background
+                // Set background and padding
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
-                    // noinspection deprecation
                     this.view.setBackgroundDrawable(backgroundDrawable);
+                    this.view.setPadding(this.defaultPadding, this.defaultPadding, this.defaultPadding, this.defaultPadding);
                 } else {
                     this.view.setBackground(backgroundDrawable);
+                    this.view.setPadding(this.defaultPadding, this.defaultPadding, this.defaultPadding, this.defaultPadding);
                 }
             }
             
