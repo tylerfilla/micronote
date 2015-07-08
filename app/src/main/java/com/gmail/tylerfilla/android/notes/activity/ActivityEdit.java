@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -381,6 +383,19 @@ public class ActivityEdit extends AppCompatActivity {
                 
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
+                
+                // If note is new
+                if (this.noteEditor.getNote().getLastModified() == 0l) {
+                    // Show soft keyboard when editor loads
+                    this.noteEditor.setWebViewClient(new WebViewClient() {
+    
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            ((InputMethodManager) EditorFragment.this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                        }
+    
+                    });
+                }
             }
             
             return this.noteEditor;
