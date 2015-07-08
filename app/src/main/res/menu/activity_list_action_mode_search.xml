@@ -6,6 +6,7 @@
     <item
         android:id="@+id/activityListMenuActionModeSearchSearchView"
         android:title="@string/activity_list_menu_action_mode_search_item_search_view_title"
+        android:actionViewClass="android.support.v7.widget.SearchView"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always" />
 

@@ -523,14 +523,14 @@ public class ActivityList extends AppCompatActivity {
             // Get reference to search view
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.activityListMenuActionModeSearchSearchView));
             
-            // Get reference to search view query input
-            EditText searchViewQueryInput = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            
             // Expand and focus search view immediately
             searchView.setFocusable(true);
             searchView.setIconified(false);
             searchView.setIconifiedByDefault(false);
             searchView.requestFocusFromTouch();
+            
+            // Get reference to search view query input
+            EditText searchViewQueryInput = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             
             // Set search view query input hint text color
             searchViewQueryInput.setHintTextColor(Color.GRAY);
@@ -570,10 +570,6 @@ public class ActivityList extends AppCompatActivity {
         
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            // Switch against menu item ID
-            switch (item.getItemId()) {
-            }
-            
             return true;
         }
         
