@@ -363,43 +363,16 @@ function initialize() {
     // Build aesthetics
     aestheticsRebuild();
     
-    // Auto upload interval
+    // Content change and auto upload interval
     listIntervals.push(setInterval(function () {
+        autoUploadDetect();
         autoUploadIterate();
     }, 50));
     
-    // Content change detection interval
-    listIntervals.push(setInterval(function() {
-        autoUploadDetect();
-    }, 50));
-    
-    // Request message interval
+    // Request command interval
     listIntervals.push(setInterval(function() {
         sendPageMessage("!request");
     }, 500));
-    
-    // Delayed sliding fade-in animation
-    setTimeout(function() {
-        
-        /*
-        
-        Sliding temporarily disabled.
-        
-        // Slide upward via top body margin
-        anim.run(anim.interpolator.fullsin, 40, 0, 300, 10, function(val, begin, end) {
-            content.style.height = (window.innerHeight - 60 - val) + "px";
-            document.body.style.marginTop = val + "px";
-            aestheticsUpdate();
-            return true;
-        });
-        */
-        
-        // Fade in
-        anim.run(anim.interpolator.fullsin, 0, 1, 300, 10, function(val, begin, end) {
-            document.body.style.opacity = val + "";
-            return true;
-        });
-    }, 700);
 }
 
 /* Event handling */
