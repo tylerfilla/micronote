@@ -535,6 +535,9 @@ public class ActivityList extends AppCompatActivity {
             // Set search view query input hint text color
             searchViewQueryInput.setHintTextColor(Color.GRAY);
             
+            // Make search view query input not long-clickable
+            searchViewQueryInput.setLongClickable(false);
+            
             // Set search view query input text
             searchViewQueryInput.setText(this.activityList.noteSearcherQuery);
             
