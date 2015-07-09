@@ -68,6 +68,9 @@ public class ActivitySettings extends PreferenceActivity {
         // Toolbar title
         this.toolbar.setTitle(this.getString(R.string.activity_settings_toolbar_title));
         
+        // Toolbar navigation icon
+        this.toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        
         // Toolbar navigation click listener
         this.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             
