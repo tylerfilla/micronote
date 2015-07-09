@@ -214,6 +214,10 @@ public class ActivityList extends AppCompatActivity {
             // Begin search
             this.searchBegin();
             break;
+        case R.id.activityListMenuItemSettings:
+            // Open settings
+            this.openSettings();
+            break;
         }
         
         return super.onOptionsItemSelected(item);
@@ -372,6 +376,14 @@ public class ActivityList extends AppCompatActivity {
         }, 500l);
     }
     
+    private void openSettings() {
+        // Intent to settings activity
+        Intent intentSettings = new Intent(this, ActivitySettings.class);
+        
+        // Start settings activity
+        this.startActivity(intentSettings);
+    }
+    
     private void openNoteFile(File noteFile) {
         // Intent to edit activity
         Intent intentEdit = new Intent(this, ActivityEdit.class);
@@ -386,7 +398,7 @@ public class ActivityList extends AppCompatActivity {
         // Set URI from file
         intentEdit.setData(noteFile == null ? null : Uri.fromFile(noteFile));
         
-        // Start activity
+        // Start edit activity
         this.startActivity(intentEdit);
     }
     

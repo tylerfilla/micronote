@@ -7,6 +7,11 @@
         android:id="@+id/activityListMenuItemSearch"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/activity_list_menu_item_search_title"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/activityListMenuItemSettings"
+        android:title="@string/activity_list_menu_item_settings_title"
+        app:showAsAction="never" />
 
 </menu>

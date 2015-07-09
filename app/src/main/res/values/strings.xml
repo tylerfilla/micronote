@@ -11,6 +11,7 @@
     <string name="activity_list_action_mode_search_select_subtitle">Searching for \"%1$s\"</string>
     
     <string name="activity_list_menu_item_search_title">Search</string>
+    <string name="activity_list_menu_item_settings_title">Settings</string>
     
     <string name="activity_list_menu_action_mode_select_item_delete_title">Delete</string>
     <string name="activity_list_menu_action_mode_search_item_search_view_title">Search</string>
