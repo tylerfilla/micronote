@@ -6,14 +6,6 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivityList.Toolbar" parent="">
-        <item name="android:background">?colorPrimary</item>
-        <item name="android:layout_height">?actionBarSize</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-    </style>
-    
     <style name="MicroNote.Activity.ActivityList.List" parent="">
         <item name="android:layout_above">@id/activityListAd</item>
         <item name="android:layout_below">@id/activityListToolbar</item>
@@ -96,15 +88,7 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivityEdit.Toolbar" parent="">
-        <item name="android:background">?colorPrimary</item>
-        <item name="android:layout_height">?actionBarSize</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-    </style>
-    
-    <style name="MicroNote.Activity.ActivityEdit.Editor" parent="">
+    <style name="MicroNote.Activity.ActivityEdit.FragmentEditor" parent="">
         <item name="android:layout_below">@id/activityEditToolbar</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
@@ -115,9 +99,32 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivitySettings.List" parent="">
+    <style name="MicroNote.Activity.ActivitySettings.Toolbar" parent="">
+        <item name="android:background">?colorPrimary</item>
+        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
+        <item name="navigationIcon">?homeAsUpIndicator</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="title">@string/activity_settings_toolbar_title</item>
+    </style>
+    
+    <style name="MicroNote.Activity.ActivitySettings.FragmentSettings" parent="">
+        <item name="android:layout_below">@id/activitySettingsToolbar</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+    </style>
+    
+    <style name="MicroNote.Widget.FloatingActionButton" parent="">
+        <item name="android:background">@drawable/background_widget_floating_action_button</item>
+    </style>
+    
+    <style name="MicroNote.Widget.Toolbar" parent="">
+        <item name="android:background">?colorPrimary</item>
+        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
     
     <style name="MicroNote.Theme" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -133,10 +140,6 @@
         <item name="android:textColorPrimary">@color/theme_toolbar_control_color_normal</item>
         <item name="android:textColorPrimaryInverse">@color/theme_toolbar_control_color_normal</item>
         <item name="colorControlNormal">@color/theme_toolbar_control_color_normal</item>
-    </style>
-    
-    <style name="MicroNote.Widget.FloatingActionButton" parent="">
-        <item name="android:background">@drawable/background_widget_floating_action_button</item>
     </style>
 
 </resources>

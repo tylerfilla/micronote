@@ -361,7 +361,7 @@ public class ActivityEdit extends AppCompatActivity {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, this.getResources().getDisplayMetrics());
     }
     
-    public static class EditorFragment extends Fragment {
+    public static class FragmentEditor extends Fragment {
         
         private NoteEditor noteEditor;
         
@@ -391,8 +391,8 @@ public class ActivityEdit extends AppCompatActivity {
                         @Override
                         public void run() {
                             // Calculate simulated touch point
-                            int x = (EditorFragment.this.noteEditor.getLeft() + EditorFragment.this.noteEditor.getRight())/2;
-                            int y = (EditorFragment.this.noteEditor.getTop() + EditorFragment.this.noteEditor.getBottom())/2;
+                            int x = (FragmentEditor.this.noteEditor.getLeft() + FragmentEditor.this.noteEditor.getRight())/2;
+                            int y = (FragmentEditor.this.noteEditor.getTop() + FragmentEditor.this.noteEditor.getBottom())/2;
                             
                             // Simulate touch
                             try {

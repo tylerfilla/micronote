@@ -4,9 +4,9 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     style="@style/MicroNote.Activity.ActivityList">
     
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/activityListToolbar"
-        style="@style/MicroNote.Activity.ActivityList.Toolbar" />
+        layout="@layout/include_toolbar" />
     
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activityListList"

@@ -28,8 +28,6 @@
     <string name="activity_edit_menu_item_rename_title">Rename</string>
     <string name="activity_edit_menu_item_delete_title">Delete</string>
     
-    <string name="activity_edit_actionbar_button_close_content_description">Close</string>
-    <string name="activity_edit_actionbar_button_menu_content_description">Menu</string>
     <string name="activity_edit_menu_item_checklist">Checklist</string>
     <string name="activity_edit_menu_item_clip">Clip</string>
     <string name="activity_edit_menu_item_list_unordered">Bullets</string>
@@ -37,8 +35,7 @@
     
     <string name="activity_edit_constant_default_note_title">Untitled Note</string>
     
-    <string name="activity_settings_actionbar_button_close_content_description">Close</string>
-    <string name="activity_settings_actionbar_title">Settings</string>
+    <string name="activity_settings_toolbar_title">Settings</string>
     
     <string name="pref_about_content_title">μNote Beta v1.0</string>
     <string name="pref_about_content_summary">&#169; 2015 Tyler Filla</string>

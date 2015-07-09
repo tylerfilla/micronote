@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MicroNote.Activity.ActivityEdit">
     
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/activityEditToolbar"
-        style="@style/MicroNote.Activity.ActivityEdit.Toolbar" />
+        layout="@layout/include_toolbar" />
     
     <fragment
-        android:id="@+id/activityEditEditorFragment"
-        class="com.gmail.tylerfilla.android.notes.activity.ActivityEdit$EditorFragment"
-        style="@style/MicroNote.Activity.ActivityEdit.Editor" />
+        android:id="@+id/activityEditFragmentEditor"
+        class="com.gmail.tylerfilla.android.notes.activity.ActivityEdit$FragmentEditor"
+        style="@style/MicroNote.Activity.ActivityEdit.FragmentEditor" />
 
 </RelativeLayout>
