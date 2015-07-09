@@ -402,7 +402,7 @@ public class ActivityEdit extends AppCompatActivity {
                             }
                         }
                         
-                    }, 100);
+                    }, 250);
                 }
             }
             
