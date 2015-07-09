@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     style="@style/MicroNote.Activity.ActivityList">
     
     <android.support.v7.widget.Toolbar
@@ -47,5 +48,11 @@
         android:id="@+id/activityListNewButton"
         android:onClick="onButtonClick"
         style="@style/MicroNote.Activity.ActivityList.NewButton" />
+    
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/activityListAd"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/admob_unit_id_activity_list_ad"
+        style="@style/MicroNote.Activity.ActivityList.Ad" />
 
 </RelativeLayout>

@@ -6,7 +6,16 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
+    <style name="MicroNote.Activity.ActivityList.Toolbar" parent="">
+        <item name="android:background">?colorPrimary</item>
+        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+    
     <style name="MicroNote.Activity.ActivityList.List" parent="">
+        <item name="android:layout_above">@id/activityListAd</item>
         <item name="android:layout_below">@id/activityListToolbar</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
@@ -33,6 +42,7 @@
         <item name="android:ellipsize">end</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/activity_list_list_item_content_preview</item>
         <item name="android:textSize">18sp</item>
     </style>
@@ -74,12 +84,11 @@
         <item name="android:src">@drawable/ic_mode_edit_white_24dp</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivityList.Toolbar" parent="">
-        <item name="android:background">?colorPrimary</item>
-        <item name="android:layout_height">?actionBarSize</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    <style name="MicroNote.Activity.ActivityList.Ad" parent="">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
     
     <style name="MicroNote.Activity.ActivityEdit" parent="">

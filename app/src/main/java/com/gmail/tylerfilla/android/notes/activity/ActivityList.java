@@ -1,9 +1,11 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
 import android.animation.AnimatorInflater;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,6 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -32,13 +36,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +64,8 @@ public class ActivityList extends AppCompatActivity {
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
+    private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
+    
     private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
     
@@ -71,6 +81,9 @@ public class ActivityList extends AppCompatActivity {
     
     private ActionMode actionMode;
     private EnumActionMode actionModeType;
+    
+    private IInAppBillingService inAppBillingService;
+    private ServiceConnection inAppBillingServiceConnection;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +131,41 @@ public class ActivityList extends AppCompatActivity {
         
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityListToolbar));
+        
+        // Create service connection for Google Play in-app billing
+        this.inAppBillingServiceConnection = new ServiceConnection() {
+            
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                // Set service reference 
+                ActivityList.this.inAppBillingService = IInAppBillingService.Stub.asInterface(service);
+                
+                // Handle ad visibility
+                ActivityList.this.handleAdVisibility();
+            }
+            
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                // Clear service reference
+                ActivityList.this.inAppBillingService = null;
+            }
+            
+        };
+        
+        // Bind to in-app billing service
+        Intent billingServiceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        billingServiceIntent.setPackage("com.android.vending");
+        this.bindService(billingServiceIntent, this.inAppBillingServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        // Unbind from in-app billing service
+        if (this.inAppBillingService != null) {
+            this.unbindService(this.inAppBillingServiceConnection);
+        }
     }
     
     @Override
@@ -391,6 +439,51 @@ public class ActivityList extends AppCompatActivity {
         
         // Show dialog
         prompt.show();
+    }
+    
+    private void handleAdVisibility() {
+        // Whether or not ad should be shown
+        boolean showAd = true;
+        
+        // Query user's purchases
+        Bundle purchases = null;
+        try {
+            purchases = this.inAppBillingService.getPurchases(3, this.getPackageName(), "inapp", null);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        
+        // If purchase query was successful
+        if (purchases != null) {
+            // If positive response
+            if (purchases.getInt("RESPONSE_CODE") == 0) {
+                // Get list of purchased items
+                ArrayList<String> purchasedSkus = purchases.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                
+                // Check for ad removal SKU (absence of which results in ad being shown)
+                showAd = !purchasedSkus.contains(BILLING_SKU_AD_REMOVAL);
+            }
+        }
+        
+        // If ad should be shown
+        if (showAd) {
+            // Make an ad request and load ad
+            AdView ad = (AdView) this.findViewById(R.id.activityListAd);
+            AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+            adRequestBuilder.addTestDevice("4C96B0950E99BA13180869369BEBC53B"); // anon
+            adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61"); // anon-2
+            ad.loadAd(adRequestBuilder.build());
+            
+            // Bump up new button
+            View newButton = ActivityList.this.findViewById(R.id.activityListNewButton);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) newButton.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+            layoutParams.addRule(RelativeLayout.ABOVE, R.id.activityListAd);
+            newButton.setLayoutParams(layoutParams);
+        } else {
+            // Hide ad
+            this.findViewById(R.id.activityListAd).setVisibility(View.GONE);
+        }
     }
     
     private void activateActionMode(EnumActionMode actionModeType) {
