@@ -41,8 +41,10 @@
             
             </intent-filter>
         </activity>
-        
+    
         <activity android:name=".activity.ActivitySettings" />
+        
+        <activity android:name=".activity.ActivityPurchase" />
         
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

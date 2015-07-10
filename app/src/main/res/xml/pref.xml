@@ -4,6 +4,25 @@
     <!-- TODO: Externalize strings -->
     
     <PreferenceCategory
+        android:key="pref_upgrade"
+        android:persistent="false"
+        android:title="Upgrade">
+        
+        <Preference
+            android:key="pref_upgrade_adremove"
+            android:persistent="false"
+            android:summary="@string/pref_upgrade_adremove_summary"
+            android:title="@string/pref_upgrade_adremove_title">
+            
+            <intent
+                android:targetPackage="com.gmail.tylerfilla.android.notes"
+                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase" />
+        
+        </Preference>
+    
+    </PreferenceCategory>
+    
+    <PreferenceCategory
         android:key="pref_style_notepad"
         android:persistent="false"
         android:title="Notepad Style">
