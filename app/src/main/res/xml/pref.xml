@@ -16,7 +16,8 @@
             
             <intent
                 android:targetPackage="com.gmail.tylerfilla.android.notes"
-                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase" />
+                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase"
+                android:data="ad_removal" />
         
         </Preference>
     
@@ -34,7 +35,7 @@
             android:summary="%s"
             android:title="Text Color" />
         
-        <SwitchPreference
+        <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:disableDependentsState="false"
             android:key="pref_style_notepad_show_lines"
@@ -84,7 +85,7 @@
         android:persistent="false"
         android:title="Other">
         
-        <SwitchPreference
+        <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_import_enable"
             android:persistent="true"
