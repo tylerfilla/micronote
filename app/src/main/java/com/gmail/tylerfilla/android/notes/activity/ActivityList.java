@@ -307,8 +307,12 @@ public class ActivityList extends AppCompatActivity {
             
         });
         
-        // Execute search
-        this.noteSearcher.search(this.noteSearcherQuery);
+        // Execute search if in search mode
+        if (this.actionModeType == EnumActionMode.NONE) {
+            this.noteSearcher.search("");
+        } else {
+            this.noteSearcher.search(this.noteSearcherQuery);
+        }
         
         // If list is empty
         if (notePreviewList.isEmpty()) {
