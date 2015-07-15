@@ -49,7 +49,7 @@ function createNotepadLines(recreate) {
     if (currentNumLines < targetNumLines) {
         for (var i = 0; i < targetNumLines - currentNumLines; i++) {
             var line = document.createElement("div");
-            line.className += " line";
+            line.classList.add("line");
             contentLines.appendChild(line);
         }
     } else {
@@ -355,14 +355,6 @@ function utilGetMonthAbbr(month) {
 /* Initialization */
 
 function initialize() {
-    // Handle compatibility with pre-Honeycomb
-    if (typeof contentText.contenteditable != "undefined") {
-        contentText.contenteditable = true;
-    } else {
-        // Remove
-        contentText.parentNode.removeChild(contentText);
-    }
-    
     // Build aesthetics
     aestheticsRebuild();
     

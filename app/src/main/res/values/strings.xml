@@ -2,7 +2,7 @@
 <resources>
     
     <string name="app_name">μNote</string>
-    <string name="app_version">Beta v1.0</string>
+    <string name="app_version_name">Beta v1.0</string>
     
     <string name="activity_list_action_mode_select_title_single">1 note</string>
     <string name="activity_list_action_mode_select_title_multiple">%1$s notes</string>
@@ -67,5 +67,15 @@
     <string name="toast_activity_list_confirm_delete_note_files_multiple">Deleted %1$s notes</string>
     
     <string name="admob_unit_id_activity_list_ad">ca-app-pub-1168572156310866/6463250837</string>
+    
+    <string name="color_namer_base_black">black</string>
+    <string name="color_namer_base_white">white</string>
+    
+    <string name="color_namer_hue_red">red</string>
+    <string name="color_namer_hue_yellow">yellow</string>
+    <string name="color_namer_hue_green">green</string>
+    <string name="color_namer_hue_cyan">cyan</string>
+    <string name="color_namer_hue_blue">blue</string>
+    <string name="color_namer_hue_magenta">magenta</string>
 
 </resources>
