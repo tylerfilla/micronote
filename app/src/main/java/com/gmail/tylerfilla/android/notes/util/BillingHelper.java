@@ -180,61 +180,6 @@ public class BillingHelper {
         }
     }
     
-    public void purchase(Activity activity, int requestCode, String productId, ProductType productType, String developerPayload, PurchaseCallback callback) throws BillingHelperException {
-        // Sanity check for in-app billing support
-        if (productType == ProductType.IN_APP && !this.supportInAppBilling) {
-            throw new BillingMethodUnsupportedException("In-app billing is not supported");
-        }
-        
-        // Sanity check for subscription support
-        if (productType == ProductType.SUBSCRIPTION && !this.supportSubscriptions) {
-            throw new BillingMethodUnsupportedException("Subscriptions are not supported");
-        }
-        
-        try {
-            // Get bundle for buy intent
-            Bundle intentBundle = this.service.getBuyIntent(BILLING_API_VERSION, this.context.getPackageName(), productId, productType.getInternalName(), developerPayload);
-            
-            // Extract response code from bundle
-            int responseCode = -1;
-            Object responseCodeObject = intentBundle.get("RESPONSE_CODE");
-            if (responseCodeObject == null) {
-                responseCode = RESPONSE_CODES_VENDING.OK;
-            } else if (responseCodeObject instanceof Integer) {
-                responseCode = (Integer) responseCodeObject;
-            } else if (responseCodeObject instanceof Long) {
-                responseCode = (int) ((Long) responseCodeObject).longValue();
-            }
-            
-            // If response code extracted
-            if (responseCode > -1) {
-                if (responseCode == RESPONSE_CODES_VENDING.OK) {
-                    // Get intent from bundle
-                    PendingIntent intent = intentBundle.getParcelable("BUY_INTENT");
-                    
-                    // Start intent sender
-                    activity.startIntentSenderForResult(intent.getIntentSender(), requestCode, new Intent(), 0, 0, 0);
-                    
-                    // Set open purchase info
-                    this.openPurchaseInfo = new OpenPurchaseInfo();
-                    this.openPurchaseInfo.callback = callback;
-                    this.openPurchaseInfo.productType = productType;
-                    this.openPurchaseInfo.requestCode = requestCode;
-                } else {
-                    callback.onPurchaseCompleted(new Response(responseCode, null, RESPONSE_CODES_HELPER.FLAG_VENDING_RESPONSE), null);
-                }
-            } else {
-                throw new BillingHelperException("No response code extracted from buy intent");
-            }
-        } catch (RemoteException e) {
-            callback.onPurchaseCompleted(new Response(RESPONSE_CODES_HELPER.INTERNAL_EXCEPTION, e, 0), null);
-            e.printStackTrace();
-        } catch (IntentSender.SendIntentException e) {
-            callback.onPurchaseCompleted(new Response(RESPONSE_CODES_HELPER.INTERNAL_EXCEPTION, e, 0), null);
-            e.printStackTrace();
-        }
-    }
-    
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
         // Check for open purchase
         if (this.openPurchaseInfo == null) {
@@ -253,7 +198,7 @@ public class BillingHelper {
             return false;
         }
         
-        // Check for activity result code
+        // Check for result code
         if (resultCode != Activity.RESULT_OK) {
             this.openPurchaseInfo.callback.onPurchaseCompleted(new Response(resultCode, null, RESPONSE_CODES_HELPER.FLAG_ACTIVITY_RESULT), null);
             return true;
@@ -321,6 +266,61 @@ public class BillingHelper {
         this.openPurchaseInfo = null;
         
         return true;
+    }
+    
+    public void purchase(Activity activity, int requestCode, String productId, ProductType productType, String developerPayload, PurchaseCallback callback) throws BillingHelperException {
+        // Sanity check for in-app billing support
+        if (productType == ProductType.IN_APP && !this.supportInAppBilling) {
+            throw new BillingMethodUnsupportedException("In-app billing is not supported");
+        }
+        
+        // Sanity check for subscription support
+        if (productType == ProductType.SUBSCRIPTION && !this.supportSubscriptions) {
+            throw new BillingMethodUnsupportedException("Subscriptions are not supported");
+        }
+        
+        try {
+            // Get bundle for buy intent
+            Bundle intentBundle = this.service.getBuyIntent(BILLING_API_VERSION, this.context.getPackageName(), productId, productType.getInternalName(), developerPayload);
+            
+            // Extract response code from bundle
+            int responseCode = -1;
+            Object responseCodeObject = intentBundle.get("RESPONSE_CODE");
+            if (responseCodeObject == null) {
+                responseCode = RESPONSE_CODES_VENDING.OK;
+            } else if (responseCodeObject instanceof Integer) {
+                responseCode = (Integer) responseCodeObject;
+            } else if (responseCodeObject instanceof Long) {
+                responseCode = (int) ((Long) responseCodeObject).longValue();
+            }
+            
+            // If response code extracted
+            if (responseCode > -1) {
+                if (responseCode == RESPONSE_CODES_VENDING.OK) {
+                    // Get intent from bundle
+                    PendingIntent intent = intentBundle.getParcelable("BUY_INTENT");
+                    
+                    // Start intent sender
+                    activity.startIntentSenderForResult(intent.getIntentSender(), requestCode, new Intent(), 0, 0, 0);
+                    
+                    // Set open purchase info
+                    this.openPurchaseInfo = new OpenPurchaseInfo();
+                    this.openPurchaseInfo.callback = callback;
+                    this.openPurchaseInfo.productType = productType;
+                    this.openPurchaseInfo.requestCode = requestCode;
+                } else {
+                    callback.onPurchaseCompleted(new Response(responseCode, null, RESPONSE_CODES_HELPER.FLAG_VENDING_RESPONSE), null);
+                }
+            } else {
+                throw new BillingHelperException("No response code extracted from buy intent");
+            }
+        } catch (RemoteException e) {
+            callback.onPurchaseCompleted(new Response(RESPONSE_CODES_HELPER.INTERNAL_EXCEPTION, e, 0), null);
+            e.printStackTrace();
+        } catch (IntentSender.SendIntentException e) {
+            callback.onPurchaseCompleted(new Response(RESPONSE_CODES_HELPER.INTERNAL_EXCEPTION, e, 0), null);
+            e.printStackTrace();
+        }
     }
     
     public interface ServiceConnectionProxy {
