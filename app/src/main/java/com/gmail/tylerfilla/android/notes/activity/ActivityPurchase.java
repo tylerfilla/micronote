@@ -72,8 +72,6 @@ public class ActivityPurchase extends Activity {
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("result");
-        
         // If billing helper cannot handle this result
         if (!this.billingHelper.handleActivityResult(requestCode, resultCode, data)) {
             // Call through to super

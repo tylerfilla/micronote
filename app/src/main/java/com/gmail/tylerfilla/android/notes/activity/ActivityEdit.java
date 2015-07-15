@@ -82,7 +82,7 @@ public class ActivityEdit extends AppCompatActivity {
             }
             
             // If the note file is unmanaged and importing is enabled
-            if (!isDescendant && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_import_enable", true)) {
+            if (!isDescendant && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_other_import_enable", true)) {
                 this.promptImport();
             }
             
@@ -218,7 +218,7 @@ public class ActivityEdit extends AppCompatActivity {
     private void handlePromptImport(boolean doImport, boolean stop) {
         if (stop) {
             // Save preference
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_import_enable", false).apply();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_other_import_enable", false).apply();
             
             // Notification dialog
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);

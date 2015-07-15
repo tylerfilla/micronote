@@ -6,7 +6,7 @@
     <PreferenceCategory
         android:key="pref_upgrade"
         android:persistent="false"
-        android:title="Upgrade">
+        android:title="@string/pref_upgrade_title">
         
         <Preference
             android:key="pref_upgrade_adremove"
@@ -26,30 +26,30 @@
     <PreferenceCategory
         android:key="pref_style_notepad"
         android:persistent="false"
-        android:title="Notepad Style">
+        android:title="@string/pref_style_notepad_title">
         
         <com.gmail.tylerfilla.android.notes.pref.ColorPreference
             android:defaultValue="@color/pref_default_style_notepad_color_text"
             android:key="pref_style_notepad_color_text"
             android:persistent="true"
-            android:summary="%s"
-            android:title="Text Color" />
+            android:summary="@string/pref_style_notepad_color_text_summary"
+            android:title="@string/pref_style_notepad_color_text_title" />
         
         <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:disableDependentsState="false"
             android:key="pref_style_notepad_show_lines"
             android:persistent="true"
-            android:summaryOff="Notepad lines will not be shown"
-            android:summaryOn="Notepad lines will be shown"
-            android:title="Show Notepad Lines" />
+            android:summaryOff="@string/pref_style_notepad_show_lines_summary_off"
+            android:summaryOn="@string/pref_style_notepad_show_lines_summary_on"
+            android:title="@string/pref_style_notepad_show_lines_title" />
     
     </PreferenceCategory>
     
     <PreferenceCategory
         android:key="pref_timedate"
         android:persistent="false"
-        android:title="Date/Time">
+        android:title="@string/pref_timedate_title">
         
         <ListPreference
             android:defaultValue="1"
@@ -57,8 +57,8 @@
             android:entryValues="@array/array_pref_list_values_timedate_format_date"
             android:key="pref_timedate_format_date"
             android:persistent="true"
-            android:summary="%s"
-            android:title="Date Format" />
+            android:summary="@string/pref_timedate_format_date_summary"
+            android:title="@string/pref_timedate_format_date_title" />
         
         <ListPreference
             android:defaultValue="12"
@@ -66,8 +66,8 @@
             android:entryValues="@array/array_pref_list_values_timedate_format_time"
             android:key="pref_timedate_format_time"
             android:persistent="true"
-            android:summary="%s"
-            android:title="Time Format" />
+            android:summary="@string/pref_timedate_format_time_summary"
+            android:title="@string/pref_timedate_format_time_summary" />
         
         <ListPreference
             android:defaultValue="1"
@@ -75,30 +75,30 @@
             android:entryValues="@array/array_pref_list_values_timedate_scheme_note_timestamp"
             android:key="pref_timedate_scheme_note_timestamp"
             android:persistent="true"
-            android:summary="%s"
-            android:title="Note Timestamp Scheme" />
+            android:summary="@string/pref_timedate_scheme_note_timestamp_summary"
+            android:title="@string/pref_timedate_scheme_note_timestamp_title" />
     
     </PreferenceCategory>
     
     <PreferenceCategory
         android:key="pref_other"
         android:persistent="false"
-        android:title="Other">
+        android:title="@string/pref_other_title">
         
         <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
             android:defaultValue="true"
-            android:key="pref_import_enable"
+            android:key="pref_other_import_enable"
             android:persistent="true"
-            android:summaryOff="You will not be prompted to import external note files"
-            android:summaryOn="You will be prompted to import external note files"
-            android:title="Prompt External Import" />
+            android:summaryOff="@string/pref_other_import_enable_summary_off"
+            android:summaryOn="@string/pref_other_import_enable_summary_on"
+            android:title="@string/pref_other_import_enable_title" />
     
     </PreferenceCategory>
     
     <PreferenceCategory
         android:key="pref_about"
         android:persistent="false"
-        android:title="About">
+        android:title="@string/pref_about_title">
         
         <Preference
             android:key="pref_about_content"
