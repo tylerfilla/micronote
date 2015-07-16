@@ -343,7 +343,7 @@ public class ActivityList extends AppCompatActivity {
         // Refresh list
         this.refreshList();
         
-        // Animate in new button
+        // Animate out new button
         this.findViewById(R.id.activityListNewButton).setEnabled(false);
         new Handler().postDelayed(new Runnable() {
             
@@ -913,6 +913,9 @@ public class ActivityList extends AppCompatActivity {
                                 } else if (ListAdapter.this.activityList.actionModeType == EnumActionMode.SEARCH_SELECT) {
                                     // Drop to search action mode
                                     ListAdapter.this.activityList.activateActionMode(EnumActionMode.SEARCH);
+                                    
+                                    // Call search begin function
+                                    ListAdapter.this.activityList.searchBegin();
                                 }
                             }
                         } else {
