@@ -40,6 +40,7 @@ import com.example.android.trivialdrivesample.util.IabException;
 import com.example.android.trivialdrivesample.util.IabHelper;
 import com.example.android.trivialdrivesample.util.IabResult;
 import com.example.android.trivialdrivesample.util.Inventory;
+import com.example.android.trivialdrivesample.util.Purchase;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
@@ -460,6 +461,17 @@ public class ActivityList extends AppCompatActivity {
         } catch (IabException e) {
             e.printStackTrace();
         }
+        
+        /*
+        this.iabHelper.consumeAsync(inventory.getPurchase(BILLING_SKU_AD_REMOVAL), new IabHelper.OnConsumeFinishedListener() {
+            
+            @Override
+            public void onConsumeFinished(Purchase purchase, IabResult result) {
+                System.out.println("consumed");
+            }
+            
+        });
+        */
         
         // Check for presence of ad removal purchase
         if (inventory != null) {

@@ -3,6 +3,7 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.android.trivialdrivesample.util.IabHelper;
@@ -26,6 +27,9 @@ public class ActivityPurchase extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Make activity not touchable
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         
         // Get product ID from intent data
         this.productId = this.getIntent().getDataString();

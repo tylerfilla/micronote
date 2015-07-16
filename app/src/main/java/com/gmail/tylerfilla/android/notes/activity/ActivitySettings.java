@@ -1,6 +1,5 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,14 +14,26 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
+import com.example.android.trivialdrivesample.util.IabException;
+import com.example.android.trivialdrivesample.util.IabHelper;
+import com.example.android.trivialdrivesample.util.IabResult;
+import com.example.android.trivialdrivesample.util.Inventory;
 import com.gmail.tylerfilla.android.notes.R;
+import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
+
+import java.util.Collections;
 
 public class ActivitySettings extends PreferenceActivity {
     
+    private static final String BILLING_SKU_AD_REMOVAL = "android.test.purchased";
+    
+    private boolean upgradeCategoryVisible;
+    
+    private FragmentSettings fragmentSettings;
     private Toolbar toolbar;
+    
+    private IabHelper iabHelper;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,39 +42,14 @@ public class ActivitySettings extends PreferenceActivity {
         // Initialize preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         
-        // If pre-Honeycomb
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            // Root for toolbar insertion
-            ViewGroup root = (ViewGroup) this.findViewById(android.R.id.content);
-            View list = root.getChildAt(0);
-            
-            // Remove all views from root
-            root.removeAllViews();
-            
-            // Inflate toolbar
-            this.toolbar = (Toolbar) this.getLayoutInflater().inflate(R.layout.include_toolbar, root, false);
-            
-            // Measure toolbar before it is drawn
-            this.toolbar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            
-            // Make room for toolbar
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) list.getLayoutParams();
-            layoutParams.topMargin = this.toolbar.getMeasuredHeight();
-            list.setLayoutParams(layoutParams);
-            
-            // Add toolbar and list
-            root.addView(this.toolbar);
-            root.addView(list);
-            
-            // Directly add preferences 
-            this.addPreferencesFromResource(R.xml.pref);
-        } else {
-            // Set content view
-            this.setContentView(R.layout.activity_settings);
-            
-            // Get reference to toolbar
-            this.toolbar = (Toolbar) this.findViewById(R.id.activitySettingsToolbar);
-        }
+        // Default this to true
+        this.upgradeCategoryVisible = true;
+        
+        // Set content view
+        this.setContentView(R.layout.activity_settings);
+        
+        // Get reference to toolbar
+        this.toolbar = (Toolbar) this.findViewById(R.id.activitySettingsToolbar);
         
         // Toolbar title
         this.toolbar.setTitle(this.getString(R.string.activity_settings_toolbar_title));
@@ -78,6 +64,25 @@ public class ActivitySettings extends PreferenceActivity {
             public void onClick(View v) {
                 // Finish settings activity
                 ActivitySettings.this.finish();
+            }
+            
+        });
+        
+        // Create IAB helper
+        this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());
+        
+        // Enable IAB helper debugging
+        this.iabHelper.enableDebugLogging(true);
+        
+        // Start IAB helper setup
+        this.iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                // If successful, handle ad visibility
+                if (result.isSuccess()) {
+                    ActivitySettings.this.handleUpgradeVisibility();
+                }
             }
             
         });
@@ -104,7 +109,35 @@ public class ActivitySettings extends PreferenceActivity {
         return super.onCreateView(name, context, attrs);
     }
     
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void handleUpgradeVisibility() {
+        // Whether or not upgrade category should be shown
+        boolean showUpgrade = true;
+        
+        // Query user's purchases
+        Inventory inventory = null;
+        try {
+            inventory = this.iabHelper.queryInventory(false, Collections.singletonList(BILLING_SKU_AD_REMOVAL));
+        } catch (IabException e) {
+            e.printStackTrace();
+        }
+        
+        // Check for presence of ad removal purchase
+        if (inventory != null) {
+            showUpgrade = !inventory.hasPurchase(BILLING_SKU_AD_REMOVAL);
+        }
+        
+        // Remove upgrade category if it shouldn't be shown
+        if (!showUpgrade) {
+            // Set flag for future settings fragment
+            this.upgradeCategoryVisible = false;
+            
+            // If settings fragment already exists
+            if (this.fragmentSettings != null) {
+                this.fragmentSettings.removeUpgradeCategory();
+            }
+        }
+    }
+    
     public static class FragmentSettings extends PreferenceFragment {
         
         @Override
@@ -113,6 +146,19 @@ public class ActivitySettings extends PreferenceActivity {
             
             // Load preferences
             this.addPreferencesFromResource(R.xml.pref);
+            
+            // Set reference to this fragment in activity
+            ((ActivitySettings) this.getActivity()).fragmentSettings = this;
+            
+            // Handle upgrade category removal
+            if (!((ActivitySettings) this.getActivity()).upgradeCategoryVisible) {
+                this.removeUpgradeCategory();
+            }
+        }
+        
+        private void removeUpgradeCategory() {
+            // Remove upgrade category
+            this.getPreferenceScreen().removePreference(this.findPreference("pref_upgrade"));
         }
         
     }
