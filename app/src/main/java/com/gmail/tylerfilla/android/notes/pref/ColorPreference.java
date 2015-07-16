@@ -18,16 +18,20 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+
+import com.gmail.tylerfilla.android.notes.util.DimenUtil;
 
 public class ColorPreference extends DialogPreference {
     
     private static final int DEFAULT_COLOR = 0xFF000000;
+    
+    private boolean viewDialogContainerScrollable;
     
     private ViewGroup viewDialog;
     
@@ -45,6 +49,8 @@ public class ColorPreference extends DialogPreference {
     
     public ColorPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        
+        this.viewDialogContainerScrollable = true;
         
         this.currentColor = ColorPreference.DEFAULT_COLOR;
         this.currentHSV = new float[3];
@@ -66,6 +72,19 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     protected View onCreateDialogView() {
+        ScrollView viewDialogContainer = new ScrollView(this.getContext()) {
+            
+            @Override
+            public boolean onInterceptTouchEvent(MotionEvent ev) {
+                if (ColorPreference.this.viewDialogContainerScrollable) {
+                    return super.onInterceptTouchEvent(ev);
+                }
+                
+                return false;
+            }
+            
+        };
+        
         this.viewDialog = new RelativeLayout(this.getContext());
         
         this.viewDialogColorFieldH = new View(this.getContext()) {
@@ -182,6 +201,15 @@ public class ColorPreference extends DialogPreference {
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    ColorPreference.this.viewDialogContainerScrollable = false;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    ColorPreference.this.viewDialogContainerScrollable = true;
+                    break;
+                }
+                
                 ColorPreference.this.currentHSV[0] = 360.0f*Math.max(0.0f, Math.min(359.0f/360.0f, (event.getY() - v.getTop())/v.getHeight()));
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
                 
@@ -196,6 +224,15 @@ public class ColorPreference extends DialogPreference {
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    ColorPreference.this.viewDialogContainerScrollable = false;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    ColorPreference.this.viewDialogContainerScrollable = true;
+                    break;
+                }
+                
                 ColorPreference.this.currentHSV[1] = Math.max(0.0f, Math.min(1.0f, (event.getX() - v.getLeft())/v.getWidth()));
                 ColorPreference.this.currentHSV[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (event.getY() - v.getTop())/v.getHeight()));
                 ColorPreference.this.currentColor = Color.HSVToColor(ColorPreference.this.currentHSV);
@@ -242,23 +279,23 @@ public class ColorPreference extends DialogPreference {
         this.viewDialogColorSwatch.setId(3);
         this.editTextDialogInputHex.setId(4);
         
-        RelativeLayout.LayoutParams layoutParamsViewDialogColorFieldH = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(220));
-        RelativeLayout.LayoutParams layoutParamsViewDialogColorFieldSV = new RelativeLayout.LayoutParams(this.dpToPx(220), this.dpToPx(220));
-        RelativeLayout.LayoutParams layoutParamsViewDialogColorSwatch = new RelativeLayout.LayoutParams(this.dpToPx(48), this.dpToPx(48));
-        RelativeLayout.LayoutParams layoutParamsEditTextDialogInputHex = new RelativeLayout.LayoutParams(this.dpToPx(120), this.dpToPx(48));
+        RelativeLayout.LayoutParams layoutParamsViewDialogColorFieldH = new RelativeLayout.LayoutParams((int) DimenUtil.dpToPx(this.getContext(), 48), (int) DimenUtil.dpToPx(this.getContext(), 220));
+        RelativeLayout.LayoutParams layoutParamsViewDialogColorFieldSV = new RelativeLayout.LayoutParams((int) DimenUtil.dpToPx(this.getContext(), 220), (int) DimenUtil.dpToPx(this.getContext(), 220));
+        RelativeLayout.LayoutParams layoutParamsViewDialogColorSwatch = new RelativeLayout.LayoutParams((int) DimenUtil.dpToPx(this.getContext(), 48), (int) DimenUtil.dpToPx(this.getContext(), 48));
+        RelativeLayout.LayoutParams layoutParamsEditTextDialogInputHex = new RelativeLayout.LayoutParams((int) DimenUtil.dpToPx(this.getContext(), 120), (int) DimenUtil.dpToPx(this.getContext(), 48));
         
-        layoutParamsViewDialogColorFieldH.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewDialogColorFieldH.setMargins((int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12));
         layoutParamsViewDialogColorFieldH.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         
-        layoutParamsViewDialogColorFieldSV.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewDialogColorFieldSV.setMargins((int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12));
         layoutParamsViewDialogColorFieldSV.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         
-        layoutParamsViewDialogColorSwatch.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsViewDialogColorSwatch.setMargins((int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12));
         layoutParamsViewDialogColorSwatch.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParamsViewDialogColorSwatch.addRule(RelativeLayout.BELOW, this.viewDialogColorFieldSV.getId());
         layoutParamsViewDialogColorSwatch.addRule(RelativeLayout.RIGHT_OF, this.editTextDialogInputHex.getId());
         
-        layoutParamsEditTextDialogInputHex.setMargins(this.dpToPx(12), this.dpToPx(12), this.dpToPx(12), this.dpToPx(12));
+        layoutParamsEditTextDialogInputHex.setMargins((int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12), (int) DimenUtil.dpToPx(this.getContext(), 12));
         layoutParamsEditTextDialogInputHex.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         layoutParamsEditTextDialogInputHex.addRule(RelativeLayout.BELOW, this.viewDialogColorFieldSV.getId());
         
@@ -272,7 +309,9 @@ public class ColorPreference extends DialogPreference {
         this.viewDialog.addView(this.viewDialogColorSwatch);
         this.viewDialog.addView(this.editTextDialogInputHex);
         
-        return this.viewDialog;
+        viewDialogContainer.addView(this.viewDialog);
+        
+        return viewDialogContainer;
     }
     
     @Override
@@ -347,11 +386,8 @@ public class ColorPreference extends DialogPreference {
             int sel = this.editTextDialogInputHex.getSelectionStart();
             this.editTextDialogInputHex.setText(Integer.toHexString(ColorPreference.this.currentColor).substring(2).toUpperCase());
             this.editTextDialogInputHex.setSelection(Math.min(sel, this.editTextDialogInputHex.length()));
+            this.editTextDialogInputHex.clearFocus();
         }
-    }
-    
-    private int dpToPx(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, this.getContext().getResources().getDisplayMetrics());
     }
     
     private static class SavedState extends BaseSavedState {
