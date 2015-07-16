@@ -1,11 +1,9 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
 import android.animation.AnimatorInflater;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,8 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -40,11 +36,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
+import com.example.android.trivialdrivesample.util.IabException;
+import com.example.android.trivialdrivesample.util.IabHelper;
+import com.example.android.trivialdrivesample.util.IabResult;
+import com.example.android.trivialdrivesample.util.Inventory;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
+import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -56,6 +56,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +65,7 @@ public class ActivityList extends AppCompatActivity {
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
-    private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
+    private static final String BILLING_SKU_AD_REMOVAL = "android.test.purchased";
     
     private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
@@ -82,8 +83,7 @@ public class ActivityList extends AppCompatActivity {
     private ActionMode actionMode;
     private EnumActionMode actionModeType;
     
-    private IInAppBillingService inAppBillingService;
-    private ServiceConnection inAppBillingServiceConnection;
+    private IabHelper iabHelper;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,40 +132,32 @@ public class ActivityList extends AppCompatActivity {
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityListToolbar));
         
-        // Create service connection for Google Play in-app billing
-        this.inAppBillingServiceConnection = new ServiceConnection() {
-            
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                // Set service reference 
-                ActivityList.this.inAppBillingService = IInAppBillingService.Stub.asInterface(service);
-                
-                // Handle ad visibility
-                ActivityList.this.handleAdVisibility();
-            }
-            
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                // Clear service reference
-                ActivityList.this.inAppBillingService = null;
-            }
-            
-        };
+        // Create IAB helper
+        this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());
         
-        // Bind to in-app billing service
-        Intent billingServiceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        billingServiceIntent.setPackage("com.android.vending");
-        this.bindService(billingServiceIntent, this.inAppBillingServiceConnection, Context.BIND_AUTO_CREATE);
+        // Enable IAB helper debugging
+        this.iabHelper.enableDebugLogging(true);
+        
+        // Start IAB helper setup
+        this.iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                // If successful, handle ad visibility
+                if (result.isSuccess()) {
+                    ActivityList.this.handleAdVisibility();
+                }
+            }
+            
+        });
     }
     
     @Override
     protected void onDestroy() {
         super.onDestroy();
         
-        // Unbind from in-app billing service
-        if (this.inAppBillingService != null) {
-            this.unbindService(this.inAppBillingServiceConnection);
-        }
+        // Dispose IAB helper
+        this.iabHelper.dispose();
     }
     
     @Override
@@ -462,23 +454,16 @@ public class ActivityList extends AppCompatActivity {
         boolean showAd = true;
         
         // Query user's purchases
-        Bundle purchases = null;
+        Inventory inventory = null;
         try {
-            purchases = this.inAppBillingService.getPurchases(3, this.getPackageName(), "inapp", null);
-        } catch (RemoteException e) {
+            inventory = this.iabHelper.queryInventory(false, Collections.singletonList(BILLING_SKU_AD_REMOVAL));
+        } catch (IabException e) {
             e.printStackTrace();
         }
         
-        // If purchase query was successful
-        if (purchases != null) {
-            // If positive response
-            if (purchases.getInt("RESPONSE_CODE") == 0) {
-                // Get list of purchased items
-                ArrayList<String> purchasedSkus = purchases.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-                
-                // Check for ad removal SKU (absence of which results in ad being shown)
-                showAd = !purchasedSkus.contains(BILLING_SKU_AD_REMOVAL);
-            }
+        // Check for presence of ad removal purchase
+        if (inventory != null) {
+            showAd = !inventory.hasPurchase(BILLING_SKU_AD_REMOVAL);
         }
         
         // If ad should be shown
