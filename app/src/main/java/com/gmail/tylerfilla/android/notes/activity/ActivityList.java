@@ -65,7 +65,7 @@ public class ActivityList extends AppCompatActivity {
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
-    private static final String BILLING_SKU_AD_REMOVAL = "android.test.purchased";
+    private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
     
     private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
@@ -460,17 +460,6 @@ public class ActivityList extends AppCompatActivity {
         } catch (IabException e) {
             e.printStackTrace();
         }
-        
-        /*
-        this.iabHelper.consumeAsync(inventory.getPurchase(BILLING_SKU_AD_REMOVAL), new IabHelper.OnConsumeFinishedListener() {
-            
-            @Override
-            public void onConsumeFinished(Purchase purchase, IabResult result) {
-                System.out.println("consumed");
-            }
-            
-        });
-        */
         
         // Check for presence of ad removal purchase
         if (inventory != null) {

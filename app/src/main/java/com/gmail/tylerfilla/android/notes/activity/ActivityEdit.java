@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +29,7 @@ import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.NoteEditor;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
+import com.gmail.tylerfilla.android.notes.util.DimenUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -308,7 +308,7 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Title textbox layout parameters
         FrameLayout.LayoutParams promptInputTitleLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        promptInputTitleLayoutParams.setMargins(dpToPxInt(24), dpToPxInt(20), dpToPxInt(24), dpToPxInt(24));
+        promptInputTitleLayoutParams.setMargins(DimenUtil.dpToPxInt(this, 24), DimenUtil.dpToPxInt(this, 20), DimenUtil.dpToPxInt(this, 24), DimenUtil.dpToPxInt(this, 24));
         promptInputTitle.setLayoutParams(promptInputTitleLayoutParams);
         
         // Dialog buttons
@@ -351,14 +351,6 @@ public class ActivityEdit extends AppCompatActivity {
         
         // Show dialog
         prompt.show();
-    }
-    
-    private float dpToPx(float dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.getResources().getDisplayMetrics());
-    }
-    
-    private int dpToPxInt(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, this.getResources().getDisplayMetrics());
     }
     
     public static class FragmentEditor extends Fragment {

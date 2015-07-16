@@ -26,7 +26,7 @@ import java.util.Collections;
 
 public class ActivitySettings extends PreferenceActivity {
     
-    private static final String BILLING_SKU_AD_REMOVAL = "android.test.purchased";
+    private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
     
     private boolean upgradeCategoryVisible;
     
