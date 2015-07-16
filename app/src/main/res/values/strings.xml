@@ -96,6 +96,9 @@
     <string name="toast_activity_list_confirm_delete_note_files_single">Deleted 1 note</string>
     <string name="toast_activity_list_confirm_delete_note_files_multiple">Deleted %1$s notes</string>
     
+    <string name="toast_activity_purchase_success">Purchase successful</string>
+    <string name="toast_activity_purchase_fail">Purchase failed</string>
+    
     <string name="admob_unit_id_activity_list_ad">ca-app-pub-1168572156310866/6463250837</string>
     
     <string name="color_namer_base_black">black</string>
