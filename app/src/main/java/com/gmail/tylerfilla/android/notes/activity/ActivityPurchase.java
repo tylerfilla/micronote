@@ -3,7 +3,9 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.WindowManager;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.trivialdrivesample.util.IabHelper;
@@ -27,9 +29,6 @@ public class ActivityPurchase extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // Make activity not touchable
-        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         
         // Get product ID from intent data
         this.productId = this.getIntent().getDataString();
@@ -57,6 +56,31 @@ public class ActivityPurchase extends Activity {
                 if (result.isSuccess()) {
                     ActivityPurchase.this.process();
                 }
+            }
+            
+        });
+        
+        // Create a proxy view for handling touches
+        final View touchProxy = new View(this);
+        touchProxy.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        touchProxy.setFocusable(true);
+        touchProxy.requestFocusFromTouch();
+        
+        // Set touch proxy as content view
+        this.setContentView(touchProxy);
+        
+        // Set listener for touch proxy
+        touchProxy.setOnTouchListener(new View.OnTouchListener() {
+            
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Finish purchase activity
+                ActivityPurchase.this.finish();
+                
+                // Nullify touch listener
+                touchProxy.setOnTouchListener(null);
+                
+                return true;
             }
             
         });
