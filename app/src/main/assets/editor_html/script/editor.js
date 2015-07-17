@@ -37,24 +37,26 @@ function aestheticsUpdate() {
 }
 
 function createNotepadLines(recreate) {
-    if (recreate) {
+    if (recreate || !config.showNotepadLines) {
         while (contentLines.firstChild) {
             contentLines.removeChild(contentLines.firstChild);
         }
     }
     
-    var targetNumLines  = Math.floor(Math.max(content.clientHeight, contentText.clientHeight)/28);
-    var currentNumLines = contentLines.childNodes.length;
-    
-    if (currentNumLines < targetNumLines) {
-        for (var i = 0; i < targetNumLines - currentNumLines; i++) {
-            var line = document.createElement("div");
-            line.classList.add("line");
-            contentLines.appendChild(line);
-        }
-    } else {
-        for (var i = currentNumLines - targetNumLines; i > 0; i--) {
-            contentLines.removeChild(contentLines.lastChild);
+    if (config.showNotepadLines) {
+        var targetNumLines  = Math.floor(Math.max(content.clientHeight, contentText.clientHeight)/28);
+        var currentNumLines = contentLines.childNodes.length;
+        
+        if (currentNumLines < targetNumLines) {
+            for (var i = 0; i < targetNumLines - currentNumLines; i++) {
+                var line = document.createElement("div");
+                line.classList.add("line");
+                contentLines.appendChild(line);
+            }
+        } else {
+            for (var i = currentNumLines - targetNumLines; i > 0; i--) {
+                contentLines.removeChild(contentLines.lastChild);
+            }
         }
     }
 }
@@ -197,6 +199,25 @@ function updateHeader() {
     }
 }
 
+/* Configuration */
+
+function applyConfig() {
+    // Apply text color
+    contentText.style.color = "rgb(" + ((config.textColor & 0xff0000) >> 16) + ", " + ((config.textColor & 0xff00) >> 8) + ", " + (config.textColor & 0xff) + ")";
+    
+    // Apply text size
+    contentText.style.fontSize = config.textSize + "px";
+    
+    // Apply font
+    contentText.style.fontFamily = config.font;
+    
+    // Update header
+    updateHeader();
+    
+    // Rebuild aesthetics
+    aestheticsRebuild();
+}
+
 /* Auto upload */
 
 function autoUploadAction() {
@@ -256,11 +277,8 @@ function handleIncomingAssignmentConfig(value) {
         config = eval(value);
     }
     
-    // Update header
-    updateHeader();
-    
-    // Rebuild aesthetics
-    aestheticsRebuild();
+    // Apply configuration
+    applyConfig();
 }
 
 function handleIncomingAssignmentNote(value) {
