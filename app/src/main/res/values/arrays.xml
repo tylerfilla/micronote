@@ -33,8 +33,8 @@
     </string-array>
     
     <string-array name="array_pref_list_values_timedate_format_time">
-        <item>12</item>
-        <item>24</item>
+        <item>_12_HOUR</item>
+        <item>_24_HOUR</item>
     </string-array>
     
     <string-array name="array_pref_list_entries_timedate_scheme_note_timestamp">

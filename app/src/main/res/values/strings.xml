@@ -21,19 +21,10 @@
     <string name="activity_list_message_empty_search_title">No Search Results</string>
     <string name="activity_list_message_empty_search_body">Your search did not turn up any results. Try broadening your query.</string>
     
-    <string name="activity_list_search_bubble_hint">Type here to search</string>
-    <string name="activity_list_search_open_title">Search Notes</string>
-    <string name="activity_list_search_open_body">Enter a query in the bubble below to begin searching through your notes.</string>
+    <string name="activity_edit_constant_default_note_title">Untitled Note</string>
     
     <string name="activity_edit_menu_item_rename_title">Rename</string>
     <string name="activity_edit_menu_item_delete_title">Delete</string>
-    
-    <string name="activity_edit_menu_item_checklist">Checklist</string>
-    <string name="activity_edit_menu_item_clip">Clip</string>
-    <string name="activity_edit_menu_item_list_unordered">Bullets</string>
-    <string name="activity_edit_menu_item_list_ordered">Numbering</string>
-    
-    <string name="activity_edit_constant_default_note_title">Untitled Note</string>
     
     <string name="activity_settings_toolbar_title">Settings</string>
     
@@ -100,7 +91,5 @@
     
     <string name="toast_activity_purchase_success">Purchase successful</string>
     <string name="toast_activity_purchase_fail">Purchase failed</string>
-    
-    <string name="admob_unit_id_activity_list_ad">ca-app-pub-1168572156310866/6463250837</string>
 
 </resources>

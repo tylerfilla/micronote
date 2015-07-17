@@ -65,7 +65,7 @@
             android:title="@string/pref_timedate_format_date_title" />
         
         <ListPreference
-            android:defaultValue="12"
+            android:defaultValue="_12_HOUR"
             android:entries="@array/array_pref_list_entries_timedate_format_time"
             android:entryValues="@array/array_pref_list_values_timedate_format_time"
             android:key="pref_timedate_format_time"

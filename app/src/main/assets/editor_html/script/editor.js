@@ -189,7 +189,7 @@ function updateHeader() {
         headerText.innerText = strDateYear;
         break;
     case "FULL":
-        headerText.innerText = strTime + " - " + strDateYear;
+        headerText.innerText = strTime + " " + strDateYear;
         break;
     case "UNIX":
         headerText.innerText = Math.floor(lastModifiedTime/1000 + 0.5);

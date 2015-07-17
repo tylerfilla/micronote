@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -396,6 +397,9 @@ public class ActivityEdit extends AppCompatActivity {
                         
                     }, 250);
                 }
+                
+                // Load configuration
+                this.loadConfiguration();
             }
             
             return this.noteEditor;
@@ -472,6 +476,22 @@ public class ActivityEdit extends AppCompatActivity {
             
             // Pause note editor
             this.noteEditor.onPause();
+        }
+        
+        private void loadConfiguration() {
+            // Get preferences
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+            
+            // Get configuration
+            NoteEditor.Configuration configuration = this.noteEditor.getConfiguration();
+            
+            // Modify configuration
+            configuration.formatDate = NoteEditor.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
+            configuration.formatTime = NoteEditor.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));
+            configuration.timestampScheme = NoteEditor.Configuration.EnumTimestampScheme.valueOf(preferences.getString("pref_timedate_scheme_note_timestamp", null));
+            
+            // Set configuration
+            this.noteEditor.setConfiguration(configuration);
         }
         
     }
