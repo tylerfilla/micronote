@@ -29,7 +29,7 @@ import com.gmail.tylerfilla.android.notes.util.DimenUtil;
 
 public class ColorPreference extends DialogPreference {
     
-    private static final int DEFAULT_COLOR = 0xFF000000;
+    private static final int DEFAULT_COLOR = 0xff000000;
     
     private boolean viewDialogContainerScrollable;
     
@@ -59,8 +59,8 @@ public class ColorPreference extends DialogPreference {
         
         this.hexModified = false;
         
-        this.setPositiveButtonText("Okay");
-        this.setNegativeButtonText("Cancel");
+        this.setNegativeButtonText(android.R.string.cancel);
+        this.setPositiveButtonText(android.R.string.ok);
     }
     
     @Override
@@ -102,7 +102,7 @@ public class ColorPreference extends DialogPreference {
                 paintHue.setStyle(Paint.Style.FILL);
                 paintLens.setStyle(Paint.Style.STROKE);
                 
-                paintHue.setShader(new LinearGradient(0.0f, 0.0f, 0.0f, height, new int[] { 0xFFFF0000, 0xFFFFFF00, 0xFF00FF00, 0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF, 0xFFFF0000, }, null, Shader.TileMode.MIRROR));
+                paintHue.setShader(new LinearGradient(0.0f, 0.0f, 0.0f, height, new int[] { 0xffff0000, 0xffffff00, 0xff00ff00, 0xff00ffff, 0xff0000ff, 0xffff00ff, 0xffff0000, }, null, Shader.TileMode.MIRROR));
                 
                 paintLens.setColor(Color.BLACK);
                 paintLens.setStrokeWidth(6.0f);
@@ -140,8 +140,8 @@ public class ColorPreference extends DialogPreference {
                 paintLens.setColor(Color.HSVToColor(new float[] { 0.0f, 0.0f, 1.0f - ColorPreference.this.currentHSV[2], }));
                 paintLens.setStrokeWidth(4.0f);
                 
-                paintSaturation.setShader(new LinearGradient(0.0f, 0.0f, width, 0.0f, new int[] { 0xFFFFFFFF, 0x00000000, }, null, Shader.TileMode.MIRROR));
-                paintValue.setShader(new LinearGradient(0.0f, 0.0f, 0.0f, height, new int[] { 0x00000000, 0xFF000000, }, null, Shader.TileMode.MIRROR));
+                paintSaturation.setShader(new LinearGradient(0.0f, 0.0f, width, 0.0f, new int[] { 0xffffffff, 0x00000000, }, null, Shader.TileMode.MIRROR));
+                paintValue.setShader(new LinearGradient(0.0f, 0.0f, 0.0f, height, new int[] { 0x00000000, 0xff000000, }, null, Shader.TileMode.MIRROR));
                 
                 canvas.drawRect(0.0f, 0.0f, width, height, paintHue);
                 canvas.drawRect(0.0f, 0.0f, width, height, paintSaturation);
@@ -255,7 +255,7 @@ public class ColorPreference extends DialogPreference {
                 if (!ColorPreference.this.hexModified) {
                     int newColor = ColorPreference.this.currentColor;
                     try {
-                        newColor = (int) Long.parseLong("FF" + s.toString(), 16);
+                        newColor = (int) Long.parseLong("ff" + s.toString(), 16);
                     } catch (NumberFormatException e) {
                     }
                     
@@ -372,7 +372,7 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     public CharSequence getSummary() {
-        return String.format(super.getSummary().toString(), "#" + ((this.currentColor & 0x00FFFFFF) == 0 ? "000000" : Integer.toHexString(this.currentColor & 0x00FFFFFF)).toUpperCase());
+        return String.format(super.getSummary().toString(), "#" + ((this.currentColor & 0x00ffffff) == 0 ? "000000" : Integer.toHexString(this.currentColor & 0x00ffffff)).toUpperCase());
     }
     
     private void updateDialogView() {
