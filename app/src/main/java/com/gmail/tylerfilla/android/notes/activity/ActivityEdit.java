@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -378,25 +380,25 @@ public class ActivityEdit extends AppCompatActivity {
                 
                 // If note is new
                 if (this.noteEditor.getNote().getLastModified() == 0l) {
-                    // Show soft keyboard when editor loads
-                    // TODO: Use less hacky method
+                    // Show soft keyboard
                     new Handler().postDelayed(new Runnable() {
                         
                         @Override
                         public void run() {
-                            // Calculate simulated touch point
-                            int x = (FragmentEditor.this.noteEditor.getLeft() + FragmentEditor.this.noteEditor.getRight())/2;
-                            int y = (FragmentEditor.this.noteEditor.getTop() + FragmentEditor.this.noteEditor.getBottom())/2;
+                            // Calculate simulated touch point coordinates
+                            float x = (FragmentEditor.this.noteEditor.getLeft() + FragmentEditor.this.noteEditor.getRight())/2.0f;
+                            float y = (FragmentEditor.this.noteEditor.getTop() + FragmentEditor.this.noteEditor.getBottom())/2.0f;
                             
-                            // Simulate touch
-                            try {
-                                Runtime.getRuntime().exec("input tap " + x + " " + y);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            // Generate events
+                            MotionEvent eventDown = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, x, y, 0);
+                            MotionEvent eventUp = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, x, y, 0);
+                            
+                            // Dispatch events
+                            FragmentEditor.this.noteEditor.onTouchEvent(eventDown);
+                            FragmentEditor.this.noteEditor.onTouchEvent(eventUp);
                         }
                         
-                    }, 250);
+                    }, 300);
                 }
                 
                 // Load configuration
