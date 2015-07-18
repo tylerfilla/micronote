@@ -471,7 +471,7 @@ public class ActivityList extends AppCompatActivity {
             // Make an ad request and load ad
             AdView ad = (AdView) this.findViewById(R.id.activityListAd);
             AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-            adRequestBuilder.addTestDevice("4C96B0950E99BA13180869369BEBC53B"); // anon
+            adRequestBuilder.addTestDevice("987981F3F5AD0170CF6C028268A11A4A"); // anon
             adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61"); // anon-2
             ad.loadAd(adRequestBuilder.build());
             
@@ -641,6 +641,9 @@ public class ActivityList extends AppCompatActivity {
             searchView.setIconified(false);
             searchView.setIconifiedByDefault(false);
             searchView.requestFocusFromTouch();
+            
+            // Fill whole toolbar
+            searchView.setMaxWidth(Integer.MAX_VALUE);
             
             // Get reference to search view query input
             EditText searchViewQueryInput = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
