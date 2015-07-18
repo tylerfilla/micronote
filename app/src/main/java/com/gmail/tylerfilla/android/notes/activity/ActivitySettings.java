@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatCheckedTextView;
 import android.support.v7.widget.AppCompatEditText;
@@ -24,7 +25,7 @@ import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
 
 import java.util.Collections;
 
-public class ActivitySettings extends PreferenceActivity {
+public class ActivitySettings extends AppCompatActivity {
     
     private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
     
