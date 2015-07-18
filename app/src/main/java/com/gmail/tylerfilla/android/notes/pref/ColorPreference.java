@@ -380,7 +380,7 @@ public class ColorPreference extends DialogPreference {
             hex = "0" + hex;
         }
         
-        // Format into summary text
+        // Format summary text
         return String.format(super.getSummary().toString(), "#" + hex);
     }
     
