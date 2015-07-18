@@ -372,7 +372,16 @@ public class ColorPreference extends DialogPreference {
     
     @Override
     public CharSequence getSummary() {
-        return String.format(super.getSummary().toString(), "#" + ((this.currentColor & 0x00ffffff) == 0 ? "000000" : Integer.toHexString(this.currentColor & 0x00ffffff)).toUpperCase());
+        // Create main hex content
+        String hex = ((this.currentColor & 0x00ffffff) == 0 ? "" : Integer.toHexString(this.currentColor & 0x00ffffff)).toUpperCase();
+        
+        // Pad beginning with zeroes
+        while (hex.length() < 6) {
+            hex = "0" + hex;
+        }
+        
+        // Format into summary text
+        return String.format(super.getSummary().toString(), "#" + hex);
     }
     
     private void updateDialogView() {
