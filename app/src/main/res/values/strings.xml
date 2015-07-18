@@ -35,8 +35,11 @@
     
     <string name="pref_style_notepad_title">Notepad Style</string>
     
-    <string name="pref_style_notepad_color_text_title">Text Color</string>
-    <string name="pref_style_notepad_color_text_summary">%s</string>
+    <string name="pref_style_notepad_text_color_title">Text Color</string>
+    <string name="pref_style_notepad_text_color_summary">%s</string>
+    
+    <string name="pref_style_notepad_text_font_title">Text Font</string>
+    <string name="pref_style_notepad_text_font_summary">%s</string>
     
     <string name="pref_style_notepad_show_lines_title">Show Notepad Lines</string>
     <string name="pref_style_notepad_show_lines_summary_off">Notepad lines will not be shown</string>

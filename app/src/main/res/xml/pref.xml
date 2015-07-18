@@ -33,11 +33,17 @@
         android:title="@string/pref_style_notepad_title">
         
         <com.gmail.tylerfilla.android.notes.pref.ColorPreference
-            android:defaultValue="@color/pref_default_style_notepad_color_text"
-            android:key="pref_style_notepad_color_text"
+            android:defaultValue="@color/pref_default_style_notepad_text_color"
+            android:key="pref_style_notepad_text_color"
             android:persistent="true"
-            android:summary="@string/pref_style_notepad_color_text_summary"
-            android:title="@string/pref_style_notepad_color_text_title" />
+            android:summary="@string/pref_style_notepad_text_color_summary"
+            android:title="@string/pref_style_notepad_text_color_title" />
+        
+        <com.gmail.tylerfilla.android.notes.pref.FontPreference
+            android:key="pref_style_notepad_text_font"
+            android:persistent="true"
+            android:summary="@string/pref_style_notepad_text_font_summary"
+            android:title="@string/pref_style_notepad_text_font_title" />
         
         <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
             android:defaultValue="true"

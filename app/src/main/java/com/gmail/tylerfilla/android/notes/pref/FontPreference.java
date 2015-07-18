@@ -2,11 +2,21 @@ package com.gmail.tylerfilla.android.notes.pref;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class FontPreference extends DialogPreference {
     
@@ -20,10 +30,37 @@ public class FontPreference extends DialogPreference {
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
+        
+        // Create font list adapter
+        final FontListAdapter fontListAdapter = new FontListAdapter();
+        
+        // Select first item by default
+        int beginningSelection = 0;
+        
+        // If a current font has been established, get its index
+        if (this.currentFontName != null) {
+            for (int i = 0; i < fontListAdapter.getDeviceFontNames().size(); i++) {
+                if (this.currentFontName.equals(fontListAdapter.getDeviceFontNames().get(i))) {
+                    beginningSelection = i;
+                    break;
+                }
+            }
+        }
+        
+        // Set up font list
+        builder.setSingleChoiceItems(new FontListAdapter(), beginningSelection, new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FontPreference.this.currentFontName = fontListAdapter.getDeviceFontNames().get(which);
+            }
+            
+        });
     }
     
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+        // Determine if the default should be used
         if (restorePersistedValue) {
             this.persistentFontName = this.getPersistedString(this.persistentFontName);
         } else {
@@ -74,6 +111,66 @@ public class FontPreference extends DialogPreference {
     public CharSequence getSummary() {
         // Format summary text
         return String.format(super.getSummary().toString(), this.currentFontName);
+    }
+    
+    private class FontListAdapter extends BaseAdapter {
+        
+        private List<String> deviceFontNames;
+        
+        private FontListAdapter() {
+            this.deviceFontNames = this.enumerateDeviceFontNames();
+        }
+        
+        @Override
+        public int getCount() {
+            return this.deviceFontNames.size();
+        }
+        
+        @Override
+        public Object getItem(int position) {
+            return this.deviceFontNames.get(position);
+        }
+        
+        @Override
+        public long getItemId(int position) {
+            return (long) position;
+        }
+        
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Try to reuse convertView
+            View view = convertView;
+            
+            // If view needs to be created
+            if (view == null) {
+                // Inflate standard single-choice list layout
+                view = ((LayoutInflater) FontPreference.this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(android.R.layout.select_dialog_singlechoice, parent, false);
+            }
+            
+            // Get reference to main text view
+            CheckedTextView checkedTextView = (CheckedTextView) view.findViewById(android.R.id.text1);
+            
+            // Get font associated with this list item
+            String fontName = this.deviceFontNames.get(position);
+            
+            // Set text to font name
+            checkedTextView.setText(fontName);
+            
+            // Set font
+            checkedTextView.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
+            
+            return view;
+        }
+        
+        public List<String> getDeviceFontNames() {
+            return this.deviceFontNames;
+        }
+        
+        private List<String> enumerateDeviceFontNames() {
+            // TODO: Read fonts on device
+            return Arrays.asList("arial", "courier new", "times new roman");
+        }
+        
     }
     
     private static class SavedState extends BaseSavedState {
