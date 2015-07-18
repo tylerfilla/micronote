@@ -112,6 +112,7 @@ public class NoteEditor extends WebView {
         Map<String, Object> map = new HashMap<>();
         
         // Put configuration data
+        map.put("backgroundColor", this.configuration.backgroundColor);
         map.put("textColor", this.configuration.textColor);
         map.put("textSize", this.configuration.textSize);
         map.put("font", this.configuration.font);
@@ -152,7 +153,7 @@ public class NoteEditor extends WebView {
         // Load editor document
         this.loadUrl(NoteEditor.ASSET_PATH_EDITOR_HTML_INDEX);
         
-        // Background transparency workaround
+        // Background color workaround
         this.setBackgroundColor(0);
         
         // Load default configuration
@@ -239,6 +240,7 @@ public class NoteEditor extends WebView {
     
     public static class Configuration {
         
+        private static final int DEFAULT_BACKGROUND_COLOR = 0xfffaf6bb;
         private static final int DEFAULT_TEXT_COLOR = Color.BLACK;
         private static final int DEFAULT_TEXT_SIZE = 22;
         private static final String DEFAULT_FONT = "arial";
@@ -247,6 +249,7 @@ public class NoteEditor extends WebView {
         private static final EnumFormatTime DEFAULT_FORMAT_TIME = EnumFormatTime.values()[0];
         private static final EnumTimestampScheme DEFAULT_TIMESTAMP_SCHEME = EnumTimestampScheme.values()[0];
         
+        public int backgroundColor;
         public int textColor;
         public int textSize;
         public String font;
@@ -257,6 +260,7 @@ public class NoteEditor extends WebView {
         
         private Configuration() {
             // Defaults
+            this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
             this.textColor = DEFAULT_TEXT_COLOR;
             this.textSize = DEFAULT_TEXT_SIZE;
             this.font = DEFAULT_FONT;

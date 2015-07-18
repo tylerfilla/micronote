@@ -378,7 +378,8 @@ public class ActivityEdit extends AppCompatActivity {
                 
                 // If note is new
                 if (this.noteEditor.getNote().getLastModified() == 0l) {
-                    // Show soft keyboard when editor loads (h4x)
+                    // Show soft keyboard when editor loads
+                    // TODO: Use less hacky method
                     new Handler().postDelayed(new Runnable() {
                         
                         @Override

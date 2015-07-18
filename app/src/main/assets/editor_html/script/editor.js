@@ -202,8 +202,11 @@ function updateHeader() {
 /* Configuration */
 
 function applyConfig() {
+    // Apply background color
+    document.body.style.backgroundColor = utilARGBIntToRGBStr(config.backgroundColor);
+    
     // Apply text color
-    contentText.style.color = "rgb(" + ((config.textColor & 0xff0000) >> 16) + ", " + ((config.textColor & 0xff00) >> 8) + ", " + (config.textColor & 0xff) + ")";
+    contentText.style.color = utilARGBIntToRGBStr(config.textColor);
     
     // Apply text size
     contentText.style.fontSize = config.textSize + "px";
@@ -361,9 +364,9 @@ function sendPageMessage(message) {
 
 /* Utilities */
 
-function utilARGBIntToRGBHexStr(argbInt) {
-    // Convert color from a 32-bit ARGB integer to an RGB hex string
-    return "#" + (argbInt & 0x00FFFFFF).toString(16);
+function utilARGBIntToRGBStr(argbInt) {
+    // Convert color from a 32-bit ARGB integer to a RGB string
+    return "rgb(" + ((argbInt & 0xff0000) >> 16) + ", " + ((argbInt & 0xff00) >> 8) + ", " + (argbInt & 0xff) + ")";
 }
 
 function utilGetMonthAbbr(month) {
