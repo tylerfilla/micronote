@@ -3,11 +3,11 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import com.gmail.tylerfilla.android.notes.R;
@@ -32,22 +32,17 @@ public class ActivityAbout extends Activity {
         dialogViewLayoutParams.setMargins(DimenUtil.dpToPxInt(this, 24), DimenUtil.dpToPxInt(this, 20), DimenUtil.dpToPxInt(this, 24), DimenUtil.dpToPxInt(this, 24));
         dialogView.setLayoutParams(dialogViewLayoutParams);
         
-        // Set web Chrome client for handling alert messages
-        dialogView.setWebChromeClient(new WebChromeClient() {
+        // Handle overriding of programmatic resources
+        dialogView.setWebViewClient(new WebViewClient() {
             
             @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                // Dismiss alert "dialog"
-                result.confirm();
-                
-                System.out.println(message);
-                
-                if ("get_license_google_play_services".equals(message)) {
-                    // Write Google Play Services license
-                    view.loadUrl("javascript:document.write('" + GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(ActivityAbout.this).replaceAll("\\'", "&#39;") + "');");
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (Uri.parse(url).getPath().endsWith("google_play_services.html")) {
+                    view.loadData("<!DOCTYPE html><html><body>" + GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(ActivityAbout.this).replaceAll("\n", "<br />") + "</body></html>", "text/html", "UTF-8");
+                    return true;
                 }
                 
-                return true;
+                return false;
             }
             
         });
