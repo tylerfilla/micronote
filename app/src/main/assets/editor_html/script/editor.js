@@ -211,9 +211,6 @@ function applyConfig() {
     // Apply text size
     contentText.style.fontSize = config.textSize + "px";
     
-    // Apply font
-    contentText.style.fontFamily = config.font;
-    
     // Update header
     updateHeader();
     

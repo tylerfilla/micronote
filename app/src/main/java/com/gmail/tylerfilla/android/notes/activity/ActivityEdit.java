@@ -489,7 +489,7 @@ public class ActivityEdit extends AppCompatActivity {
             NoteEditor.Configuration configuration = this.noteEditor.getConfiguration();
             
             // Modify configuration
-            configuration.textColor = preferences.getInt("pref_style_notepad_color_text", 0);
+            configuration.textColor = preferences.getInt("pref_style_notepad_text_color", 0);
             configuration.showNotepadLines = preferences.getBoolean("pref_style_notepad_show_lines", false);
             configuration.formatDate = NoteEditor.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
             configuration.formatTime = NoteEditor.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));

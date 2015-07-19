@@ -115,7 +115,6 @@ public class NoteEditor extends WebView {
         map.put("backgroundColor", this.configuration.backgroundColor);
         map.put("textColor", this.configuration.textColor);
         map.put("textSize", this.configuration.textSize);
-        map.put("font", this.configuration.font);
         map.put("showNotepadLines", this.configuration.showNotepadLines);
         map.put("formatDate", this.configuration.formatDate.name());
         map.put("formatTime", this.configuration.formatTime.name());
@@ -243,7 +242,6 @@ public class NoteEditor extends WebView {
         private static final int DEFAULT_BACKGROUND_COLOR = 0xfffaf6bb;
         private static final int DEFAULT_TEXT_COLOR = Color.BLACK;
         private static final int DEFAULT_TEXT_SIZE = 22;
-        private static final String DEFAULT_FONT = "arial";
         private static final boolean DEFAULT_SHOW_NOTEPAD_LINES = true;
         private static final EnumFormatDate DEFAULT_FORMAT_DATE = EnumFormatDate.values()[0];
         private static final EnumFormatTime DEFAULT_FORMAT_TIME = EnumFormatTime.values()[0];
@@ -252,7 +250,6 @@ public class NoteEditor extends WebView {
         public int backgroundColor;
         public int textColor;
         public int textSize;
-        public String font;
         public boolean showNotepadLines;
         public EnumFormatDate formatDate;
         public EnumFormatTime formatTime;
@@ -263,7 +260,6 @@ public class NoteEditor extends WebView {
             this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
             this.textColor = DEFAULT_TEXT_COLOR;
             this.textSize = DEFAULT_TEXT_SIZE;
-            this.font = DEFAULT_FONT;
             this.showNotepadLines = DEFAULT_SHOW_NOTEPAD_LINES;
             this.formatDate = DEFAULT_FORMAT_DATE;
             this.formatTime = DEFAULT_FORMAT_TIME;
