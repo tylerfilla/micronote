@@ -40,6 +40,7 @@
             android:title="@string/pref_style_notepad_text_color_title" />
         
         <com.gmail.tylerfilla.android.notes.pref.FontPreference
+            android:defaultValue="@string/pref_style_notepad_text_font_default_value"
             android:key="pref_style_notepad_text_font"
             android:persistent="true"
             android:summary="@string/pref_style_notepad_text_font_summary"

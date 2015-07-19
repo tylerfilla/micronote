@@ -49,7 +49,7 @@ public class FontPreference extends DialogPreference {
         
         // If a current font has been established, get its index
         if (this.currentFontPath != null) {
-            beginningSelection = this.fontListAdapter.getDeviceFontPathList().indexOf(this.currentFontPath);
+            beginningSelection = this.fontListAdapter.deviceFontPathList.indexOf(this.currentFontPath);
         }
         
         // Set up font list
@@ -58,10 +58,10 @@ public class FontPreference extends DialogPreference {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Set current font name
-                FontPreference.this.currentFontName = FontPreference.this.fontListAdapter.getDeviceFontNameList().get(which);
+                FontPreference.this.currentFontName = FontPreference.this.fontListAdapter.deviceFontNameList.get(which);
                 
                 // Set current font path
-                FontPreference.this.currentFontPath = FontPreference.this.fontListAdapter.getDeviceFontPathList().get(which);
+                FontPreference.this.currentFontPath = FontPreference.this.fontListAdapter.deviceFontPathList.get(which);
                 
                 // Clear cancelled flag
                 FontPreference.this.cancelled = false;
@@ -112,14 +112,20 @@ public class FontPreference extends DialogPreference {
         if (restorePersistedValue) {
             this.persistentFontPath = this.getPersistedString(this.persistentFontPath);
         } else {
-            this.persistentFontPath = (String) defaultValue;
+            this.persistentFontPath = "";
         }
         
         // Persist font path
         this.persistString(this.persistentFontPath);
         
-        // Set current font name to persistent font name
+        // Set current font path to persistent font name
         this.currentFontPath = this.persistentFontPath;
+        
+        // Set current font name to that associated with font file
+        int currentFontIndex = this.fontListAdapter.deviceFontPathList.indexOf(this.currentFontPath);
+        if (currentFontIndex >= 0) {
+            this.currentFontName = this.fontListAdapter.deviceFontNameList.get(currentFontIndex);
+        }
     }
     
     @Override
@@ -158,7 +164,7 @@ public class FontPreference extends DialogPreference {
     
     @Override
     public CharSequence getSummary() {
-        return String.format(super.getSummary().toString(), this.currentFontName);
+        return String.format(super.getSummary().toString(), this.currentFontName == null ? "Unset" : this.currentFontName);
     }
     
     private static class FontListAdapter extends BaseAdapter {
@@ -176,8 +182,12 @@ public class FontPreference extends DialogPreference {
             this.ttfReader = new TTFReader();
             
             this.deviceFontNameList = new ArrayList<>();
-            this.deviceFontPathList = this.enumerateDeviceFontPaths();
+            this.deviceFontPathList = new ArrayList<>();
             
+            // Add all enumerated device font paths
+            this.deviceFontPathList.addAll(this.enumerateDeviceFontPaths());
+            
+            // Read fonts and add all names
             for (String fontPath : this.deviceFontPathList) {
                 // Try to get name from font file
                 try {
@@ -195,7 +205,7 @@ public class FontPreference extends DialogPreference {
                     
                     // Remove file extension
                     if (name.contains(".")) {
-                        name = name.substring(0, name.lastIndexOf('.'));
+                        name = name.substring(0, name.lastIndexOf("."));
                     }
                     
                     // Add 
@@ -237,17 +247,13 @@ public class FontPreference extends DialogPreference {
             checkedTextView.setText(this.deviceFontNameList.get(position));
             
             // Set font
-            checkedTextView.setTypeface(Typeface.createFromFile(this.deviceFontPathList.get(position)));
+            if (this.deviceFontPathList.get(position) == null || this.deviceFontPathList.get(position).isEmpty()) {
+                checkedTextView.setTypeface(Typeface.DEFAULT);
+            } else {
+                checkedTextView.setTypeface(Typeface.createFromFile(this.deviceFontPathList.get(position)));
+            }
             
             return view;
-        }
-        
-        public List<String> getDeviceFontNameList() {
-            return this.deviceFontNameList;
-        }
-        
-        public List<String> getDeviceFontPathList() {
-            return this.deviceFontPathList;
         }
         
         private List<String> enumerateDeviceFontPaths() {
@@ -264,7 +270,9 @@ public class FontPreference extends DialogPreference {
                 
                 // Iterate over font files in font directory
                 for (File fontFile : fontDirectory.listFiles()) {
-                    deviceFontPathList.add(fontFile.getAbsolutePath());
+                    if (fontFile.getName().toLowerCase().endsWith("ttf")) {
+                        deviceFontPathList.add(fontFile.getAbsolutePath());
+                    }
                 }
             }
             
