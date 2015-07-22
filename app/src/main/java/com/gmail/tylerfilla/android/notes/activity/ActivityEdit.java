@@ -409,7 +409,7 @@ public class ActivityEdit extends AppCompatActivity {
                         final View activityEditCover = FragmentEditor.this.getActivity().findViewById(R.id.activityEditCover);
                         
                         // Get fade duration
-                        int fadeDuration = FragmentEditor.this.getActivity().getResources().getInteger(android.R.integer.config_shortAnimTime);
+                        int fadeDuration = FragmentEditor.this.getActivity().getResources().getInteger(android.R.integer.config_mediumAnimTime);
                         
                         // Animate cover out
                         AlphaAnimation fade = new AlphaAnimation(1.0f, 0.0f);

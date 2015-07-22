@@ -447,7 +447,7 @@ function windowOnUnload(event) {
 
 function windowOnResize(event) {
     // Resize content height
-    content.style.height = (window.innerHeight - 70 - 16) + "px";
+    content.style.height = (window.innerHeight - 68 - 16) + "px";
     
     // Update aesthetics
     aestheticsUpdate();
