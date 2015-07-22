@@ -9,7 +9,8 @@
 }
 
 body {
-    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-transform:   translate3d(0, 0, 0);
+    -webkit-user-select: none;
 }
 
 #header {
@@ -18,42 +19,33 @@ body {
     top:   0;
     right: 0;
     
-    text-align:  right;
+    text-align: right;
     
-    height: 40px;
-    
-    padding: 16px;
+    padding: 24px 8px 0 0;
 }
 
 #headerText {
-    display: inline;
+    color: #C00000;
     
-    color:       #C00000;
-    font-size:   1.2em;
-    line-height: 40px;
-    text-align:  right;
-    
-    -webkit-user-select: none;
+    font-size: 22px;
 }
 
 #content {
     position: absolute;
-    bottom: 40px;
     left:   0;
     right:  0;
-    top:    50px;
+    top:    70px;
     
-    margin-left:  8px;
-    margin-right: 8px;
+    margin: 0px 8px 0 8px;
 }
 
 #contentLines {
     height: 100%;
     width:  100%;
     
-    z-index: 0;
-    
     pointer-events: none;
+    
+    z-index: 0;
 }
 
 #contentLines .line {
@@ -71,8 +63,10 @@ body {
     
     width: 100%;
     
-    font-size:   22px;
+    font-size:   36px;
     line-height: 32px;
     
     z-index: 9001;
+    
+    -webkit-user-select: all;
 }

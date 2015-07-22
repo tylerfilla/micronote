@@ -44,7 +44,7 @@ function createNotepadLines(recreate) {
     }
     
     if (config.showNotepadLines) {
-        var targetNumLines  = Math.floor(Math.max(content.clientHeight, contentText.clientHeight)/28);
+        var targetNumLines  = Math.floor(Math.max(content.clientHeight, contentText.clientHeight)/32);
         var currentNumLines = contentLines.childNodes.length;
         
         if (currentNumLines < targetNumLines) {
@@ -377,7 +377,7 @@ function initialize() {
     aestheticsRebuild();
     
     // Content change and auto upload interval
-    listIntervals.push(setInterval(function () {
+    listIntervals.push(setInterval(function() {
         autoUploadDetect();
         autoUploadIterate();
     }, 50));
@@ -447,7 +447,7 @@ function windowOnUnload(event) {
 
 function windowOnResize(event) {
     // Resize content height
-    content.style.height = (window.innerHeight - 60) + "px";
+    content.style.height = (window.innerHeight - 70 - 16) + "px";
     
     // Update aesthetics
     aestheticsUpdate();
