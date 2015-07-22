@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,6 +39,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ActivityEdit extends AppCompatActivity {
+    
+    private static final String STATE_KEY_COVER_VISIBILITY = "cover_visibility";
     
     private static final int NOTE_TITLE_MAX_LENGTH = 20;
     
@@ -134,6 +137,22 @@ public class ActivityEdit extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.setTaskDescription(new ActivityManager.TaskDescription(this.note.getTitle(), null, this.getTheme().obtainStyledAttributes(R.style.MicroNote_Theme, new int[] { R.attr.colorPrimary }).getColor(0, 0)));
         }
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        
+        // Restore cover visibility
+        this.findViewById(R.id.activityEditCover).setVisibility(savedInstanceState.getBoolean(STATE_KEY_COVER_VISIBILITY, true) ? View.VISIBLE : View.GONE);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        // Save cover visibility
+        outState.putBoolean(STATE_KEY_COVER_VISIBILITY, this.findViewById(R.id.activityEditCover).getVisibility() == View.VISIBLE);
     }
     
     @Override
@@ -375,34 +394,61 @@ public class ActivityEdit extends AppCompatActivity {
                 // Create note editor
                 this.noteEditor = new NoteEditor(this.getActivity().getApplicationContext());
                 
+                // Load configuration
+                this.loadConfiguration();
+                
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
                 
-                // If note is new
-                if (this.noteEditor.getNote().getLastModified() == 0l) {
-                    // Show soft keyboard
-                    new Handler().postDelayed(new Runnable() {
+                // Set initialized listener
+                this.noteEditor.setOnInitializedListener(new NoteEditor.OnInitializedListener() {
+                    
+                    @Override
+                    public void onInitialized() {
+                        // Get reference to edit activity cover
+                        final View activityEditCover = FragmentEditor.this.getActivity().findViewById(R.id.activityEditCover);
                         
-                        @Override
-                        public void run() {
-                            // Calculate simulated touch point coordinates
-                            float x = (FragmentEditor.this.noteEditor.getLeft() + FragmentEditor.this.noteEditor.getRight())/2.0f;
-                            float y = (FragmentEditor.this.noteEditor.getTop() + FragmentEditor.this.noteEditor.getBottom())/2.0f;
-                            
-                            // Generate events
-                            MotionEvent eventDown = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, x, y, 0);
-                            MotionEvent eventUp = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, x, y, 0);
-                            
-                            // Dispatch events
-                            FragmentEditor.this.noteEditor.onTouchEvent(eventDown);
-                            FragmentEditor.this.noteEditor.onTouchEvent(eventUp);
-                        }
+                        // Get fade duration
+                        int fadeDuration = FragmentEditor.this.getActivity().getResources().getInteger(android.R.integer.config_shortAnimTime);
                         
-                    }, 300);
-                }
-                
-                // Load configuration
-                this.loadConfiguration();
+                        // Animate cover out
+                        AlphaAnimation fade = new AlphaAnimation(1.0f, 0.0f);
+                        fade.setDuration(fadeDuration);
+                        fade.setFillAfter(true);
+                        activityEditCover.startAnimation(fade);
+                        
+                        // Handler to sync with animation completion
+                        new Handler().postDelayed(new Runnable() {
+                            
+                            @Override
+                            public void run() {
+                                // Hide cover
+                                activityEditCover.setVisibility(View.GONE);
+                                
+                                // If note is new, simulate touch to naturally focus editor
+                                if (FragmentEditor.this.noteEditor.getNote().getLastModified() == 0l) {
+                                    // Calculate simulated touch point coordinates
+                                    float x = (FragmentEditor.this.noteEditor.getLeft() + FragmentEditor.this.noteEditor.getRight())/2.0f;
+                                    float y = (FragmentEditor.this.noteEditor.getTop() + FragmentEditor.this.noteEditor.getBottom())/2.0f;
+                                    
+                                    // Generate events
+                                    MotionEvent eventDown = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, x, y, 0);
+                                    MotionEvent eventUp = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, x, y, 0);
+                                    
+                                    // Dispatch events
+                                    FragmentEditor.this.noteEditor.onTouchEvent(eventDown);
+                                    FragmentEditor.this.noteEditor.onTouchEvent(eventUp);
+                                    
+                                    // Recycle events
+                                    eventDown.recycle();
+                                    eventUp.recycle();
+                                }
+                            }
+                            
+                        }, fadeDuration);
+                    }
+                    
+                });
             }
             
             return this.noteEditor;

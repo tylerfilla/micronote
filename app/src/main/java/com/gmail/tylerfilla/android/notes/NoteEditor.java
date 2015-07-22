@@ -7,6 +7,7 @@ import android.os.Build;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.gmail.tylerfilla.android.notes.util.JSONUtil;
 
@@ -21,8 +22,13 @@ public class NoteEditor extends WebView {
     private static final String ASSET_PATH_EDITOR_HTML_INDEX = "file:///android_asset/editor_html/editor.html";
     
     private Note note;
+    
     private Configuration configuration;
+    private OnInitializedListener onInitializedListener;
+    
     private ArrayDeque<String> queueAppMessage;
+    
+    private boolean initialized;
     
     public NoteEditor(Context context) {
         super(context);
@@ -73,6 +79,10 @@ public class NoteEditor extends WebView {
         
         // Load new configuration
         this.loadConfiguration();
+    }
+    
+    public void setOnInitializedListener(OnInitializedListener onInitializedListener) {
+        this.onInitializedListener = onInitializedListener;
     }
     
     public void unload() {
@@ -130,6 +140,22 @@ public class NoteEditor extends WebView {
     
     @SuppressLint("SetJavaScriptEnabled")
     private void initializeWebView() {
+        // Add a WebView client to handle initialized event
+        this.setWebViewClient(new WebViewClient() {
+            
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (!NoteEditor.this.initialized && NoteEditor.this.onInitializedListener != null) {
+                    // Set initialized flag
+                    NoteEditor.this.initialized = true;
+                    
+                    // Callback
+                    NoteEditor.this.onInitializedListener.onInitialized();
+                }
+            }
+            
+        });
+        
         // Add a Chrome client to intercept "alert dialogs"
         this.setWebChromeClient(new WebChromeClient() {
             
@@ -299,6 +325,12 @@ public class NoteEditor extends WebView {
             UNIX,
             
         }
+        
+    }
+    
+    public interface OnInitializedListener {
+        
+        void onInitialized();
         
     }
     
