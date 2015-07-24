@@ -52,7 +52,7 @@
     <com.google.android.gms.ads.AdView
         android:id="@+id/activityListAd"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-1168572156310866/6463250837"
+        ads:adUnitId="ca-app-pub-1168572156310866/6932962034"
         style="@style/MicroNote.Activity.ActivityList.Ad" />
 
 </RelativeLayout>
