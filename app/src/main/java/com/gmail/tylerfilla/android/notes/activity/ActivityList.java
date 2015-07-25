@@ -32,19 +32,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.trivialdrivesample.util.IabException;
-import com.example.android.trivialdrivesample.util.IabHelper;
-import com.example.android.trivialdrivesample.util.IabResult;
-import com.example.android.trivialdrivesample.util.Inventory;
 import com.gmail.tylerfilla.android.notes.Note;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.io.NoteIO;
+import com.gmail.tylerfilla.android.notes.util.AdRemovalUtil;
 import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
-import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -56,7 +51,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,8 +76,6 @@ public class ActivityList extends AppCompatActivity {
     
     private ActionMode actionMode;
     private EnumActionMode actionModeType;
-    
-    private IabHelper iabHelper;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,20 +124,22 @@ public class ActivityList extends AppCompatActivity {
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityListToolbar));
         
-        // Create IAB helper
-        this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());
+        // Make an ad request and load ad
+        final AdView ad = (AdView) this.findViewById(R.id.activityListAd);
+        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        adRequestBuilder.addTestDevice("987981F3F5AD0170CF6C028268A11A4A"); // anon
+        adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61"); // anon-2
+        ad.loadAd(adRequestBuilder.build());
         
-        // Enable IAB helper debugging
-        this.iabHelper.enableDebugLogging(true);
-        
-        // Start IAB helper setup
-        this.iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        // Handle ad removal
+        AdRemovalUtil.create(this, new AdRemovalUtil.Callback() {
             
             @Override
-            public void onIabSetupFinished(IabResult result) {
-                // If successful, handle ad visibility
-                if (result.isSuccess()) {
-                    ActivityList.this.handleAdVisibility();
+            public void callback() {
+                // If ad should be removed
+                if (AdRemovalUtil.checkAdRemovalStatus()) {
+                    // Hide ad
+                    ad.setVisibility(View.GONE);
                 }
             }
             
@@ -156,8 +150,8 @@ public class ActivityList extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         
-        // Dispose IAB helper
-        this.iabHelper.dispose();
+        // Clean up ad removal utility
+        AdRemovalUtil.destroy();
     }
     
     @Override
@@ -447,44 +441,6 @@ public class ActivityList extends AppCompatActivity {
         
         // Show dialog
         prompt.show();
-    }
-    
-    private void handleAdVisibility() {
-        // Whether or not ad should be shown
-        boolean showAd = true;
-        
-        // Query user's purchases
-        Inventory inventory = null;
-        try {
-            inventory = this.iabHelper.queryInventory(false, Collections.singletonList(BILLING_SKU_AD_REMOVAL));
-        } catch (IabException e) {
-            e.printStackTrace();
-        }
-        
-        // Check for presence of ad removal purchase
-        if (inventory != null) {
-            showAd = !inventory.hasPurchase(BILLING_SKU_AD_REMOVAL);
-        }
-        
-        // If ad should be shown
-        if (showAd) {
-            // Make an ad request and load ad
-            AdView ad = (AdView) this.findViewById(R.id.activityListAd);
-            AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-            adRequestBuilder.addTestDevice("987981F3F5AD0170CF6C028268A11A4A"); // anon
-            adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61"); // anon-2
-            ad.loadAd(adRequestBuilder.build());
-            
-            // Bump up new button
-            View newButton = ActivityList.this.findViewById(R.id.activityListNewButton);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) newButton.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
-            layoutParams.addRule(RelativeLayout.ABOVE, R.id.activityListAd);
-            newButton.setLayoutParams(layoutParams);
-        } else {
-            // Hide ad
-            this.findViewById(R.id.activityListAd).setVisibility(View.GONE);
-        }
     }
     
     private void activateActionMode(EnumActionMode actionModeType) {

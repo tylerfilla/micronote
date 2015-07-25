@@ -3,6 +3,7 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.example.android.trivialdrivesample.util.IabException;
 import com.example.android.trivialdrivesample.util.IabHelper;
@@ -35,8 +36,18 @@ public class ActivitySettings extends AppCompatPreferenceActivity {
         // Set content view
         this.setContentView(R.layout.activity_settings);
         
-        // Set toolbar
-        this.setSupportActionBar((Toolbar) this.findViewById(R.id.activitySettingsToolbar));
+        // Configure toolbar
+        Toolbar toolbar = (Toolbar) this.findViewById(R.id.activitySettingsToolbar);
+        this.setSupportActionBar(toolbar);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                ActivitySettings.this.finish();
+            }
+            
+        });
         
         // Create IAB helper
         this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());

@@ -67,7 +67,7 @@
     </style>
     
     <style name="MicroNote.Activity.ActivityList.NewButton" parent="MicroNote.Widget.FloatingActionButton">
-        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignBottom">@id/activityListList</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_height">@dimen/activity_list_new_button_layout_height</item>
         <item name="android:layout_width">@dimen/activity_list_new_button_layout_width</item>
