@@ -26,6 +26,8 @@ public class NoteEditor extends WebView {
     private Note note;
     
     private Configuration configuration;
+    private Map<String, Object> res;
+    
     private OnInitializedListener onInitializedListener;
     
     private ArrayDeque<String> queueAppMessage;
@@ -37,6 +39,9 @@ public class NoteEditor extends WebView {
         
         // Configuration
         this.configuration = new Configuration();
+        
+        // Res
+        this.res = new HashMap<>();
         
         // App message queue
         this.queueAppMessage = new ArrayDeque<>();
@@ -83,6 +88,17 @@ public class NoteEditor extends WebView {
         this.loadConfiguration();
     }
     
+    public Map<String, Object> getRes() {
+        return this.res;
+    }
+    
+    public void setRes(Map<String, Object> res) {
+        this.res = res;
+        
+        // Load new res
+        this.loadRes();
+    }
+    
     public void setOnInitializedListener(OnInitializedListener onInitializedListener) {
         this.onInitializedListener = onInitializedListener;
     }
@@ -106,7 +122,7 @@ public class NoteEditor extends WebView {
         map.put("title", this.note.getTitle());
         map.put("lastModified", this.note.getLastModified());
         
-        // Send serialized copy of configuration
+        // Send serialized copy of note data
         try {
             this.enqueueAppMessage("~note=" + JSONUtil.convertMapToJSONObject(map));
         } catch (JSONException e) {
@@ -131,10 +147,26 @@ public class NoteEditor extends WebView {
         map.put("formatDate", this.configuration.formatDate.name());
         map.put("formatTime", this.configuration.formatTime.name());
         map.put("timestampScheme", this.configuration.timestampScheme.name());
+        map.put("locale", this.configuration.locale);
+        map.put("localizedStrings", this.configuration.localizedStrings);
         
-        // Send serialized copy of configuration
+        // Send serialized copy of configuration data
         try {
             this.enqueueAppMessage("~config=" + JSONUtil.convertMapToJSONObject(map));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void loadRes() {
+        // Sanity check
+        if (this.res == null) {
+            return;
+        }
+        
+        // Send serialized copy of resource data
+        try {
+            this.enqueueAppMessage("~res=" + JSONUtil.convertMapToJSONObject(this.res));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -275,8 +307,6 @@ public class NoteEditor extends WebView {
         private static final EnumFormatTime DEFAULT_FORMAT_TIME = EnumFormatTime.values()[0];
         private static final EnumTimestampScheme DEFAULT_TIMESTAMP_SCHEME = EnumTimestampScheme.values()[0];
         
-        private static final Locale DEFAULT_LOCALE = Locale.getDefault();
-        
         public int backgroundColor;
         public int textColor;
         public int textSize;
@@ -286,6 +316,7 @@ public class NoteEditor extends WebView {
         public EnumTimestampScheme timestampScheme;
         
         public Locale locale;
+        public HashMap<String, String> localizedStrings;
         
         private Configuration() {
             /* Defaults */
@@ -297,8 +328,6 @@ public class NoteEditor extends WebView {
             this.formatDate = DEFAULT_FORMAT_DATE;
             this.formatTime = DEFAULT_FORMAT_TIME;
             this.timestampScheme = DEFAULT_TIMESTAMP_SCHEME;
-            
-            this.locale = DEFAULT_LOCALE;
         }
         
         public enum EnumFormatDate {

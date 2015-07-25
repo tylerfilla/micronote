@@ -13,6 +13,9 @@ var config = {};
 // Current note info
 var note = {};
 
+// Externally localized resources
+var res = {};
+
 // Intervals and timeouts
 var listIntervals = new Array();
 var listTimeouts  = new Array();
@@ -263,6 +266,9 @@ function handleIncomingAssignment(key, value) {
     case "note":
         handler = handleIncomingAssignmentNote;
         break;
+    case "res":
+        handler = handleIncomingAssignmentRes;
+        break;
     }
     
     // Call selected handler
@@ -303,6 +309,15 @@ function handleIncomingAssignmentNote(value) {
     
     // Rebuild aesthetics
     aestheticsRebuild();
+}
+
+function handleIncomingAssignmentRes(value) {
+    // Parse JSON object and store to global 'res'
+    if (window.JSON) {
+        res = JSON.parse(value);
+    } else {
+        res = eval(value);
+    }
 }
 
 function handleIncomingCommand(command) {

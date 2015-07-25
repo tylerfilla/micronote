@@ -29,14 +29,18 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.gmail.tylerfilla.android.notes.core.Note;
-import com.gmail.tylerfilla.android.notes.widget.NoteEditor;
 import com.gmail.tylerfilla.android.notes.R;
+import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.DimenUtil;
+import com.gmail.tylerfilla.android.notes.widget.NoteEditor;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class ActivityEdit extends AppCompatActivity {
     
@@ -394,8 +398,8 @@ public class ActivityEdit extends AppCompatActivity {
                 // Create note editor
                 this.noteEditor = new NoteEditor(this.getActivity().getApplicationContext());
                 
-                // Load configuration
-                this.loadConfiguration();
+                // Load context
+                this.loadContext();
                 
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
@@ -527,6 +531,14 @@ public class ActivityEdit extends AppCompatActivity {
             this.noteEditor.onPause();
         }
         
+        private void loadContext() {
+            // Load configuration
+            this.loadConfiguration();
+            
+            // Load res
+            this.loadRes();
+        }
+        
         private void loadConfiguration() {
             // Get preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
@@ -540,9 +552,40 @@ public class ActivityEdit extends AppCompatActivity {
             configuration.formatDate = NoteEditor.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
             configuration.formatTime = NoteEditor.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));
             configuration.timestampScheme = NoteEditor.Configuration.EnumTimestampScheme.valueOf(preferences.getString("pref_timedate_scheme_note_timestamp", null));
+            configuration.locale = Locale.getDefault();
             
             // Set configuration
             this.noteEditor.setConfiguration(configuration);
+        }
+        
+        private void loadRes() {
+            // Get res
+            Map<String, Object> res = this.noteEditor.getRes();
+            
+            // Integers
+            Map<String, Integer> integer = new HashMap<>();
+            for (Field field : R.integer.class.getDeclaredFields()) {
+                try {
+                    integer.put(field.getName(), this.getActivity().getResources().getInteger(field.getInt(null)));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            res.put("integer", integer);
+            
+            // Strings
+            Map<String, String> string = new HashMap<>();
+            for (Field field : R.string.class.getDeclaredFields()) {
+                try {
+                    string.put(field.getName(), this.getActivity().getResources().getString(field.getInt(null)).replaceAll("\\\"", "\\\\u0022"));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            res.put("string", string);
+            
+            // Set res
+            this.noteEditor.setRes(res);
         }
         
     }
