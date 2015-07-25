@@ -106,20 +106,10 @@
         <item name="android:layout_width">match_parent</item>
     </style>
     
-    <style name="MicroNote.Activity.ActivitySettings.Toolbar" parent="">
-        <item name="android:background">?colorPrimary</item>
-        <item name="android:layout_height">?actionBarSize</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:theme">@style/MicroNote.Theme.Toolbar</item>
-        <item name="navigationIcon">?homeAsUpIndicator</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="title">@string/activity_settings_toolbar_title</item>
-    </style>
-    
-    <style name="MicroNote.Activity.ActivitySettings.FragmentSettings" parent="">
+    <style name="MicroNote.Activity.ActivitySettings.List" parent="">
         <item name="android:layout_below">@id/activitySettingsToolbar</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
     
     <style name="MicroNote.Widget.FloatingActionButton" parent="">

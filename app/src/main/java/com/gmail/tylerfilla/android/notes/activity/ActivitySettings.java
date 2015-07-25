@@ -1,19 +1,8 @@
 package com.gmail.tylerfilla.android.notes.activity;
 
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatCheckedTextView;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatRadioButton;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.view.View;
 
 import com.example.android.trivialdrivesample.util.IabException;
 import com.example.android.trivialdrivesample.util.IabHelper;
@@ -24,13 +13,11 @@ import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
 
 import java.util.Collections;
 
-public class ActivitySettings extends AppCompatActivity {
+public class ActivitySettings extends AppCompatPreferenceActivity {
     
     private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
+    private static final String PREF_NAME_UPGRADE = "pref_upgrade";
     
-    private boolean upgradeCategoryVisible;
-    
-    private FragmentSettings fragmentSettings;
     private Toolbar toolbar;
     
     private IabHelper iabHelper;
@@ -42,31 +29,14 @@ public class ActivitySettings extends AppCompatActivity {
         // Initialize preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         
-        // Default this to true
-        this.upgradeCategoryVisible = true;
+        // Add preferences
+        this.addPreferencesFromResource(R.xml.pref);
         
         // Set content view
         this.setContentView(R.layout.activity_settings);
         
-        // Get reference to toolbar
-        this.toolbar = (Toolbar) this.findViewById(R.id.activitySettingsToolbar);
-        
-        // Toolbar title
-        this.toolbar.setTitle(this.getString(R.string.activity_settings_toolbar_title));
-        
-        // Toolbar navigation icon
-        this.toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        
-        // Toolbar navigation click listener
-        this.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // Finish settings activity
-                ActivitySettings.this.finish();
-            }
-            
-        });
+        // Set toolbar
+        this.setSupportActionBar((Toolbar) this.findViewById(R.id.activitySettingsToolbar));
         
         // Create IAB helper
         this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());
@@ -88,27 +58,6 @@ public class ActivitySettings extends AppCompatActivity {
         });
     }
     
-    @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        // If pre-Lollipop
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            switch (name) {
-            case "EditText":
-                return new AppCompatEditText(this, attrs);
-            case "Spinner":
-                return new AppCompatSpinner(this, attrs);
-            case "Checkbox":
-                return new AppCompatCheckBox(this, attrs);
-            case "RadioButton":
-                return new AppCompatRadioButton(this, attrs);
-            case "CheckedTextView":
-                return new AppCompatCheckedTextView(this, attrs);
-            }
-        }
-        
-        return super.onCreateView(name, context, attrs);
-    }
-    
     private void handleUpgradeVisibility() {
         // Whether or not upgrade category should be shown
         boolean showUpgrade = true;
@@ -128,39 +77,8 @@ public class ActivitySettings extends AppCompatActivity {
         
         // Remove upgrade category if it shouldn't be shown
         if (!showUpgrade) {
-            // Set flag for future settings fragment
-            this.upgradeCategoryVisible = false;
-            
-            // If settings fragment already exists
-            if (this.fragmentSettings != null) {
-                this.fragmentSettings.removeUpgradeCategory();
-            }
+            this.getPreferenceScreen().removePreference(this.findPreference(PREF_NAME_UPGRADE));
         }
-    }
-    
-    public static class FragmentSettings extends PreferenceFragment {
-        
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            
-            // Load preferences
-            this.addPreferencesFromResource(R.xml.pref);
-            
-            // Set reference to this fragment in activity
-            ((ActivitySettings) this.getActivity()).fragmentSettings = this;
-            
-            // Handle upgrade category removal
-            if (!((ActivitySettings) this.getActivity()).upgradeCategoryVisible) {
-                this.removeUpgradeCategory();
-            }
-        }
-        
-        private void removeUpgradeCategory() {
-            // Remove upgrade category
-            this.getPreferenceScreen().removePreference(this.findPreference("pref_upgrade"));
-        }
-        
     }
     
 }
