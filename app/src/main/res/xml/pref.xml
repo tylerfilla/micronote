@@ -14,8 +14,11 @@
             
             <intent
                 android:targetPackage="com.gmail.tylerfilla.android.notes"
-                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase"
-                android:data="ad_removal">
+                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase">
+                
+                <extra
+                    android:name="SKU"
+                    android:value="ad_removal" />
                 
                 <extra
                     android:name="TYPE"

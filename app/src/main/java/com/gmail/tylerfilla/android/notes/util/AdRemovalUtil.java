@@ -11,7 +11,9 @@ import java.util.Collections;
 
 public class AdRemovalUtil {
     
-    private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
+    public static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
+    public static final String BILLING_TYPE_AD_REMOVAL = "inapp";
+    
     private static final boolean DEBUG_MODE = true;
     
     private static IabHelper currentIabHelper;

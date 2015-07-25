@@ -13,10 +13,13 @@ import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
 
 public class ActivityPurchase extends Activity {
     
-    private static final String EXTRA_TYPE_NAME = "TYPE";
+    public static final String EXTRA_SKU_NAME = "SKU";
+    public static final String EXTRA_TYPE_NAME = "TYPE";
+    
+    private static final String EXTRA_SKU_DEFAULT = "android.test.purchased";
     private static final String EXTRA_TYPE_DEFAULT = "inapp";
     
-    private static final int PURCHASE_REQUEST_CODE = -5897;
+    private static final int PURCHASE_REQUEST_CODE = -1337;
     
     private String productId;
     private String productType;
@@ -29,16 +32,11 @@ public class ActivityPurchase extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // Get product ID from intent data
-        this.productId = this.getIntent().getDataString();
+        // Get product ID from intent extras
+        this.productId = this.getIntent().hasExtra(EXTRA_SKU_NAME) ? this.getIntent().getStringExtra(EXTRA_SKU_NAME) : EXTRA_SKU_DEFAULT;
         
         // Get product type from intent extras
         this.productType = this.getIntent().hasExtra(EXTRA_TYPE_NAME) ? this.getIntent().getStringExtra(EXTRA_TYPE_NAME) : EXTRA_TYPE_DEFAULT;
-        
-        // If a product ID wasn't given
-        if (this.productId == null || this.productId.isEmpty()) {
-            this.finish();
-        }
         
         // Create IAB helper
         this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());
@@ -108,9 +106,6 @@ public class ActivityPurchase extends Activity {
                 } else {
                     Toast.makeText(ActivityPurchase.this, ActivityPurchase.this.getString(R.string.toast_activity_purchase_fail), Toast.LENGTH_SHORT).show();
                 }
-                
-                // Finish
-                ActivityPurchase.this.finish();
             }
             
         }, null);

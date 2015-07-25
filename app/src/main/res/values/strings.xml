@@ -12,6 +12,7 @@
     
     <string name="activity_list_menu_item_search_title">Search</string>
     <string name="activity_list_menu_item_settings_title">Settings</string>
+    <string name="activity_list_menu_item_upgrade_title">Remove Ads</string>
     
     <string name="activity_list_menu_action_mode_select_item_delete_title">Delete</string>
     <string name="activity_list_menu_action_mode_search_item_search_view_title">Search</string>
@@ -89,7 +90,7 @@
     <string name="toast_activity_list_confirm_delete_note_files_single">Deleted 1 note</string>
     <string name="toast_activity_list_confirm_delete_note_files_multiple">Deleted %1$s notes</string>
     
-    <string name="toast_activity_purchase_success">Purchase successful</string>
-    <string name="toast_activity_purchase_fail">Purchase failed</string>
+    <string name="toast_activity_purchase_success">Purchase successful! You may need to restart μNote.</string>
+    <string name="toast_activity_purchase_fail">Purchase failed!</string>
 
 </resources>

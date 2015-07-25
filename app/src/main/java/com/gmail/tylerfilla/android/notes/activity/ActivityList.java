@@ -35,11 +35,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.R;
+import com.gmail.tylerfilla.android.notes.core.Note;
+import com.gmail.tylerfilla.android.notes.core.NoteSearcher;
 import com.gmail.tylerfilla.android.notes.core.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.AdRemovalUtil;
-import com.gmail.tylerfilla.android.notes.core.NoteSearcher;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -58,8 +58,6 @@ import java.util.Set;
 public class ActivityList extends AppCompatActivity {
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
-    
-    private static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
     
     private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 20;
     private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
@@ -203,6 +201,10 @@ public class ActivityList extends AppCompatActivity {
         case R.id.activityListMenuItemSettings:
             // Open settings
             this.openSettings();
+            break;
+        case R.id.activityListMenuItemUpgrade:
+            // Open purchase activity to upgrade
+            this.openUpgrade();
             break;
         }
         
@@ -372,6 +374,18 @@ public class ActivityList extends AppCompatActivity {
         
         // Start settings activity
         this.startActivity(intentSettings);
+    }
+    
+    private void openUpgrade() {
+        // Intent to purchase activity
+        Intent intentUpgrade = new Intent(this, ActivityPurchase.class);
+        
+        // Set parameters for ad removal
+        intentUpgrade.putExtra(ActivityPurchase.EXTRA_SKU_NAME, AdRemovalUtil.BILLING_SKU_AD_REMOVAL);
+        intentUpgrade.putExtra(ActivityPurchase.EXTRA_TYPE_NAME, AdRemovalUtil.BILLING_TYPE_AD_REMOVAL);
+        
+        // Start purchase activity
+        this.startActivity(intentUpgrade);
     }
     
     private void openNoteFile(File noteFile) {
