@@ -3,9 +3,6 @@ package com.gmail.tylerfilla.android.notes.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.trivialdrivesample.util.IabHelper;
@@ -25,6 +22,8 @@ public class ActivityPurchase extends Activity {
     private String productType;
     
     private IabHelper iabHelper;
+    
+    private boolean enteredPurchaseFlow;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,31 +58,6 @@ public class ActivityPurchase extends Activity {
             }
             
         });
-        
-        // Create a proxy view for handling touches
-        final View touchProxy = new View(this);
-        touchProxy.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        touchProxy.setFocusable(true);
-        touchProxy.requestFocusFromTouch();
-        
-        // Set touch proxy as content view
-        this.setContentView(touchProxy);
-        
-        // Set listener for touch proxy
-        touchProxy.setOnTouchListener(new View.OnTouchListener() {
-            
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Finish purchase activity
-                ActivityPurchase.this.finish();
-                
-                // Nullify touch listener
-                touchProxy.setOnTouchListener(null);
-                
-                return true;
-            }
-            
-        });
     }
     
     @Override
@@ -92,6 +66,25 @@ public class ActivityPurchase extends Activity {
         
         // Dispose IAB helper
         this.iabHelper.dispose();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        // If resuming from purchase flow
+        if (this.enteredPurchaseFlow) {
+            // We're done here
+            this.finish();
+        }
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        // Pausing without finishing indicates purchase flow
+        this.enteredPurchaseFlow = !this.isFinishing();
     }
     
     @Override
