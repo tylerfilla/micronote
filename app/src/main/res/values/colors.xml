@@ -8,7 +8,7 @@
     <color name="activity_list_message_title">#ffa50000</color>
     <color name="activity_list_message_body">#ff646464</color>
     
-    <color name="pref_default_style_notepad_text_color">#ff000000</color>
+    <color name="pref_default_style_notepad_text_color">#ff404040</color>
     
     <color name="theme_accent">#ff7f5634</color>
     <color name="theme_primary">#ff3e2f21</color>
