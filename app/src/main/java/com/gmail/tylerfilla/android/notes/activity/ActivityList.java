@@ -544,7 +544,11 @@ public class ActivityList extends AppCompatActivity {
         
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            // Update
             this.update(mode, menu);
+            
+            // Refresh list
+            this.activityList.refreshList();
             
             return true;
         }
@@ -696,7 +700,11 @@ public class ActivityList extends AppCompatActivity {
         
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            // Update
             this.update(mode, menu);
+            
+            // Refresh list
+            this.activityList.refreshList();
             
             return true;
         }
