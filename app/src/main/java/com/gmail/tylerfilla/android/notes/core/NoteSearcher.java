@@ -1,6 +1,4 @@
-package com.gmail.tylerfilla.android.notes.util;
-
-import com.gmail.tylerfilla.android.notes.Note;
+package com.gmail.tylerfilla.android.notes.core;
 
 import java.io.File;
 import java.util.HashMap;

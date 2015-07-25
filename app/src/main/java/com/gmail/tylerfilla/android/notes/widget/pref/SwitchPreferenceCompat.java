@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes.pref;
+package com.gmail.tylerfilla.android.notes.widget.pref;
 
 import android.annotation.TargetApi;
 import android.content.Context;

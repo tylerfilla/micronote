@@ -32,14 +32,14 @@
         android:persistent="false"
         android:title="@string/pref_style_notepad_title">
         
-        <com.gmail.tylerfilla.android.notes.pref.ColorPreference
+        <com.gmail.tylerfilla.android.notes.widget.pref.ColorPreference
             android:defaultValue="@color/pref_default_style_notepad_text_color"
             android:key="pref_style_notepad_text_color"
             android:persistent="true"
             android:summary="@string/pref_style_notepad_text_color_summary"
             android:title="@string/pref_style_notepad_text_color_title" />
         
-        <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
+        <com.gmail.tylerfilla.android.notes.widget.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:disableDependentsState="false"
             android:key="pref_style_notepad_show_lines"
@@ -89,7 +89,7 @@
         android:persistent="false"
         android:title="@string/pref_other_title">
         
-        <com.gmail.tylerfilla.android.notes.pref.SwitchPreferenceCompat
+        <com.gmail.tylerfilla.android.notes.widget.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_other_import_enable"
             android:persistent="true"

@@ -29,10 +29,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.gmail.tylerfilla.android.notes.Note;
-import com.gmail.tylerfilla.android.notes.NoteEditor;
+import com.gmail.tylerfilla.android.notes.core.Note;
+import com.gmail.tylerfilla.android.notes.widget.NoteEditor;
 import com.gmail.tylerfilla.android.notes.R;
-import com.gmail.tylerfilla.android.notes.io.NoteIO;
+import com.gmail.tylerfilla.android.notes.core.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.DimenUtil;
 
 import java.io.File;

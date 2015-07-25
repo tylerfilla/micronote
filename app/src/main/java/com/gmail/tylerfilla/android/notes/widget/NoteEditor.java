@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes;
+package com.gmail.tylerfilla.android.notes.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,12 +9,14 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.util.JSONUtil;
 
 import org.json.JSONException;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class NoteEditor extends WebView {
@@ -273,6 +275,8 @@ public class NoteEditor extends WebView {
         private static final EnumFormatTime DEFAULT_FORMAT_TIME = EnumFormatTime.values()[0];
         private static final EnumTimestampScheme DEFAULT_TIMESTAMP_SCHEME = EnumTimestampScheme.values()[0];
         
+        private static final Locale DEFAULT_LOCALE = Locale.getDefault();
+        
         public int backgroundColor;
         public int textColor;
         public int textSize;
@@ -281,8 +285,11 @@ public class NoteEditor extends WebView {
         public EnumFormatTime formatTime;
         public EnumTimestampScheme timestampScheme;
         
+        public Locale locale;
+        
         private Configuration() {
-            // Defaults
+            /* Defaults */
+            
             this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
             this.textColor = DEFAULT_TEXT_COLOR;
             this.textSize = DEFAULT_TEXT_SIZE;
@@ -290,6 +297,8 @@ public class NoteEditor extends WebView {
             this.formatDate = DEFAULT_FORMAT_DATE;
             this.formatTime = DEFAULT_FORMAT_TIME;
             this.timestampScheme = DEFAULT_TIMESTAMP_SCHEME;
+            
+            this.locale = DEFAULT_LOCALE;
         }
         
         public enum EnumFormatDate {

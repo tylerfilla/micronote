@@ -1,4 +1,4 @@
-package com.gmail.tylerfilla.android.notes;
+package com.gmail.tylerfilla.android.notes.core;
 
 public class Note {
     

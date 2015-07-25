@@ -35,11 +35,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gmail.tylerfilla.android.notes.Note;
+import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.R;
-import com.gmail.tylerfilla.android.notes.io.NoteIO;
+import com.gmail.tylerfilla.android.notes.core.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.AdRemovalUtil;
-import com.gmail.tylerfilla.android.notes.util.NoteSearcher;
+import com.gmail.tylerfilla.android.notes.core.NoteSearcher;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 

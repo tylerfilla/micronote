@@ -1,8 +1,8 @@
-package com.gmail.tylerfilla.android.notes.io;
+package com.gmail.tylerfilla.android.notes.core.io;
 
 import android.content.Context;
 
-import com.gmail.tylerfilla.android.notes.Note;
+import com.gmail.tylerfilla.android.notes.core.Note;
 
 import java.io.BufferedReader;
 import java.io.File;
