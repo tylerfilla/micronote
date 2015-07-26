@@ -491,38 +491,35 @@ public class ActivityEdit extends AppCompatActivity {
         public void onPause() {
             super.onPause();
             
-            // If activity is finishing
-            if (this.getActivity().isFinishing()) {
-                // Unload note editor
-                this.noteEditor.unload();
-                
-                // If note file hasn't been deleted
-                if (!((ActivityEdit) this.getActivity()).noteFileDeleted) {
-                    // If changes occurred
-                    if (this.noteEditor.getNote().getChanged()) {
-                        // Get reference to content
-                        String content = this.noteEditor.getNote().getContent();
-                        
-                        // Strip HTML tags
-                        String contentDetagged = Html.fromHtml(content).toString();
-                        
-                        // Strip whitespace
-                        String contentDetaggedDewhited = contentDetagged.replaceAll("\\s+", "").trim();
-                        
-                        // One of those weird edge cases
-                        if (!contentDetaggedDewhited.isEmpty()) {
-                            // Create title from first line for new notes
-                            if (this.noteEditor.getNote().getLastModified() == 0l && this.noteEditor.getNote().getTitle().equals(this.getString(R.string.activity_edit_constant_default_note_title))) {
-                                this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
-                            }
+            // Unload note editor
+            this.noteEditor.unload();
+            
+            // If note file hasn't been deleted
+            if (!((ActivityEdit) this.getActivity()).noteFileDeleted) {
+                // If changes occurred
+                if (this.noteEditor.getNote().getChanged()) {
+                    // Get reference to content
+                    String content = this.noteEditor.getNote().getContent();
+                    
+                    // Strip HTML tags
+                    String contentDetagged = Html.fromHtml(content).toString();
+                    
+                    // Strip whitespace
+                    String contentDetaggedDewhited = contentDetagged.replaceAll("\\s+", "").trim();
+                    
+                    // One of those weird edge cases
+                    if (!contentDetaggedDewhited.isEmpty()) {
+                        // Create title from first line for new notes
+                        if (this.noteEditor.getNote().getLastModified() == 0l && this.noteEditor.getNote().getTitle().equals(this.getString(R.string.activity_edit_constant_default_note_title))) {
+                            this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
                         }
-                        
-                        // Attempt to write note
-                        try {
-                            NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    }
+                    
+                    // Attempt to write note
+                    try {
+                        NoteIO.write(this.noteEditor.getNote(), ((ActivityEdit) this.getActivity()).noteFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
