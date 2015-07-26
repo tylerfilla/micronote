@@ -187,6 +187,11 @@ public class ActivityList extends AppCompatActivity {
         // Inflate menu for actionbar buttons
         this.getMenuInflater().inflate(R.menu.activity_list, menu);
         
+        // Remove upgrade item
+        if (AdRemovalUtil.checkAdRemovalStatus()) {
+            menu.removeItem(R.id.activityListMenuItemUpgrade);
+        }
+        
         return super.onCreateOptionsMenu(menu);
     }
     
