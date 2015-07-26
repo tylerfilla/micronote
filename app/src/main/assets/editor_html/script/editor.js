@@ -17,8 +17,8 @@ var note = {};
 var res = {};
 
 // Intervals and timeouts
-var listIntervals = new Array();
-var listTimeouts  = new Array();
+var listIntervals = [];
+var listTimeouts  = [];
 
 // Localized document elements
 var header;
@@ -26,6 +26,9 @@ var headerText;
 var content;
 var contentLines;
 var contentText;
+
+// Storage for scanned blocks
+var scannedBlocks = [];
 
 /* Aesthetics */
 
@@ -61,6 +64,144 @@ function createNotepadLines(recreate) {
                 contentLines.removeChild(contentLines.lastChild);
             }
         }
+    }
+}
+
+/* Scan functions */
+
+function scan() {
+    // Scan for blocks
+    scanBlocks();
+    
+    // Scan for lists
+    scanLists();
+}
+
+function scanBlocks() {
+    // Clear scanned blocks array
+    scannedBlocks = [];
+    
+    // Split lines of content
+    var lines = (contentText.innerText + "\n").split("\n");
+    
+    // Values to track block bounds
+    var blockBegin = -1;
+    var blockEnd   = -1;
+    
+    // Value to track block isolation
+    var isolation = 0;
+    
+    // Iterate over each line
+    for (var i = 0; i < lines.length; i++) {
+        // If line is empty
+        if (lines[i].length == 0) {
+            // If block has not started
+            if (blockBegin < 0) {
+                // Increment isolation
+                isolation++;
+            } else {
+                // Stop block
+                blockEnd = i - 1;
+                
+                // Store block
+                scannedBlocks.push([blockBegin, blockEnd, isolation]);
+                
+                // Reset values
+                blockBegin = -1;
+                blockEnd   = -1;
+                isolation  = 1;
+            }
+        } else {
+            // If block has not started
+            if (blockBegin < 0) {
+                // Start block
+                blockBegin = i;
+            }
+        }
+    }
+}
+
+function scanLists() {
+    // Split lines of content
+    var lines = contentText.innerText.split("\n");
+    
+    // Iterate over scanned blocks
+    for (var blockId in scannedBlocks) {
+        // Get block data
+        var block = scannedBlocks[blockId];
+        
+        // Omit one-liners
+        if (block[0] == block[1]) {
+            continue;
+        }
+        
+        /* Find outliers in line lengths */
+        
+        // Number of outliers within block
+        var numOutliers = 0;
+        
+        // Distribution of line lengths
+        var dist = [];
+        
+        // Iterate over block lines
+        for (var i = block[0]; i <= block[1]; i++) {
+            // Add line length to distribution
+            dist.push(lines[i].length);
+        }
+        
+        // Sort distribution in ascending numeric order
+        dist.sort(function(a, b) {
+            return a - b;
+        });
+        
+        // First and third quartiles
+        var q1, q3 = 0;
+        
+        // Halves of distribution
+        var half1 = [];
+        var half2 = [];
+        
+        // If size of distribution is even
+        if (dist.length%2 == 0) {
+            // Slice distribution in half evenly
+            half1 = dist.slice(0, dist.length/2);
+            half2 = dist.slice(dist.length/2);
+        } else {
+            // Slice distribution in half, excluding middle datum
+            half1 = dist.slice(0, Math.floor(dist.length/2));
+            half2 = dist.slice(Math.ceil(dist.length/2));
+        }
+        
+        // If size of first half is even
+        if (half1.length%2 == 0) {
+            // First quartile is average of middle two data
+            q1 = (half1[half1.length/2 - 1] + half1[half1.length/2])/2;
+        } else {
+            // First quartile is middle datum
+            q1 = half1[Math.floor(half1.length/2)];
+        }
+        
+        // If size of second half is even
+        if (half2.length%2 == 0) {
+            // Third quartile is average of middle two data
+            q3 = (half2[half2.length/2 - 1] + half2[half2.length/2])/2;
+        } else {
+            // Third quartile is middle datum
+            q3 = half2[Math.floor(half2.length/2)];
+        }
+        
+        // Outlier bounds
+        var outlierMax = q3 + 1.5*(q3 - q1);
+        var outlierMin = q1 - 1.5*(q3 - q1);
+        
+        // Iterate over block lines and count outliers
+        for (var i = block[0]; i <= block[1]; i++) {
+            if (lines[i].length > outlierMax || lines[i].length < outlierMin) {
+                numOutliers++;
+            }
+        }
+        
+        console.log(blockId + ": " + numOutliers + " outliers");
     }
 }
 
@@ -387,6 +528,9 @@ function contentTextOnClick(event) {
 function contentTextOnKeyup(event) {
     // Update aesthetics
     aestheticsUpdate();
+    
+    // Function scan
+    scan();
 }
 
 function windowOnLoad(event) {
