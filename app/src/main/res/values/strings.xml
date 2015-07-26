@@ -92,5 +92,11 @@
     
     <string name="toast_activity_purchase_success">Purchase successful! You may need to restart μNote.</string>
     <string name="toast_activity_purchase_fail">Purchase failed!</string>
+    
+    <string name="editor_util_months">January|February|March|April|May|June|July|August|September|October|November|December</string>
+    
+    <string name="editor_header_cascade_seconds">%1$s sec</string>
+    <string name="editor_header_cascade_minutes">%1$s min</string>
+    <string name="editor_header_new">New</string>
 
 </resources>

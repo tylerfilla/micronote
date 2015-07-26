@@ -2,16 +2,16 @@
 <resources>
     
     <string-array name="array_pref_list_entries_timedate_format_date">
-        <item>Month D, YYYY (e.g. January 1, 1970)</item>
-        <item>Month D, YY (e.g. January 1, 70)</item>
-        <item>M/DD/YYYY (e.g. 1/01/1970)</item>
-        <item>M-DD-YYYY (e.g. 1-01-1970)</item>
-        <item>M/DD/YY (e.g. 1/01/70)</item>
-        <item>M-DD-YY (e.g. 1-01-70)</item>
-        <item>DD/M/YYYY (e.g. 01/1/1970)</item>
-        <item>DD-M-YYYY (e.g. 01-1-1970)</item>
-        <item>DD/M/YY (e.g. 01/1/70)</item>
-        <item>DD-M-YY (e.g. 01-1-70)</item>
+        <item>January 1, 1970</item>
+        <item>January 1, 70</item>
+        <item>1/01/1970</item>
+        <item>1–01–1970</item>
+        <item>1/01/70</item>
+        <item>1–01–70</item>
+        <item>01/1/1970</item>
+        <item>01–1–1970</item>
+        <item>01/1/70</item>
+        <item>01–1–70</item>
     </string-array>
     
     <string-array name="array_pref_list_values_timedate_format_date">
@@ -35,26 +35,6 @@
     <string-array name="array_pref_list_values_timedate_format_time">
         <item>_12_HOUR</item>
         <item>_24_HOUR</item>
-    </string-array>
-    
-    <string-array name="array_pref_list_entries_timedate_scheme_note_timestamp">
-        <item>Seconds old, minutes old, time, date (w/o year), then date (w/ year)</item>
-        <item>Minutes old, time, date (w/o year), then date (w/ year)</item>
-        <item>Time, date (w/o year), then date (w/ year)</item>
-        <item>Date (w/o year) then date (w/ year)</item>
-        <item>Date (w/ year)</item>
-        <item>Full time and date</item>
-        <item>UNIX timestamp (seconds)</item>
-    </string-array>
-    
-    <string-array name="array_pref_list_values_timedate_scheme_note_timestamp">
-        <item>CASCADE_5_SEC</item>
-        <item>CASCADE_4_MIN</item>
-        <item>CASCADE_3_TIME</item>
-        <item>CASCADE_2_DATE_NOYEAR</item>
-        <item>CASCADE_1_DATE_YEAR</item>
-        <item>FULL</item>
-        <item>UNIX</item>
     </string-array>
 
 </resources>

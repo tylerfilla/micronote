@@ -76,7 +76,7 @@ function updateHeader() {
     
     // Check for just-created signature
     if (lastModifiedTime == 0) {
-        headerText.innerText = "New";
+        headerText.innerText = res.string.editor_header_new;
         return;
     }
     
@@ -85,7 +85,7 @@ function updateHeader() {
     var date      = lastModifiedDate.getDate();
     var date2     = (date < 10 ? "0" : "") + date; // Always two digits
     var month     = lastModifiedDate.getMonth();
-    var monthAbbr = utilGetMonthAbbr(month);
+    var monthName = utilGetMonth(month);
     var year      = lastModifiedDate.getFullYear();
     var yearShort = String(year).substring(2);
     
@@ -94,11 +94,11 @@ function updateHeader() {
     
     switch (config.formatDate) {
     case "MONTH_D_YYYY":
-        strDateNoYear = monthAbbr + " " + date;
+        strDateNoYear = monthName + " " + date;
         strDateYear   = strDateNoYear + ", " + year;
         break;
     case "MONTH_D_YY":
-        strDateNoYear = monthAbbr + " " + date;
+        strDateNoYear = monthName + " " + date;
         strDateYear   = strDateNoYear + ", " + yearShort;
         break;
     case "M_DD_YYYY_SLASH":
@@ -148,57 +148,18 @@ function updateHeader() {
         break;
     }
     
-    // Switch against preferred scheme
-    switch (config.timestampScheme) {
-    case "CASCADE_5_SEC":
-        if (timeSince < 60*1000) {
-            headerText.innerText = Math.floor(timeSince/1000 + 0.5) + " sec";
-        } else if (timeSince < 60*60*1000) {
-            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
-        } else if (timeSince < 24*60*60*1000) {
-            headerText.innerText = strTime;
-        } else if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case "CASCADE_4_MIN":
-        if (timeSince < 60*60*1000) {
-            headerText.innerText = Math.floor(timeSince/(60*1000) + 0.5) + " min";
-        } else if (timeSince < 24*60*60*1000) {
-            headerText.innerText = strTime;
-        } else if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case "CASCADE_3_TIME":
-        if (timeSince < 24*60*60*1000) {
-            headerText.innerText = strTime;
-        } else if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case "CASCADE_2_DATE_NOYEAR":
-        if (timeSince < 365*24*60*60*1000) {
-            headerText.innerText = strDateNoYear;
-        } else {
-            headerText.innerText = strDateYear;
-        }
-        break;
-    case "CASCADE_1_DATE_YEAR":
+    /* Build and set header text */
+    
+    if (timeSince < 60*1000) {
+        headerText.innerText = res.string.editor_header_cascade_seconds.replace("%1$s", Math.floor(timeSince/1000 + 0.5));
+    } else if (timeSince < 60*60*1000) {
+        headerText.innerText = res.string.editor_header_cascade_minutes.replace("%1$s", Math.floor(timeSince/(60*1000) + 0.5));
+    } else if (timeSince < 24*60*60*1000) {
+        headerText.innerText = strTime;
+    } else if (timeSince < 365*24*60*60*1000) {
+        headerText.innerText = strDateNoYear;
+    } else {
         headerText.innerText = strDateYear;
-        break;
-    case "FULL":
-        headerText.innerText = strTime + " " + strDateYear;
-        break;
-    case "UNIX":
-        headerText.innerText = Math.floor(lastModifiedTime/1000 + 0.5);
-        break;
     }
 }
 
@@ -381,8 +342,8 @@ function utilARGBIntToRGBStr(argbInt) {
     return "rgb(" + ((argbInt & 0xff0000) >> 16) + ", " + ((argbInt & 0xff00) >> 8) + ", " + (argbInt & 0xff) + ")";
 }
 
-function utilGetMonthAbbr(month) {
-    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month];
+function utilGetMonth(month) {
+    return res.string.editor_util_months.split("|")[month];
 }
 
 /* Initialization */

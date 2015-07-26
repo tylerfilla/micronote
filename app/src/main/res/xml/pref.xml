@@ -75,15 +75,6 @@
             android:persistent="true"
             android:summary="@string/pref_timedate_format_time_summary"
             android:title="@string/pref_timedate_format_time_title" />
-        
-        <ListPreference
-            android:defaultValue="CASCADE_5_SEC"
-            android:entries="@array/array_pref_list_entries_timedate_scheme_note_timestamp"
-            android:entryValues="@array/array_pref_list_values_timedate_scheme_note_timestamp"
-            android:key="pref_timedate_scheme_note_timestamp"
-            android:persistent="true"
-            android:summary="@string/pref_timedate_scheme_note_timestamp_summary"
-            android:title="@string/pref_timedate_scheme_note_timestamp_title" />
     
     </PreferenceCategory>
     
