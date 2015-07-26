@@ -71,7 +71,7 @@ public class AdRemovalUtil {
         
         // Check for presence of ad removal purchase
         if (inventory != null) {
-            return inventory.hasPurchase(BILLING_SKU_AD_REMOVAL);
+            return !inventory.hasPurchase(BILLING_SKU_AD_REMOVAL);
         } else {
             return false;
         }

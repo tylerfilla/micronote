@@ -129,7 +129,7 @@ public class ActivityList extends AppCompatActivity {
         adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61"); // anon-2
         ad.loadAd(adRequestBuilder.build());
         
-        // Handle ad removal
+        // Configure ad removal utility
         AdRemovalUtil.create(this, new AdRemovalUtil.Callback() {
             
             @Override
@@ -148,7 +148,7 @@ public class ActivityList extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         
-        // Clean up ad removal utility
+        // Destroy ad removal utility
         AdRemovalUtil.destroy();
     }
     
@@ -340,7 +340,7 @@ public class ActivityList extends AppCompatActivity {
                 ActivityList.this.findViewById(R.id.activityListNewButton).setVisibility(View.GONE);
             }
             
-        }, 500l);
+        }, this.getResources().getInteger(android.R.integer.config_shortAnimTime));
     }
     
     private void searchEnd() {
@@ -365,7 +365,7 @@ public class ActivityList extends AppCompatActivity {
                 ActivityList.this.findViewById(R.id.activityListNewButton).setEnabled(true);
             }
             
-        }, 500l);
+        }, this.getResources().getInteger(android.R.integer.config_shortAnimTime));
     }
     
     private void openSettings() {

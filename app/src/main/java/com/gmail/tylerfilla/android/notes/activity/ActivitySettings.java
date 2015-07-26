@@ -10,6 +10,7 @@ import com.example.android.trivialdrivesample.util.IabHelper;
 import com.example.android.trivialdrivesample.util.IabResult;
 import com.example.android.trivialdrivesample.util.Inventory;
 import com.gmail.tylerfilla.android.notes.R;
+import com.gmail.tylerfilla.android.notes.util.AdRemovalUtil;
 import com.gmail.tylerfilla.android.notes.util.PublicKeyUtil;
 
 import java.util.Collections;
@@ -20,8 +21,6 @@ public class ActivitySettings extends AppCompatPreferenceActivity {
     private static final String PREF_NAME_UPGRADE = "pref_upgrade";
     
     private Toolbar toolbar;
-    
-    private IabHelper iabHelper;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,47 +48,26 @@ public class ActivitySettings extends AppCompatPreferenceActivity {
             
         });
         
-        // Create IAB helper
-        this.iabHelper = new IabHelper(this, PublicKeyUtil.getPublicKey());
-        
-        // Enable IAB helper debugging
-        this.iabHelper.enableDebugLogging(true);
-        
-        // Start IAB helper setup
-        this.iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        // Configure ad removal utility
+        AdRemovalUtil.create(this, new AdRemovalUtil.Callback() {
             
             @Override
-            public void onIabSetupFinished(IabResult result) {
-                // If successful, handle ad visibility
-                if (result.isSuccess()) {
-                    ActivitySettings.this.handleUpgradeVisibility();
+            public void callback() {
+                // Remove upgrade category if it shouldn't be shown
+                if (AdRemovalUtil.checkAdRemovalStatus()) {
+                    ActivitySettings.this.getPreferenceScreen().removePreference(ActivitySettings.this.findPreference(PREF_NAME_UPGRADE));
                 }
             }
             
         });
     }
     
-    private void handleUpgradeVisibility() {
-        // Whether or not upgrade category should be shown
-        boolean showUpgrade = true;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         
-        // Query user's purchases
-        Inventory inventory = null;
-        try {
-            inventory = this.iabHelper.queryInventory(false, Collections.singletonList(BILLING_SKU_AD_REMOVAL));
-        } catch (IabException e) {
-            e.printStackTrace();
-        }
-        
-        // Check for presence of ad removal purchase
-        if (inventory != null) {
-            showUpgrade = !inventory.hasPurchase(BILLING_SKU_AD_REMOVAL);
-        }
-        
-        // Remove upgrade category if it shouldn't be shown
-        if (!showUpgrade) {
-            this.getPreferenceScreen().removePreference(this.findPreference(PREF_NAME_UPGRADE));
-        }
+        // Destroy ad removal utility
+        AdRemovalUtil.destroy();
     }
     
 }
