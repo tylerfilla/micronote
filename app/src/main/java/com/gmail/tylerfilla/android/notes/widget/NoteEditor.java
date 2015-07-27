@@ -146,7 +146,6 @@ public class NoteEditor extends WebView {
         map.put("showNotepadLines", this.configuration.showNotepadLines);
         map.put("formatDate", this.configuration.formatDate.name());
         map.put("formatTime", this.configuration.formatTime.name());
-        map.put("timestampScheme", this.configuration.timestampScheme.name());
         map.put("locale", this.configuration.locale);
         map.put("localizedStrings", this.configuration.localizedStrings);
         
@@ -305,7 +304,6 @@ public class NoteEditor extends WebView {
         private static final boolean DEFAULT_SHOW_NOTEPAD_LINES = true;
         private static final EnumFormatDate DEFAULT_FORMAT_DATE = EnumFormatDate.values()[0];
         private static final EnumFormatTime DEFAULT_FORMAT_TIME = EnumFormatTime.values()[0];
-        private static final EnumTimestampScheme DEFAULT_TIMESTAMP_SCHEME = EnumTimestampScheme.values()[0];
         
         public int backgroundColor;
         public int textColor;
@@ -313,7 +311,6 @@ public class NoteEditor extends WebView {
         public boolean showNotepadLines;
         public EnumFormatDate formatDate;
         public EnumFormatTime formatTime;
-        public EnumTimestampScheme timestampScheme;
         
         public Locale locale;
         public HashMap<String, String> localizedStrings;
@@ -327,7 +324,6 @@ public class NoteEditor extends WebView {
             this.showNotepadLines = DEFAULT_SHOW_NOTEPAD_LINES;
             this.formatDate = DEFAULT_FORMAT_DATE;
             this.formatTime = DEFAULT_FORMAT_TIME;
-            this.timestampScheme = DEFAULT_TIMESTAMP_SCHEME;
         }
         
         public enum EnumFormatDate {
@@ -349,18 +345,6 @@ public class NoteEditor extends WebView {
             
             _12_HOUR,
             _24_HOUR,
-            
-        }
-        
-        public enum EnumTimestampScheme {
-            
-            CASCADE_5_SEC,
-            CASCADE_4_MIN,
-            CASCADE_3_TIME,
-            CASCADE_2_DATE_NOYEAR,
-            CASCADE_1_DATE_YEAR,
-            FULL,
-            UNIX,
             
         }
         

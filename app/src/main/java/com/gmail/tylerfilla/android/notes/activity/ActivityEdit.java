@@ -548,7 +548,6 @@ public class ActivityEdit extends AppCompatActivity {
             configuration.showNotepadLines = preferences.getBoolean("pref_style_notepad_show_lines", false);
             configuration.formatDate = NoteEditor.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
             configuration.formatTime = NoteEditor.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));
-            configuration.timestampScheme = NoteEditor.Configuration.EnumTimestampScheme.valueOf(preferences.getString("pref_timedate_scheme_note_timestamp", null));
             configuration.locale = Locale.getDefault();
             
             // Set configuration
