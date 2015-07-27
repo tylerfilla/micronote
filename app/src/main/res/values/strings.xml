@@ -43,7 +43,7 @@
     <string name="pref_style_notepad_show_lines_summary_off">Notepad lines will not be shown</string>
     <string name="pref_style_notepad_show_lines_summary_on">Notepad lines will be shown</string>
     
-    <string name="pref_timedate_title">Time/Date</string>
+    <string name="pref_timedate_title">Time and Date</string>
     
     <string name="pref_timedate_format_date_title">Date Format</string>
     <string name="pref_timedate_format_date_summary">%s</string>
