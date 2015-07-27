@@ -29,7 +29,10 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".activity.ActivityEdit">
+        <activity
+            android:name=".activity.ActivityEdit"
+            android:hardwareAccelerated="true">
+            
             <intent-filter>
                 
                 <action android:name="android.intent.action.VIEW" />
@@ -40,6 +43,7 @@
                 <data android:pathPattern=".*\\.note" />
             
             </intent-filter>
+        
         </activity>
         
         <activity android:name=".activity.ActivitySettings" />
