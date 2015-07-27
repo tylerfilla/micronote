@@ -73,8 +73,8 @@ public class NoteEditor extends WebView {
     public void setNote(Note note) {
         this.note = note;
         
-        // Load new note
-        this.loadNote();
+        // Reload
+        this.load();
     }
     
     public Configuration getConfiguration() {
@@ -84,8 +84,8 @@ public class NoteEditor extends WebView {
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
         
-        // Load new configuration
-        this.loadConfiguration();
+        // Reload
+        this.load();
     }
     
     public Map<String, Object> getRes() {
@@ -95,8 +95,8 @@ public class NoteEditor extends WebView {
     public void setRes(Map<String, Object> res) {
         this.res = res;
         
-        // Load new res
-        this.loadRes();
+        // Reload
+        this.load();
     }
     
     public void setOnInitializedListener(OnInitializedListener onInitializedListener) {
@@ -106,6 +106,17 @@ public class NoteEditor extends WebView {
     public void unload() {
         // Call the unload event handler in JavaScript
         this.loadUrl("javascript:window.onunload(null);");
+    }
+    
+    private void load() {
+        // Load res
+        this.loadRes();
+        
+        // Load configuration
+        this.loadConfiguration();
+        
+        // Load note
+        this.loadNote();
     }
     
     private void loadNote() {
@@ -125,6 +136,20 @@ public class NoteEditor extends WebView {
         // Send serialized copy of note data
         try {
             this.enqueueAppMessage("~note=" + JSONUtil.convertMapToJSONObject(map));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void loadRes() {
+        // Sanity check
+        if (this.res == null) {
+            return;
+        }
+        
+        // Send serialized copy of resource data
+        try {
+            this.enqueueAppMessage("~res=" + JSONUtil.convertMapToJSONObject(this.res));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -152,20 +177,6 @@ public class NoteEditor extends WebView {
         // Send serialized copy of configuration data
         try {
             this.enqueueAppMessage("~config=" + JSONUtil.convertMapToJSONObject(map));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void loadRes() {
-        // Sanity check
-        if (this.res == null) {
-            return;
-        }
-        
-        // Send serialized copy of resource data
-        try {
-            this.enqueueAppMessage("~res=" + JSONUtil.convertMapToJSONObject(this.res));
         } catch (JSONException e) {
             e.printStackTrace();
         }

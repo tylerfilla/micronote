@@ -362,19 +362,28 @@ function handleIncomingAssignment(key, value) {
     
     // Select appropriate handler function for key
     switch (key) {
+    case "res":
+        handler = handleIncomingAssignmentRes;
+        break;
     case "config":
         handler = handleIncomingAssignmentConfig;
         break;
     case "note":
         handler = handleIncomingAssignmentNote;
         break;
-    case "res":
-        handler = handleIncomingAssignmentRes;
-        break;
     }
     
     // Call selected handler
     handler(value);
+}
+
+function handleIncomingAssignmentRes(value) {
+    // Parse JSON object and store to global 'res'
+    if (window.JSON) {
+        res = JSON.parse(value);
+    } else {
+        res = eval(value);
+    }
 }
 
 function handleIncomingAssignmentConfig(value) {
@@ -411,15 +420,6 @@ function handleIncomingAssignmentNote(value) {
     
     // Rebuild aesthetics
     aestheticsRebuild();
-}
-
-function handleIncomingAssignmentRes(value) {
-    // Parse JSON object and store to global 'res'
-    if (window.JSON) {
-        res = JSON.parse(value);
-    } else {
-        res = eval(value);
-    }
 }
 
 function handleIncomingCommand(command) {
