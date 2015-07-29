@@ -4,7 +4,6 @@ import android.animation.AnimatorInflater;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -75,9 +74,6 @@ public class ActivityList extends AppCompatActivity {
     
     private ActionMode actionMode;
     private EnumActionMode actionModeType;
-    
-    private boolean configurationChanged;
-    private Configuration configurationLast;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,18 +155,6 @@ public class ActivityList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        
-        // Check if configuration changed
-        if (!this.getResources().getConfiguration().equals(this.configurationLast)) {
-            // Resume with config change; set changed flag
-            this.configurationChanged = true;
-            
-            // Store copy of configuration for future comparison
-            this.configurationLast = new Configuration(this.getResources().getConfiguration());
-        } else {
-            // Resume without config change; clear changed flag
-            this.configurationChanged = false;
-        }
         
         // Refresh list
         this.refreshList();
