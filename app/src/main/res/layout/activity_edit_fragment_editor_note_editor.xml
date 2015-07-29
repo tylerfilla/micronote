@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.gmail.tylerfilla.android.notes.widget.NoteEditor
+    style="@style/MicroNote.Activity.ActivityEdit.FragmentEditor.NoteEditor" />

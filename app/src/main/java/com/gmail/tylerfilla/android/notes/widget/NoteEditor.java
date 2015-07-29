@@ -3,6 +3,7 @@ package com.gmail.tylerfilla.android.notes.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -33,8 +34,8 @@ public class NoteEditor extends WebView {
     
     private boolean initialized;
     
-    public NoteEditor(Context context) {
-        super(context);
+    public NoteEditor(Context context, AttributeSet attrs) {
+        super(context, attrs);
         
         // Configuration
         this.configuration = new Configuration();

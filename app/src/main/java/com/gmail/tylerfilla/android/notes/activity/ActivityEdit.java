@@ -395,8 +395,8 @@ public class ActivityEdit extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // If note editor not already created
             if (this.noteEditor == null) {
-                // Create note editor
-                this.noteEditor = new NoteEditor(this.getActivity().getApplicationContext());
+                // Inflate note editor
+                this.noteEditor = (NoteEditor) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor, container);
                 
                 // Load context
                 this.loadContext();
