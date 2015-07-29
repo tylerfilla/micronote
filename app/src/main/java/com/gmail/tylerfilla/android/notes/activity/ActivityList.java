@@ -4,6 +4,7 @@ import android.animation.AnimatorInflater;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -74,6 +75,9 @@ public class ActivityList extends AppCompatActivity {
     
     private ActionMode actionMode;
     private EnumActionMode actionModeType;
+    
+    private boolean configurationChanged;
+    private Configuration configurationLast;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +159,18 @@ public class ActivityList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        // Check if configuration changed
+        if (!this.getResources().getConfiguration().equals(this.configurationLast)) {
+            // Resume with config change; set changed flag
+            this.configurationChanged = true;
+            
+            // Store copy of configuration for future comparison
+            this.configurationLast = new Configuration(this.getResources().getConfiguration());
+        } else {
+            // Resume without config change; clear changed flag
+            this.configurationChanged = false;
+        }
         
         // Refresh list
         this.refreshList();
@@ -332,20 +348,6 @@ public class ActivityList extends AppCompatActivity {
             // Upgrade to search action mode
             this.activateActionMode(EnumActionMode.SEARCH);
         }
-        
-        // Refresh list
-        this.refreshList();
-        
-        // Animate out new button
-        this.findViewById(R.id.activityListNewButton).setEnabled(false);
-        new Handler().postDelayed(new Runnable() {
-            
-            @Override
-            public void run() {
-                ActivityList.this.findViewById(R.id.activityListNewButton).setVisibility(View.GONE);
-            }
-            
-        }, this.getResources().getInteger(android.R.integer.config_shortAnimTime));
     }
     
     private void searchEnd() {
@@ -357,20 +359,6 @@ public class ActivityList extends AppCompatActivity {
             // Downgrade to no action mode
             this.activateActionMode(EnumActionMode.NONE);
         }
-        
-        // Refresh list
-        this.refreshList();
-        
-        // Animate in new button
-        this.findViewById(R.id.activityListNewButton).setVisibility(View.VISIBLE);
-        new Handler().postDelayed(new Runnable() {
-            
-            @Override
-            public void run() {
-                ActivityList.this.findViewById(R.id.activityListNewButton).setEnabled(true);
-            }
-            
-        }, this.getResources().getInteger(android.R.integer.config_shortAnimTime));
     }
     
     private void openSettings() {
@@ -663,6 +651,20 @@ public class ActivityList extends AppCompatActivity {
         
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            // Refresh list
+            this.activityList.refreshList();
+            
+            // Animate out new button
+            this.activityList.findViewById(R.id.activityListNewButton).setEnabled(false);
+            new Handler().postDelayed(new Runnable() {
+                
+                @Override
+                public void run() {
+                    ActionModeCallbackSearch.this.activityList.findViewById(R.id.activityListNewButton).setVisibility(View.GONE);
+                }
+                
+            }, this.activityList.getResources().getInteger(android.R.integer.config_shortAnimTime));
+            
             return true;
         }
         
@@ -677,8 +679,19 @@ public class ActivityList extends AppCompatActivity {
             this.activityList.actionMode = null;
             this.activityList.actionModeType = EnumActionMode.NONE;
             
-            // End search
-            this.activityList.searchEnd();
+            // Refresh list
+            this.activityList.refreshList();
+            
+            // Animate in new button
+            this.activityList.findViewById(R.id.activityListNewButton).setVisibility(View.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                
+                @Override
+                public void run() {
+                    ActionModeCallbackSearch.this.activityList.findViewById(R.id.activityListNewButton).setEnabled(true);
+                }
+                
+            }, this.activityList.getResources().getInteger(android.R.integer.config_shortAnimTime));
             
             // Hide soft keyboard from search view
             ((InputMethodManager) this.activityList.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(MenuItemCompat.getActionView(mode.getMenu().findItem(R.id.activityListMenuActionModeSearchSearchView)).getWindowToken(), 0);
@@ -741,8 +754,8 @@ public class ActivityList extends AppCompatActivity {
             this.activityList.actionMode = null;
             this.activityList.actionModeType = EnumActionMode.NONE;
             
-            // End search
-            this.activityList.searchEnd();
+            // Refresh list
+            this.activityList.refreshList();
         }
         
         private void update(ActionMode mode, Menu menu) {
