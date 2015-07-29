@@ -3,7 +3,6 @@ package com.gmail.tylerfilla.android.notes.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -48,22 +47,6 @@ public class NoteEditor extends WebView {
         
         // Initialize backing WebView
         this.initializeWebView();
-    }
-    
-    @Override
-    public void onResume() {
-        // Call through if at least Honeycomb
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            super.onResume();
-        }
-    }
-    
-    @Override
-    public void onPause() {
-        // Call through if at least Honeycomb
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            super.onPause();
-        }
     }
     
     public Note getNote() {
