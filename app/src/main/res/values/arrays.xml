@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    <string-array name="array_pref_list_entries_style_notepad_text_color">
+        <item>Default</item>
+        <item>Black</item>
+        <item>Custom</item>
+    </string-array>
+    
+    <integer-array name="array_pref_list_values_style_notepad_text_color">
+        <item>@color/notepad_text_default</item>
+        <item>@color/notepad_text_black</item>
+        <item>0</item>
+    </integer-array>
+    
     <string-array name="array_pref_list_entries_timedate_format_date">
         <item>January 1, 1970</item>
         <item>January 1, 70</item>

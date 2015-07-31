@@ -17,5 +17,8 @@
     <color name="theme_window_background">#fffaf6bb</color>
     
     <color name="widget_floating_action_button_nonripple_highlight">#14000000</color>
+    
+    <color name="notepad_text_default">#ff404040</color>
+    <color name="notepad_text_black">#ff000000</color>
 
 </resources>

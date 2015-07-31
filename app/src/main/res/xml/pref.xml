@@ -36,7 +36,9 @@
         android:title="@string/pref_style_notepad_title">
         
         <com.gmail.tylerfilla.android.notes.widget.pref.ColorPreference
-            android:defaultValue="@color/pref_default_style_notepad_text_color"
+            android:defaultValue="@color/notepad_text_default"
+            android:entries="@array/array_pref_list_entries_style_notepad_text_color"
+            android:entryValues="@array/array_pref_list_values_style_notepad_text_color"
             android:key="pref_style_notepad_text_color"
             android:persistent="true"
             android:summary="@string/pref_style_notepad_text_color_summary"
