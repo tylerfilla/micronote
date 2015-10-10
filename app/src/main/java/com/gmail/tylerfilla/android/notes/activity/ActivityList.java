@@ -524,9 +524,6 @@ public class ActivityList extends AppCompatActivity {
             // Update
             this.update(mode, menu);
             
-            // Refresh list
-            this.activityList.refreshList();
-            
             return true;
         }
         
@@ -1043,13 +1040,8 @@ public class ActivityList extends AppCompatActivity {
                 }
                 
                 // Set background and padding
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
-                    this.view.setBackgroundDrawable(backgroundDrawable);
-                    this.view.setPadding(this.defaultPadding, this.defaultPadding, this.defaultPadding, this.defaultPadding);
-                } else {
-                    this.view.setBackground(backgroundDrawable);
-                    this.view.setPadding(this.defaultPadding, this.defaultPadding, this.defaultPadding, this.defaultPadding);
-                }
+                this.view.setBackgroundDrawable(backgroundDrawable);
+                this.view.setPadding(this.defaultPadding, this.defaultPadding, this.defaultPadding, this.defaultPadding);
             }
             
         }
