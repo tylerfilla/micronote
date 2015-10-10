@@ -89,6 +89,9 @@ public class NoteIO {
         
         // Store note data as Java properties file
         noteProps.store(new FileOutputStream(noteFile), FILE_IDENTIFICATION_COMMENT);
+        
+        // Clear changed flag
+        note.setChanged(false);
     }
     
 }
