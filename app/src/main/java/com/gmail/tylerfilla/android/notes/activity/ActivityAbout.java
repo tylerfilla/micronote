@@ -47,9 +47,6 @@ public class ActivityAbout extends Activity {
             
         });
         
-        // Enable JavaScript
-        dialogView.getSettings().setJavaScriptEnabled(true);
-        
         // Load about document
         dialogView.loadUrl(ASSET_PATH_ABOUT_HTML_INDEX);
         
