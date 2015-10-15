@@ -24,5 +24,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.google.android.gms:play-services-ads:7.5.0'
+    compile 'com.google.android.gms:play-services-ads:7.8.0'
+    compile files('libs/applovin-sdk-6.0.1.jar')
+    compile files('libs/appodeal-1.13.1.jar')
+    compile files('libs/chartboost-5.2.0.jar')
+    compile files('libs/my-target-4.0.13.jar')
 }

@@ -49,10 +49,8 @@
         android:onClick="onButtonClick"
         style="@style/MicroNote.Activity.ActivityList.NewButton" />
     
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/activityListAd"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-1168572156310866/6932962034"
-        style="@style/MicroNote.Activity.ActivityList.Ad" />
+    <FrameLayout
+        android:id="@+id/activityListAdSpacer"
+        style="@style/MicroNote.Activity.ActivityList.AdSpacer" />
 
 </RelativeLayout>

@@ -35,13 +35,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appodeal.ads.Appodeal;
 import com.gmail.tylerfilla.android.notes.R;
 import com.gmail.tylerfilla.android.notes.core.Note;
 import com.gmail.tylerfilla.android.notes.core.NoteSearcher;
 import com.gmail.tylerfilla.android.notes.core.io.NoteIO;
 import com.gmail.tylerfilla.android.notes.util.AdRemovalUtil;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,22 +121,20 @@ public class ActivityList extends AppCompatActivity {
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityListToolbar));
         
-        // Make an ad request and load ad
-        final AdView ad = (AdView) this.findViewById(R.id.activityListAd);
-        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        adRequestBuilder.addTestDevice("987981F3F5AD0170CF6C028268A11A4A"); // anon
-        adRequestBuilder.addTestDevice("6D7349D3D4A841BCFF63345BCFC6FB61"); // anon-2
-        ad.loadAd(adRequestBuilder.build());
-        
         // Configure ad removal utility
         AdRemovalUtil.create(this, new AdRemovalUtil.Callback() {
             
             @Override
             public void callback() {
-                // If ad should be removed
-                if (AdRemovalUtil.checkAdRemovalStatus()) {
-                    // Hide ad
-                    ad.setVisibility(View.GONE);
+                // If ad should be displayed
+                if (!AdRemovalUtil.checkAdRemovalStatus()) {
+                    // Initialize Appodeal and display banner
+                    Appodeal.disableLocationPermissionCheck();
+                    Appodeal.initialize(ActivityList.this, "df565b8fe94d355f67412bb1eb1039dfa35e171b1037753f", Appodeal.BANNER);
+                    Appodeal.show(ActivityList.this, Appodeal.BANNER_BOTTOM);
+                } else {
+                    // Hide spacer
+                    ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.GONE);
                 }
             }
             
@@ -155,6 +152,9 @@ public class ActivityList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        // Resume Appodeal function
+        Appodeal.onResume(this, Appodeal.BANNER);
         
         // Refresh list
         this.refreshList();

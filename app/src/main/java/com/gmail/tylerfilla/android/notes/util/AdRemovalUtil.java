@@ -1,6 +1,7 @@
 package com.gmail.tylerfilla.android.notes.util;
 
 import android.content.Context;
+import android.provider.Settings;
 
 import com.example.android.trivialdrivesample.util.IabException;
 import com.example.android.trivialdrivesample.util.IabHelper;
@@ -8,8 +9,12 @@ import com.example.android.trivialdrivesample.util.IabResult;
 import com.example.android.trivialdrivesample.util.Inventory;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AdRemovalUtil {
+    
+    private static final HashSet<String> TEST_DEVICE_IDS = new HashSet<>();
     
     public static final String BILLING_SKU_AD_REMOVAL = "ad_removal";
     public static final String BILLING_TYPE_AD_REMOVAL = "inapp";
@@ -18,11 +23,16 @@ public class AdRemovalUtil {
     
     private static IabHelper currentIabHelper;
     
+    private static String deviceId;
+    
     public static void create(Context context, final Callback callback) {
         // IabHelper must be disposed of first
         if (currentIabHelper != null) {
             destroy();
         }
+        
+        // Obtain device ID
+        deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         
         // Instantiate Android sample in-app billing helper
         final IabHelper iabHelper = new IabHelper(context, PublicKeyUtil.getPublicKey());
@@ -61,6 +71,11 @@ public class AdRemovalUtil {
             return false;
         }
         
+        // If this is a test device, remove ads
+        if (TEST_DEVICE_IDS.contains(deviceId)) {
+            return true;
+        }
+        
         // Query user's purchases
         Inventory inventory = null;
         try {
@@ -81,6 +96,10 @@ public class AdRemovalUtil {
         
         void callback();
         
+    }
+    
+    static {
+        TEST_DEVICE_IDS.add("b3240e21135584c2");
     }
     
 }
