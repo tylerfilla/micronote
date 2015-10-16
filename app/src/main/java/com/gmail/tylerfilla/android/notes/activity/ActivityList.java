@@ -56,9 +56,11 @@ import java.util.Set;
 
 public class ActivityList extends AppCompatActivity {
     
+    private static final String APPODEAL_AD_ID_BOTTOM_BANNER = "df565b8fe94d355f67412bb1eb1039dfa35e171b1037753f";
+    
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
-    private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 20;
+    private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 40;
     private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
     
     private RecyclerView list;
@@ -121,20 +123,20 @@ public class ActivityList extends AppCompatActivity {
         // Configure toolbar
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.activityListToolbar));
         
-        // Configure ad removal utility
+        // Configure advertisement
         AdRemovalUtil.create(this, new AdRemovalUtil.Callback() {
             
             @Override
             public void callback() {
                 // If ad should be displayed
                 if (!AdRemovalUtil.checkAdRemovalStatus()) {
+                    // Show spacer
+                    ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.VISIBLE);
+                    
                     // Initialize Appodeal and display banner
                     Appodeal.disableLocationPermissionCheck();
-                    Appodeal.initialize(ActivityList.this, "df565b8fe94d355f67412bb1eb1039dfa35e171b1037753f", Appodeal.BANNER);
+                    Appodeal.initialize(ActivityList.this, APPODEAL_AD_ID_BOTTOM_BANNER, Appodeal.BANNER);
                     Appodeal.show(ActivityList.this, Appodeal.BANNER_BOTTOM);
-                } else {
-                    // Hide spacer
-                    ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.GONE);
                 }
             }
             

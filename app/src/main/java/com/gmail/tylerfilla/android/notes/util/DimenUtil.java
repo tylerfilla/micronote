@@ -10,7 +10,7 @@ public class DimenUtil {
     }
     
     public static int dpToPxInt(Context context, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, context.getResources().getDisplayMetrics());
+        return (int) dpToPx(context, (float) dp);
     }
     
 }
