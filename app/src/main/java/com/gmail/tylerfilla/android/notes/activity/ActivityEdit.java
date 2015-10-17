@@ -45,7 +45,7 @@ public class ActivityEdit extends AppCompatActivity {
     
     private static final String STATE_KEY_COVER_VISIBILITY = "cover_visibility";
     
-    private static final int NOTE_TITLE_MAX_WORDS = 8;
+    private static final int NOTE_TITLE_MAX_WORDS = 6;
     
     private Note note;
     private File noteFile;
