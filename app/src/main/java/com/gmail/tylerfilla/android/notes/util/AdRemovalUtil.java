@@ -10,7 +10,6 @@ import com.example.android.trivialdrivesample.util.Inventory;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 public class AdRemovalUtil {
     
@@ -100,6 +99,7 @@ public class AdRemovalUtil {
     
     static {
         TEST_DEVICE_IDS.add("b3240e21135584c2");
+        TEST_DEVICE_IDS.add("124cef71a9b4d7ca");
     }
     
 }

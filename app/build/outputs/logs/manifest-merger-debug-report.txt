@@ -212,66 +212,18 @@ ADDED from AndroidManifest.xml:120:9
 		ADDED from AndroidManifest.xml:122:13
 	android:name
 		ADDED from AndroidManifest.xml:121:13
-activity#com.unity3d.ads.android.view.UnityAdsFullscreenActivity
+activity#ru.mail.android.mytarget.ads.MyTargetActivity
 ADDED from AndroidManifest.xml:124:9
-	android:hardwareAccelerated
-		ADDED from AndroidManifest.xml:128:13
 	android:configChanges
 		ADDED from AndroidManifest.xml:126:13
-	android:theme
-		ADDED from AndroidManifest.xml:127:13
 	android:name
 		ADDED from AndroidManifest.xml:125:13
-activity#ru.mail.android.mytarget.ads.MyTargetActivity
-ADDED from AndroidManifest.xml:130:9
-	android:configChanges
-		ADDED from AndroidManifest.xml:132:13
-	android:name
-		ADDED from AndroidManifest.xml:131:13
 activity#org.nexage.sourcekit.vast.activity.VASTActivity
-ADDED from AndroidManifest.xml:134:9
+ADDED from AndroidManifest.xml:128:9
 	android:theme
-		ADDED from AndroidManifest.xml:136:13
+		ADDED from AndroidManifest.xml:130:13
 	android:name
-		ADDED from AndroidManifest.xml:135:13
-activity#com.facebook.ads.InterstitialAdActivity
-ADDED from AndroidManifest.xml:138:9
-	android:configChanges
-		ADDED from AndroidManifest.xml:140:13
-	android:name
-		ADDED from AndroidManifest.xml:139:13
-activity#com.jirbo.adcolony.AdColonyOverlay
-ADDED from AndroidManifest.xml:142:9
-	android:configChanges
-		ADDED from AndroidManifest.xml:144:13
-	android:theme
-		ADDED from AndroidManifest.xml:145:13
-	android:name
-		ADDED from AndroidManifest.xml:143:13
-activity#com.jirbo.adcolony.AdColonyFullscreen
-ADDED from AndroidManifest.xml:147:9
-	android:configChanges
-		ADDED from AndroidManifest.xml:149:13
-	android:theme
-		ADDED from AndroidManifest.xml:150:13
-	android:name
-		ADDED from AndroidManifest.xml:148:13
-activity#com.jirbo.adcolony.AdColonyBrowser
-ADDED from AndroidManifest.xml:152:9
-	android:configChanges
-		ADDED from AndroidManifest.xml:154:13
-	android:theme
-		ADDED from AndroidManifest.xml:155:13
-	android:name
-		ADDED from AndroidManifest.xml:153:13
-activity#com.vungle.publisher.FullScreenAdActivity
-ADDED from AndroidManifest.xml:157:9
-	android:configChanges
-		ADDED from AndroidManifest.xml:159:13
-	android:theme
-		ADDED from AndroidManifest.xml:160:13
-	android:name
-		ADDED from AndroidManifest.xml:158:13
+		ADDED from AndroidManifest.xml:129:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:support-v4:22.2.0:20:5
