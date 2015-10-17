@@ -15,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,7 +45,7 @@ public class ActivityEdit extends AppCompatActivity {
     
     private static final String STATE_KEY_COVER_VISIBILITY = "cover_visibility";
     
-    private static final int NOTE_TITLE_MAX_LENGTH = 40;
+    private static final int NOTE_TITLE_MAX_WORDS = 8;
     
     private Note note;
     private File noteFile;
@@ -329,7 +328,6 @@ public class ActivityEdit extends AppCompatActivity {
         promptInputTitle.setMaxLines(1);
         promptInputTitle.setHint(this.note.getTitle());
         promptInputTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        promptInputTitle.setFilters(new InputFilter[] { new InputFilter.LengthFilter(NOTE_TITLE_MAX_LENGTH) });
         promptInputTitleHolder.addView(promptInputTitle);
         
         // Title textbox layout parameters
@@ -509,9 +507,20 @@ public class ActivityEdit extends AppCompatActivity {
                     
                     // One of those weird edge cases
                     if (!contentDetaggedDewhited.isEmpty()) {
-                        // Create title from first line for new notes
+                        // Generate title if note is new
                         if (this.noteEditor.getNote().getLastModified() == 0l && this.noteEditor.getNote().getTitle().equals(this.getString(R.string.activity_edit_constant_default_note_title))) {
-                            this.noteEditor.getNote().setTitle(contentDetagged.substring(0, Math.min(contentDetagged.length(), contentDetagged.contains("\n") ? Math.min(NOTE_TITLE_MAX_LENGTH, contentDetagged.indexOf('\n')) : NOTE_TITLE_MAX_LENGTH)));
+                            int wordCount = 0;
+                            
+                            StringBuilder titleBuilder = new StringBuilder();
+                            for (String word : Html.fromHtml(this.noteEditor.getNote().getContent()).toString().split("\n")[0].trim().split(" ")) {
+                                titleBuilder.append(word).append(" ");
+                                
+                                if (++wordCount >= NOTE_TITLE_MAX_WORDS) {
+                                    break;
+                                }
+                            }
+                            
+                            this.noteEditor.getNote().setTitle(titleBuilder.toString());
                         }
                     }
                     

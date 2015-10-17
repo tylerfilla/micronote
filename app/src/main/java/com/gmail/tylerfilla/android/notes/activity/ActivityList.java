@@ -60,8 +60,7 @@ public class ActivityList extends AppCompatActivity {
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
-    private static final int NOTE_PREVIEW_TITLE_MAX_LENGTH = 40;
-    private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 50;
+    private static final int NOTE_PREVIEW_CONTENT_MAX_LENGTH = 256;
     
     private RecyclerView list;
     private ListAdapter listAdapter;
@@ -257,10 +256,6 @@ public class ActivityList extends AppCompatActivity {
                     String title = note.getTitle();
                     String content = note.getContent();
                     
-                    if (title != null) {
-                        // Cut length to maximum
-                        title = title.substring(0, Math.min(ActivityList.NOTE_PREVIEW_TITLE_MAX_LENGTH, title.length()));
-                    }
                     if (content != null) {
                         // Strip HTML tags
                         content = Html.fromHtml(content).toString().replaceAll("\n+", " ");
