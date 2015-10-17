@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MicroNote.Activity.ActivitySettings">
+    
+    <include
+        android:id="@+id/activitySettingsToolbar"
+        layout="@layout/include_toolbar" />
+    
+    <ListView
+        android:id="@android:id/list"
+        style="@style/MicroNote.Activity.ActivitySettings.List" />
+
+</RelativeLayout>
+<!-- From: file:/home/tyler/Development/Android/Projects/μNote/app/src/main/res/layout/activity_settings.xml -->

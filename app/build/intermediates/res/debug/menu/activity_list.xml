@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/activityListMenuItemSearch"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/activity_list_menu_item_search_title"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/activityListMenuItemSettings"
+        android:title="@string/activity_list_menu_item_settings_title"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/activityListMenuItemUpgrade"
+        android:title="@string/activity_list_menu_item_upgrade_title"
+        app:showAsAction="never" />
+
+</menu>
+<!-- From: file:/home/tyler/Development/Android/Projects/μNote/app/src/main/res/menu/activity_list.xml -->

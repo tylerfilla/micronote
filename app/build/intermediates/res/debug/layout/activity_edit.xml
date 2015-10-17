@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MicroNote.Activity.ActivityEdit">
+    
+    <include
+        android:id="@+id/activityEditToolbar"
+        layout="@layout/include_toolbar" />
+    
+    <fragment
+        android:id="@+id/activityEditFragmentEditor"
+        class="com.gmail.tylerfilla.android.notes.activity.ActivityEdit$FragmentEditor"
+        style="@style/MicroNote.Activity.ActivityEdit.FragmentEditor" />
+    
+    <FrameLayout
+        android:id="@+id/activityEditCover"
+        style="@style/MicroNote.Activity.ActivityEdit.Cover" />
+
+</RelativeLayout>
+<!-- From: file:/home/tyler/Development/Android/Projects/μNote/app/src/main/res/layout/activity_edit.xml -->

@@ -1,0 +1,74 @@
+
+/* Written by Tyler Filla */
+
+* {
+    outline: none !important;
+    
+    -webkit-focus-ring-color:    rgba(0, 0, 0, 0) !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+}
+
+body {
+    -webkit-transform:   translate3d(0, 0, 0);
+    -webkit-user-select: none;
+}
+
+#header {
+    position: absolute;
+    left:  0;
+    top:   0;
+    right: 0;
+    
+    text-align: right;
+    
+    padding: 24px 8px 0 0;
+}
+
+#headerText {
+    color: #C00000;
+    
+    font-size: 20px;
+}
+
+#content {
+    position: absolute;
+    left:   0;
+    right:  0;
+    top:    68px;
+    
+    margin: 0px 8px 0 8px;
+}
+
+#contentLines {
+    position: relative;
+    bottom: 4px;
+    
+    height: 100%;
+    width:  100%;
+    
+    pointer-events: none;
+    
+    z-index: 0;
+}
+
+#contentLines .line {
+    height: 30px;
+    width:  100%;
+    
+    margin-bottom: 1px;
+    
+    border-bottom: 1px solid #E5E3B9;
+}
+
+#contentText {
+    position: relative;
+    top: -100%;
+    
+    width: 100%;
+    
+    line-height: 32px;
+    
+    z-index: 9001;
+    
+    -webkit-user-select: text;
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    style="@style/MicroNote.Activity.ActivityList">
+    
+    <include
+        android:id="@+id/activityListToolbar"
+        layout="@layout/include_toolbar" />
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activityListList"
+        style="@style/MicroNote.Activity.ActivityList.List" />
+    
+    <LinearLayout
+        android:id="@+id/activityListMessageEmptyList"
+        style="@style/MicroNote.Activity.ActivityList.Message">
+        
+        <TextView
+            android:id="@+id/activityListMessageEmptyListTitle"
+            android:text="@string/activity_list_message_empty_list_title"
+            style="@style/MicroNote.Activity.ActivityList.Message.Title" />
+        
+        <TextView
+            android:id="@+id/activityListMessageEmptyListBody"
+            android:text="@string/activity_list_message_empty_list_body"
+            style="@style/MicroNote.Activity.ActivityList.Message.Body" />
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/activityListMessageEmptySearch"
+        style="@style/MicroNote.Activity.ActivityList.Message">
+        
+        <TextView
+            android:id="@+id/activityListMessageEmptySearchTitle"
+            android:text="@string/activity_list_message_empty_search_title"
+            style="@style/MicroNote.Activity.ActivityList.Message.Title" />
+        
+        <TextView
+            android:id="@+id/activityListMessageEmptySearchBody"
+            android:text="@string/activity_list_message_empty_search_body"
+            style="@style/MicroNote.Activity.ActivityList.Message.Body" />
+    
+    </LinearLayout>
+    
+    <ImageButton
+        android:id="@+id/activityListNewButton"
+        android:onClick="onButtonClick"
+        style="@style/MicroNote.Activity.ActivityList.NewButton" />
+    
+    <FrameLayout
+        android:id="@+id/activityListAdSpacer"
+        style="@style/MicroNote.Activity.ActivityList.AdSpacer" />
+
+</RelativeLayout>
+<!-- From: file:/home/tyler/Development/Android/Projects/μNote/app/src/main/res/layout/activity_list.xml -->
