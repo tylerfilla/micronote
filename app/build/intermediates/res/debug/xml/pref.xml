@@ -13,8 +13,8 @@
             android:title="@string/pref_upgrade_adremove_title">
             
             <intent
-                android:targetPackage="com.gmail.tylerfilla.android.notes"
-                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase">
+                android:targetPackage="io.microdev.note"
+                android:targetClass="io.microdev.note.activity.ActivityPurchase">
                 
                 <extra
                     android:name="SKU"
@@ -35,7 +35,7 @@
         android:persistent="false"
         android:title="@string/pref_style_notepad_title">
         
-        <com.gmail.tylerfilla.android.notes.widget.pref.ColorPreference
+        <io.microdev.note.pref.ColorPreference
             android:defaultValue="@color/notepad_text_default"
             android:entries="@array/array_pref_list_entries_style_notepad_text_color"
             android:entryValues="@array/array_pref_list_values_style_notepad_text_color"
@@ -44,7 +44,7 @@
             android:summary="@string/pref_style_notepad_text_color_summary"
             android:title="@string/pref_style_notepad_text_color_title" />
         
-        <com.gmail.tylerfilla.android.notes.widget.pref.SwitchPreferenceCompat
+        <io.microdev.note.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:disableDependentsState="false"
             android:key="pref_style_notepad_show_lines"
@@ -85,7 +85,7 @@
         android:persistent="false"
         android:title="@string/pref_other_title">
         
-        <com.gmail.tylerfilla.android.notes.widget.pref.SwitchPreferenceCompat
+        <io.microdev.note.pref.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_other_import_enable"
             android:persistent="true"
@@ -107,8 +107,8 @@
             android:title="@string/pref_about_content_title">
             
             <intent
-                android:targetPackage="com.gmail.tylerfilla.android.notes"
-                android:targetClass="com.gmail.tylerfilla.android.notes.activity.ActivityAbout" />
+                android:targetPackage="io.microdev.note"
+                android:targetClass="io.microdev.note.activity.ActivityAbout" />
         
         </Preference>
     

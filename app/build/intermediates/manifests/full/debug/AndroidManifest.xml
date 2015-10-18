@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gmail.tylerfilla.android.notes"
+    package="io.microdev.note"
     android:versionCode="1054"
     android:versionName="@string/app_version_name" >
 
@@ -22,7 +22,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name="com.gmail.tylerfilla.android.notes.activity.ActivityList" >
+        <activity android:name="io.microdev.note.activity.ActivityList" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gmail.tylerfilla.android.notes.activity.ActivityEdit"
+            android:name="io.microdev.note.activity.ActivityEdit"
             android:hardwareAccelerated="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -42,12 +42,12 @@
                 <data android:pathPattern=".*\\.note" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gmail.tylerfilla.android.notes.activity.ActivitySettings" />
+        <activity android:name="io.microdev.note.activity.ActivitySettings" />
         <activity
-            android:name="com.gmail.tylerfilla.android.notes.activity.ActivityPurchase"
+            android:name="io.microdev.note.activity.ActivityPurchase"
             android:theme="@style/MicroNote.Theme.Translucent" />
         <activity
-            android:name="com.gmail.tylerfilla.android.notes.activity.ActivityAbout"
+            android:name="io.microdev.note.activity.ActivityAbout"
             android:theme="@style/MicroNote.Theme.Translucent" />
 
         <!-- Appodeal Advertising -->
@@ -68,11 +68,6 @@
             android:name="com.appodeal.ads.LoaderActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

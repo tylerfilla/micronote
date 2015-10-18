@@ -4,17 +4,18 @@ android {
     buildToolsVersion "21.1.2"
     
     defaultConfig {
-        applicationId 'com.gmail.tylerfilla.android.notes'
+        applicationId 'io.microdev.note'
         minSdkVersion 11
         targetSdkVersion 21
     }
     
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            proguardFiles 'proguard-rules.pro'
         }
     }
+    
     productFlavors {
     }
 }

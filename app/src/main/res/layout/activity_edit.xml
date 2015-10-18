@@ -9,7 +9,7 @@
     
     <fragment
         android:id="@+id/activityEditFragmentEditor"
-        class="com.gmail.tylerfilla.android.notes.activity.ActivityEdit$FragmentEditor"
+        class="io.microdev.note.activity.ActivityEdit$FragmentEditor"
         style="@style/MicroNote.Activity.ActivityEdit.FragmentEditor" />
     
     <FrameLayout
