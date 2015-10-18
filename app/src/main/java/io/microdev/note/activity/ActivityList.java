@@ -56,7 +56,7 @@ import java.util.Set;
 
 public class ActivityList extends AppCompatActivity {
     
-    private static final String APPODEAL_AD_ID_BOTTOM_BANNER = "df565b8fe94d355f67412bb1eb1039dfa35e171b1037753f";
+    private static final String APPODEAL_AD_ID_BOTTOM_BANNER = "b9932bed6b64f3f271c7e1336264a396c337f393bf634d46";
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
