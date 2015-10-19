@@ -45,5 +45,4 @@ public static final ** CREATOR;
 -dontwarn com.mopub.**
 -dontwarn com.appodeal.ads.networks.**
 
--keepattributes *Annotation*
--keepattributes Signature
+-keep class * extends io.microdev.note.activity.ActivityList$ActionModeCallback { *; }
