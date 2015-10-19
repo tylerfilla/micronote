@@ -1,7 +1,6 @@
 package io.microdev.note.activity;
 
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -18,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -33,8 +31,6 @@ import io.microdev.note.core.io.NoteIO;
 import io.microdev.note.util.DimenUtil;
 
 public class ActivityEdit extends AppCompatActivity {
-    
-    private static final String STATE_KEY_COVER_VISIBILITY = "cover_visibility";
     
     private static final int NOTE_TITLE_MAX_WORDS = 6;
     
@@ -136,17 +132,11 @@ public class ActivityEdit extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        
-        // Restore cover visibility
-        this.findViewById(R.id.activityEditCover).setVisibility(savedInstanceState.getBoolean(STATE_KEY_COVER_VISIBILITY, true) ? View.VISIBLE : View.GONE);
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        
-        // Save cover visibility
-        outState.putBoolean(STATE_KEY_COVER_VISIBILITY, this.findViewById(R.id.activityEditCover).getVisibility() == View.VISIBLE);
     }
     
     @Override
@@ -387,63 +377,8 @@ public class ActivityEdit extends AppCompatActivity {
                 // Inflate note editor
                 this.noteEditor = (NoteEditor) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor, container);
                 
-                // Load context
-                //this.loadContext();
-                
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
-                
-                /*
-                // Set initialized listener
-                this.noteEditor.setOnInitializedListener(new NoteEditorOld.OnInitializedListener() {
-                    
-                    @Override
-                    public void onInitialized() {
-                        // Get reference to edit activity cover
-                        final View activityEditCover = FragmentEditor.this.getActivity().findViewById(R.id.activityEditCover);
-                        
-                        // Get fade duration
-                        int fadeDuration = FragmentEditor.this.getActivity().getResources().getInteger(android.R.integer.config_mediumAnimTime);
-                        
-                        // Animate cover out
-                        AlphaAnimation fade = new AlphaAnimation(1.0f, 0.0f);
-                        fade.setDuration(fadeDuration);
-                        fade.setFillAfter(true);
-                        activityEditCover.startAnimation(fade);
-                        
-                        // Handler to sync with animation completion
-                        new Handler().postDelayed(new Runnable() {
-                            
-                            @Override
-                            public void run() {
-                                // Hide cover
-                                activityEditCover.setVisibility(View.GONE);
-                                
-                                // If note is new, simulate touch to naturally focus editor
-                                if (FragmentEditor.this.noteEditor.getNote().getLastModified() == 0l) {
-                                    // Calculate simulated touch point coordinates
-                                    float x = (FragmentEditor.this.noteEditor.getLeft() + FragmentEditor.this.noteEditor.getRight())/2.0f;
-                                    float y = (FragmentEditor.this.noteEditor.getTop() + FragmentEditor.this.noteEditor.getBottom())/2.0f;
-                                    
-                                    // Generate events
-                                    MotionEvent eventDown = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, x, y, 0);
-                                    MotionEvent eventUp = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, x, y, 0);
-                                    
-                                    // Dispatch events
-                                    FragmentEditor.this.noteEditor.onTouchEvent(eventDown);
-                                    FragmentEditor.this.noteEditor.onTouchEvent(eventUp);
-                                    
-                                    // Recycle events
-                                    eventDown.recycle();
-                                    eventUp.recycle();
-                                }
-                            }
-                            
-                        }, fadeDuration);
-                    }
-                    
-                });
-                */
             }
             
             return this.noteEditor;
@@ -458,32 +393,8 @@ public class ActivityEdit extends AppCompatActivity {
         }
         
         @Override
-        public void onDetach() {
-            super.onDetach();
-            
-            /* Some hacky stuff to remove focus from the editor */
-            
-            // Hide soft keyboard
-            //((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.noteEditor.getWindowToken(), 0);
-            
-            // Clear editor focus
-            //this.noteEditor.loadUrl("javascript:contentText.blur();");
-        }
-        
-        @Override
-        public void onResume() {
-            super.onResume();
-            
-            // Resume note editor
-            //this.noteEditor.onResume();
-        }
-        
-        @Override
         public void onPause() {
             super.onPause();
-            
-            // Unload note editor
-            //this.noteEditor.unload();
             
             // If note file hasn't been deleted
             if (!((ActivityEdit) this.getActivity()).noteFileDeleted) {
@@ -525,68 +436,7 @@ public class ActivityEdit extends AppCompatActivity {
                     }
                 }
             }
-            
-            // Pause note editor
-            //this.noteEditor.onPause();
         }
-        
-        /*
-        private void loadContext() {
-            // Load configuration
-            this.loadConfiguration();
-            
-            // Load res
-            this.loadRes();
-        }
-        
-        private void loadConfiguration() {
-            // Get preferences
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-            
-            // Get configuration
-            NoteEditorOld.Configuration configuration = this.noteEditor.getConfiguration();
-            
-            // Modify configuration
-            configuration.textColor = preferences.getInt("pref_style_notepad_text_color", 0);
-            configuration.showNotepadLines = preferences.getBoolean("pref_style_notepad_show_lines", false);
-            configuration.formatDate = NoteEditorOld.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
-            configuration.formatTime = NoteEditorOld.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));
-            configuration.locale = Locale.getDefault();
-            
-            // Set configuration
-            this.noteEditor.setConfiguration(configuration);
-        }
-        
-        private void loadRes() {
-            // Get res
-            Map<String, Object> res = this.noteEditor.getRes();
-            
-            // Integers
-            Map<String, Integer> integer = new HashMap<>();
-            for (Field field : R.integer.class.getDeclaredFields()) {
-                try {
-                    integer.put(field.getName(), this.getActivity().getResources().getInteger(field.getInt(null)));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-            res.put("integer", integer);
-            
-            // Strings
-            Map<String, String> string = new HashMap<>();
-            for (Field field : R.string.class.getDeclaredFields()) {
-                try {
-                    string.put(field.getName(), this.getActivity().getResources().getString(field.getInt(null)).replaceAll("\\\"", "\\\\u0022"));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-            res.put("string", string);
-            
-            // Set res
-            this.noteEditor.setRes(res);
-        }
-        */
         
     }
     

@@ -11,9 +11,5 @@
         android:id="@+id/activityEditFragmentEditor"
         class="io.microdev.note.activity.ActivityEdit$FragmentEditor"
         style="@style/MicroNote.Activity.ActivityEdit.FragmentEditor" />
-    
-    <FrameLayout
-        android:id="@+id/activityEditCover"
-        style="@style/MicroNote.Activity.ActivityEdit.Cover" />
 
 </RelativeLayout>

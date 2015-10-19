@@ -9,14 +9,14 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import io.microdev.note.util.JSONUtil;
-
 import org.json.JSONException;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import io.microdev.note.util.JSONUtil;
 
 public class NoteEditorOld extends WebView {
     
