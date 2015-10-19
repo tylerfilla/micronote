@@ -15,14 +15,12 @@ ADDED from AndroidManifest.xml:2:1
 		ADDED from AndroidManifest.xml:3:5
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from AndroidManifest.xml:8:5
-MERGED from com.google.android.gms:play-services-ads:7.8.0:21:5
-MERGED from com.google.android.gms:play-services-analytics:7.8.0:22:5
+MERGED from com.google.android.gms:play-services-ads:8.1.0:21:5
 	android:name
 		ADDED from AndroidManifest.xml:8:22
 uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:9:5
-MERGED from com.google.android.gms:play-services-ads:7.8.0:20:5
-MERGED from com.google.android.gms:play-services-analytics:7.8.0:21:5
+MERGED from com.google.android.gms:play-services-ads:8.1.0:20:5
 	android:name
 		ADDED from AndroidManifest.xml:9:22
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
@@ -35,23 +33,21 @@ ADDED from AndroidManifest.xml:11:5
 		ADDED from AndroidManifest.xml:11:22
 application
 ADDED from AndroidManifest.xml:13:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.android.support:appcompat-v7:22.2.0:22:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.android.support:design:22.2.0:22:5
-MERGED from com.android.support:appcompat-v7:22.2.0:22:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.google.android.gms:play-services-ads:7.8.0:24:5
-MERGED from com.google.android.gms:play-services-base:7.8.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.google.android.gms:play-services-analytics:7.8.0:24:5
-MERGED from com.google.android.gms:play-services-base:7.8.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
-MERGED from com.google.android.gms:play-services-appindexing:7.8.0:19:5
-MERGED from com.google.android.gms:play-services-base:7.8.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:22:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.android.support:appcompat-v7:23.1.0:22:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.android.support:design:23.1.0:22:5
+MERGED from com.android.support:appcompat-v7:23.1.0:22:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.google.android.gms:play-services-ads:8.1.0:24:5
+MERGED from com.google.android.gms:play-services-basement:8.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
+MERGED from com.google.android.gms:play-services-appindexing:8.1.0:19:5
+MERGED from com.google.android.gms:play-services-basement:8.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:22:5
 	android:label
 		ADDED from AndroidManifest.xml:16:9
 	android:allowBackup
@@ -62,9 +58,8 @@ MERGED from com.android.support:support-v4:22.2.0:22:5
 		ADDED from AndroidManifest.xml:17:9
 meta-data#com.google.android.gms.version
 ADDED from AndroidManifest.xml:19:9
-MERGED from com.google.android.gms:play-services-base:7.8.0:21:9
-MERGED from com.google.android.gms:play-services-base:7.8.0:21:9
-MERGED from com.google.android.gms:play-services-base:7.8.0:21:9
+MERGED from com.google.android.gms:play-services-basement:8.1.0:21:9
+MERGED from com.google.android.gms:play-services-basement:8.1.0:21:9
 	android:value
 		ADDED from AndroidManifest.xml:21:13
 	android:name
@@ -151,7 +146,7 @@ ADDED from AndroidManifest.xml:75:9
 		ADDED from AndroidManifest.xml:76:13
 activity#com.google.android.gms.ads.AdActivity
 ADDED from AndroidManifest.xml:80:9
-MERGED from com.google.android.gms:play-services-ads:7.8.0:26:9
+MERGED from com.google.android.gms:play-services-ads:8.1.0:26:9
 	android:configChanges
 		ADDED from AndroidManifest.xml:82:13
 	android:theme
@@ -226,24 +221,23 @@ ADDED from AndroidManifest.xml:124:9
 		ADDED from AndroidManifest.xml:125:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.android.support:appcompat-v7:22.2.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.android.support:design:22.2.0:20:5
-MERGED from com.android.support:appcompat-v7:22.2.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.android.support:recyclerview-v7:22.2.0:20:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.google.android.gms:play-services-ads:7.8.0:23:5
-MERGED from com.google.android.gms:play-services-base:7.8.0:18:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.google.android.gms:play-services-analytics:7.8.0:18:5
-MERGED from com.google.android.gms:play-services-base:7.8.0:18:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from com.google.android.gms:play-services-appindexing:7.8.0:18:5
-MERGED from com.google.android.gms:play-services-base:7.8.0:18:5
-MERGED from com.android.support:support-v4:22.2.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.android.support:appcompat-v7:23.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.android.support:design:23.1.0:20:5
+MERGED from com.android.support:appcompat-v7:23.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.android.support:recyclerview-v7:23.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.android.support:recyclerview-v7:23.1.0:20:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.google.android.gms:play-services-ads:8.1.0:23:5
+MERGED from com.google.android.gms:play-services-basement:8.1.0:18:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
+MERGED from com.google.android.gms:play-services-appindexing:8.1.0:18:5
+MERGED from com.google.android.gms:play-services-basement:8.1.0:18:5
+MERGED from com.android.support:support-v4:23.1.0:20:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -251,8 +245,8 @@ MERGED from com.android.support:support-v4:22.2.0:20:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 activity#com.google.android.gms.ads.purchase.InAppPurchaseActivity
-ADDED from com.google.android.gms:play-services-ads:7.8.0:30:9
+ADDED from com.google.android.gms:play-services-ads:8.1.0:30:9
 	android:theme
-		ADDED from com.google.android.gms:play-services-ads:7.8.0:31:13
+		ADDED from com.google.android.gms:play-services-ads:8.1.0:31:13
 	android:name
-		ADDED from com.google.android.gms:play-services-ads:7.8.0:30:19
+		ADDED from com.google.android.gms:play-services-ads:8.1.0:30:19

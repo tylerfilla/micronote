@@ -42,3 +42,8 @@ public static final ** CREATOR;
 -dontwarn com.google.**
 -dontwarn com.appodeal.ads.video.**
 -dontwarn android.support.design.widget.**
+-dontwarn com.mopub.**
+-dontwarn com.appodeal.ads.networks.**
+
+-keepattributes *Annotation*
+-keepattributes Signature
