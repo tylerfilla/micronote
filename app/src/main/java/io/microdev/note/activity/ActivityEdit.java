@@ -32,7 +32,7 @@ import io.microdev.note.R;
 import io.microdev.note.core.Note;
 import io.microdev.note.core.io.NoteIO;
 import io.microdev.note.util.DimenUtil;
-import io.microdev.note.NoteEditor;
+import io.microdev.note.core.NoteEditor;
 
 import java.io.File;
 import java.io.IOException;

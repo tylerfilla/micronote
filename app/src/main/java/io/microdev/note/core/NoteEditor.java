@@ -1,4 +1,4 @@
-package io.microdev.note;
+package io.microdev.note.core;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import io.microdev.note.core.Note;
 import io.microdev.note.util.JSONUtil;
 
 import org.json.JSONException;
