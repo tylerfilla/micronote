@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<io.microdev.note.NoteEditor
+<io.microdev.note.core.NoteEditor
     style="@style/MicroNote.Activity.ActivityEdit.FragmentEditor.NoteEditor" />
 <!-- From: file:/home/tyler/Development/Android/Projects/μNote/app/src/main/res/layout/activity_edit_fragment_editor_note_editor.xml -->

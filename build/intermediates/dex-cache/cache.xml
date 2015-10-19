@@ -2,13 +2,6 @@
 <items version="2" >
 
     <item
-        jar="/home/tyler/Development/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-3f5ad1b1847f5dfbc4fe37bff4d59dddaa1def68.jar" />
-    </item>
-    <item
         jar="/home/tyler/Development/Android/Projects/μNote/app/libs/chartboost-5.2.0.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -16,25 +9,32 @@
         <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/chartboost-5.2.0-1f081418e4715d3a8cafb704439ecd7dada0a9af.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.8.0/jars/classes.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/libs/chartboost-5.2.0.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-b971e9c166b1466daccef9c3a17ea2d422a880db.jar" />
+        revision="23.0.1"
+        sha1="3a3a8803bd49ff18a15d67c122b4d7270807ab16">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/chartboost-5.2.0-1f081418e4715d3a8cafb704439ecd7dada0a9af.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-1160c266ebeb4f8ccb75c2670bfa17dca48ef15f.jar" />
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-f76d37a12eb91a56a50be3fc7abca5a96004a2ff.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.8.0/jars/classes.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-61773cdfa3aaabf3a60de2f5f75452ca2a7cb493.jar" />
+        revision="23.0.1"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-ab898a6eb90f6251be06b5ffe57a51d5807b0d5e.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="997773777cf3904c11d6764fe3b7668538220e49">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-a94726ec0b065cabb970e54a40408155e6f3e6d8.jar" />
     </item>
     <item
         jar="/home/tyler/Development/Android/Projects/μNote/app/libs/appodeal-1.13.1.jar"
@@ -44,53 +44,32 @@
         <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/appodeal-1.13.1-5889c9e0c18c027a5e708195b8e42cc16c34c805.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.8.0/jars/classes.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-32cc63871ccded39661171af881ebadbe72807fe.jar" />
+        revision="23.0.1"
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-3ef39602d3bafd73cb468f2c4a213f1d85c40899.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars/classes.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-5355c39d83879307f7103eb5436f4ea5e0df56fc.jar" />
+        revision="23.0.1"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-209353c3a6f52ccd97955fd2a1ed9615bc3b1ca9.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/libs/my-target-4.0.13.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="145af6b05440cb7c993e6732966aa2ec534f9b66">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/my-target-4.0.13-8f019d1c2d08e77abb971fe7fbfd119fec514ee0.jar" />
+        revision="23.0.1"
+        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-abcbab5149f0da30fb3d1ad54772e31e2aee45af.jar" />
     </item>
     <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-d4055bbde1abd7098d9ff184a7377ea40776ffb2.jar" />
-    </item>
-    <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.8.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-4c2df7ab25638de6ab7de88c4ab2a1ee9248cdb7.jar" />
-    </item>
-    <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-11ba72a0f7011024c0dfca53255dafdc41a115c8.jar" />
-    </item>
-    <item
-        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-dad71ae0e7485b9fe5cb7cf7d1b7f93b7040ebe7.jar" />
+        revision="23.0.1"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-a52cd3e043167c09bc8fd367fb6e9201924f530e.jar" />
     </item>
     <item
         jar="/home/tyler/Development/Android/Projects/μNote/app/libs/applovin-sdk-6.0.1.jar"
@@ -98,6 +77,48 @@
         revision="21.1.2"
         sha1="5ada65a6738ca6b247ffa6a21c7e044403d5ca47">
         <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/applovin-sdk-6.0.1-143481e88b95578b0b95a45d8e2eaa6b83155092.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-a4388792d5a49768b99e9eb6dcdd7c39db2bb245.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/classes-8b96ee70f7b75ccc5650740246cf06315c56c37f.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Projects/μNote/app/libs/applovin-sdk-6.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5ada65a6738ca6b247ffa6a21c7e044403d5ca47">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/applovin-sdk-6.0.1-143481e88b95578b0b95a45d8e2eaa6b83155092.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Projects/μNote/app/libs/my-target-4.0.13.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="145af6b05440cb7c993e6732966aa2ec534f9b66">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/my-target-4.0.13-8f019d1c2d08e77abb971fe7fbfd119fec514ee0.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Projects/μNote/app/libs/appodeal-1.13.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ed6c862d1da2f2e3e5bb9e38d2ebe2ba4204c56f">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/appodeal-1.13.1-5889c9e0c18c027a5e708195b8e42cc16c34c805.jar" />
+    </item>
+    <item
+        jar="/home/tyler/Development/Android/Projects/μNote/app/libs/my-target-4.0.13.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="145af6b05440cb7c993e6732966aa2ec534f9b66">
+        <dex dex="/home/tyler/Development/Android/Projects/μNote/app/build/intermediates/pre-dexed/debug/my-target-4.0.13-8f019d1c2d08e77abb971fe7fbfd119fec514ee0.jar" />
     </item>
 
 </items>

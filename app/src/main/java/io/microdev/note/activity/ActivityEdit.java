@@ -3,12 +3,9 @@ package io.microdev.note.activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -19,27 +16,21 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import io.microdev.note.R;
-import io.microdev.note.core.Note;
-import io.microdev.note.core.io.NoteIO;
-import io.microdev.note.util.DimenUtil;
-import io.microdev.note.core.NoteEditor;
-
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+
+import io.microdev.note.R;
+import io.microdev.note.core.Note;
+import io.microdev.note.core.NoteEditor;
+import io.microdev.note.core.io.NoteIO;
+import io.microdev.note.util.DimenUtil;
 
 public class ActivityEdit extends AppCompatActivity {
     
@@ -397,13 +388,14 @@ public class ActivityEdit extends AppCompatActivity {
                 this.noteEditor = (NoteEditor) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor, container);
                 
                 // Load context
-                this.loadContext();
+                //this.loadContext();
                 
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
                 
+                /*
                 // Set initialized listener
-                this.noteEditor.setOnInitializedListener(new NoteEditor.OnInitializedListener() {
+                this.noteEditor.setOnInitializedListener(new NoteEditorOld.OnInitializedListener() {
                     
                     @Override
                     public void onInitialized() {
@@ -451,6 +443,7 @@ public class ActivityEdit extends AppCompatActivity {
                     }
                     
                 });
+                */
             }
             
             return this.noteEditor;
@@ -471,10 +464,10 @@ public class ActivityEdit extends AppCompatActivity {
             /* Some hacky stuff to remove focus from the editor */
             
             // Hide soft keyboard
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.noteEditor.getWindowToken(), 0);
+            //((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.noteEditor.getWindowToken(), 0);
             
             // Clear editor focus
-            this.noteEditor.loadUrl("javascript:contentText.blur();");
+            //this.noteEditor.loadUrl("javascript:contentText.blur();");
         }
         
         @Override
@@ -482,7 +475,7 @@ public class ActivityEdit extends AppCompatActivity {
             super.onResume();
             
             // Resume note editor
-            this.noteEditor.onResume();
+            //this.noteEditor.onResume();
         }
         
         @Override
@@ -490,7 +483,7 @@ public class ActivityEdit extends AppCompatActivity {
             super.onPause();
             
             // Unload note editor
-            this.noteEditor.unload();
+            //this.noteEditor.unload();
             
             // If note file hasn't been deleted
             if (!((ActivityEdit) this.getActivity()).noteFileDeleted) {
@@ -534,9 +527,10 @@ public class ActivityEdit extends AppCompatActivity {
             }
             
             // Pause note editor
-            this.noteEditor.onPause();
+            //this.noteEditor.onPause();
         }
         
+        /*
         private void loadContext() {
             // Load configuration
             this.loadConfiguration();
@@ -550,13 +544,13 @@ public class ActivityEdit extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
             
             // Get configuration
-            NoteEditor.Configuration configuration = this.noteEditor.getConfiguration();
+            NoteEditorOld.Configuration configuration = this.noteEditor.getConfiguration();
             
             // Modify configuration
             configuration.textColor = preferences.getInt("pref_style_notepad_text_color", 0);
             configuration.showNotepadLines = preferences.getBoolean("pref_style_notepad_show_lines", false);
-            configuration.formatDate = NoteEditor.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
-            configuration.formatTime = NoteEditor.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));
+            configuration.formatDate = NoteEditorOld.Configuration.EnumFormatDate.valueOf(preferences.getString("pref_timedate_format_date", null));
+            configuration.formatTime = NoteEditorOld.Configuration.EnumFormatTime.valueOf(preferences.getString("pref_timedate_format_time", null));
             configuration.locale = Locale.getDefault();
             
             // Set configuration
@@ -592,6 +586,7 @@ public class ActivityEdit extends AppCompatActivity {
             // Set res
             this.noteEditor.setRes(res);
         }
+        */
         
     }
     
