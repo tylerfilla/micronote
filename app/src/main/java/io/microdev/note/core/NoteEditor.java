@@ -1,6 +1,7 @@
 package io.microdev.note.core;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -17,6 +18,11 @@ public class NoteEditor extends EditText {
         this.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
         
         this.setGravity(Gravity.TOP);
+    }
+    
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
     }
     
     public Note getNote() {
