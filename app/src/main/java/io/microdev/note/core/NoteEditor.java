@@ -69,8 +69,6 @@ public class NoteEditor extends EditText {
     
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        
         Paint linePaint = new Paint();
         linePaint.setColor(0xffe5e3b9);
         linePaint.setStrokeWidth(DimenUtil.dpToPx(this.getContext(), 1.0f));
@@ -80,6 +78,8 @@ public class NoteEditor extends EditText {
             float lineY = DimenUtil.dpToPx(this.getContext(), 1.0f) + (float) (i*this.getLineHeight() + this.getBaseline());
             canvas.drawLine(this.getPaddingLeft(), lineY, (float) (this.getWidth() - this.getPaddingRight()), lineY, linePaint);
         }
+        
+        super.onDraw(canvas);
     }
     
     public Note getNote() {

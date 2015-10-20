@@ -109,6 +109,7 @@
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="android:textSize">22sp</item>
+        <item name="android:inputType">textCapSentences</item>
     </style>
     
     <style name="MicroNote.Activity.ActivitySettings" parent="">
