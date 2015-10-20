@@ -130,16 +130,6 @@ public class ActivityEdit extends AppCompatActivity {
     }
     
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-    
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu for actionbar buttons
         this.getMenuInflater().inflate(R.menu.activity_edit, menu);
@@ -360,6 +350,7 @@ public class ActivityEdit extends AppCompatActivity {
     
     public static class FragmentEditor extends Fragment {
         
+        private ViewGroup noteEditorContainer;
         private NoteEditor noteEditor;
         
         @Override
@@ -374,14 +365,15 @@ public class ActivityEdit extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // If note editor not already created
             if (this.noteEditor == null) {
-                // Inflate note editor
-                this.noteEditor = (NoteEditor) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor, container);
+                // Inflate note editor container and get editor
+                this.noteEditorContainer = (ViewGroup) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor_container, container);
+                this.noteEditor = (NoteEditor) this.noteEditorContainer.findViewById(R.id.activityEditFragmentEditorNoteEditor);
                 
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
             }
             
-            return this.noteEditor;
+            return this.noteEditorContainer;
         }
         
         @Override
@@ -389,7 +381,7 @@ public class ActivityEdit extends AppCompatActivity {
             super.onDestroyView();
             
             // Remove note editor from its current parent
-            ((ViewGroup) this.noteEditor.getParent()).removeView(this.noteEditor);
+            ((ViewGroup) this.noteEditorContainer.getParent()).removeView(this.noteEditorContainer);
         }
         
         @Override
