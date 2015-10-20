@@ -1495,6 +1495,7 @@
     <style name="MicroNote.Activity.ActivityEdit.FragmentEditor.NoteEditorContainer" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:fillViewport">true</item>
         <item name="android:smoothScrollbar">true</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
     </style>
