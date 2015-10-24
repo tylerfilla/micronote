@@ -1,11 +1,12 @@
 package io.microdev.note.core;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.Editable;
 import android.text.Html;
-import android.text.InputType;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.EditText;
 
+import io.microdev.note.R;
 import io.microdev.note.util.DimenUtil;
 
 public class NoteEditor extends EditText {
@@ -24,6 +26,8 @@ public class NoteEditor extends EditText {
     
     private long timeLastChange;
     
+    private Paint paintDecorLine;
+    
     public NoteEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
         
@@ -34,8 +38,14 @@ public class NoteEditor extends EditText {
         
         this.timeLastChange = System.currentTimeMillis();
         
-        // Configure input behaviour
-        this.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        this.paintDecorLine = new Paint();
+        
+        TypedArray array = context.obtainStyledAttributes(attrs, new int[] { R.attr.decorLineColor, R.attr.decorLineSize, });
+        
+        this.paintDecorLine.setColor(array.getColor(0, Color.BLACK));
+        this.paintDecorLine.setStrokeWidth(array.getDimension(1, DimenUtil.dpToPx(context, 1.0f)));
+        
+        array.recycle();
         
         // Programmatic attribute defaults
         this.setBackgroundColor(0);
@@ -43,6 +53,8 @@ public class NoteEditor extends EditText {
         
         // Implement TextWatcher for note updating
         this.addTextChangedListener(new TextWatcher() {
+            
+            private int previousLineCount;
             
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -55,6 +67,13 @@ public class NoteEditor extends EditText {
                 
                 // Set last change time
                 NoteEditor.this.timeLastChange = System.currentTimeMillis();
+                
+                // Request layout if line count changed
+                if (this.previousLineCount != NoteEditor.this.getLineCount()) {
+                    this.previousLineCount = NoteEditor.this.getLineCount();
+                    
+                    NoteEditor.this.requestLayout();
+                }
             }
             
             @Override
@@ -69,14 +88,10 @@ public class NoteEditor extends EditText {
     
     @Override
     protected void onDraw(Canvas canvas) {
-        Paint linePaint = new Paint();
-        linePaint.setColor(0xffe5e3b9);
-        linePaint.setStrokeWidth(DimenUtil.dpToPx(this.getContext(), 1.0f));
-        
         // Draw notepad lines
         for (int i = 0; i < Math.max(this.getHeight()/this.getLineHeight(), this.getLineCount()); i++) {
             float lineY = DimenUtil.dpToPx(this.getContext(), 1.0f) + (float) (i*this.getLineHeight() + this.getBaseline());
-            canvas.drawLine(this.getPaddingLeft(), lineY, (float) (this.getWidth() - this.getPaddingRight()), lineY, linePaint);
+            canvas.drawLine(this.getPaddingLeft(), lineY, (float) (this.getWidth() - this.getPaddingRight()), lineY, this.paintDecorLine);
         }
         
         super.onDraw(canvas);
@@ -121,6 +136,12 @@ public class NoteEditor extends EditText {
                 // Update if necessary
                 if (!NoteEditor.this.updated && System.currentTimeMillis() - NoteEditor.this.timeLastChange >= NOTE_UPDATE_IDLE_DELAY) {
                     NoteEditor.this.updateNote();
+                }
+                
+                try {
+                    Thread.sleep(50l);
+                } catch (InterruptedException e) {
+                    break;
                 }
             }
         }

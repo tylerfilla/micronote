@@ -26,8 +26,8 @@ public final class R {
 		public static final int common_signin_btn_light_text_disabled = 0x7f0c001e;
 		public static final int common_signin_btn_light_text_focused = 0x7f0c001f;
 		public static final int common_signin_btn_light_text_pressed = 0x7f0c0020;
-		public static final int common_signin_btn_text_dark = 0x7f0c0065;
-		public static final int common_signin_btn_text_light = 0x7f0c0066;
+		public static final int common_signin_btn_text_dark = 0x7f0c0067;
+		public static final int common_signin_btn_text_light = 0x7f0c0068;
 	}
 	public static final class drawable {
 		public static final int common_full_open_on_phone = 0x7f020046;
@@ -86,7 +86,7 @@ public final class R {
 		public static final int store_picture_title = 0x7f060079;
 	}
 	public static final class style {
-		public static final int Theme_IAPTheme = 0x7f090108;
+		public static final int Theme_IAPTheme = 0x7f09010a;
 	}
 	public static final class styleable {
 		public static final int[] AdsAttrs = { 0x7f01001f, 0x7f010020, 0x7f010021 };

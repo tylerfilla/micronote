@@ -134,6 +134,8 @@
     <color name="material_grey_900">#ff212121</color>
     <!-- From: file:/home/tyler/Development/Android/Projects/μNote/app/src/main/res/values/colors.xml -->
     <eat-comment/>
+    <color name="notepad_header_default">#ffc00000</color>
+    <color name="notepad_line_default">#ffe5e3b9</color>
     <color name="notepad_text_black">#ff000000</color>
     <color name="notepad_text_default">#ff404040</color>
     <color name="pref_default_style_notepad_text_color">#ff404040</color>
@@ -193,6 +195,7 @@
     <declare-styleable name="MenuItem"><attr name="android:id"/><attr name="android:menuCategory"/><attr name="android:orderInCategory"/><attr name="android:title"/><attr name="android:titleCondensed"/><attr name="android:icon"/><attr name="android:alphabeticShortcut"/><attr name="android:numericShortcut"/><attr name="android:checkable"/><attr name="android:checked"/><attr name="android:visible"/><attr name="android:enabled"/><attr name="android:onClick"/><attr name="showAsAction"><flag name="never" value="0"/><flag name="ifRoom" value="1"/><flag name="always" value="2"/><flag name="withText" value="4"/><flag name="collapseActionView" value="8"/></attr><attr format="reference" name="actionLayout"/><attr format="string" name="actionViewClass"/><attr format="string" name="actionProviderClass"/></declare-styleable>
     <declare-styleable name="MenuView"><attr name="android:itemTextAppearance"/><attr name="android:horizontalDivider"/><attr name="android:verticalDivider"/><attr name="android:headerBackground"/><attr name="android:itemBackground"/><attr name="android:windowAnimationStyle"/><attr name="android:itemIconDisabledAlpha"/><attr format="boolean" name="preserveIconSpacing"/></declare-styleable>
     <declare-styleable name="NavigationView"><attr name="android:background"/><attr name="android:fitsSystemWindows"/><attr name="android:maxWidth"/><attr name="elevation"/><attr format="reference" name="menu"/><attr format="color" name="itemIconTint"/><attr format="color" name="itemTextColor"/><attr format="reference" name="itemBackground"/><attr format="reference" name="itemTextAppearance"/><attr format="reference" name="headerLayout"/></declare-styleable>
+    <declare-styleable name="NoteEditor"><attr format="color" name="decorLineColor"/><attr format="dimension" name="decorLineSize"/></declare-styleable>
     <declare-styleable name="PopupWindow"><attr format="boolean" name="overlapAnchor"/><attr name="android:popupBackground"/></declare-styleable>
     <declare-styleable name="PopupWindowBackgroundState"><attr format="boolean" name="state_above_anchor"/></declare-styleable>
     <declare-styleable name="RecyclerView"><attr format="string" name="layoutManager"/><attr name="android:orientation"/><attr format="integer" name="spanCount"/><attr format="boolean" name="reverseLayout"/><attr format="boolean" name="stackFromEnd"/></declare-styleable>
@@ -1490,9 +1493,29 @@
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="android:textSize">22sp</item>
-        <item name="android:inputType">textCapSentences</item>
+        <item name="android:inputType">textMultiLine|textCapSentences</item>
+        <item name="decorLineColor">@color/notepad_line_default</item>
+        <item name="decorLineSize">1dp</item>
     </style>
     <style name="MicroNote.Activity.ActivityEdit.FragmentEditor.NoteEditorContainer" parent="">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="MicroNote.Activity.ActivityEdit.FragmentEditor.NoteHeader" parent="">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginTop">26dp</item>
+        <item name="android:textColor">@color/notepad_header_default</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:text">New</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+    <style name="MicroNote.Activity.ActivityEdit.FragmentEditor.ScrollContainer" parent="">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:fillViewport">true</item>

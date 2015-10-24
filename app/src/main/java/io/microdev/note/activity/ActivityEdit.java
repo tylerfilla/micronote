@@ -350,7 +350,7 @@ public class ActivityEdit extends AppCompatActivity {
     
     public static class FragmentEditor extends Fragment {
         
-        private ViewGroup noteEditorContainer;
+        private ViewGroup scrollContainer;
         private NoteEditor noteEditor;
         
         @Override
@@ -365,23 +365,23 @@ public class ActivityEdit extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // If note editor not already created
             if (this.noteEditor == null) {
-                // Inflate note editor container and get editor
-                this.noteEditorContainer = (ViewGroup) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor_container, container);
-                this.noteEditor = (NoteEditor) this.noteEditorContainer.findViewById(R.id.activityEditFragmentEditorNoteEditor);
+                // Inflate scroll container and get editor
+                this.scrollContainer = (ViewGroup) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor_container, container);
+                this.noteEditor = (NoteEditor) this.scrollContainer.findViewById(R.id.activityEditFragmentEditorNoteEditor);
                 
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
             }
             
-            return this.noteEditorContainer;
+            return this.scrollContainer;
         }
         
         @Override
         public void onDestroyView() {
             super.onDestroyView();
             
-            // Remove note editor from its current parent
-            ((ViewGroup) this.noteEditorContainer.getParent()).removeView(this.noteEditorContainer);
+            // Remove scroll container
+            ((ViewGroup) this.scrollContainer.getParent()).removeView(this.scrollContainer);
         }
         
         @Override
