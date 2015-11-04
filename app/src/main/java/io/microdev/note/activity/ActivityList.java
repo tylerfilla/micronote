@@ -36,11 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
-import io.microdev.note.R;
-import io.microdev.note.core.Note;
-import io.microdev.note.core.NoteSearcher;
-import io.microdev.note.core.io.NoteIO;
-import io.microdev.note.util.AdRemovalUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +48,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import io.microdev.note.R;
+import io.microdev.note.core.Note;
+import io.microdev.note.core.NoteSearcher;
+import io.microdev.note.core.io.NoteIO;
+import io.microdev.note.util.AdRemovalUtil;
 
 public class ActivityList extends AppCompatActivity {
     
@@ -204,9 +205,9 @@ public class ActivityList extends AppCompatActivity {
             // Begin search
             this.searchBegin();
             break;
-        case R.id.activityListMenuItemSettings:
+        case R.id.activityListMenuItemAbout:
             // Open settings
-            this.openSettings();
+            this.openAbout();
             break;
         case R.id.activityListMenuItemUpgrade:
             // Open purchase activity to upgrade
@@ -342,12 +343,12 @@ public class ActivityList extends AppCompatActivity {
         }
     }
     
-    private void openSettings() {
-        // Intent to settings activity
-        Intent intentSettings = new Intent(this, ActivitySettings.class);
+    private void openAbout() {
+        // Intent to about activity
+        Intent intentAbout = new Intent(this, ActivityAbout.class);
         
-        // Start settings activity
-        this.startActivity(intentSettings);
+        // Start about activity
+        this.startActivity(intentAbout);
     }
     
     private void openUpgrade() {

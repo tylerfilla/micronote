@@ -56,31 +56,6 @@
     </PreferenceCategory>
     
     <PreferenceCategory
-        android:key="pref_timedate"
-        android:persistent="false"
-        android:title="@string/pref_timedate_title">
-        
-        <ListPreference
-            android:defaultValue="MONTH_D_YYYY"
-            android:entries="@array/array_pref_list_entries_timedate_format_date"
-            android:entryValues="@array/array_pref_list_values_timedate_format_date"
-            android:key="pref_timedate_format_date"
-            android:persistent="true"
-            android:summary="@string/pref_timedate_format_date_summary"
-            android:title="@string/pref_timedate_format_date_title" />
-        
-        <ListPreference
-            android:defaultValue="_12_HOUR"
-            android:entries="@array/array_pref_list_entries_timedate_format_time"
-            android:entryValues="@array/array_pref_list_values_timedate_format_time"
-            android:key="pref_timedate_format_time"
-            android:persistent="true"
-            android:summary="@string/pref_timedate_format_time_summary"
-            android:title="@string/pref_timedate_format_time_title" />
-    
-    </PreferenceCategory>
-    
-    <PreferenceCategory
         android:key="pref_other"
         android:persistent="false"
         android:title="@string/pref_other_title">
@@ -92,25 +67,6 @@
             android:summaryOff="@string/pref_other_import_enable_summary_off"
             android:summaryOn="@string/pref_other_import_enable_summary_on"
             android:title="@string/pref_other_import_enable_title" />
-    
-    </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:key="pref_about"
-        android:persistent="false"
-        android:title="@string/pref_about_title">
-        
-        <Preference
-            android:key="pref_about_content"
-            android:persistent="false"
-            android:summary="@string/pref_about_content_summary"
-            android:title="@string/pref_about_content_title">
-            
-            <intent
-                android:targetPackage="io.microdev.note"
-                android:targetClass="io.microdev.note.activity.ActivityAbout" />
-        
-        </Preference>
     
     </PreferenceCategory>
 

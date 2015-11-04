@@ -46,8 +46,6 @@
         
         </activity>
         
-        <activity android:name="io.microdev.note.activity.ActivitySettings" />
-        
         <activity
             android:name="io.microdev.note.activity.ActivityPurchase"
             android:theme="@style/MicroNote.Theme.Translucent" />

@@ -11,7 +11,7 @@
     <string name="activity_list_action_mode_search_select_subtitle">Searching for \"%1$s\"</string>
     
     <string name="activity_list_menu_item_search_title">Search</string>
-    <string name="activity_list_menu_item_settings_title">Settings</string>
+    <string name="activity_list_menu_item_about_title">About</string>
     <string name="activity_list_menu_item_upgrade_title">Remove Ads</string>
     
     <string name="activity_list_menu_action_mode_select_item_delete_title">Delete</string>
@@ -45,27 +45,11 @@
     <string name="pref_style_notepad_show_lines_summary_off">Notepad lines will not be shown</string>
     <string name="pref_style_notepad_show_lines_summary_on">Notepad lines will be shown</string>
     
-    <string name="pref_timedate_title">Time and Date</string>
-    
-    <string name="pref_timedate_format_date_title">Date Format</string>
-    <string name="pref_timedate_format_date_summary">%s</string>
-    
-    <string name="pref_timedate_format_time_title">Time Format</string>
-    <string name="pref_timedate_format_time_summary">%s</string>
-    
-    <string name="pref_timedate_scheme_note_timestamp_title">Note Timestamp Scheme</string>
-    <string name="pref_timedate_scheme_note_timestamp_summary">%s</string>
-    
     <string name="pref_other_title">Other</string>
     
     <string name="pref_other_import_enable_title">Prompt External Import</string>
     <string name="pref_other_import_enable_summary_off">You will not be prompted to import external note files</string>
     <string name="pref_other_import_enable_summary_on">You will be prompted to import external note files</string>
-    
-    <string name="pref_about_title">About</string>
-    
-    <string name="pref_about_content_title">μNote v1.6</string>
-    <string name="pref_about_content_summary">&#169; 2015 Tyler Filla</string>
     
     <string name="dialog_activity_list_prompt_delete_note_files_title">Confirm Deletion</string>
     <string name="dialog_activity_list_prompt_delete_note_files_message_single">Are you sure you want to delete this note?</string>
@@ -94,11 +78,5 @@
     
     <string name="toast_activity_purchase_success">Purchase successful! You may need to restart μNote.</string>
     <string name="toast_activity_purchase_fail">Purchase failed!</string>
-    
-    <string name="editor_util_months">January|February|March|April|May|June|July|August|September|October|November|December</string>
-    
-    <string name="editor_header_cascade_seconds">%1$s sec</string>
-    <string name="editor_header_cascade_minutes">%1$s min</string>
-    <string name="editor_header_new">New</string>
 
 </resources>

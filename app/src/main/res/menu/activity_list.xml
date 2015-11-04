@@ -10,8 +10,8 @@
         app:showAsAction="ifRoom" />
     
     <item
-        android:id="@+id/activityListMenuItemSettings"
-        android:title="@string/activity_list_menu_item_settings_title"
+        android:id="@+id/activityListMenuItemAbout"
+        android:title="@string/activity_list_menu_item_about_title"
         app:showAsAction="never" />
     
     <item
