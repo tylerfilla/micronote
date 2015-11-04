@@ -402,6 +402,7 @@
     <string name="activity_edit_constant_default_note_title">Untitled Note</string>
     <string name="activity_edit_menu_item_delete_title">Delete</string>
     <string name="activity_edit_menu_item_rename_title">Rename</string>
+    <string name="activity_edit_note_header_default_text">New</string>
     <string name="activity_list_action_mode_search_select_subtitle">Searching for \"%1$s\"</string>
     <string name="activity_list_action_mode_search_select_title_multiple">%1$s notes</string>
     <string name="activity_list_action_mode_search_select_title_single">1 note</string>
@@ -1511,7 +1512,7 @@
         <item name="android:layout_marginTop">26dp</item>
         <item name="android:textColor">@color/notepad_header_default</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:text">New</item>
+        <item name="android:text">@string/activity_edit_note_header_default_text</item>
         <item name="android:gravity">center_vertical|right</item>
         <item name="android:paddingRight">8dp</item>
     </style>

@@ -128,18 +128,20 @@ public class NoteEditor extends EditText {
     
     private class UpdateThread extends Thread {
         
-        private static final long NOTE_UPDATE_IDLE_DELAY = 350l;
+        private static final long NOTE_UPDATE_IDLE_TRIGGER = 350l;
+        private static final long THREAD_LOOP_ITERATION_DELAY = 50l;
         
         @Override
         public void run() {
             while (true) {
                 // Update if necessary
-                if (!NoteEditor.this.updated && System.currentTimeMillis() - NoteEditor.this.timeLastChange >= NOTE_UPDATE_IDLE_DELAY) {
+                if (!NoteEditor.this.updated && System.currentTimeMillis() - NoteEditor.this.timeLastChange >= NOTE_UPDATE_IDLE_TRIGGER) {
                     NoteEditor.this.updateNote();
                 }
                 
+                // Wait for iteration delay
                 try {
-                    Thread.sleep(50l);
+                    Thread.sleep(THREAD_LOOP_ITERATION_DELAY);
                 } catch (InterruptedException e) {
                     break;
                 }

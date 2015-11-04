@@ -24,9 +24,9 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import io.microdev.note.R;
 import io.microdev.note.core.Note;
@@ -355,6 +355,7 @@ public class ActivityEdit extends AppCompatActivity {
     public static class FragmentEditor extends Fragment {
         
         private ViewGroup scrollContainer;
+        
         private TextView noteHeader;
         private NoteEditor noteEditor;
         
@@ -377,17 +378,30 @@ public class ActivityEdit extends AppCompatActivity {
                 this.noteHeader = (TextView) this.scrollContainer.findViewById(R.id.activityEditFragmentEditorNoteHeader);
                 this.noteEditor = (NoteEditor) this.scrollContainer.findViewById(R.id.activityEditFragmentEditorNoteEditor);
                 
-                Date noteLastModifiedDate = new Date(((ActivityEdit) this.getActivity()).note.getLastModified());
+                // Get note
+                Note note = ((ActivityEdit) this.getActivity()).note;
                 
-                GregorianCalendar c = new GregorianCalendar();
-                c.setTimeInMillis(((ActivityEdit) this.getActivity()).note.getLastModified());
+                // Note last modified time
+                long noteLastModifiedTime = note.getLastModified();
                 
-                // Set header to note date
-                this.noteHeader.setText(SimpleDateFormat.getDateTimeInstance().format(noteLastModifiedDate));
-                // FIXME: Change the format based on elapsed time
+                // If note is not new
+                if (noteLastModifiedTime > 0l) {
+                    // Header date format
+                    DateFormat dateFormat;
+                    
+                    // Determine date/time format
+                    if (System.currentTimeMillis() - noteLastModifiedTime > 86400l) {
+                        dateFormat = SimpleDateFormat.getDateInstance();
+                    } else {
+                        dateFormat = SimpleDateFormat.getTimeInstance();
+                    }
+                    
+                    // Set header text to formatted note date
+                    this.noteHeader.setText(dateFormat.format(new Date(noteLastModifiedTime)));
+                }
                 
                 // Pass note to editor
-                this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
+                this.noteEditor.setNote(note);
             }
             
             return this.scrollContainer;
