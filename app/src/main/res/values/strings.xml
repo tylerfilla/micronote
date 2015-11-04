@@ -27,6 +27,8 @@
     <string name="activity_edit_menu_item_rename_title">Rename</string>
     <string name="activity_edit_menu_item_delete_title">Delete</string>
     
+    <string name="activity_edit_note_header_default_text">New</string>
+    
     <string name="activity_settings_toolbar_title">Settings</string>
     
     <string name="pref_upgrade_title">Upgrade</string>

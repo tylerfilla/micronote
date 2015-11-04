@@ -20,9 +20,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import io.microdev.note.R;
 import io.microdev.note.core.Note;
@@ -351,6 +355,7 @@ public class ActivityEdit extends AppCompatActivity {
     public static class FragmentEditor extends Fragment {
         
         private ViewGroup scrollContainer;
+        private TextView noteHeader;
         private NoteEditor noteEditor;
         
         @Override
@@ -363,11 +368,23 @@ public class ActivityEdit extends AppCompatActivity {
         
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // If note editor not already created
-            if (this.noteEditor == null) {
-                // Inflate scroll container and get editor
+            // If editor scroll container not already inflated
+            if (this.scrollContainer == null) {
+                // Inflate editor scroll container
                 this.scrollContainer = (ViewGroup) inflater.inflate(R.layout.activity_edit_fragment_editor_note_editor_container, container);
+                
+                // Get components within editor scroll container
+                this.noteHeader = (TextView) this.scrollContainer.findViewById(R.id.activityEditFragmentEditorNoteHeader);
                 this.noteEditor = (NoteEditor) this.scrollContainer.findViewById(R.id.activityEditFragmentEditorNoteEditor);
+                
+                Date noteLastModifiedDate = new Date(((ActivityEdit) this.getActivity()).note.getLastModified());
+                
+                GregorianCalendar c = new GregorianCalendar();
+                c.setTimeInMillis(((ActivityEdit) this.getActivity()).note.getLastModified());
+                
+                // Set header to note date
+                this.noteHeader.setText(SimpleDateFormat.getDateTimeInstance().format(noteLastModifiedDate));
+                // FIXME: Change the format based on elapsed time
                 
                 // Pass note to editor
                 this.noteEditor.setNote(((ActivityEdit) this.getActivity()).note);
