@@ -390,7 +390,7 @@ public class ActivityEdit extends AppCompatActivity {
                     DateFormat dateFormat;
                     
                     // Determine date/time format
-                    if (System.currentTimeMillis() - noteLastModifiedTime > 86400l) {
+                    if (System.currentTimeMillis() - noteLastModifiedTime > 86400000l) {
                         dateFormat = SimpleDateFormat.getDateInstance();
                     } else {
                         dateFormat = SimpleDateFormat.getTimeInstance();
@@ -402,6 +402,11 @@ public class ActivityEdit extends AppCompatActivity {
                 
                 // Pass note to editor
                 this.noteEditor.setNote(note);
+                
+                // Focus editor if note is new
+                if (noteLastModifiedTime == 0l) {
+                    this.noteEditor.requestFocus();
+                }
             }
             
             return this.scrollContainer;

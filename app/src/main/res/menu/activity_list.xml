@@ -17,6 +17,7 @@
     <item
         android:id="@+id/activityListMenuItemUpgrade"
         android:title="@string/activity_list_menu_item_upgrade_title"
+        android:visible="false"
         app:showAsAction="never" />
 
 </menu>
