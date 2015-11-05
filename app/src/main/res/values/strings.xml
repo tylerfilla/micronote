@@ -2,7 +2,7 @@
 <resources>
     
     <string name="app_name">μNote</string>
-    <string name="app_version_name">v1.6</string>
+    <string name="app_version_name">v1.6.1</string>
     
     <string name="activity_list_action_mode_select_title_single">1 note</string>
     <string name="activity_list_action_mode_select_title_multiple">%1$s notes</string>
