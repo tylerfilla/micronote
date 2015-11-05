@@ -29,28 +29,6 @@
     
     <string name="activity_edit_note_header_default_text">New</string>
     
-    <string name="activity_settings_toolbar_title">Settings</string>
-    
-    <string name="pref_upgrade_title">Upgrade</string>
-    
-    <string name="pref_upgrade_adremove_title">Remove Ads</string>
-    <string name="pref_upgrade_adremove_summary">Remove ads and support development</string>
-    
-    <string name="pref_style_notepad_title">Notepad Style</string>
-    
-    <string name="pref_style_notepad_text_color_title">Text Color</string>
-    <string name="pref_style_notepad_text_color_summary">%s</string>
-    
-    <string name="pref_style_notepad_show_lines_title">Show Notepad Lines</string>
-    <string name="pref_style_notepad_show_lines_summary_off">Notepad lines will not be shown</string>
-    <string name="pref_style_notepad_show_lines_summary_on">Notepad lines will be shown</string>
-    
-    <string name="pref_other_title">Other</string>
-    
-    <string name="pref_other_import_enable_title">Prompt External Import</string>
-    <string name="pref_other_import_enable_summary_off">You will not be prompted to import external note files</string>
-    <string name="pref_other_import_enable_summary_on">You will be prompted to import external note files</string>
-    
     <string name="dialog_activity_list_prompt_delete_note_files_title">Confirm Deletion</string>
     <string name="dialog_activity_list_prompt_delete_note_files_message_single">Are you sure you want to delete this note?</string>
     <string name="dialog_activity_list_prompt_delete_note_files_message_multiple">Are you sure you want to delete these %1$s notes?</string>
