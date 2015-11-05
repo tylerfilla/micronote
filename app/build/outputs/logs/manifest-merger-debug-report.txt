@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml:2:1-129:12
+ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml:2:1-128:12
 	package
 		ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml:4:5-31
 		INJECTED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml
@@ -32,7 +32,7 @@ ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidM
 	android:name
 		ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml:11:22-64
 application
-ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml:13:5-127:19
+ADDED from /home/tyler/Development/Android/Projects/μNote/app/src/main/AndroidManifest.xml:13:5-126:19
 MERGED from [com.android.support:support-v4:23.1.0] /home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:appcompat-v7:23.1.0] /home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.1.0] /home/tyler/Development/Android/Projects/μNote/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/AndroidManifest.xml:22:5-20

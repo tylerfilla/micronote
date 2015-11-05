@@ -123,7 +123,6 @@
             android:name="org.nexage.sourcekit.vast.activity.VASTActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     
-    
     </application>
 
 </manifest>
