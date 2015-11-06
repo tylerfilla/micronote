@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-    
+    buildToolsVersion "23.0.2"
+
     defaultConfig {
         applicationId 'io.microdev.note'
         minSdkVersion 11
         targetSdkVersion 23
     }
-    
+
     buildTypes {
         release {
             minifyEnabled true
@@ -22,9 +22,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:recyclerview-v7:23.1.0'
-    compile 'com.google.android.gms:play-services-ads:8.1.0'
-    compile files('libs/applovin-sdk-6.0.1.jar')
-    compile files('libs/appodeal-1.13.1.jar')
-    compile files('libs/chartboost-5.2.0.jar')
-    compile files('libs/my-target-4.0.13.jar')
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
+    
+    compile files('libs/my-target-4.1.1.jar')
+    compile files('libs/chartboost-5.5.3.jar')
+    compile files('libs/appodeal-1.13.7.jar')
+    compile files('libs/applovin-6.1.4.jar')
+    compile files('libs/unity-ads-1.4.7.jar')
+    compile files('libs/yandex-metrica-android-2.00.jar')
+    compile files('libs/inmobi-5.0.1.jar')
 }

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="my-target-4.0.13">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/my-target-4.0.13.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
