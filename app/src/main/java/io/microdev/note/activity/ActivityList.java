@@ -36,6 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
+import com.appodeal.ads.BannerCallbacks;
+import com.google.android.gms.ads.AdListener;
 import com.tappx.TAPPXAdBanner;
 
 import java.io.File;
@@ -139,11 +141,42 @@ public class ActivityList extends AppCompatActivity {
                     // Decide between Tappx and Appodeal
                     if (new Random().nextInt(2) > 0) {
                         // Display banner via Tappx
-                        TAPPXAdBanner.ConfigureAndShowAtBottom(ActivityList.this, null, TAPPX_KEY);
+                        TAPPXAdBanner.ConfigureAndShowAtBottom(ActivityList.this, null, TAPPX_KEY).setAdListener(new AdListener() {
+                            
+                            @Override
+                            public void onAdLoaded() {
+                                super.onAdLoaded();
+                                
+                                // Hide spacer
+                                ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.INVISIBLE);
+                            }
+                            
+                        });
                     } else {
                         // Display banner via Appodeal
                         Appodeal.disableLocationPermissionCheck();
                         Appodeal.initialize(ActivityList.this, APPODEAL_AD_ID_BOTTOM_BANNER, Appodeal.BANNER);
+                        Appodeal.setBannerCallbacks(new BannerCallbacks() {
+                            
+                            @Override
+                            public void onBannerLoaded() {
+                                // Hide spacer
+                                ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.INVISIBLE);
+                            }
+                            
+                            @Override
+                            public void onBannerFailedToLoad() {
+                            }
+                            
+                            @Override
+                            public void onBannerShown() {
+                            }
+                            
+                            @Override
+                            public void onBannerClicked() {
+                            }
+                            
+                        });
                         Appodeal.show(ActivityList.this, Appodeal.BANNER_BOTTOM);
                     }
                 }
@@ -538,9 +571,9 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListMenuActionModeSelectItemExport:
-                System.out.println("Export selection");
-                break;
+            //        case R.id.activityListMenuActionModeSelectItemExport:
+            //            System.out.println("Export selection");
+            //            break;
             case R.id.activityListMenuActionModeSelectItemDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
@@ -722,9 +755,9 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
-            case R.id.activityListMenuActionModeSelectItemExport:
-                System.out.println("Export selection");
-                break;
+            //        case R.id.activityListMenuActionModeSelectItemExport:
+            //            System.out.println("Export selection");
+            //            break;
             case R.id.activityListMenuActionModeSelectItemDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
