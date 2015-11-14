@@ -2,7 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.microdev.note"
-    android:versionCode="1065"
+    android:versionCode="1074"
     android:versionName="@string/app_version_name">
     
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

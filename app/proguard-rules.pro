@@ -53,6 +53,8 @@
 -keep class android.support.v4.view.PagerAdapter { *; }
 -keep class android.support.v4.view.ViewPager { *; }
 
+-keep public class com.tappx.** { *; }
+
 -dontwarn com.chartboost.**
 -dontwarn com.mopub.**
 
