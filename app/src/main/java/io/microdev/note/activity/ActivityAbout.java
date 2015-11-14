@@ -55,7 +55,7 @@ public class ActivityAbout extends Activity {
         
         // Build dialog
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setIcon(R.drawable.ic_launcher);
+        dialogBuilder.setIcon(R.mipmap.ic_launcher);
         dialogBuilder.setTitle(R.string.dialog_activity_about_title);
         dialogBuilder.setView(dialogView);
         dialogBuilder.setPositiveButton(android.R.string.ok, null);
