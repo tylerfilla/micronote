@@ -36,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.tappx.TAPPXAdBanner;
 
 import java.io.File;
@@ -137,12 +136,11 @@ public class ActivityList extends AppCompatActivity {
                     // Show spacer
                     ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.VISIBLE);
                     
+                    // Decide between Tappx and Appodeal
                     if (new Random().nextInt(2) > 0) {
-                        System.out.println("Using tappx");
                         // Display banner via Tappx
                         TAPPXAdBanner.ConfigureAndShowAtBottom(ActivityList.this, null, TAPPX_KEY);
                     } else {
-                        System.out.println("Using appodeal");
                         // Display banner via Appodeal
                         Appodeal.disableLocationPermissionCheck();
                         Appodeal.initialize(ActivityList.this, APPODEAL_AD_ID_BOTTOM_BANNER, Appodeal.BANNER);
@@ -540,6 +538,9 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
+            case R.id.activityListMenuActionModeSelectItemExport:
+                System.out.println("Export selection");
+                break;
             case R.id.activityListMenuActionModeSelectItemDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {
@@ -721,6 +722,9 @@ public class ActivityList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Switch against menu item ID
             switch (item.getItemId()) {
+            case R.id.activityListMenuActionModeSelectItemExport:
+                System.out.println("Export selection");
+                break;
             case R.id.activityListMenuActionModeSelectItemDelete:
                 Set<File> noteFiles = new HashSet<>();
                 for (int selectionIndex : this.activityList.listAdapter.getNoteSelectionSet()) {

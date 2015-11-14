@@ -3,6 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
+    <!--
+    <item
+        android:id="@+id/activityListMenuActionModeSelectItemExport"
+        android:icon="@android:drawable/btn_radio"
+        android:title="Export"
+        app:showAsAction="ifRoom" />
+    -->
+    
     <item
         android:id="@+id/activityListMenuActionModeSelectItemDelete"
         android:icon="@drawable/ic_delete_white_24dp"
