@@ -23,7 +23,6 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.google.android.gms:play-services-ads:8.3.0'
-    
     compile files('libs/my-target-4.1.1.jar')
     compile files('libs/chartboost-5.5.3.jar')
     compile files('libs/appodeal-1.13.7.jar')
@@ -31,4 +30,5 @@ dependencies {
     compile files('libs/unity-ads-1.4.7.jar')
     compile files('libs/yandex-metrica-android-2.00.jar')
     compile files('libs/inmobi-5.0.1.jar')
+    compile files('libs/tappx-sdk-android-v2.3.0.jar')
 }

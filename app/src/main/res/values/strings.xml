@@ -22,6 +22,8 @@
     <string name="activity_list_message_empty_search_title">No Search Results</string>
     <string name="activity_list_message_empty_search_body">Your search did not turn up any results. Try broadening your query.</string>
     
+    <string name="activity_list_ad_spacer_text">Loading advertisement...</string>
+    
     <string name="activity_edit_constant_default_note_title">Untitled Note</string>
     
     <string name="activity_edit_menu_item_rename_title">Rename</string>

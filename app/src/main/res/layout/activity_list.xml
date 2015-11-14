@@ -48,8 +48,9 @@
         android:onClick="onButtonClick"
         style="@style/MicroNote.Activity.ActivityList.NewButton" />
     
-    <FrameLayout
+    <TextView
         android:id="@+id/activityListAdSpacer"
+        android:text="@string/activity_list_ad_spacer_text"
         style="@style/MicroNote.Activity.ActivityList.AdSpacer" />
 
 </RelativeLayout>

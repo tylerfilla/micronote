@@ -36,6 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.tappx.TAPPXAdBanner;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +49,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import io.microdev.note.R;
@@ -58,6 +61,7 @@ import io.microdev.note.util.AdRemovalUtil;
 public class ActivityList extends AppCompatActivity {
     
     private static final String APPODEAL_AD_ID_BOTTOM_BANNER = "b9932bed6b64f3f271c7e1336264a396c337f393bf634d46";
+    private static final String TAPPX_KEY = "/120940746/Pub-6411-Android-2269";
     
     private static final String STATE_KEY_ACTION_MODE_TYPE = "action_mode_select_shown";
     
@@ -133,10 +137,17 @@ public class ActivityList extends AppCompatActivity {
                     // Show spacer
                     ActivityList.this.findViewById(R.id.activityListAdSpacer).setVisibility(View.VISIBLE);
                     
-                    // Initialize Appodeal and display banner
-                    Appodeal.disableLocationPermissionCheck();
-                    Appodeal.initialize(ActivityList.this, APPODEAL_AD_ID_BOTTOM_BANNER, Appodeal.BANNER);
-                    Appodeal.show(ActivityList.this, Appodeal.BANNER_BOTTOM);
+                    if (new Random().nextInt(2) > 0) {
+                        System.out.println("Using tappx");
+                        // Display banner via Tappx
+                        TAPPXAdBanner.ConfigureAndShowAtBottom(ActivityList.this, null, TAPPX_KEY);
+                    } else {
+                        System.out.println("Using appodeal");
+                        // Display banner via Appodeal
+                        Appodeal.disableLocationPermissionCheck();
+                        Appodeal.initialize(ActivityList.this, APPODEAL_AD_ID_BOTTOM_BANNER, Appodeal.BANNER);
+                        Appodeal.show(ActivityList.this, Appodeal.BANNER_BOTTOM);
+                    }
                 }
             }
             

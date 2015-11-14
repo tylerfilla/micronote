@@ -78,11 +78,14 @@
     </style>
     
     <style name="MicroNote.Activity.ActivityList.AdSpacer" parent="">
+        <item name="android:background">#444444</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:visibility">gone</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
     </style>
     
     <style name="MicroNote.Activity.ActivityEdit" parent="">
